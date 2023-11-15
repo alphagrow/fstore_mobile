@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GrowiT-Pariwar</string>
+
+    <string name="JSONDATA_NULL">Server not Responding</string>
+    <string name="RESPONSE_NULL">Server not Responding</string>
+    <string name="NETWORK_GONE">No Internet Connection</string>
+    <string name="USER_ID_PASSWORD">Please Enter Store ID and Password.</string>
+    <string name="USER_ID_PASSWORD_INCORRECT">Incorrect username or password</string>
+    <string name="LOGIN_SUCCESS">Login successful</string>
+    <string name="PAYMENT_METHOD">Please Select a payment method</string>
+    <string name="FREE_PRODUCT">Free product already added.</string>
+    <string name="COUPON">Enter the Coupon Code</string>
+    <string name="CUSTOMER_FIRST">Please select customer first!</string>
+    <string name="LOGIN_FIRST">Please login first!</string>
+    <string name="COUPON_EXPIRED">Coupon has been Expired</string>
+    <string name="COUPON_CODE">Coupon code does not match.</string>
+    <string name="VALID_COUPON">Not Valid  Coupon Code</string>
+    <string name="CUSTOMER_UADATE">Customer Updated</string>
+    <string name="VIEWPDF">No Application available to view PDF</string>
+    <string name="NO_DATA">No Data Found..</string>
+    <string name="ORDER_FAIL">Order failed!!</string>
+    <string name="cust_create_success">Customer  created successfully</string>
+
+    <!--    add customer-->
+    <string name="customer_mobile">Enter the Mobile Number</string>
+    <string name="land_size">Enter the Land size</string>
+    <string name="CUSTOMER_NAME">Enter the Customer Name</string>
+    <string name="ADDRESS">Enter the Address</string>
+    <string name="PIN_CODE">Enter the Pin Code</string>
+    <string name="MOBILE_NUMBER">Mobile Number Already exist!</string>
+    <string name="REGISTRATION_FAILED">Registration failed!!</string>
+
+    <string name="Select_state">Select state</string>
+    <string name="Select_district">Select district</string>
+    <string name="Select_taluka">Select taluka</string>
+    <!--    Login page-->
+    <string name="Password">Enter the Password</string>
+    <string name="store_id">Enter the Store Id</string>
+
+    <!--    Item page-->
+    <string name="Add_Variants">Please add variants</string>
+    <string name="Add_card">Added to cart</string>
+    <string name="No_Variants">No variants</string>
+
+        <string name="navigation_drawer_open">नेव्हिगेशन ड्रॉवर उघडा</string>
+        <string name="navigation_drawer_close">नेव्हिगेशन ड्रॉवर बंद करा</string>
+        <string name="nav_header_title">Android स्टुडिओ</string>
+        <string name="nav_header_subtitle">android.studio@android.com</string>
+        <string name="nav_header_desc">नेव्हिगेशन शीर्षलेख</string>
+        <string name="action_settings">सेटिंग्ज</string>
+        <string name="drawer_open">उघडा</string>
+        <string name="drawer_close">बंद</string>
+        <string name="menu_home">मुख्यपृष्ठ</string>
+        <string name="menu_addCustomer">ग्राहक जोडा</string>
+        <string name="menu_profile">प्रोफाइल</string>
+        <string name="user_password">पासवर्ड</string>
+        <string name="login">लॉगिन करा</string>
+        <string name="fantasy">कल्पनारम्य सुरू ठेवा</string>
+        <string name="Reset"><a href="">पासवर्ड रीसेट करा</a></string>
+        <string name="customer_name">ग्राहकाचे नाव</string>
+
+        <string name="email">ग्राहक ईमेल</string>
+        <string name="address">गाव/पत्ता</string>
+        <string name="pincode">पिन कोड</string>
+        <string name="taluka">तालुका/तहसील</string>
+        <string name="submit">प्रस्तुत करणे</string>
+        <string name="reset">रीसेट करा</string>
+        <string name="otp">OTP</string>
+        <string name="newPassword">नवीन पासवर्ड</string>
+        <string name="confirmPassword">पासवर्डची पुष्टी करा</string>
+        <string name="hello_blank_fragment">हॅलो रिक्त तुकडा</string>
+        <string name="change_language">भाषा बदला</string>
+        <string name="reset_password">पासवर्ड रीसेट करा</string>
+        <!--    profile-->
+        <string name="user_name">नाव</string>
+        <string name="user_email">ईमेल</string>
+        <string name="user_mobile">मोबाईल नंबर</string>
+        <string name="user_profile">प्रोफाइल</string>
+    <!--    dashbord-->
+        <string name="search">नाव किंवा मोबाईल नंबर द्वारे शोधा</string>
+        <string name="product_search">शोधा</string>
+        <!--    menu-->
+        <string name="products">उत्पादने</string>
+        <string name="add_customer">ग्राहक जोडा</string>
+        <string name="view_customer">ग्राहक पहा</string>
+        <string name="add_product">उत्पादन जोडा</string>
+        <string name="about_us">आमच्या बद्दल में</string>
+        <string name="contact_us">आमच्याशी संपर्क साधां</string>
+        <string name="gift_card">भेटपत्र</string>
+
+    <!--    customer list -->
+    <string name="name">नाव : </string>
+    <string name="mobile_list">मोबाईल : </string>
+    <!--toolbar-->
+    <string name="Product">उत्पादन</string>
+    <string name="OrderHistory">ऑर्डर इतिहास</string>
+    <string name="Transaction">व्यवहार</string>
+    <string name="Item_Cart">आयटम कार्ट</string>
+    <string name="Update_Customer">ग्राहक अपडेट करा</string>
+
+        <string name="store">स्टोअर</string>
+        <string name="order">ऑर्डर करा</string>
+        <string name="transaction">व्यवहार</string>
+        <string name="cart">कार्ट</string>
+        <string name="logout">बाहेर पडणे</string>
+        <string name="administrator">प्रशासक</string>
+        <string name="customer_type">ग्राहक प्रकार</string>
+        <string name="state">राज्य</string>
+        <string name="district">जिल्हा</string>
+
+    <!--    rest password-->
+    <string name="mobile">मोबाईल नंबर</string>
+
+        <!--    add product-->
+        <string name="product_Name">उत्पादनाचे नांव</string>
+        <string name="product_price">उत्पादन किंमत</string>
+        <string name="UOM">UOM</string>
+        <string name="size">आकार</string>
+        <string name="color">रंग</string>
+        <string name="whole_pattern">संपूर्ण नमुना</string>
+        <string name="upload_images">प्रतिमा अपलोड करा *</string>
+        <string name="upload_Product_Video">उत्पादन व्हिडिओ अपलोड करा</string>
+
+    <!--Item Cart-->
+    <string name="place_order">मागणी नोंद करा</string>
+</resources>

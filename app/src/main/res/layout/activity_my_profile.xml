@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gdbros_bg"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/sv_non_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionGroup="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@drawable/back_toolbar"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="left|center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/backBtn"
+                        android:layout_width="22dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/baseline_arrow_back_24">
+
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="17dp"
+                        android:fontFamily="@font/roboto_medium"
+                        android:gravity="left|center_vertical"
+                        android:text="Customer Details"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_gray">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/fourty" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/camera" />
+
+                <ProgressBar
+                    android:id="@+id/idPBLoading"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/splash_color"
+                    android:indeterminateTintMode="src_atop"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+
+            <EditText
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="@dimen/fourty"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/custom_edit_text_cut_2"
+                android:drawableEnd="@drawable/baseline_account_circle_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/helvetica_neue_medium"
+                android:hint="User Name"
+                android:textStyle="normal"
+
+                android:inputType="text"
+                android:maxLines="1"
+                android:nextFocusUp="@+id/et_password"
+                android:padding="8dp"
+                android:textColor="#E8393939"
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/et_useremail"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_edit_text_cut_2"
+                android:drawableEnd="@drawable/baseline_mail_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/helvetica_neue_medium"
+                android:hint="Email"
+                android:textStyle="normal"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:nextFocusUp="@+id/et_password"
+                android:padding="8dp"
+                android:textColor="#E8393939"
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/et_usermobile"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_edit_text_cut_2"
+                android:drawableEnd="@drawable/baseline_phone_enabled_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/helvetica_neue_medium"
+                android:hint="Mobile"
+                android:inputType="text"
+                android:textStyle="normal"
+                android:maxLines="1"
+                android:nextFocusUp="@+id/et_password"
+                android:padding="8dp"
+                android:textColor="#E8393939"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/button"
+                android:fontFamily="@font/sf_compact_regular"
+                android:gravity="center"
+                android:nextFocusUp="@+id/tv_register"
+                android:padding="@dimen/ten"
+                android:text="Submit"
+                android:textColor="#ffff"
+                android:textSize="@dimen/twenty" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <FrameLayout
+        android:id="@+id/fl_pic_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/pic_image"
+            layout="@layout/view_pic_image" />
+    </FrameLayout>
+</FrameLayout>

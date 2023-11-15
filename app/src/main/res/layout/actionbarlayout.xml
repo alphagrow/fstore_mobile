@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:background="@drawable/back_images"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:minHeight="?attr/actionBarSize"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    <LinearLayout
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="40dp"
+        android:gravity="center"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/titleTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start|center"
+            android:fontFamily="@font/roboto_regular"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text=""
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/toolbar_image_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.1"
+                android:layout_gravity="center"
+                android:background="@drawable/logo_dash"
+                android:visibility="visible" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="22dp"
+                android:layout_gravity="end|center"
+                android:layout_marginLeft="30dp"
+                android:layout_weight=".4"
+                android:background="@drawable/language"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_notifications"
+                android:layout_width="0dp"
+                android:layout_height="23dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight=".4"
+                android:layout_gravity="end|center"
+                android:background="@drawable/notification"
+                android:visibility="visible" />
+        </LinearLayout>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.1"
+            android:layout_gravity="center"
+            android:background="@drawable/logo_dash"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+</androidx.appcompat.widget.Toolbar>

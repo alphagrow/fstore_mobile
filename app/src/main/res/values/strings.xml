@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">GrowiT-Pariwar</string>
+
+    //message
+    <string name="JSONDATA_NULL">Server not Responding</string>
+    <string name="RESPONSE_NULL">Server not Responding</string>
+    <string name="NETWORK_GONE">No Internet Connection</string>
+    <string name="USER_ID_PASSWORD">Please Enter Store ID and Password.</string>
+    <string name="USER_ID_PASSWORD_INCORRECT">Incorrect username or password</string>
+    <string name="LOGIN_SUCCESS">Login successful</string>
+    <string name="PAYMENT_METHOD">Please Select a payment method</string>
+    <string name="FREE_PRODUCT">Free product already added.</string>
+    <string name="COUPON">Enter the Coupon Code</string>
+    <string name="CUSTOMER_FIRST">Please select customer first!</string>
+    <string name="LOGIN_FIRST">Please login first!</string>
+    <string name="COUPON_EXPIRED">Coupon has been Expired</string>
+    <string name="COUPON_CODE">Coupon code does not match.</string>
+    <string name="VALID_COUPON">Not Valid  Coupon Code</string>
+    <string name="CUSTOMER_UADATE">Customer Updated</string>
+    <string name="VIEWPDF">No Application available to view PDF</string>
+    <string name="NO_DATA">No Data Found..</string>
+    <string name="ORDER_FAIL">Order failed!!</string>
+    <string name="cust_create_success">Customer  created successfully</string>
+
+    <!--    add customer-->
+    <string name="customer_mobile">Enter the Mobile Number</string>
+    <string name="land_size">Enter the Land size</string>
+    <string name="CUSTOMER_NAME">Enter the Customer Name</string>
+    <string name="ADDRESS">Enter the Address</string>
+    <string name="PIN_CODE">Enter the Pin Code</string>
+    <string name="MOBILE_NUMBER">Mobile Number Already exist!</string>
+    <string name="REGISTRATION_FAILED">Registration failed!!</string>
+    <string name="Select_state">Select state</string>
+    <string name="Select_district">Select district</string>
+    <string name="Select_taluka">Select taluka</string>
+
+
+    <!--    Login page-->
+    <string name="Password">Enter the Password</string>
+    <string name="store_id">Enter the Store Id</string>
+
+    <!--    Item page-->
+    <string name="Add_Variants">Please add variants</string>
+    <string name="Add_card">Added to cart</string>
+    <string name="No_Variants">No variants</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_addCustomer">Add Customer</string>
+    <string name="menu_profile">Profile</string>
+    <string name="change_language">Change language</string>
+    <string name="reset_password">Reset Password </string>
+
+    <!--    profile-->
+    <string name="user_name">Name</string>
+    <string name="user_email">Email</string>
+    <string name="user_mobile">Mobile</string>
+    <string name="user_profile">Profile</string>
+     <!--    dashboard-->
+    <string name="search">Search by Name or Mobile No</string>
+    <string name="product_search">Search...</string>
+
+    <!--    customer list -->
+    <string name="name">Name : </string>
+    <string name="mobile_list">Mobile No.: </string>
+
+
+
+    <!--    profile-->
+    <string name="products">Products</string>
+    <string name="add_customer">Add Customer</string>
+    <string name="view_customer">View Customer</string>
+    <string name="view_inventory" translatable="false">Inventory</string>
+    <string name="add_product">Add Product</string>
+    <string name="about_us">About Us</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="gift_card">Gift Cards</string>
+    <!--    menu-->
+    <string name="store">Home</string>
+    <string name="order">Order</string>
+    <string name="transaction">Transaction</string>
+    <string name="cart">Cart</string>
+    <string name="logout">Logout</string>
+    <string name="administrator">Administrator</string>
+
+    <!--    add customer-->
+    <string name="customer_type">Customer Type</string>
+    <string name="state">State</string>
+    <string name="district">District</string>
+
+
+    <!--    add product-->
+    <string name="product_Name">Product Name</string>
+    <string name="product_price">Product Price</string>
+    <string name="UOM">UOM</string>
+    <string name="size">size</string>
+    <string name="color">Color</string>
+    <string name="whole_pattern">Whole Pattern</string>
+    <string name="upload_images">Upload Images *</string>
+    <string name="upload_Product_Video">Upload Product Video</string>
+
+
+    <!--login-->
+    <string name="user_password">Password</string>
+    <string name="login">Login</string>
+    <string name="fantasy">Continue to Fantasy</string>
+    <string name="Reset"><a href="">Reset Password</a></string>
+
+
+    <!--toolbar-->
+    <string name="Product">Product</string>
+    <string name="OrderHistory">OrderHistory</string>
+    <string name="Transaction">Transaction</string>
+    <string name="Item_Cart">Item Cart</string>
+    <string name="Update_Customer">Update Customer</string>
+    <!--Add customer-->
+    <string name="customer_name">Customer Name</string>
+    <string name="mobile_no">Customer Mobile No</string>
+    <string name="email">Customer Email</string>
+    <string name="address">Village/Address</string>
+    <string name="pincode">Pincode</string>
+    <string name="taluka">Taluka/Tehsil</string>
+    <string name="submit">Submit</string>
+
+<!--    rest password-->
+    <string name="mobile">Mobile Number</string>
+    <string name="reset">Reset</string>
+    <string name="otp">OTP</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+
+
+</resources>

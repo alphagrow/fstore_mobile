@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="20dp"
+        android:text="Select photo"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/tv_gallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/gallery"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="Gallery"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tv_camera"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/camera"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="Camera"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tv_cross"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/cross"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+</LinearLayout>

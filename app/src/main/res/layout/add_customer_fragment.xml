@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffff"
+    android:orientation="vertical"
+    tools:context=".ui.AddCustomerActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:weightSum="3"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/backBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start|center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/baseline_arrow_back_24">
+                </ImageView>
+                <TextView
+                    android:id="@+id/titleTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="Add Customer"
+                    android:textColor="@color/white"
+                     />
+
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_usermobile"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_phone_enabled_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/mobile_no"
+                android:importantForAutofill="no"
+                android:textSize="14dp"
+                android:inputType="number"
+                android:maxLength="10"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical" />
+
+            <EditText
+                android:id="@+id/customer_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_regular"
+                android:hint="Customer Type"
+                android:inputType="text"
+                android:padding="8dp"
+                android:paddingStart="@dimen/ten"
+                android:paddingEnd="@dimen/ten"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/lay_custom_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut">
+
+                <Spinner
+                    android:id="@+id/cstTypeSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+            <EditText
+                android:visibility="gone"
+                android:id="@+id/gst_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/gst_no"
+                android:drawablePadding="@dimen/ten"
+                android:maxLength="16"
+                android:fontFamily="@font/sf_compact_regular"
+                android:hint="GST No."
+                android:inputType="text"
+                android:padding="8dp" />
+
+            <EditText
+                android:importantForAutofill="no"
+                android:id="@+id/land_size"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:requiresFadingEdge="vertical"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:textSize="14dp"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Land Size in(acre)"
+                android:inputType="text"
+                android:padding="8dp" />
+
+
+
+            <EditText
+                android:importantForAutofill="no"
+                android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_account_circle_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/customer_name"
+                android:inputType="text"
+                android:textSize="14dp"
+
+                android:padding="8dp" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/state_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:text=" State "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut">
+
+                <Spinner
+                    android:id="@+id/stateSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut">
+
+                <Spinner
+                    android:id="@+id/citySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut">
+
+                <Spinner
+                    android:id="@+id/talukaSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_centerHorizontal="true"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/et_useraddress"
+                android:importantForAutofill="no"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_home_work_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/address"
+                android:inputType="text"
+                android:textSize="14dp"
+
+                android:padding="8dp" />
+
+
+            <EditText
+                android:id="@+id/et_pincode"
+                android:importantForAutofill="no"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_person_pin_circle_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/pincode"
+                android:inputType="number"
+                android:textSize="14dp"
+
+                android:maxLength="6"
+                android:padding="8dp" />
+
+
+            <EditText
+                android:importantForAutofill="no"
+                android:id="@+id/et_useremail"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_mail_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:textSize="14dp"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/register_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="@dimen/fifty"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/button"
+                android:fontFamily="@font/sf_compact_regular"
+                android:gravity="center"
+                android:nextFocusUp="@+id/tv_register"
+                android:padding="@dimen/ten"
+                android:textSize="16sp"
+                android:text="Submit"
+                android:textColor="#ffff"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

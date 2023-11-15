@@ -1,0 +1,57 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.GStore" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#3E9547</item>
+        <item name="colorPrimaryVariant">#3E9547</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#3E9547</item>
+        <item name="colorSecondaryVariant">#3E9547</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="MyAppTheme.NumberPicker" parent="Theme.GStore">
+        <item name="android:colorControlNormal">#000 </item>
+    </style>
+    <style name="animation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+    <style name="Theme.GStore.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="NumberPickerTheme" parent="Theme.AppCompat.Light">
+        <!-- Edit this colorControlNormal value as you need -->
+        <item name="colorControlNormal">@android:color/black</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+
+        <item name="android:background">#FFFF</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="BottomTab">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:color">@color/black</item>
+        <item name="android:layout_marginTop">@dimen/m_home_bottom_tab</item>
+        <item name="android:layout_marginBottom">@dimen/m_home_bottom_tab</item>
+
+    </style>
+    <style name="Widget.MyTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+    </style>
+    <style name="Theme.GStore.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.GStore.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="myActionButtonStyle" parent="Widget.AppCompat.ActionButton">
+
+
+
+    </style>
+</resources>

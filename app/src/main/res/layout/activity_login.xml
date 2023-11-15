@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/login_back"
+    android:orientation="vertical">
+    <ImageView
+        android:src="@drawable/logo"
+        android:layout_gravity="center"
+        android:layout_width="210dp"
+        android:layout_height="120dp">
+
+    </ImageView>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_marginTop="@dimen/ten"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:padding="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/helvetica_neue_medium"
+                    android:gravity="center"
+                    android:text="Welcome to GROWIT-Pariwar "
+                    android:textColor="#393939"
+                    android:textStyle="normal"
+                    android:textSize="16sp"/>
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="36dp"
+                    android:fontFamily="@font/helveticaneuelight"
+                    android:gravity="center"
+                    android:text="@string/login"
+                    android:textColor="#E6393939"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:id="@+id/login_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginBottom="10dp"
+                    app:boxStrokeWidth="0dp"
+                    app:passwordToggleTint="@color/black">
+
+                    <EditText
+                        android:id="@+id/et_storeIDView"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/custom_edit_text_cut"
+                        android:fontFamily="@font/helvetica_neue_medium"
+                        android:hint="Login ID"
+                        android:inputType="text"
+                        android:drawableEnd="@drawable/icon_user"
+                        android:textSize="14sp"
+                        android:maxLines="1"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                <!--TextInput layout which acts as a wrapper to the edit text-->
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:passwordToggleDrawable="@drawable/show_password_selector"
+                    app:passwordToggleEnabled="true"
+                    app:boxStrokeWidth="0dp"
+                    app:passwordToggleTint="@color/black_overlay">
+
+                    <EditText
+                        android:layout_height="60dp"
+                        android:id="@+id/et_password"
+                        android:textColorHint="@color/dark_grey"
+                        android:hint="@string/user_password"
+                        android:drawablePadding="@dimen/ten"
+                        android:layout_width="match_parent"
+                        android:background="@drawable/custom_edit_text_cut"
+                        android:fontFamily="@font/helvetica_neue_medium"
+                        android:inputType="textPassword"
+                        android:textSize="14sp"
+                        android:maxLines="1"
+                        android:textColor="@color/black_overlay" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                <Button
+                    android:id="@+id/loginBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button"
+                    android:fontFamily="@font/helvetica_neue_medium"
+                    android:gravity="center"
+                    android:textAllCaps="false"
+                    android:padding="@dimen/ten"
+                    android:text="Login"
+                    android:textColor="#ffff"
+                    android:textSize="16sp" />
+                <TextView
+                    android:layout_marginTop="@dimen/ten"
+                    android:id="@+id/reset_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/helvetica_neue_medium"
+                    android:gravity="end"
+                    android:textColor="@color/black"
+                    android:text="@string/Reset"
+                    android:textSize="16sp" />
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/fifteen"
+                    android:layout_marginTop="@dimen/thirty"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+                <Button
+                    android:visibility="gone"
+                    android:id="@+id/but_change_lang"
+                    android:layout_margin="16dp"
+                    android:background="@color/design_default_color_primary"
+                    android:textColor="#ffffff"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_language"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
