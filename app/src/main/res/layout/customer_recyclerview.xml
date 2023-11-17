@@ -28,9 +28,9 @@
 
                 <ImageView
                         android:id="@+id/backBtn"
-                        android:layout_width="15dp"
+                        android:layout_width="13dp"
                         android:layout_weight=".1"
-                        android:layout_height="30dp"
+                        android:layout_height="25dp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/baseline_arrow_back_24">
@@ -77,13 +77,10 @@
         </LinearLayout>
 
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/lay_custom_type">
+
 
             <androidx.core.widget.NestedScrollView
+                android:layout_below="@+id/lay_custom_type"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fillViewport="true"
@@ -181,6 +178,5 @@
                         app:layoutManager="LinearLayoutManager"/>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

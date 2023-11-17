@@ -40,14 +40,18 @@
                     </ImageView>
 
                     <TextView
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="50dp"
+                        android:layout_gravity="center"
+                        android:textSize="18sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="17dp"
-                        android:fontFamily="@font/roboto_medium"
-                        android:gravity="left|center_vertical"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textStyle="bold"                        android:gravity="left|center_vertical"
                         android:text="Customer Details"
                         android:textColor="@color/white"
-                        android:textSize="20sp" />
+                        />
                 </LinearLayout>
 
 

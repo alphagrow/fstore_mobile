@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.growit.posapp.gstore.ui.home.HomeFragment"
+        android:name="com.growit.posapp.fstore.ui.fragments.ProductListFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.growit.posapp.gstore.ui.gallery.GalleryFragment"
+        android:name="com.growit.posapp.fstore.ui.gallery.GalleryFragment"
         android:label="@string/menu_addCustomer"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.growit.posapp.gstore.ui.slideshow.SlideshowFragment"
+        android:name="com.growit.posapp.fstore.ui.slideshow.SlideshowFragment"
         android:label="View Customer List"
         tools:layout="@layout/fragment_slideshow" />
 </navigation>

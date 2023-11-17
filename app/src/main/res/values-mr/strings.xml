@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">GrowiT-Pariwar</string>
+    <string name="app_name">Business Partner</string>
 
     <string name="JSONDATA_NULL">Server not Responding</string>
     <string name="RESPONSE_NULL">Server not Responding</string>

@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.growit.posapp.gstore'
+    namespace 'com.growit.posapp.fstore'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.growit.posapp.gstore"
+        applicationId "com.growit.posapp.fstore"
         minSdk 26
         targetSdk 33
         versionCode 3

@@ -12,8 +12,14 @@
             android:id="@+id/cst_fragment"
             android:title="@string/add_customer" />
 
-
-
+    <item
+        android:icon="@drawable/user_add"
+        android:id="@+id/add_product"
+        android:title="Add Product" />
+    <item
+        android:icon="@drawable/user_add"
+        android:id="@+id/add_pos_category"
+        android:title="Add POS Category" />
         <item
             android:icon="@drawable/user_square"
             android:id="@+id/Viewcst_fragment"

@@ -1,0 +1,479 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    tools:context=".ui.fragments.AddProduct.AddProductFragment">
+
+    <ScrollView
+        android:id="@+id/sv_non_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionGroup="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/et_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Product Name"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+
+            <EditText
+                android:id="@+id/et_product_price"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/product_price"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+
+            <EditText
+                android:id="@+id/et_uom"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_event_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/UOM"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+
+            <EditText
+                android:id="@+id/et_size"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/size"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+
+            <EditText
+                android:id="@+id/et_color"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_invert_colors_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/color"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+
+            <EditText
+                android:id="@+id/et_whole_pattern"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="@string/whole_pattern"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/tech_name_pest"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Technical  Name Pest"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/brand_name"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Brand Name"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/company_name"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_home_work_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Company Name"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/mkt_by"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_apartment_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="MKT BY"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/batch_number"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint=" Batch Number"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/cir_number"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="CIR Number"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/which_crop"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Which Crop"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/which_pest"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Which Pest"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/packing_std"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Packing Std"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+
+
+            <TextView
+                android:id="@+id/mfd_date"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_event_24"
+                android:gravity="center|start"
+                android:hint="Mfd. Date"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/exp_date"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_calendar_month_24"
+                android:gravity="center|start"
+                android:hint="Exp. Date"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/exp_date_alarm"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_alarm_on_24"
+                android:gravity="center|start"
+                android:hint="Expire Date Alarm"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
+
+            <include
+                android:id="@+id/sel_non_gov"
+                layout="@layout/non_gov" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@string/upload_images"
+                    android:textSize="15sp" />
+
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="20dp"
+
+                    android:src="@drawable/cloud_computing">
+
+                </ImageView>
+
+                <LinearLayout
+                    android:id="@+id/imageLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/image_set"
+                    android:layout_width="190dp"
+                    android:layout_height="110dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:src="@drawable/no_image"
+                    android:visibility="gone">
+
+                </ImageView>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recy_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    app:layoutManager="LinearLayoutManager" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_regular"
+                    android:text="@string/upload_Product_Video"
+                    android:textSize="@dimen/fifteen" />
+
+                <ImageView
+                    android:id="@+id/video"
+                    android:layout_width="100dp"
+                    android:layout_height="110dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:src="@drawable/cloud_computing" />
+
+                <VideoView
+                    android:id="@+id/simpleVideoView"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/video_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="@dimen/ten"
+                    android:layout_marginEnd="25dp"
+                    android:fontFamily="@font/sf_compact_regular"
+                    android:lines="1"
+                    android:text=""
+                    android:textSize="@dimen/fifteen" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/submit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/button"
+                android:fontFamily="@font/helvetica_neue_medium"
+                android:gravity="center"
+                android:padding="@dimen/ten"
+                android:text="Save"
+                android:textAllCaps="false"
+                android:textColor="#ffff"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
