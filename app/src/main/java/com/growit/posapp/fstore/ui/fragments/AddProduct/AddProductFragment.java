@@ -30,6 +30,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -102,6 +104,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     final Calendar myCalendar = Calendar.getInstance();
     FragmentAddProductBinding binding;
 
+    String   str_mfd_date,str_exp_date;
+    private String[] detailed_type = {"product", "service"};
+    String str_detailed_type;
+   String str_non_gov_product= "Non-Gov";
+
     //    private static final int SELECT_VIDEO = 3;
     public AddProductFragment() {
         // Required empty public constructor
@@ -159,6 +166,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 //        packing_std = view.findViewById(R.id.packing_std);
 //        layout = view.findViewById(R.id.imageLayout);
 //        recy_image = view.findViewById(R.id.recy_image);
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
+        binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         progressBar = new ProgressBar(getActivity());
@@ -172,6 +181,19 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             }
         });
+        binding.detailTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+              //  ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
+                str_detailed_type = detailed_type[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         binding.expDateAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,9 +257,9 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 // checkedId is the RadioButton selected
                 //  RadioButton rb = view.findViewById(checkedId);
                 if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Gov")) {
-
+                    str_non_gov_product= "Non-Gov";
                 } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov Authorized")) {
-
+                    str_non_gov_product= "Gov Authorized";
                 }
             }
         });
@@ -250,25 +272,22 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
 });
     }
     private void updateLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
-     String   str_mfd_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
-        String date_e = sd.format(myCalendar.getTime());
-        mfd_date.setText(date_e);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        str_mfd_date = sdf.format(myCalendar.getTime());
+//        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
+//        String date_e = sd.format(myCalendar.getTime());
+        binding.mfdDate.setText(str_mfd_date);
     }
     private void ExpireLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
-        String   str_exp_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
-        String date_e = sd.format(myCalendar.getTime());
-        exp_date.setText(date_e);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+           str_exp_date = sdf.format(myCalendar.getTime());
+           binding.expDate.setText(str_exp_date);
     }
     private void AlarmLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String   str_exp_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
-        String date_e = sd.format(myCalendar.getTime());
-        exp_date_alarm.setText(date_e);
+
+        binding.expDateAlarm.setText(str_exp_date);
     }
     /**
      * Called when a view has been clicked.
@@ -284,6 +303,17 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
             str_size = binding.etSize.getText().toString();
             str_color = binding.etColor.getText().toString();
             str_whole_pattern = binding.etWholePattern.getText().toString();
+            String str_techNamePest = binding.techNamePest.getText().toString();
+            String str_brand_name = binding.brandName.getText().toString();
+            String str_mkt_by = binding.mktBy.getText().toString();
+            String str_batchNumber = binding.batchNumber.getText().toString();
+            String str_cirNumber = binding.cirNumber.getText().toString();
+            String str_whichCrop = binding.whichCrop.getText().toString();
+            String str_whichPest = binding.whichPest.getText().toString();
+            String str_etUom = binding.etUom.getText().toString();
+            String str_description = binding.description.getText().toString();
+            String str_uomProduct = binding.etUomProduct.getText().toString();
+
             if (str_product_name.length() == 0 || str_product_price.length() == 0 || str_uom.length() == 0) {
                 Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
                 return;
@@ -292,27 +322,39 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            addProductRequest(str_product_name, str_product_price, str_uom, str_size, str_color, str_whole_pattern);
+            addProductRequest(str_product_name, str_product_price, str_uom, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop, str_whichPest,str_etUom,str_description,str_uomProduct);
         }
     }
 
-    private void addProductRequest(String product_name, String product_price, String uom, String size, String color, String whole_pattern) {
+    private void addProductRequest(String product_name, String product_price, String uom, String size, String color, String whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String cir_no,String str_whichCrop,String str_whichPest,String str_etUom,String str_description,String str_uomProduct) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-        params.put("user_id", sm.getUserID() + "");
-        params.put("product_name", product_name);
-        params.put("product_price", product_price);
-        params.put("uom", uom);
-        params.put("size", size);
-        params.put("color", color);
-        params.put("whole_pattern", whole_pattern);
+        //params.put("user_id", sm.getUserID() + "");
+        params.put("name", product_name);
+        params.put("description", str_description);
+        params.put("list_price", product_price);
+        params.put("technical_pest", str_techNamePest);
+        params.put("brand_name", str_brand_name);
+        params.put("mkd_by", str_mkt_by);
+        params.put("batch_number", str_batchNumber);
+        params.put("cir_no", cir_no);
+        params.put("which_crop", str_whichCrop);
+        params.put("which_pest", str_whichPest);
+        params.put("non_gov_product", str_non_gov_product);
+        params.put("mfd_date", str_mfd_date);
+        params.put("exp_date", str_exp_date);
+        params.put("uom_id", "Days");
+        params.put("uom_po_id", "Days");
+        params.put("detailed_type", str_detailed_type);
+
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMax(100);
         progressDialog.setMessage("Please wait while a moment...");
         progressDialog.setTitle("Registering");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_CUSTOMER, new VolleyCallback() {
+        Log.d("url_addproduct",params.toString());
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_PRODUCT, new VolleyCallback() {
             private String message = "Registration failed!!";
             @Override
             public void onSuccess(Object result) throws JSONException {
@@ -320,12 +362,13 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
+               String  message_success = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     int visibility = (progressBar.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
                     progressBar.setVisibility(visibility);
                     progressDialog.cancel();
-//                    SaveTask st = new SaveTask();
-//                    st.execute();
+                    Toast.makeText(getActivity(), message_success, Toast.LENGTH_SHORT).show();
+
                     resetFields();
                 }
             }

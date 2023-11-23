@@ -67,6 +67,22 @@
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
+            <LinearLayout
+                android:id="@+id/lay_detailed_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut">
+
+                <Spinner
+                    android:id="@+id/detailTypeSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
 
 
             <EditText
@@ -82,7 +98,7 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint="@string/product_price"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="number"
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
@@ -106,6 +122,23 @@
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
 
+            <EditText
+                android:id="@+id/et_uom_product"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_event_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="UOM Product"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
 
             <EditText
                 android:id="@+id/et_size"
@@ -194,7 +227,7 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint="Brand Name"
                 android:importantForAutofill="no"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
@@ -284,7 +317,7 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint="Which Crop"
                 android:importantForAutofill="no"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
@@ -302,7 +335,7 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint="Which Pest"
                 android:importantForAutofill="no"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
@@ -320,7 +353,7 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint="Packing Std"
                 android:importantForAutofill="no"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
@@ -338,7 +371,7 @@
                 android:drawableEnd="@drawable/baseline_event_24"
                 android:gravity="center|start"
                 android:hint="Mfd. Date"
-                android:inputType="text"
+                android:inputType="date"
                 android:maxLines="1"
                 android:padding="8dp"
                 android:singleLine="true"
@@ -356,7 +389,7 @@
                 android:drawableEnd="@drawable/baseline_calendar_month_24"
                 android:gravity="center|start"
                 android:hint="Exp. Date"
-                android:inputType="text"
+                android:inputType="date"
                 android:maxLines="1"
                 android:padding="8dp"
                 android:singleLine="true"
@@ -374,13 +407,31 @@
                 android:drawableEnd="@drawable/baseline_alarm_on_24"
                 android:gravity="center|start"
                 android:hint="Expire Date Alarm"
-                android:inputType="text"
+                android:inputType="date"
                 android:maxLines="1"
                 android:padding="8dp"
                 android:singleLine="true"
                 android:textSize="15sp" />
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Description"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
 
-<!--            <include-->
+
+            <!--            <include-->
 <!--                android:id="@+id/sel_non_gov"-->
 <!--                layout="@layout/non_gov" />-->
             <RadioGroup
