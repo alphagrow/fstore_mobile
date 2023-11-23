@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -36,13 +37,16 @@ import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.growit.posapp.fstore.ui.fragments.AddPOSCategoryFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
+import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
+import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
+import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.ui.fragments.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -66,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout toolbar_image_lay;
     TextView home_text,customer_text,cart_text,transaction_text,order_text;
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
-
+    LinearLayout  sale_menu_lay;
+    TextView vendor;
+    boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         customer_icon = findViewById(R.id.customer_icon);
         transaction_icon = findViewById(R.id.transaction_icon);
         order_icon = findViewById(R.id.order_icon);
+
+
         customer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
+
         navigationView.setNavigationItemSelectedListener(
                 menuItem -> {
                     selectDrawerItem(menuItem);
@@ -389,12 +398,7 @@ public class MainActivity extends AppCompatActivity {
             fragment = ProductListFragment.newInstance();
         } else if (menuItem.getItemId() == R.id.cst_fragment) {
             toolbar.setVisibility(View.GONE);
-            ///toolbar vistble
-//            toolbar.setVisibility(View.VISIBLE);
-//            toolbar_image_lay.setVisibility(View.GONE);
-//            toolbar.setVisibility(View.VISIBLE);
-//            titleTxt.setVisibility(View.VISIBLE);
-//            titleTxt.setText("Add Customer");
+
             fragment = AddCustomerFragment.newInstance();
         } else if (menuItem.getItemId() == R.id.Viewcst_fragment) {
             ///toolbar gone
@@ -413,9 +417,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (menuItem.getItemId() == R.id.about_fragment) {
             ///toolbar vistble
             toolbar.setVisibility(View.GONE);
-//            toolbar.setBackgroundResource(R.color.colorPrimary);
-//            toolbar_image_lay.setVisibility(View.GONE);
-//            titleTxt.setVisibility(View.GONE);
+
             fragment = AboutFragment.newInstance();
         } else if (menuItem.getItemId() == R.id.contact_fragment) {
             toolbar.setVisibility(View.GONE);
@@ -426,18 +428,12 @@ public class MainActivity extends AppCompatActivity {
             fragment = ContactUsFragment.newInstance();
 
         }  else if (menuItem.getItemId() == R.id.add_product) {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_image_lay.setVisibility(View.GONE);
-            titleTxt.setVisibility(View.VISIBLE);
-            titleTxt.setText("Add Product");
-            fragment = AddProductFragment.newInstance();
+            toolbar.setVisibility(View.GONE);
+            fragment = AddProductListFragment.newInstance();
 
         } else if (menuItem.getItemId() == R.id.add_pos_category) {
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_image_lay.setVisibility(View.GONE);
-            titleTxt.setVisibility(View.VISIBLE);
-            titleTxt.setText("POS Category");
-            fragment = AddPOSCategoryFragment.newInstance();
+            toolbar.setVisibility(View.GONE);
+            fragment = POSCategoryListFragment.newInstance();
 
         }
         else if (menuItem.getItemId() == R.id.logout_id) {
@@ -457,14 +453,35 @@ public class MainActivity extends AppCompatActivity {
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
         TextView ivHeaderPhoto = headerLayout.findViewById(R.id.avatorIamge);
         TextView name = headerLayout.findViewById(R.id.nameTxtHeaderView);
-
+       View view_sale = nvDrawer.inflateHeaderView(R.layout.menu_button);
+        sale_menu_lay = view_sale.findViewById(R.id.sale_menu_lay);
+        vendor = view_sale.findViewById(R.id.vendor);
         name.setText(sm.getUserName());
         headerLayout.setOnClickListener(view -> {
             Intent profileIntent = new Intent(MainActivity.this, MyProfileActivity.class);
             startActivity(profileIntent);
-//            finish();
+        });
+        sale_menu_lay.setOnClickListener(view -> {
+            if (!isClicked) {
+                vendor.setVisibility(View.VISIBLE);
+                isClicked = true;
+            }else {
+                vendor.setVisibility(View.GONE);
+                isClicked = false;
+            }
+
         });
 
+        vendor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = VendorListFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
     }
 
     private void logoutAlert() {
@@ -491,7 +508,11 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        vendor.setVisibility(View.GONE);
+    }
     private void closeSession(String session) {
         ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMax(100);

@@ -44,4 +44,5 @@
     <color name="customer_del_color_text">#A691782E</color>
     <color name="yellow">#FFC000</color>
     <color name="green_color">#2b6731</color>
+    <color name="text_color">#393939</color>
 </resources>

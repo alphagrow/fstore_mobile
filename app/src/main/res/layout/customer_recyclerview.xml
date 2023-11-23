@@ -92,16 +92,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/crop_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="My Crops"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="normal" />
 
                     <LinearLayout
                         android:id="@+id/lay_add_customer"
@@ -147,26 +137,7 @@
 
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/croplist_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="10dp"
-                        app:layoutManager="LinearLayoutManager"/>
 
-                    <TextView
-                        android:id="@+id/product_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Product"
-                        android:textColor="@color/black"
-                        android:textIsSelectable="true"
-                        android:textSize="20sp"
-                        android:textStyle="normal" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view"

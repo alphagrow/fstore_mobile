@@ -37,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +46,8 @@ import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
+import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
+import com.growit.posapp.fstore.databinding.FragmentUpdateAddProductBinding;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -68,7 +69,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class AddProductFragment extends Fragment implements View.OnClickListener {
+public class UpdateAddProductFragment extends Fragment implements View.OnClickListener {
     private EditText et_product_name, et_product_price, et_uom, et_size, et_color, et_whole_pattern,
             tech_name_pest,brand_name,mkt_by,batch_number,cir_number,which_crop,which_pest,packing_std;
     private ImageView product_image,image_set;
@@ -100,10 +101,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     DatePickerDialog.OnDateSetListener date_mfd,date_exp,date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
-    FragmentAddProductBinding binding;
+    FragmentUpdateAddProductBinding binding;
 
     //    private static final int SELECT_VIDEO = 3;
-    public AddProductFragment() {
+    public UpdateAddProductFragment() {
         // Required empty public constructor
     }
 
@@ -123,7 +124,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding= DataBindingUtil.inflate(inflater,R.layout.fragment_add_product, container, false);
+       // R.layout.fragment_update_add_product
+        binding= FragmentUpdateAddProductBinding.inflate(inflater, container, false);
         imagesUriArrayList = new ArrayList();
         init();
         return binding.getRoot();
@@ -147,8 +149,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 //        mfd_date = view.findViewById(R.id.mfd_date);
 //        exp_date =view.findViewById(R.id.exp_date);
 //        exp_date_alarm = view.findViewById(R.id.exp_date_alarm);
-
-
 //        tech_name_pest = view.findViewById(R.id.tech_name_pest);
 //        brand_name = view.findViewById(R.id.brand_name);
 //        mkt_by =view.findViewById(R.id.mkt_by);
@@ -241,17 +241,17 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 }
             }
         });
-binding.backBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        getActivity().finish();
-    }
-});
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+            }
+        });
     }
     private void updateLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
-     String   str_mfd_date = sdf.format(myCalendar.getTime());
+        String   str_mfd_date = sdf.format(myCalendar.getTime());
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
         String date_e = sd.format(myCalendar.getTime());
         mfd_date.setText(date_e);

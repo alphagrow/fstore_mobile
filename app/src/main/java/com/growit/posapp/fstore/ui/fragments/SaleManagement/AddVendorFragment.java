@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.SaleManagement;
 
 import android.os.Bundle;
 
@@ -11,16 +11,18 @@ import android.view.ViewGroup;
 import com.growit.posapp.fstore.R;
 
 
-public class AddPOSCategoryFragment extends Fragment {
+public class AddVendorFragment extends Fragment {
 
 
 
-    public AddPOSCategoryFragment() {
+    public AddVendorFragment() {
         // Required empty public constructor
     }
-    public static AddPOSCategoryFragment newInstance() {
-        return new AddPOSCategoryFragment();
+    public static AddVendorFragment newInstance() {
+        return new AddVendorFragment();
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,6 @@ public class AddPOSCategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_p_o_s_category, container, false);
+        return inflater.inflate(R.layout.fragment_add_vendor, container, false);
     }
 }

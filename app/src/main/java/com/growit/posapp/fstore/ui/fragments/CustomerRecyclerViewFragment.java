@@ -60,8 +60,6 @@ public class CustomerRecyclerViewFragment extends Fragment {
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cstTpeArray);
         cstTypeSpinner.setAdapter(spinnerArrayAdapter);
         searchEditTxt = view.findViewById(R.id.seacrEditTxt);
-        TextView crop_text = view.findViewById(R.id.crop_text);
-        TextView product_text = view.findViewById(R.id.product_text);
         LinearLayout lay_add_customer = view.findViewById(R.id.lay_add_customer);
         total_customer_text = view.findViewById(R.id.total_customer_text);
         backBtn = view.findViewById(R.id.backBtn);
@@ -72,8 +70,8 @@ public class CustomerRecyclerViewFragment extends Fragment {
         customAdapter = new CustomerRecyclerViewAdapter(getActivity(), null);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
-        product_text.setVisibility(View.GONE);
-        crop_text.setVisibility(View.GONE);
+
+
         cstTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -122,6 +120,7 @@ public class CustomerRecyclerViewFragment extends Fragment {
                 Fragment fragment = AddCustomerFragment.newInstance();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
             }
         });
         backBtn.setOnClickListener(new View.OnClickListener() {

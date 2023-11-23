@@ -139,11 +139,13 @@ public class AddCustomerFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
             }
         });
         cstTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
 
                     cusTomerType = cstTpeIDArray[position];
                     if (cusTomerType.equals("1")) {

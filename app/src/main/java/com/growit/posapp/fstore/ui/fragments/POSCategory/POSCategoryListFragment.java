@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments.AddProduct;
+package com.growit.posapp.fstore.ui.fragments.POSCategory;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,30 +26,39 @@ import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
-import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
+import com.growit.posapp.fstore.adapters.CropAdapter;
+import com.growit.posapp.fstore.adapters.POSAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
+import com.growit.posapp.fstore.databinding.FragmentPOSCategoryBinding;
+import com.growit.posapp.fstore.databinding.FragmentPOSCategoryListBinding;
 import com.growit.posapp.fstore.model.StockInventoryModel;
-import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
+import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 
-public class AddProductListFragment extends Fragment {
-    FragmentAddProductListBinding binding;
+public class POSCategoryListFragment extends Fragment {
+
+
+    FragmentPOSCategoryListBinding binding;
     StockInventoryModel stockInventoryModel;
-    AddProductListAdapter adapter;
-    public AddProductListFragment() {
+    POSAdapter adapter;
+    public POSCategoryListFragment() {
         // Required empty public constructor
     }
 
-    public static AddProductListFragment newInstance() {
-        return new AddProductListFragment();
+    public static POSCategoryListFragment newInstance() {
+        return new POSCategoryListFragment();
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,13 +71,14 @@ public class AddProductListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding= DataBindingUtil.inflate(inflater,R.layout.fragment_add_product_list, container, false);
+        //R.layout.fragment_p_o_s_category_list,
+        binding= FragmentPOSCategoryListBinding.inflate(inflater, container, false);
         init();
         return binding.getRoot();
     }
     private void init(){
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
-        binding.recycler.setLayoutManager(layoutManager);
+        binding.recyclerPos.setLayoutManager(layoutManager);
         if (Utility.isNetworkAvailable(getContext())) {
             getProductList();
         } else {
@@ -98,7 +108,7 @@ public class AddProductListFragment extends Fragment {
         binding.addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = AddProductFragment.newInstance();
+                Fragment fragment = AddPOSCategoryFragment.newInstance();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
@@ -133,12 +143,12 @@ public class AddProductListFragment extends Fragment {
                             binding.noItem.setVisibility(View.GONE);
                         } else {
                             binding.noItem.setVisibility(View.GONE);
-                            binding.recycler.setVisibility(View.VISIBLE);
+                            binding.recyclerPos.setVisibility(View.VISIBLE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            adapter = new AddProductListAdapter(getActivity(), stockInventoryModel.getData());
-                            binding.recycler.setAdapter(adapter);
-                            binding.recycler.setLayoutManager(layoutManager);
+                            adapter = new POSAdapter(getActivity(), stockInventoryModel.getData());
+                            binding.recyclerPos.setAdapter(adapter);
+                            binding.recyclerPos.setLayoutManager(layoutManager);
 
                         }
                     }
@@ -150,8 +160,10 @@ public class AddProductListFragment extends Fragment {
             }
         }, error -> {
             binding.noItem.setVisibility(View.VISIBLE);
-            binding.recycler.setVisibility(View.GONE);
+            binding.recyclerPos.setVisibility(View.GONE);
         });
         queue.add(jsonObjectRequest);
     }
+
+
 }

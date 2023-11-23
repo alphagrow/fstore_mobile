@@ -124,8 +124,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 try {
                     //our imageFilePath that contains the absolute path to the created file
                     File file = new File(imageFilePath);
-                    Bitmap imageBitmap = MediaStore.Images.Media
-                            .getBitmap(getContentResolver(), Uri.fromFile(file));
+                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
                     idPBLoading.setVisibility(View.VISIBLE);
                     if (!Utility.isNetworkAvailable(getApplication())) {
                         Toast.makeText(getApplication(), "Network not available.Please try later!", Toast.LENGTH_SHORT).show();

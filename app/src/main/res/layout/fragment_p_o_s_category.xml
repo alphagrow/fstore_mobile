@@ -1,14 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.fragments.POSCategory.AddPOSCategoryFragment">
+
+
+<LinearLayout
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.AddPOSCategoryFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="65dp"
+        android:weightSum="3"
+        android:background="@drawable/back_images"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <ImageView
+            android:layout_marginStart="10dp"
+            android:id="@+id/backBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="start|center"
+            android:background="@drawable/baseline_arrow_back_24">
+        </ImageView>
+        <TextView
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="50dp"
+            android:id="@+id/titleTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="start|center"
+            android:fontFamily="@font/roboto_regular"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="Add Crop"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_gravity="center"
+            android:src="@drawable/no_image"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="10dp" />
+
+
+
+
+
+    <EditText
+        android:id="@+id/crop_name"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="@dimen/twenty_five"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/twenty_five"
+        android:background="@drawable/custom_edit_text_cut"
+        android:drawableEnd="@drawable/land_size"
+        android:drawablePadding="@dimen/ten"
+        android:fontFamily="@font/sf_compact_medium"
+        android:hint="Crop Name"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:padding="8dp"
+        android:requiresFadingEdge="vertical"
+        android:textSize="14dp" />
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/helvetica_neue_medium"
+        android:gravity="center"
+        android:padding="@dimen/ten"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="#ffff"
+        android:textSize="16sp" />
+    <FrameLayout
+        android:id="@+id/fl_pic_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/pic_image"
+            layout="@layout/view_pic_image" />
+    </FrameLayout>
+
+
+</LinearLayout>
+</layout>
