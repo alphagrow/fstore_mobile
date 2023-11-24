@@ -2,12 +2,15 @@ package com.growit.posapp.fstore.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,24 +18,36 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.StockInventoryModelList;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
+import com.growit.posapp.fstore.utils.SessionManagement;
+import com.growit.posapp.fstore.utils.Utility;
 import com.skyhope.showmoretextview.ShowMoreTextView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.List;
 
 public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
 
 
-    private List<StockInventoryModelList> list;
+    private List<Value> list;
 private Context mContext;
 
-    public POSAdapter(Context context, List<StockInventoryModelList> contacts) {
+    public POSAdapter(Context context, List<Value> contacts) {
         list = contacts;
         mContext = context;
     }
@@ -40,7 +55,7 @@ private Context mContext;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
     public TextView nameTextView;
-    ImageView productThumb;
+    ImageView productThumb,deleteBtn;
     LinearLayout card;
     ShowMoreTextView product_name_text;
     public ViewHolder(View itemView) {
@@ -48,6 +63,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         product_name_text = itemView.findViewById(R.id.product_name_text);
         productThumb = itemView.findViewById(R.id.images);
         card = itemView.findViewById(R.id.card);
+        deleteBtn = itemView.findViewById(R.id.deleteBtn);
     }
 }
 
@@ -63,15 +79,15 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     @Override
     public void onBindViewHolder(@NonNull POSAdapter.ViewHolder holder, int position) {
-        StockInventoryModelList model = list.get(position);
-        holder.product_name_text.setText(model.getProductName());
+        Value model = list.get(position);
+        holder.product_name_text.setText(model.getValueName());
         holder.product_name_text.setShowingChar(100);
         holder.product_name_text.setShowingLine(2);
         holder.product_name_text.addShowMoreText("");
         holder.product_name_text.addShowLessText("Less");
         holder.product_name_text.setShowMoreColor(Color.BLACK); // or other color
         holder.product_name_text.setShowLessTextColor(Color.RED); // or other color
-        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getProductImage())
+        Picasso.with(mContext).load(model.getImage_url())
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.no_image)
                 .into(holder.productThumb);
@@ -79,11 +95,59 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("crop_list", (Serializable) list);
+                bundle.putInt("position", position);
                 Fragment fragment = AddPOSCategoryFragment.newInstance();
+                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+
             }
         });
+        holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Value model = list.get(position);
+                getDelete(String.valueOf(model.getValueId()));
+            }
+        });
+    }
+    private void getDelete(String id) {
+        SessionManagement sm = new SessionManagement(mContext);
+        RequestQueue queue = Volley.newRequestQueue(mContext);//162.246.254.203:8069
+        String url = ApiConstants.BASE_URL + ApiConstants.DELETE_POS_CATEGORY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "pos_category_id=" + id;
+        Log.v("delete_product_url", url);
+        Utility.showDialoge("Please wait while a moment...", mContext);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                Utility.dismissDialoge();
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+                    String message = obj.optString("message");
+                    String error_message = obj.optString("error_message");
+
+                    if (status.equalsIgnoreCase("success")) {
+
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(mContext, error_message, Toast.LENGTH_SHORT).show();
+
+                    }
+                }catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        }, error -> Toast.makeText(mContext, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
     }
 
 

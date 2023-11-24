@@ -299,7 +299,6 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         if (view.getId() == R.id.submit_btn) {
             str_product_name = binding.etProductName.getText().toString();
             str_product_price = binding.etProductPrice.getText().toString();
-            str_uom = binding.etUom.getText().toString();
             str_size = binding.etSize.getText().toString();
             str_color = binding.etColor.getText().toString();
             str_whole_pattern = binding.etWholePattern.getText().toString();
@@ -314,7 +313,7 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
             String str_description = binding.description.getText().toString();
             String str_uomProduct = binding.etUomProduct.getText().toString();
 
-            if (str_product_name.length() == 0 || str_product_price.length() == 0 || str_uom.length() == 0) {
+            if (str_product_name.length() == 0 || str_product_price.length() == 0) {
                 Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -322,11 +321,11 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            addProductRequest(str_product_name, str_product_price, str_uom, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop, str_whichPest,str_etUom,str_description,str_uomProduct);
+            addProductRequest(str_product_name, str_product_price, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop, str_whichPest,str_etUom,str_description,str_uomProduct);
         }
     }
 
-    private void addProductRequest(String product_name, String product_price, String uom, String size, String color, String whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String cir_no,String str_whichCrop,String str_whichPest,String str_etUom,String str_description,String str_uomProduct) {
+    private void addProductRequest(String product_name, String product_price,String size, String color, String whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String cir_no,String str_whichCrop,String str_whichPest,String str_etUom,String str_description,String str_uomProduct) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         //params.put("user_id", sm.getUserID() + "");
@@ -343,6 +342,8 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         params.put("non_gov_product", str_non_gov_product);
         params.put("mfd_date", str_mfd_date);
         params.put("exp_date", str_exp_date);
+//        params.put("uom_id", str_etUom); //kg,ml, etc by API
+//        params.put("uom_po_id", str_uomProduct);
         params.put("uom_id", "Days");
         params.put("uom_po_id", "Days");
         params.put("detailed_type", str_detailed_type);
@@ -354,7 +355,7 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
         Log.d("url_addproduct",params.toString());
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_PRODUCT, new VolleyCallback() {
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_ADD_PRODUCT, new VolleyCallback() {
             private String message = "Registration failed!!";
             @Override
             public void onSuccess(Object result) throws JSONException {

@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,8 @@ import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
 import com.growit.posapp.fstore.databinding.AddCustomerFragmentBinding;
 import com.growit.posapp.fstore.databinding.FragmentPOSCategoryBinding;
+import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.tables.Customer;
 import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -46,11 +49,13 @@ import com.growit.posapp.fstore.volley.VolleyRequestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -63,6 +68,9 @@ public class AddPOSCategoryFragment extends Fragment {
     String imageFilePath;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 3;
+    Bitmap imageBitmap = null;
+    String str_image_crop;
+    List<Value> crop_mode = null;
     public AddPOSCategoryFragment() {
         // Required empty public constructor
     }
@@ -85,6 +93,12 @@ public class AddPOSCategoryFragment extends Fragment {
         return  binding.getRoot();
     }
     private void init(){
+        if (getArguments() != null) {
+            crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
+            int position = getArguments().getInt("position");
+            binding.cropName.setText(crop_mode.get(position).getValueName());
+        }
+
         binding.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +114,9 @@ public class AddPOSCategoryFragment extends Fragment {
                     return;
                 }
                 if (isAllFieldsChecked) {
-                    getPosCategory();
+                    if(str_image_crop !=null) {
+                        getPosCategory(binding.cropName.getText().toString(),str_image_crop);
+                    }
                 }
             }
         });
@@ -181,7 +197,7 @@ public class AddPOSCategoryFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_FROM_FILE) {
                 Uri selectedImageUri = data.getData();
-                Bitmap imageBitmap = null;
+
                 try {
                     imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
                 } catch (IOException e) {
@@ -191,18 +207,20 @@ public class AddPOSCategoryFragment extends Fragment {
                     Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
+                str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
                 binding.profileImage.setImageBitmap(imageBitmap);
             } else if (requestCode == PICK_FROM_CAMERA) {
 
                 try {
                     //our imageFilePath that contains the absolute path to the created file
                     File file = new File(imageFilePath);
-                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                     imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
 
                     if (!Utility.isNetworkAvailable(getActivity())) {
                         Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
                    binding.profileImage.setImageBitmap(imageBitmap);
 
                 } catch (Exception e) {
@@ -213,7 +231,14 @@ public class AddPOSCategoryFragment extends Fragment {
         }
     }
 
-
+    public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        byte[] byteFormat = stream.toByteArray();
+        // Get the Base64 string
+        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+        return imgString;
+    }
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
@@ -236,14 +261,16 @@ public class AddPOSCategoryFragment extends Fragment {
         }
         return true;
     }
-    private void getPosCategory(){
+    private void getPosCategory(String crop_name,String str_image_crop){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-//        params.put("name", nameStr);
-
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+        params.put("user_id", sm.getUserID()+ "");
+        params.put("token", sm.getJWTToken());
+          params.put("name", crop_name);
+        params.put("image_data", str_image_crop);
+          Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_CUSTOMER, new VolleyCallback() {
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_POS_CATEGORY, new VolleyCallback() {
             private String message = "Registration failed!!";
 
             @Override
@@ -253,8 +280,9 @@ public class AddPOSCategoryFragment extends Fragment {
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
 
-                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
+                if (message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -267,18 +295,6 @@ public class AddPOSCategoryFragment extends Fragment {
 
     }
 
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
+
 
 }

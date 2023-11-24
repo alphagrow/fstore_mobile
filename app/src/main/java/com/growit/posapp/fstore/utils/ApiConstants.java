@@ -39,7 +39,11 @@ public class ApiConstants {
     public final static String POST_ORDER_DISCOUNT = "/api/get/order-discount?";
     public final static String LOGOUT_REQUEST = "api/close_pos_session?";//session_id
     public final static String GET_STOCK_QUANT = "/api/stock_quant/details?";
-    public final static String ADD_PRODUCT = "/api/create_product?";
+    public final static String POST_ADD_PRODUCT = "/api/create_product?";
+    public final static String DELETE_PRODUCT = "/api/delete_product?";
+    public final static String PUT_UPDATE_PRODUCT = "/api/update_product?";
+    public final static String POST_CREATE_POS_CATEGORY = "/api/create_pos_category?";
+    public final static String DELETE_POS_CATEGORY = "/api/delete_pos_category?";
 }
 
 

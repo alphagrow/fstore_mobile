@@ -1,8 +1,11 @@
 package com.growit.posapp.fstore.ui.fragments.AddProduct;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,24 +29,31 @@ import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
+import com.growit.posapp.fstore.adapters.ProductListAdapter;
 import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
+import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddProductListFragment extends Fragment {
     FragmentAddProductListBinding binding;
     StockInventoryModel stockInventoryModel;
     AddProductListAdapter adapter;
+    protected List<Product> productList = new ArrayList<>();
+    Activity contexts;
     public AddProductListFragment() {
         // Required empty public constructor
     }
@@ -104,54 +114,124 @@ public class AddProductListFragment extends Fragment {
             }
         });
     }
-    private void getProductList(){
+//    private void getProductList(){
+//        SessionManagement sm = new SessionManagement(getActivity());
+//        RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
+//        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+//        Log.v("url", url);
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.v("Response", response.toString());
+//
+//                JSONObject obj = null;
+//                try {
+//                    obj = new JSONObject(response.toString());
+//                    int statusCode = obj.optInt("statuscode");
+//                    String status = obj.optString("status");
+//
+//                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+//                        Utility.dismissDialoge();
+//                        Gson gson = new Gson();
+//                        Type listType = new TypeToken<StockInventoryModel>() {
+//                        }.getType();
+//
+//                        stockInventoryModel = gson.fromJson(response.toString(), listType);
+//                        if (stockInventoryModel.getData() == null || stockInventoryModel.getData().size() == 0) {
+//                            binding.noItem.setVisibility(View.VISIBLE);
+//                            binding.noItem.setVisibility(View.GONE);
+//                        } else {
+//                            binding.noItem.setVisibility(View.GONE);
+//                            binding.recycler.setVisibility(View.VISIBLE);
+//                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//                            adapter = new AddProductListAdapter(getActivity(), stockInventoryModel);
+//                            binding.recycler.setAdapter(adapter);
+//                            binding.recycler.setLayoutManager(layoutManager);
+//
+//                        }
+//                    }
+//                }catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//
+//            }
+//        }, error -> {
+//            binding.noItem.setVisibility(View.VISIBLE);
+//            binding.recycler.setVisibility(View.GONE);
+//        });
+//        queue.add(jsonObjectRequest);
+//    }
+@Override
+public void onAttach(@NonNull Context context) {
+    super.onAttach(context);
+    contexts = getActivity();
+
+}
+
+
+    private void getProductList() {
         SessionManagement sm = new SessionManagement(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Log.v("url", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + "1" + "&" + "token=" + sm.getJWTToken();
+        Log.d("product_list",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
-                        Gson gson = new Gson();
-                        Type listType = new TypeToken<StockInventoryModel>() {
-                        }.getType();
+                        JSONArray jsonArray = obj.getJSONArray("data");
+                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
+                        productList = new ArrayList<>();
+                        if (productArray.length() > 0) {
+                            for (int i = 0; i < productArray.length(); i++) {
+                                Product product = new Product();
+                                JSONObject data = productArray.getJSONObject(i);
+                                int ID = data.optInt("product_id");
+                                String name = data.optString("product_name");
+                                double price = data.optDouble("list_price");
+                                product.setProductID(ID + "");
+                                product.setProductName(name);
+                                product.setPrice(price);
+                                String image = "";
+                                if (data.opt("image_url").equals(false)) {
+                                    image = "";
+                                } else {
+                                    image = data.optString("image_url");
+                                }
+                                product.setProductImage(image);
+                                productList.add(product);
+                            }
+                            if (productList == null || productList.size() == 0) {
+                                binding.noItem.setVisibility(View.VISIBLE);
+                                binding.noItem.setVisibility(View.GONE);
+                            } else {
+                                binding.noItem.setVisibility(View.GONE);
+                                binding.recycler.setVisibility(View.VISIBLE);
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                adapter = new AddProductListAdapter(getActivity(), productList);
+                                binding.recycler.setAdapter(adapter);
+                                binding.recycler.setLayoutManager(layoutManager);
 
-                        stockInventoryModel = gson.fromJson(response.toString(), listType);
-                        if (stockInventoryModel.getData() == null || stockInventoryModel.getData().size() == 0) {
-                            binding.noItem.setVisibility(View.VISIBLE);
-                            binding.noItem.setVisibility(View.GONE);
-                        } else {
-                            binding.noItem.setVisibility(View.GONE);
-                            binding.recycler.setVisibility(View.VISIBLE);
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            adapter = new AddProductListAdapter(getActivity(), stockInventoryModel.getData());
-                            binding.recycler.setAdapter(adapter);
-                            binding.recycler.setLayoutManager(layoutManager);
-
-                        }
+                            }
+                            adapter.notifyDataSetChanged();                        }
                     }
-                }catch (JSONException e) {
+                } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-
-
             }
-        }, error -> {
-            binding.noItem.setVisibility(View.VISIBLE);
-            binding.recycler.setVisibility(View.GONE);
-        });
+        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
+
     }
+
 }

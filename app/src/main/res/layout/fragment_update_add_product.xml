@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFF">
-        <!--tools:context=".ui.fragments.AddProduct.AddProductFragment"-->
         <ScrollView
             android:id="@+id/sv_non_login"
             android:layout_width="match_parent"
@@ -44,7 +43,7 @@
                         android:fontFamily="@font/roboto_regular"
                         android:textStyle="bold"
                         android:textSize="18sp"
-                        android:text="Add Product"
+                        android:text="Update Product"
                         android:textColor="@color/white" />
 
 
@@ -97,7 +96,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="@dimen/twenty_five"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_event_24"
+                    android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint="@string/UOM"
@@ -107,6 +106,23 @@
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
 
+                <EditText
+                    android:id="@+id/et_uom_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/land_size"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint="UOM Product"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:requiresFadingEdge="vertical"
+                    android:textSize="14dp" />
 
                 <EditText
                     android:id="@+id/et_size"
@@ -195,7 +211,7 @@
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint="Brand Name"
                     android:importantForAutofill="no"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
@@ -285,7 +301,7 @@
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint="Which Crop"
                     android:importantForAutofill="no"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
@@ -303,7 +319,7 @@
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint="Which Pest"
                     android:importantForAutofill="no"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
@@ -321,7 +337,7 @@
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint="Packing Std"
                     android:importantForAutofill="no"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
@@ -357,7 +373,7 @@
                     android:drawableEnd="@drawable/baseline_calendar_month_24"
                     android:gravity="center|start"
                     android:hint="Exp. Date"
-                    android:inputType="text"
+                    android:inputType="date"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:singleLine="true"
@@ -380,6 +396,25 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textSize="15sp" />
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/land_size"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint="Description"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:requiresFadingEdge="vertical"
+                    android:textSize="14dp" />
+
+
 
                 <!--            <include-->
                 <!--                android:id="@+id/sel_non_gov"-->

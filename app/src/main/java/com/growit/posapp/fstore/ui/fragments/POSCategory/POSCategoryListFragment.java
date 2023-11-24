@@ -1,8 +1,11 @@
 package com.growit.posapp.fstore.ui.fragments.POSCategory;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -45,6 +48,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class POSCategoryListFragment extends Fragment {
@@ -53,6 +57,8 @@ public class POSCategoryListFragment extends Fragment {
     FragmentPOSCategoryListBinding binding;
     StockInventoryModel stockInventoryModel;
     POSAdapter adapter;
+    Activity contexts;
+    List<Value> cropList = new ArrayList<>();
     public POSCategoryListFragment() {
         // Required empty public constructor
     }
@@ -77,10 +83,13 @@ public class POSCategoryListFragment extends Fragment {
         return binding.getRoot();
     }
     private void init(){
+        cropList = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerPos.setLayoutManager(layoutManager);
+
+
         if (Utility.isNetworkAvailable(getContext())) {
-            getProductList();
+            getCropRequest();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -90,7 +99,7 @@ public class POSCategoryListFragment extends Fragment {
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
-                    getProductList();
+                    getCropRequest();
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -114,17 +123,18 @@ public class POSCategoryListFragment extends Fragment {
             }
         });
     }
-    private void getProductList(){
-        SessionManagement sm = new SessionManagement(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Log.v("url", url);
+
+    private void getCropRequest() {
+        adapter = new POSAdapter(getActivity(), cropList);
+        binding.recyclerPos.setAdapter(adapter);
+        SessionManagement sm = new SessionManagement(contexts);
+        RequestQueue queue = Volley.newRequestQueue(contexts);
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
@@ -133,36 +143,43 @@ public class POSCategoryListFragment extends Fragment {
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
-                        Gson gson = new Gson();
-                        Type listType = new TypeToken<StockInventoryModel>() {
-                        }.getType();
-
-                        stockInventoryModel = gson.fromJson(response.toString(), listType);
-                        if (stockInventoryModel.getData() == null || stockInventoryModel.getData().size() == 0) {
-                            binding.noItem.setVisibility(View.VISIBLE);
-                            binding.noItem.setVisibility(View.GONE);
-                        } else {
-                            binding.noItem.setVisibility(View.GONE);
-                            binding.recyclerPos.setVisibility(View.VISIBLE);
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            adapter = new POSAdapter(getActivity(), stockInventoryModel.getData());
-                            binding.recyclerPos.setAdapter(adapter);
-                            binding.recyclerPos.setLayoutManager(layoutManager);
+                        JSONArray jsonArray = obj.getJSONArray("data");
+                        cropList.clear();
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Value cropPattern = new Value();
+                                JSONObject data = jsonArray.getJSONObject(i);
+                                Integer cropID = data.optInt("category_id");
+                                String name = data.optString("name");
+                                String image_url = data.optString("image_url");
+                                cropPattern.setValueId(Integer.valueOf(cropID + ""));
+                                cropPattern.setValueName(name);
+                                cropPattern.setImage_url(image_url);
+                                cropPattern.setSelectedPosition(0);
+                                cropList.add(cropPattern);
+                            }
+                            if (cropList == null || cropList.size() == 0) {
+                                binding.noItem.setVisibility(View.VISIBLE);
+                            } else {
+                                binding.noItem.setVisibility(View.GONE);
+                            }
 
                         }
+                        adapter.notifyDataSetChanged();
                     }
-                }catch (JSONException e) {
+                } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-
-
             }
-        }, error -> {
-            binding.noItem.setVisibility(View.VISIBLE);
-            binding.recyclerPos.setVisibility(View.GONE);
-        });
+        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        contexts = getActivity();
+
     }
 
 

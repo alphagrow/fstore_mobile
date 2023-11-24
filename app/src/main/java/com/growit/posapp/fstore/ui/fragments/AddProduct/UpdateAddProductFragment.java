@@ -42,12 +42,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
 import com.growit.posapp.fstore.databinding.FragmentUpdateAddProductBinding;
+import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -108,8 +114,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         // Required empty public constructor
     }
 
-    public static AddProductFragment newInstance() {
-        return new AddProductFragment();
+    public static UpdateAddProductFragment newInstance() {
+        return new UpdateAddProductFragment();
     }
 
 
@@ -254,21 +260,21 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         String   str_mfd_date = sdf.format(myCalendar.getTime());
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
         String date_e = sd.format(myCalendar.getTime());
-        mfd_date.setText(date_e);
+        binding.mfdDate.setText(date_e);
     }
     private void ExpireLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
         String   str_exp_date = sdf.format(myCalendar.getTime());
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
         String date_e = sd.format(myCalendar.getTime());
-        exp_date.setText(date_e);
+        binding.expDate.setText(date_e);
     }
     private void AlarmLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
         String   str_exp_date = sdf.format(myCalendar.getTime());
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
         String date_e = sd.format(myCalendar.getTime());
-        exp_date_alarm.setText(date_e);
+        binding.expDateAlarm.setText(date_e);
     }
     /**
      * Called when a view has been clicked.
@@ -280,74 +286,84 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         if (view.getId() == R.id.submit_btn) {
             str_product_name = binding.etProductName.getText().toString();
             str_product_price = binding.etProductPrice.getText().toString();
-            str_uom = binding.etUom.getText().toString();
             str_size = binding.etSize.getText().toString();
             str_color = binding.etColor.getText().toString();
             str_whole_pattern = binding.etWholePattern.getText().toString();
-            if (str_product_name.length() == 0 || str_product_price.length() == 0 || str_uom.length() == 0) {
-                Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            String str_techNamePest = binding.techNamePest.getText().toString();
+            String str_brand_name = binding.brandName.getText().toString();
+            String str_mkt_by = binding.mktBy.getText().toString();
+            String str_batchNumber = binding.batchNumber.getText().toString();
+            String str_cirNumber = binding.cirNumber.getText().toString();
+            String str_whichCrop = binding.whichCrop.getText().toString();
+            String str_whichPest = binding.whichPest.getText().toString();
+            String str_etUom = binding.etUom.getText().toString();
+            String str_description = binding.description.getText().toString();
+            String str_uomProduct = binding.etUomProduct.getText().toString();
+
+//            if (str_product_name.length() == 0 || str_product_price.length() == 0 || str_uom.length() == 0) {
+//                Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
             if (!Utility.isNetworkAvailable(getActivity())) {
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            addProductRequest(str_product_name, str_product_price, str_uom, str_size, str_color, str_whole_pattern);
+            updateProductRequest(str_product_name, str_product_price, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop,str_whichPest,str_etUom,str_description,str_uomProduct);
         }
     }
 
-    private void addProductRequest(String product_name, String product_price, String uom, String size, String color, String whole_pattern) {
+    private void updateProductRequest(String str_product_name,String str_product_price, String str_size,String str_color, String str_whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String str_cirNumber,String str_whichCrop,String str_whichPest,String str_etUom,String str_description,String str_uomProduct) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
+        params.put("name", str_product_name);
         params.put("user_id", sm.getUserID() + "");
-        params.put("product_name", product_name);
-        params.put("product_price", product_price);
-        params.put("uom", uom);
-        params.put("size", size);
-        params.put("color", color);
-        params.put("whole_pattern", whole_pattern);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMax(100);
-        progressDialog.setMessage("Please wait while a moment...");
-        progressDialog.setTitle("Registering");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_CUSTOMER, new VolleyCallback() {
-            private String message = "Registration failed!!";
+        params.put("token", sm.getJWTToken());
+        params.put("technical_pest", str_techNamePest);
+        params.put("brand_name", str_brand_name);
+        params.put("mkd_by", str_mkt_by);
+        params.put("batch_number", str_batchNumber);
+        params.put("cir_no", str_cirNumber);
+        params.put("which_crop", str_whichCrop);
+        params.put("which_pest", str_whichPest);
+        params.put("list_price", str_product_price);
+
+        params.put("non_gov_product", str_whichPest);
+        params.put("mfd_date", str_whichPest);
+        params.put("exp_date", str_whichPest);
+//        params.put("uom_id",str_etUom);   //kg,ml
+//        params.put("uom_po_id", "str_uomProduct");
+        params.put("uom_id", "Days");
+        params.put("uom_po_id", "Days");
+        params.put("detailed_type", "product");
+       params.put("description", str_description);
+
+        params.put("product_id", "34");
+
+        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_PRODUCT, new VolleyCallback() {
+            private String message = "Update failed!!";
+
             @Override
             public void onSuccess(Object result) throws JSONException {
-                Log.v("Response", result.toString());
                 JSONObject obj = new JSONObject(result.toString());
-                int statusCode = obj.optInt("statuscode");
-                message = obj.optString("status");
-                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-                    int visibility = (progressBar.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
-                    progressBar.setVisibility(visibility);
-                    progressDialog.cancel();
-//                    SaveTask st = new SaveTask();
-//                    st.execute();
-                    resetFields();
+                String status = obj.optString("status");
+                message = obj.optString("message");
+               String error_message = obj.optString("error_message");
+                if (status.equalsIgnoreCase("success")) {
+                    Toast.makeText(getActivity(), "Update Product", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+
                 }
             }
 
             @Override
             public void onError(String result) throws Exception {
-                progressDialog.cancel();
-                Log.v("Response", result);
-                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+                Log.v("Response", result.toString());
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void resetFields() {
-        binding.etProductName.setText("");
-        binding.etProductPrice.setText("");
-        binding.etUom.setText("");
-        binding.etSize.setText("");
-        binding.etColor.setText("");
-        binding.etWholePattern.setText("");
-
-    }
 
     private void takePhoto() {
         final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
