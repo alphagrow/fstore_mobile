@@ -140,7 +140,6 @@ public class POSCategoryListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
