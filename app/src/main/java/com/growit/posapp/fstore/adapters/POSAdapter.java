@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -23,10 +24,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.StockInventoryModelList;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -45,7 +48,7 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
 
 
     private List<Value> list;
-private Context mContext;
+    private Context mContext;
 
     public POSAdapter(Context context, List<Value> contacts) {
         list = contacts;
@@ -53,19 +56,20 @@ private Context mContext;
     }
 
 
-public class ViewHolder extends RecyclerView.ViewHolder {
-    public TextView nameTextView;
-    ImageView productThumb,deleteBtn;
-    LinearLayout card;
-    ShowMoreTextView product_name_text;
-    public ViewHolder(View itemView) {
-        super(itemView);
-        product_name_text = itemView.findViewById(R.id.product_name_text);
-        productThumb = itemView.findViewById(R.id.images);
-        card = itemView.findViewById(R.id.card);
-        deleteBtn = itemView.findViewById(R.id.deleteBtn);
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView nameTextView;
+        ImageView productThumb,deleteBtn,update;
+        LinearLayout card;
+        ShowMoreTextView product_name_text;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            product_name_text = itemView.findViewById(R.id.product_name_text);
+            productThumb = itemView.findViewById(R.id.images);
+            card = itemView.findViewById(R.id.card);
+            deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            update = itemView.findViewById(R.id.update);
+        }
     }
-}
 
     @Override
     public POSAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -92,29 +96,57 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 .error(R.drawable.no_image)
                 .into(holder.productThumb);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("crop_list", (Serializable) list);
                 bundle.putInt("position", position);
                 Fragment fragment = AddPOSCategoryFragment.newInstance();
-                 fragment.setArguments(bundle);
+                fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
 
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("crop_list", (Serializable) list);
+                bundle.putInt("position", position);
+                Fragment fragment = AddProductListFragment.newInstance();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+
+            }
+        });
+
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Value model = list.get(position);
-                getDelete(String.valueOf(model.getValueId()));
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage("Are you sure you want to delete ?");
+                builder.setTitle("Alert !");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    Value model = list.get(position);
+                    getDelete(String.valueOf(model.getValueId()),position);
+
+                });
+
+                builder.setNegativeButton("No", (dialog, which) -> {
+                    dialog.cancel();
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
     }
-    private void getDelete(String id) {
+    private void getDelete(String id,int position) {
         SessionManagement sm = new SessionManagement(mContext);
         RequestQueue queue = Volley.newRequestQueue(mContext);//162.246.254.203:8069
         String url = ApiConstants.BASE_URL + ApiConstants.DELETE_POS_CATEGORY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "pos_category_id=" + id;
@@ -134,6 +166,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                     String error_message = obj.optString("error_message");
 
                     if (status.equalsIgnoreCase("success")) {
+                        list.remove(position);
+                        notifyDataSetChanged();
 
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }else {

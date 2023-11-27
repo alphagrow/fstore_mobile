@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -32,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
@@ -45,6 +48,7 @@ import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +56,8 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -71,6 +77,7 @@ public class AddPOSCategoryFragment extends Fragment {
     Bitmap imageBitmap = null;
     String str_image_crop;
     List<Value> crop_mode = null;
+    int position;
     public AddPOSCategoryFragment() {
         // Required empty public constructor
     }
@@ -93,10 +100,22 @@ public class AddPOSCategoryFragment extends Fragment {
         return  binding.getRoot();
     }
     private void init(){
+        binding.titleTxt.setText("Add crop");
         if (getArguments() != null) {
+            binding.titleTxt.setText("Update crop");
             crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
-            int position = getArguments().getInt("position");
+            position = getArguments().getInt("position");
             binding.cropName.setText(crop_mode.get(position).getValueName());
+            str_image_crop= Utility.convertUrlToBase64(crop_mode.get(position).getImage_url());
+            Picasso.with(getActivity()).load(crop_mode.get(position).getImage_url())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.no_image)
+                    .into(binding.profileImage);
+
+            binding.update.setVisibility(View.VISIBLE);
+            binding.submitBtn.setVisibility(View.GONE);
+
+
         }
 
         binding.profileImage.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +124,25 @@ public class AddPOSCategoryFragment extends Fragment {
                 takePhoto();
             }
         });
+        binding.update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isAllFieldsChecked= CheckAllFields();
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (isAllFieldsChecked) {
+                    if(str_image_crop !=null) {
+                        getUpdatePosCategory(binding.cropName.getText().toString(),String.valueOf(crop_mode.get(position).getValueId()),str_image_crop);
+                   }else {
+                        Toast.makeText(getContext(), " Change image", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+        });
+
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +166,7 @@ public class AddPOSCategoryFragment extends Fragment {
             }
         });
     }
+
     private void takePhoto() {
         final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -214,14 +253,14 @@ public class AddPOSCategoryFragment extends Fragment {
                 try {
                     //our imageFilePath that contains the absolute path to the created file
                     File file = new File(imageFilePath);
-                     imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
 
                     if (!Utility.isNetworkAvailable(getActivity())) {
                         Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
-                   binding.profileImage.setImageBitmap(imageBitmap);
+                    binding.profileImage.setImageBitmap(imageBitmap);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -266,9 +305,9 @@ public class AddPOSCategoryFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID()+ "");
         params.put("token", sm.getJWTToken());
-          params.put("name", crop_name);
+        params.put("name", crop_name);
         params.put("image_data", str_image_crop);
-          Utility.showDialoge("Please wait while a moment...", getActivity());
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_POS_CATEGORY, new VolleyCallback() {
             private String message = "Registration failed!!";
@@ -283,6 +322,8 @@ public class AddPOSCategoryFragment extends Fragment {
                 if (message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    binding.cropName.setText("");
+                    binding.profileImage.setImageResource(R.drawable.no_image);
 
                 }
             }
@@ -296,5 +337,38 @@ public class AddPOSCategoryFragment extends Fragment {
     }
 
 
+    private void getUpdatePosCategory(String crop_name ,String str_pos_category,String image_crop) {
+        SessionManagement sm = new SessionManagement(getActivity());
+        Map<String, String> params = new HashMap<>();
+        params.put("pos_category_id", str_pos_category);
+        params.put("user_id", sm.getUserID() + "");
+        params.put("token", sm.getJWTToken());
+        params.put("name", crop_name);
+        params.put("image_data", image_crop);
+        Log.d("crop_list",params.toString());
+        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_POS_CATEGORY, new VolleyCallback() {
+            private String message = "Update failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                JSONObject obj = new JSONObject(result.toString());
+                String status = obj.optString("status");
+                message = obj.optString("message");
+                String error_message = obj.optString("error_message");
+                if (status.equalsIgnoreCase("success")) {
+                    Toast.makeText(getActivity(), "Update crop", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Log.v("Response", result.toString());
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 }

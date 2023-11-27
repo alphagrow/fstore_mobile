@@ -429,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
 
         }  else if (menuItem.getItemId() == R.id.add_product) {
             toolbar.setVisibility(View.GONE);
-            fragment = AddProductListFragment.newInstance();
+            fragment = AddProductFragment.newInstance();
 
         } else if (menuItem.getItemId() == R.id.add_pos_category) {
             toolbar.setVisibility(View.GONE);

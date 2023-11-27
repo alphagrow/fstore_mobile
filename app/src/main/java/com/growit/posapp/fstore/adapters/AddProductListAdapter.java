@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -29,6 +30,7 @@ import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.model.StockInventoryModelList;
+import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
@@ -118,13 +120,26 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
 holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        Product model = list.get(position);
-        getDelete(model.getProductID());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage("Are you sure you want to delete ?");
+        builder.setTitle("Alert !");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            Product model = list.get(position);
+            getDelete(String.valueOf(model.getProductID()),position);
+
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            dialog.cancel();
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 });
 
     }
-    private void getDelete(String id) {
+    private void getDelete(String id,int position) {
         SessionManagement sm = new SessionManagement(mContext);
         RequestQueue queue = Volley.newRequestQueue(mContext);//162.246.254.203:8069
         String url = ApiConstants.BASE_URL + ApiConstants.DELETE_PRODUCT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "product_id=" + id;
@@ -144,7 +159,8 @@ holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
                     String error_message = obj.optString("error_message");
 
                     if (status.equalsIgnoreCase("success")) {
-
+                        list.remove(position);
+                        notifyDataSetChanged();
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(mContext, error_message, Toast.LENGTH_SHORT).show();

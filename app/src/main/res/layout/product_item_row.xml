@@ -41,7 +41,7 @@
             android:orientation="vertical">
 <LinearLayout
     android:layout_marginEnd="5dp"
-    android:weightSum="2"
+    android:weightSum="3"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -49,7 +49,7 @@
         android:padding="3dp"
         android:id="@+id/product_name_text"
         android:layout_width="0dp"
-        android:layout_weight="1.8"
+        android:layout_weight="2.3"
         android:layout_height="wrap_content"
         android:fontFamily="@font/helvetica_neue_medium"
         android:textColor="#D9171717"
@@ -58,10 +58,18 @@
     <ImageView
         android:id="@+id/deleteBtn"
         android:layout_width="0dp"
-        android:layout_weight=".2"
+        android:layout_weight=".3"
         android:layout_gravity="end"
         android:layout_height="28dp"
         android:background="@drawable/trash" />
+    <ImageView
+        android:id="@+id/update"
+        android:layout_marginLeft="5dp"
+        android:layout_width="0dp"
+        android:layout_weight=".3"
+        android:layout_gravity="end"
+        android:layout_height="28dp"
+        android:background="@drawable/updated" />
 </LinearLayout>
 
             <LinearLayout

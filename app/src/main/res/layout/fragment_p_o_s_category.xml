@@ -34,7 +34,7 @@
             android:fontFamily="@font/roboto_regular"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:text="Add Crop"
+            android:text=" "
             android:textColor="@color/white" />
 
 
@@ -71,6 +71,25 @@
         android:requiresFadingEdge="vertical"
         android:textSize="14dp" />
     <Button
+        android:id="@+id/update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/helvetica_neue_medium"
+        android:gravity="center"
+        android:padding="@dimen/ten"
+        android:text="Update"
+        android:textAllCaps="false"
+        android:textColor="#ffff"
+        android:textSize="16sp" />
+
+    <Button
+        android:visibility="visible"
         android:id="@+id/submit_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -4,14 +4,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.StrictMode;
+import android.util.Base64;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -84,7 +90,23 @@ public class Utility {
         return false;
     }
 
-
+    public static  String convertUrlToBase64(String url) {
+        URL newurl;
+        Bitmap bitmap;
+        String base64 = "";
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            newurl = new URL(url);
+            bitmap = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return base64;
+    }
     public static double decimalFormatTaxAmount(double value) {
         DecimalFormat form = new DecimalFormat("0.0000");
         double shortDouble= Double.parseDouble(form.format(Double.valueOf(value)));

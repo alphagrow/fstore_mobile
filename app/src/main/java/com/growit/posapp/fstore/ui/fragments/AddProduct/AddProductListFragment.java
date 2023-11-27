@@ -34,6 +34,7 @@ import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.StockInventoryModel;
+import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -54,6 +55,8 @@ public class AddProductListFragment extends Fragment {
     AddProductListAdapter adapter;
     protected List<Product> productList = new ArrayList<>();
     Activity contexts;
+    List<Value> crop_mode = null;
+    int position;
     public AddProductListFragment() {
         // Required empty public constructor
     }
@@ -79,18 +82,26 @@ public class AddProductListFragment extends Fragment {
     private void init(){
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recycler.setLayoutManager(layoutManager);
-        if (Utility.isNetworkAvailable(getContext())) {
-            getProductList();
-        } else {
-            Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+        if (getArguments() != null) {
+            crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
+            position = getArguments().getInt("position");
 
+            if (Utility.isNetworkAvailable(getContext())) {
+                getProductList(String.valueOf(crop_mode.get(position).getValueId()));
+            } else {
+                Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+
+            }
         }
+
+
+
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
-                    getProductList();
+                    getProductList(String.valueOf(crop_mode.get(position).getValueId()));
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -172,11 +183,11 @@ public void onAttach(@NonNull Context context) {
 }
 
 
-    private void getProductList() {
+    private void getProductList(String pos_category_id) {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + "1" + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + pos_category_id + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -211,11 +222,10 @@ public void onAttach(@NonNull Context context) {
                                 productList.add(product);
                             }
                             if (productList == null || productList.size() == 0) {
-                                binding.noItem.setVisibility(View.VISIBLE);
                                 binding.noItem.setVisibility(View.GONE);
                             } else {
                                 binding.noItem.setVisibility(View.GONE);
-                                binding.recycler.setVisibility(View.VISIBLE);
+
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                 adapter = new AddProductListAdapter(getActivity(), productList);
@@ -223,7 +233,7 @@ public void onAttach(@NonNull Context context) {
                                 binding.recycler.setLayoutManager(layoutManager);
 
                             }
-                            adapter.notifyDataSetChanged();                        }
+                                                  }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

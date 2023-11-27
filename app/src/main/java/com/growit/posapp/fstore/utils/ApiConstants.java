@@ -44,6 +44,7 @@ public class ApiConstants {
     public final static String PUT_UPDATE_PRODUCT = "/api/update_product?";
     public final static String POST_CREATE_POS_CATEGORY = "/api/create_pos_category?";
     public final static String DELETE_POS_CATEGORY = "/api/delete_pos_category?";
+    public final static String PUT_UPDATE_POS_CATEGORY = "/api/update_pos_category?";
 }
 
 

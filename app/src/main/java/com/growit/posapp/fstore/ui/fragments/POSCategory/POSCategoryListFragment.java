@@ -34,6 +34,7 @@ import com.growit.posapp.fstore.adapters.POSAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
 import com.growit.posapp.fstore.databinding.FragmentPOSCategoryBinding;
 import com.growit.posapp.fstore.databinding.FragmentPOSCategoryListBinding;
+import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
@@ -125,8 +126,6 @@ public class POSCategoryListFragment extends Fragment {
     }
 
     private void getCropRequest() {
-        adapter = new POSAdapter(getActivity(), cropList);
-        binding.recyclerPos.setAdapter(adapter);
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
@@ -140,6 +139,7 @@ public class POSCategoryListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
@@ -161,10 +161,12 @@ public class POSCategoryListFragment extends Fragment {
                                 binding.noItem.setVisibility(View.VISIBLE);
                             } else {
                                 binding.noItem.setVisibility(View.GONE);
+                                adapter = new POSAdapter(getActivity(), cropList);
+                                binding.recyclerPos.setAdapter(adapter);
+
                             }
 
                         }
-                        adapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
