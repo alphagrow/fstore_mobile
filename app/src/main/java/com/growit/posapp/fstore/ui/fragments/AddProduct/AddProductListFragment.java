@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +58,7 @@ public class AddProductListFragment extends Fragment {
     protected List<Product> productList = new ArrayList<>();
     Activity contexts;
     List<Value> crop_mode = null;
-    int position;
+    String crop_id;
     public AddProductListFragment() {
         // Required empty public constructor
     }
@@ -84,24 +86,22 @@ public class AddProductListFragment extends Fragment {
         binding.recycler.setLayoutManager(layoutManager);
         if (getArguments() != null) {
             crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
-            position = getArguments().getInt("position");
-
+         int  position = getArguments().getInt("position");
+            crop_id =String.valueOf(crop_mode.get(position).getValueId());
             if (Utility.isNetworkAvailable(getContext())) {
-                getProductList(String.valueOf(crop_mode.get(position).getValueId()));
+                getProductList(crop_id);
             } else {
                 Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
             }
         }
 
-
-
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
-                    getProductList(String.valueOf(crop_mode.get(position).getValueId()));
+                    getProductList(crop_id);
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -119,9 +119,18 @@ public class AddProductListFragment extends Fragment {
         binding.addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = AddProductFragment.newInstance();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                if(crop_id != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("crop_id", crop_id);
+                    Fragment fragment = AddProductFragment.newInstance();
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                }
+//                Fragment fragment = AddProductFragment.newInstance();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
             }
         });
     }
@@ -233,6 +242,8 @@ public void onAttach(@NonNull Context context) {
                                 binding.recycler.setLayoutManager(layoutManager);
 
                             }
+
+
                                                   }
                     }
                 } catch (JSONException e) {

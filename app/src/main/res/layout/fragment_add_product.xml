@@ -139,26 +139,6 @@
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
-
-            <EditText
-                android:id="@+id/et_size"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="@dimen/twenty_five"
-                android:background="@drawable/custom_edit_text_cut"
-                android:drawableEnd="@drawable/land_size"
-                android:drawablePadding="@dimen/ten"
-                android:fontFamily="@font/sf_compact_medium"
-                android:hint="@string/size"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:padding="8dp"
-                android:requiresFadingEdge="vertical"
-                android:textSize="14dp" />
-
-
             <EditText
                 android:id="@+id/et_color"
                 android:layout_width="match_parent"
@@ -464,6 +444,7 @@
 
 
             </RadioGroup>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

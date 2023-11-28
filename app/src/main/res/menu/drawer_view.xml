@@ -20,6 +20,10 @@
         android:icon="@drawable/user_add"
         android:id="@+id/add_pos_category"
         android:title="Add POS Category" />
+    <item
+        android:icon="@drawable/user_add"
+        android:id="@+id/create_attribute"
+        android:title="Create Attribute" />
         <item
             android:icon="@drawable/user_square"
             android:id="@+id/Viewcst_fragment"

@@ -45,16 +45,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.AddProductListAdapter;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
+import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,17 +72,19 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 
 public class AddProductFragment extends Fragment implements View.OnClickListener {
     private EditText et_product_name, et_product_price, et_uom, et_size, et_color, et_whole_pattern,
-            tech_name_pest,brand_name,mkt_by,batch_number,cir_number,which_crop,which_pest,packing_std;
-    private ImageView product_image,image_set;
+            tech_name_pest, brand_name, mkt_by, batch_number, cir_number, which_crop, which_pest, packing_std;
+    private ImageView product_image, image_set;
     private Button submit_btn;
 
     ArrayList<String> api_array_list;
@@ -91,23 +102,24 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 3;
     private static final int PICK_FROM_VIDEO = 4;
-    private  String str_image_aa;
+    private String str_image_aa;
     ProgressDialog progressDialog;
     MediaController mediaControls;
     private RecyclerView recy_image;
     Bitmap bitmap = null;
     RadioGroup sel_non_gov;
     ImageAdapter adapter;
-    TextView mfd_date,exp_date,exp_date_alarm;
+    TextView mfd_date, exp_date, exp_date_alarm;
 
-    DatePickerDialog.OnDateSetListener date_mfd,date_exp,date_exp_alarm;
+    DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
     FragmentAddProductBinding binding;
 
-    String   str_mfd_date,str_exp_date;
+    String str_mfd_date, str_exp_date;
     private String[] detailed_type = {"product", "service"};
     String str_detailed_type;
-   String str_non_gov_product= "Non-Gov";
+    String str_non_gov_product = "Non-Gov";
+    String crop_id;
 
     //    private static final int SELECT_VIDEO = 3;
     public AddProductFragment() {
@@ -122,7 +134,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null) {
+        if (getArguments() != null) {
 
         }
     }
@@ -130,7 +142,13 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding= DataBindingUtil.inflate(inflater,R.layout.fragment_add_product, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product, container, false);
+
+        if (getArguments() != null) {
+            crop_id = getArguments().getString("crop_id");
+
+        }
+
         imagesUriArrayList = new ArrayList();
         init();
         return binding.getRoot();
@@ -154,8 +172,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 //        mfd_date = view.findViewById(R.id.mfd_date);
 //        exp_date =view.findViewById(R.id.exp_date);
 //        exp_date_alarm = view.findViewById(R.id.exp_date_alarm);
-
-
 //        tech_name_pest = view.findViewById(R.id.tech_name_pest);
 //        brand_name = view.findViewById(R.id.brand_name);
 //        mkt_by =view.findViewById(R.id.mkt_by);
@@ -184,7 +200,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.detailTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-              //  ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
+                //  ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
                 str_detailed_type = detailed_type[position];
             }
 
@@ -193,7 +209,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             }
         });
-
+        getAttributeList();
         binding.expDateAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +244,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 ExpireLabel();
             }
         };
-        date_exp_alarm  = new DatePickerDialog.OnDateSetListener() {
+        date_exp_alarm = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 // TODO Auto-generated method stub
@@ -257,20 +273,23 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 // checkedId is the RadioButton selected
                 //  RadioButton rb = view.findViewById(checkedId);
                 if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Gov")) {
-                    str_non_gov_product= "Non-Gov";
+                    str_non_gov_product = "Non-Gov";
                 } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov Authorized")) {
-                    str_non_gov_product= "Gov Authorized";
+                    str_non_gov_product = "Gov Authorized";
                 }
             }
         });
-binding.backBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        getActivity().finish();
+
+
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+            }
+        });
     }
-});
-    }
+
     private void updateLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         str_mfd_date = sdf.format(myCalendar.getTime());
@@ -278,17 +297,20 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
 //        String date_e = sd.format(myCalendar.getTime());
         binding.mfdDate.setText(str_mfd_date);
     }
+
     private void ExpireLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-           str_exp_date = sdf.format(myCalendar.getTime());
-           binding.expDate.setText(str_exp_date);
+        str_exp_date = sdf.format(myCalendar.getTime());
+        binding.expDate.setText(str_exp_date);
     }
+
     private void AlarmLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String   str_exp_date = sdf.format(myCalendar.getTime());
+        String str_exp_date = sdf.format(myCalendar.getTime());
 
         binding.expDateAlarm.setText(str_exp_date);
     }
+
     /**
      * Called when a view has been clicked.
      *
@@ -299,9 +321,7 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         if (view.getId() == R.id.submit_btn) {
             str_product_name = binding.etProductName.getText().toString();
             str_product_price = binding.etProductPrice.getText().toString();
-            str_size = binding.etSize.getText().toString();
-            str_color = binding.etColor.getText().toString();
-            str_whole_pattern = binding.etWholePattern.getText().toString();
+
             String str_techNamePest = binding.techNamePest.getText().toString();
             String str_brand_name = binding.brandName.getText().toString();
             String str_mkt_by = binding.mktBy.getText().toString();
@@ -321,11 +341,14 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            addProductRequest(str_product_name, str_product_price, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop, str_whichPest,str_etUom,str_description,str_uomProduct);
+            if(crop_id !=null) {
+                addProductRequest(str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichCrop, str_whichPest, str_etUom, str_description, str_uomProduct, crop_id);
+            }
         }
     }
 
-    private void addProductRequest(String product_name, String product_price,String size, String color, String whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String cir_no,String str_whichCrop,String str_whichPest,String str_etUom,String str_description,String str_uomProduct) {
+    private void addProductRequest(String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichCrop, String str_whichPest, String str_etUom, String str_description, String str_uomProduct ,String crop_id) {
+
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         //params.put("user_id", sm.getUserID() + "");
@@ -347,23 +370,26 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         params.put("uom_id", "Days");
         params.put("uom_po_id", "Days");
         params.put("detailed_type", str_detailed_type);
+        params.put("pos_categ_id", crop_id);
 
+        params.put("attribute_lines"," " );
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMax(100);
         progressDialog.setMessage("Please wait while a moment...");
         progressDialog.setTitle("Registering");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-        Log.d("url_addproduct",params.toString());
+        Log.d("url_addproduct", params.toString());
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_ADD_PRODUCT, new VolleyCallback() {
             private String message = "Registration failed!!";
+
             @Override
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
-               String  message_success = obj.optString("message");
+                String message_success = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     int visibility = (progressBar.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
                     progressBar.setVisibility(visibility);
@@ -387,7 +413,6 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         binding.etProductName.setText("");
         binding.etProductPrice.setText("");
         binding.etUom.setText("");
-        binding.etSize.setText("");
         binding.etColor.setText("");
         binding.etWholePattern.setText("");
 
@@ -418,11 +443,50 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         builder.show();
     }
 
+    private void getAttributeList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+        Log.d("product_list", url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        JSONArray jsonArray = obj.getJSONArray("attributes");
+                        //  JSONArray attributesArray = jsonArray.getJSONObject(0).getJSONArray("attributes");
 
-    private void getVideo(){
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Value cropPattern = new Value();
+                                JSONObject data = jsonArray.getJSONObject(i);
+                                Integer id = data.optInt("id");
+                                String name = data.optString("name");
+                                JSONArray value = data.optJSONArray("values");
+
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+
+    }
+
+    private void getVideo() {
         askForPermission("android.permission.READ_MEDIA_VIDEO", 3);
 
     }
+
     private void askForPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
@@ -431,7 +495,7 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
                 fromGallery();
             } else if (requestCode == 2) {
                 openCamera();
-            }else if (requestCode == 3) {
+            } else if (requestCode == 3) {
                 openVideo();
             }
         }
@@ -469,6 +533,7 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
 
         }
     }
+
     /**
      * Open Video when user click on camera
      */
@@ -476,7 +541,7 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         Intent intent = new Intent();
         intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select a Video "), PICK_FROM_VIDEO);
+        startActivityForResult(Intent.createChooser(intent, "Select a Video "), PICK_FROM_VIDEO);
 
     }
 
@@ -498,17 +563,17 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
             }
         }
         if (requestCode == PICK_FROM_FILE && resultCode == RESULT_OK && null != data) {
-            if(data.getClipData()== null){
+            if (data.getClipData() == null) {
                 Toast.makeText(getActivity(), "Please select minimum 2 images", Toast.LENGTH_SHORT).show();
 
-            }else {
+            } else {
                 if (data.getClipData().getItemCount() <= 4) {
 
                     for (int i = 0; i < data.getClipData().getItemCount(); i++) {
 
                         try {
 
-                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),data.getClipData().getItemAt(i).getUri());
+                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getClipData().getItemAt(i).getUri());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -566,6 +631,7 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
+
     public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
@@ -590,9 +656,12 @@ binding.backBtn.setOnClickListener(new View.OnClickListener() {
         imageFilePath = image.getAbsolutePath();
         return image;
     }
+
     public byte[] getFileDataFromDrawable(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
+
+
 }
