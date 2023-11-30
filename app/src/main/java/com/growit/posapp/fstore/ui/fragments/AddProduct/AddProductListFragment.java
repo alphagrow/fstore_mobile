@@ -119,17 +119,11 @@ public class AddProductListFragment extends Fragment {
         binding.addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(crop_id != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("crop_id", crop_id);
-                    Fragment fragment = AddProductFragment.newInstance();
-                    fragment.setArguments(bundle);
+                   Fragment fragment = AddProductFragment.newInstance();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                }
-//                Fragment fragment = AddProductFragment.newInstance();
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+
 
             }
         });

@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,11 +26,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,11 +55,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
+import com.growit.posapp.fstore.adapters.POSAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
+import com.growit.posapp.fstore.model.AttributeModel;
+import com.growit.posapp.fstore.model.AttributeValue;
+import com.growit.posapp.fstore.model.ListAttributesModel;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -70,10 +82,12 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -120,8 +134,15 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     String str_detailed_type;
     String str_non_gov_product = "Non-Gov";
     String crop_id;
-
+    ListAttributesModel model_attribute;
+    List<AttributeModel> model = new ArrayList<>();
+    List<Value> cropList = new ArrayList<>();
     //    private static final int SELECT_VIDEO = 3;
+
+    ArrayList<Integer> langList = new ArrayList<>();
+    ArrayList<Integer> crop_id_list = new ArrayList<>();
+    ArrayList<Integer> attribute_id_list = new ArrayList<>();
+
     public AddProductFragment() {
         // Required empty public constructor
     }
@@ -143,11 +164,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product, container, false);
-
-        if (getArguments() != null) {
-            crop_id = getArguments().getString("crop_id");
-
-        }
 
         imagesUriArrayList = new ArrayList();
         init();
@@ -182,6 +198,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 //        packing_std = view.findViewById(R.id.packing_std);
 //        layout = view.findViewById(R.id.imageLayout);
 //        recy_image = view.findViewById(R.id.recy_image);
+
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
         binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
@@ -209,7 +226,9 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             }
         });
+        getCropRequest();
         getAttributeList();
+
         binding.expDateAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -327,7 +346,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             String str_mkt_by = binding.mktBy.getText().toString();
             String str_batchNumber = binding.batchNumber.getText().toString();
             String str_cirNumber = binding.cirNumber.getText().toString();
-            String str_whichCrop = binding.whichCrop.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
             String str_etUom = binding.etUom.getText().toString();
             String str_description = binding.description.getText().toString();
@@ -341,17 +359,22 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            if(crop_id !=null) {
-                addProductRequest(str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichCrop, str_whichPest, str_etUom, str_description, str_uomProduct, crop_id);
-            }
+if(crop_id_list.size()==0) {
+    Toast.makeText(getActivity(), "Selected Crop Name", Toast.LENGTH_SHORT).show();
+
+}else {
+    addProductRequest(str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_etUom, str_description, str_uomProduct,crop_id_list);
+
+}
         }
     }
 
-    private void addProductRequest(String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichCrop, String str_whichPest, String str_etUom, String str_description, String str_uomProduct ,String crop_id) {
+    private void addProductRequest(String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_etUom, String str_description, String str_uomProduct,ArrayList<Integer> crop_id_list) {
 
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-        //params.put("user_id", sm.getUserID() + "");
+        params.put("user_id", sm.getUserID() + "");
+        params.put("token", sm.getJWTToken());
         params.put("name", product_name);
         params.put("description", str_description);
         params.put("list_price", product_price);
@@ -360,7 +383,9 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("mkd_by", str_mkt_by);
         params.put("batch_number", str_batchNumber);
         params.put("cir_no", cir_no);
-        params.put("which_crop", str_whichCrop);
+
+//        params.put("which_crop", str_whichCrop);
+
         params.put("which_pest", str_whichPest);
         params.put("non_gov_product", str_non_gov_product);
         params.put("mfd_date", str_mfd_date);
@@ -370,21 +395,27 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("uom_id", "Days");
         params.put("uom_po_id", "Days");
         params.put("detailed_type", str_detailed_type);
-        params.put("pos_categ_id", crop_id);
 
-        params.put("attribute_lines"," " );
+       // params.put("pos_categ_id", crop_id_list.toString());
+        params.put("pos_categ_id", "1,4");
+
+        params.put("attribute_lines","[]");
+
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMax(100);
         progressDialog.setMessage("Please wait while a moment...");
         progressDialog.setTitle("Registering");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
+
         Log.d("url_addproduct", params.toString());
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_ADD_PRODUCT, new VolleyCallback() {
             private String message = "Registration failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
+
+
                 Log.v("Response", result.toString());
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
@@ -413,8 +444,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.etProductName.setText("");
         binding.etProductPrice.setText("");
         binding.etUom.setText("");
-        binding.etColor.setText("");
-        binding.etWholePattern.setText("");
+
 
     }
 
@@ -446,8 +476,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private void getAttributeList() {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+                String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST + "user_id=" + sm.getUserID() +"&" + "token=" + sm.getJWTToken();
+      //  String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
         Log.d("product_list", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -460,18 +490,34 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         JSONArray jsonArray = obj.getJSONArray("attributes");
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ListAttributesModel>() {
+                        }.getType();
+
+                        model_attribute = gson.fromJson(response.toString(), listType);
+                        model.addAll(model_attribute.getAttributes());
+
+                        createTextDynamically(model_attribute.getAttributes().size());
+
+
+
                         //  JSONArray attributesArray = jsonArray.getJSONObject(0).getJSONArray("attributes");
 
-                        if (jsonArray.length() > 0) {
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                Value cropPattern = new Value();
-                                JSONObject data = jsonArray.getJSONObject(i);
-                                Integer id = data.optInt("id");
-                                String name = data.optString("name");
-                                JSONArray value = data.optJSONArray("values");
-
-                            }
-                        }
+//                        if (jsonArray.length() > 0) {
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                AttributeValue value_mode = new AttributeValue();
+//                                JSONObject data = jsonArray.getJSONObject(i);
+//                                Integer id = data.optInt("id");
+//                                String name = data.optString("name");
+//                                JSONArray value = data.optJSONArray("values");
+//                                value_mode.setId(value.getInt(0));
+//                                value_mode.setName(value.getString(1));
+//                                attributeValueList.add(value_mode);
+//
+//                            }
+//
+//                        }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -487,6 +533,75 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     }
 
+    private void createTextDynamically(int n){
+        Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = display.getWidth();
+
+        LinearLayout l = new LinearLayout(getActivity());
+        binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
+        for (int j = 0; j < n; j++) {
+            TextView text = new TextView(getActivity());
+            LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
+
+            editTextParams.setMargins(20, 20, 20, 0);
+            text.setLayoutParams(editTextParams);
+            text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size));
+            text.setTextSize(16);
+            text.setId(j);
+            final int id_ = text.getId();
+            text.setHint("Select the " + model.get(j).getName());
+
+            List<AttributeValue> name = model.get(j).getValues();
+//            text.setText(name.get(1).getName());
+
+            text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
+            text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
+          //  et.setEnabled(false);
+            binding.linearLayoutMain.addView(text, editTextParams);
+            text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   // text.setText(name.get(1).getName());
+
+                 //   SetDataTextDataDynamically(text,id_,name);
+
+                }
+            });
+
+        }
+
+
+//        LinearLayout linearLayoutSubParent = new LinearLayout(getActivity());
+//        linearLayoutSubParent.setOrientation(LinearLayout.VERTICAL);
+//        linearLayoutSubParent.setWeightSum(100f); // you can also add more widget by providing weight
+//
+//        LinearLayout.LayoutParams linearLayoutSubParentParams =
+//                new LinearLayout.LayoutParams(0,
+//                        LinearLayout.LayoutParams.WRAP_CONTENT, 100f);
+//        linearLayoutSubParent.setLayoutParams(linearLayoutSubParentParams);
+//        linearLayoutSubParent.setPadding(0, 0, 0, 0);
+//
+//        // Add TextInputLayout to parent layout first
+//        TextInputLayout textInputLayout = new TextInputLayout(getActivity());
+//        LinearLayout.LayoutParams textInputLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 100f);
+//        textInputLayout.setLayoutParams(textInputLayoutParams);
+//        textInputLayout.setHintTextAppearance(R.style.TextSizeHint);
+//        linearLayoutSubParent.addView(textInputLayout);
+//
+//        // Add EditText control to TextInputLayout
+//        final EditText editText = new EditText(getActivity());
+//        LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        editTextParams.setMargins(0, 10, 0, 0);
+//        editText.setLayoutParams(editTextParams);
+//        editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size));
+//        editText.setHint("Enter value");
+//        editText.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+//        editText.setEnabled(false);
+//
+//        textInputLayout.addView(editText, editTextParams);
+//        binding.linearLayoutMain.addView(linearLayoutSubParent);
+    }
     private void askForPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
@@ -663,5 +778,215 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         return byteArrayOutputStream.toByteArray();
     }
 
+    private void getCropRequest() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Utility.showDialoge("Please wait while a moment...", getActivity());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("data");
+
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Value cropPattern = new Value();
+                                JSONObject data = jsonArray.getJSONObject(i);
+                                Integer cropID = data.optInt("category_id");
+                                String name = data.optString("name");
+                                cropPattern.setValueId(Integer.valueOf(cropID + ""));
+                                cropPattern.setValueName(name);
+
+                                cropList.add(cropPattern);
+                            }
+                            Log.d("url_string", String.valueOf(cropList.size()));
+                            setWhichCrop(cropList);
+
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+
+    private void SetDataTextDataDynamically(TextView text_view,int text_id, List<AttributeValue> attribute_value) {
+        ArrayList<String> attribute_name = new ArrayList<>();
+
+        for(int i=0;i<attribute_value.size();i++){
+            String valueName = attribute_value.get(i).getName();
+            attribute_name.add(valueName);
+
+        }
+        final CharSequence[] items_value = attribute_name.toArray(new CharSequence[attribute_name.size()]);
+        boolean[]  selected_value = new boolean[attribute_name.size()];
+
+
+        text_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Attribute value");
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(items_value, selected_value, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+
+                            langList.add(i);
+                            Collections.sort(langList);
+                        } else {
+
+                            langList.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Initialize string builder
+                        StringBuilder stringBuilder = new StringBuilder();
+                        // use for loop
+                        int  attribute_value_id=0;
+                        for (int j = 0; j < langList.size(); j++) {
+                            stringBuilder.append(items_value[langList.get(j)]);
+
+                            attribute_value_id =  attribute_value.get(j).getId();
+
+                            if (j != langList.size() - 1) {
+                                stringBuilder.append(", ");
+                            }
+                        }
+                        attribute_id_list.add(attribute_value_id);
+
+                        // set text on textView
+                        text_view.setText(stringBuilder.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // dismiss dialog
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // use for loop
+                        for (int j = 0; j < selected_value.length; j++) {
+                            // remove all selection
+                            selected_value[j] = false;
+                            // clear language list
+                            langList.clear();
+                            // clear text view value
+                            text_view.setText("");
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+    }
+
+
+    private void setWhichCrop( List<Value> cropList) {
+         ArrayList<String> crop_name = new ArrayList<>();
+
+        for(int i=0;i<cropList.size();i++){
+            String name = cropList.get(i).getValueName();
+            crop_name.add(name);
+
+        }
+        final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
+        boolean[]  selected_crop = new boolean[crop_name.size()];
+
+
+        binding.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Select Crop Name");
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(items, selected_crop, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+
+                            langList.add(i);
+                            Collections.sort(langList);
+                        } else {
+
+                            langList.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Initialize string builder
+                        StringBuilder stringBuilder = new StringBuilder();
+                        // use for loop
+                        int  ValueId=0;
+                        for (int j = 0; j < langList.size(); j++) {
+                            stringBuilder.append(items[langList.get(j)]);
+
+                            ValueId =  cropList.get(j).getValueId();
+
+                            if (j != langList.size() - 1) {
+                                stringBuilder.append(", ");
+                            }
+                        }
+                        crop_id_list.add(ValueId);
+
+                        // set text on textView
+                        binding.textView.setText(stringBuilder.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // dismiss dialog
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // use for loop
+                        for (int j = 0; j < selected_crop.length; j++) {
+                            // remove all selection
+                            selected_crop[j] = false;
+                            // clear language list
+                            langList.clear();
+                            // clear text view value
+                            binding.textView.setText("");
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+    }
 
 }

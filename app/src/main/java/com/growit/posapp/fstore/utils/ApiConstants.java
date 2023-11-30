@@ -46,7 +46,7 @@ public class ApiConstants {
     public final static String DELETE_POS_CATEGORY = "/api/delete_pos_category?";
     public final static String PUT_UPDATE_POS_CATEGORY = "/api/update_pos_category?";
     public final static String POST_CREATE_ATTRIBUTE_VALUE = "/api/create_attribute_and_values?";
-    public final static String GET_ATTRIBUTES_LIST = "/api/list_attributes_and_values";
+    public final static String GET_ATTRIBUTES_LIST = "/api/list_attributes_and_values?";
     public final static String DELETE_ATTRIBUTE_VALUES = "/api/delete_attribute_and_values?";
 }
 

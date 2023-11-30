@@ -3,7 +3,7 @@ package com.growit.posapp.fstore.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AttributeValueModel {
+public class AttributeValue {
     @SerializedName("id")
     @Expose
     private Integer id;

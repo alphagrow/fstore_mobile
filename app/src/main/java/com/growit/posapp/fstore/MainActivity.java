@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -37,10 +36,7 @@ import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
-import com.growit.posapp.fstore.ui.fragments.AttributeListFragment;
-import com.growit.posapp.fstore.ui.fragments.CreateAttributeFragment;
-import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;

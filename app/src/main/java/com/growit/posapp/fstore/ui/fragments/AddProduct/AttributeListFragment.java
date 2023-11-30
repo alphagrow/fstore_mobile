@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.AddProduct;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,19 +30,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
-import com.growit.posapp.fstore.adapters.AddProductListAdapter;
+
+
 import com.growit.posapp.fstore.adapters.AttributeAdapter;
-import com.growit.posapp.fstore.adapters.POSAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAttributeListBinding;
-import com.growit.posapp.fstore.databinding.FragmentCreateAttributeBinding;
-import com.growit.posapp.fstore.databinding.FragmentPOSCategoryListBinding;
-import com.growit.posapp.fstore.model.AttributeValueModel;
-import com.growit.posapp.fstore.model.StockInventoryModel;
-import com.growit.posapp.fstore.model.Value;
-import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
-import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
+import com.growit.posapp.fstore.model.AttributeModel;
+import com.growit.posapp.fstore.model.AttributeValue;
+import com.growit.posapp.fstore.model.ListAttributesModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -52,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +61,8 @@ public class AttributeListFragment extends Fragment {
     AttributeAdapter adapter;
 
     Activity contexts;
-    List<AttributeValueModel> model = new ArrayList<>();
-    private ArrayList<String> languageList;
+    List<AttributeModel> model = new ArrayList<>();
+    ListAttributesModel model_attribute;
     public AttributeListFragment() {
         // Required empty public constructor
     }
@@ -132,49 +130,7 @@ public class AttributeListFragment extends Fragment {
         });
 
 
-        languageList = new ArrayList<>();
-        // languages to our language list
-        languageList.add("Java");
-        languageList.add("Kotlin");
-        languageList.add("C++");
-        languageList.add("C");
-        LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
 
-        txtLayoutParam.gravity = Gravity.CENTER;
-        LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        spinnerLayoutParam.gravity = Gravity.CENTER;
-        TextView headingTV = new TextView(getActivity());
-        headingTV.setText("Dynamic Spinner in Android");
-        headingTV.setTextSize(20f);
-        headingTV.setTextColor(getResources().getColor(R.color.black));
-        headingTV.setTypeface(Typeface.DEFAULT_BOLD);
-        headingTV.setPadding(20, 20, 20, 20);
-        headingTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        headingTV.setLayoutParams(txtLayoutParam);
-        Spinner spinner = new Spinner(getActivity());
-        spinner.setLayoutParams(spinnerLayoutParam);
-        binding.idLLContainer.addView(headingTV);
-        binding.idLLContainer.addView(spinner);
-        if (spinner != null) {
-            ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, languageList);
-            spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    // in on selected listener we are displaying a toast message
-                    Toast.makeText(getActivity(), "Selected Language is : " + languageList.get(position), Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-        }
 
 
     }
@@ -182,8 +138,8 @@ public class AttributeListFragment extends Fragment {
     private void getAttributeList() {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+                String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST + "user_id=" + sm.getUserID() +"&" + "token=" + sm.getJWTToken();
+       // String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
         Log.d("product_list",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -191,37 +147,33 @@ public class AttributeListFragment extends Fragment {
                 Log.v("Response", response.toString());
                 JSONObject obj = null;
                 try {
+
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        model.clear();
                         JSONArray jsonArray = obj.getJSONArray("attributes");
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ListAttributesModel>() {
+                        }.getType();
 
-                        if (jsonArray.length() > 0) {
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                Value cropPattern = new Value();
-                                JSONObject data = jsonArray.getJSONObject(i);
-                                Integer id = data.optInt("id");
-                                String name = data.optString("name");
-                                //AttributeValueModel   value = data.optJSONObject("values");
+                        model_attribute = gson.fromJson(response.toString(), listType);
+                        model.addAll(model_attribute.getAttributes());
+
+                        if (model_attribute.getAttributes() == null || model_attribute.getAttributes().size() == 0) {
+                                binding.noItem.setVisibility(View.GONE);
+                            } else {
+                                binding.noItem.setVisibility(View.GONE);
+
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                adapter = new AttributeAdapter(getActivity(), model);
+                                binding.recyclerAtt.setAdapter(adapter);
+                                binding.recyclerAtt.setLayoutManager(layoutManager);
 
                             }
 
-                            Log.d("jsonArray",jsonArray.toString());
-
-//                            if (productList == null || productList.size() == 0) {
-//                                binding.noItem.setVisibility(View.GONE);
-//                            } else {
-//                                binding.noItem.setVisibility(View.GONE);
-//
-//                                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//                                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//                                adapter = new AttributeAdapter(getActivity(), productList);
-//                                binding.recyclerAttribute.setAdapter(adapter);
-//                                binding.recyclerAttribute.setLayoutManager(layoutManager);
-//
-//                            }
-                        }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

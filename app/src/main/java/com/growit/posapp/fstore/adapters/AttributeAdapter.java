@@ -1,8 +1,6 @@
 package com.growit.posapp.fstore.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -25,29 +20,27 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.model.AttributeModel;
+import com.growit.posapp.fstore.model.AttributeValue;
+import com.growit.posapp.fstore.model.ListAttributesModel;
 import com.growit.posapp.fstore.model.Value;
-import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
-import com.growit.posapp.fstore.ui.fragments.CreateAttributeFragment;
-import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.skyhope.showmoretextview.ShowMoreTextView;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class AttributeAdapter extends RecyclerView.Adapter<AttributeAdapter.ViewHolder> {
 
 
-    private List<Value> list;
+    private List<AttributeModel> list;
     private Context mContext;
 
-    public AttributeAdapter(Context context, List<Value> contacts) {
+    public AttributeAdapter(Context context, List<AttributeModel> contacts) {
         list = contacts;
         mContext = context;
     }
@@ -57,12 +50,13 @@ public class AttributeAdapter extends RecyclerView.Adapter<AttributeAdapter.View
         public TextView attribute_name;
         ImageView deleteBtn,update;
         LinearLayout card;
-        ShowMoreTextView product_name_text;
+       TextView value;
         public ViewHolder(View itemView) {
             super(itemView);
             attribute_name = itemView.findViewById(R.id.attribute_name);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             update = itemView.findViewById(R.id.update);
+            value = itemView.findViewById(R.id.value);
         }
     }
 
@@ -78,8 +72,10 @@ public class AttributeAdapter extends RecyclerView.Adapter<AttributeAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull AttributeAdapter.ViewHolder holder, int position) {
-        Value model = list.get(position);
-      //  holder.attribute_name.setText();
+        AttributeModel model = list.get(position);
+        holder.attribute_name.setText(model.getName());
+
+      //  holder.value.setText(model.getValues().get(0).getName());
 
         holder.update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,8 +100,8 @@ public class AttributeAdapter extends RecyclerView.Adapter<AttributeAdapter.View
                 builder.setTitle("Alert !");
                 builder.setCancelable(false);
                 builder.setPositiveButton("Yes", (dialog, which) -> {
-//                    Value model = list.get(position);
-//                    getDelete(String.valueOf(model.getValueId()),position);
+                    AttributeModel model = list.get(position);
+                    getDelete(String.valueOf(model.getId()),position);
 
                 });
 
@@ -120,7 +116,7 @@ public class AttributeAdapter extends RecyclerView.Adapter<AttributeAdapter.View
     private void getDelete(String id,int position) {
         SessionManagement sm = new SessionManagement(mContext);
         RequestQueue queue = Volley.newRequestQueue(mContext);//162.246.254.203:8069
-        String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ATTRIBUTE_VALUES  + "attribute_id=" + id;
+        String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ATTRIBUTE_VALUES  + "attribute_id=" + id+ "&"+ "user_id=" + sm.getUserID() + "&" +"token=" + sm.getJWTToken();
         Log.v("delete_product_url", url);
         Utility.showDialoge("Please wait while a moment...", mContext);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {

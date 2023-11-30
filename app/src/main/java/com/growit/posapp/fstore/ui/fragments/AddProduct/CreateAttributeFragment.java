@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.AddProduct;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +15,6 @@ import android.widget.Toast;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.databinding.FragmentCreateAttributeBinding;
-import com.growit.posapp.fstore.model.AttributeValueModel;
-import com.growit.posapp.fstore.model.Value;
-import com.growit.posapp.fstore.ui.LoginActivity;
-import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -28,9 +24,7 @@ import com.growit.posapp.fstore.volley.VolleyRequestHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -92,6 +86,8 @@ public class CreateAttributeFragment extends Fragment {
     private void addAttribute(String str_attr_name,String str_attr_value){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
+        params.put("user_id", sm.getUserID()+"");
+        params.put("token", sm.getJWTToken());
         params.put("attribute_name", str_attr_name);
         params.put("attribute_values_string", str_attr_value);
         Utility.showDialoge("Please wait while a moment...", getActivity());

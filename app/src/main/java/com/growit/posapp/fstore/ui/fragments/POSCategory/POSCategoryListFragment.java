@@ -130,6 +130,7 @@ public class POSCategoryListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Utility.showDialoge("Please wait while a moment...", getActivity());
+        Log.d("ALL_CROPS_url",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
