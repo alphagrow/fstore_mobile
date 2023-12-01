@@ -88,43 +88,44 @@
                     android:textSize="14dp" />
 
 
-                <EditText
-                    android:id="@+id/et_uom"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:hint="@string/UOM"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+<!--                <EditText-->
+<!--                    android:id="@+id/et_uom"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="55dp"-->
+<!--                    android:layout_marginStart="@dimen/twenty_five"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                    android:background="@drawable/custom_edit_text_cut"-->
+<!--                    android:drawableEnd="@drawable/land_size"-->
+<!--                    android:drawablePadding="@dimen/ten"-->
+<!--                    android:fontFamily="@font/sf_compact_medium"-->
+<!--                    android:hint="@string/UOM"-->
+<!--                    android:importantForAutofill="no"-->
+<!--                    android:inputType="text"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:requiresFadingEdge="vertical"-->
+<!--                    android:textSize="14dp" />-->
+
+<!--                <EditText-->
+<!--                    android:id="@+id/et_uom_product"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="55dp"-->
+<!--                    android:layout_marginStart="@dimen/twenty_five"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                    android:background="@drawable/custom_edit_text_cut"-->
+<!--                    android:drawableEnd="@drawable/land_size"-->
+<!--                    android:drawablePadding="@dimen/ten"-->
+<!--                    android:fontFamily="@font/sf_compact_medium"-->
+<!--                    android:hint="UOM Product"-->
+<!--                    android:importantForAutofill="no"-->
+<!--                    android:inputType="text"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:requiresFadingEdge="vertical"-->
+<!--                    android:textSize="14dp" />-->
 
                 <EditText
-                    android:id="@+id/et_uom_product"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:hint="UOM Product"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
-
-                <EditText
+                    android:visibility="gone"
                     android:id="@+id/et_size"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -144,6 +145,8 @@
 
 
                 <EditText
+                    android:visibility="gone"
+
                     android:id="@+id/et_color"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -163,6 +166,7 @@
 
 
                 <EditText
+                    android:visibility="gone"
                     android:id="@+id/et_whole_pattern"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -344,6 +348,7 @@
 
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/mfd_date"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -362,6 +367,7 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/exp_date"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -380,6 +386,7 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/exp_date_alarm"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"

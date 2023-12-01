@@ -48,7 +48,23 @@
 
 
             </LinearLayout>
-
+            <!--            <EditText-->
+            <!--                android:id="@+id/et_color"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="55dp"-->
+            <!--                android:layout_marginStart="@dimen/twenty_five"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:layout_marginEnd="@dimen/twenty_five"-->
+            <!--                android:background="@drawable/custom_edit_text_cut"-->
+            <!--                android:drawableEnd="@drawable/baseline_invert_colors_24"-->
+            <!--                android:drawablePadding="@dimen/ten"-->
+            <!--                android:fontFamily="@font/sf_compact_medium"-->
+            <!--                android:hint="@string/color"-->
+            <!--                android:importantForAutofill="no"-->
+            <!--                android:inputType="text"-->
+            <!--                android:padding="8dp"-->
+            <!--                android:requiresFadingEdge="vertical"-->
+            <!--                android:textSize="14dp" />-->
 
             <EditText
                 android:id="@+id/et_product_name"
@@ -102,25 +118,41 @@
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
-
-
-            <EditText
-                android:id="@+id/et_uom"
+            <LinearLayout
+                android:id="@+id/lay_et_uom_type"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_five"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="@dimen/twenty_five"
-                android:background="@drawable/custom_edit_text_cut"
-                android:drawableEnd="@drawable/baseline_event_24"
-                android:drawablePadding="@dimen/ten"
-                android:fontFamily="@font/sf_compact_medium"
-                android:hint="@string/UOM"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:padding="8dp"
-                android:requiresFadingEdge="vertical"
-                android:textSize="14dp" />
+                android:background="@drawable/custom_edit_text_cut">
+
+                <Spinner
+                    android:id="@+id/et_uom_Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+
+<!--            <EditText-->
+<!--                android:id="@+id/et_uom"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="55dp"-->
+<!--                android:layout_marginStart="@dimen/twenty_five"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                android:background="@drawable/custom_edit_text_cut"-->
+<!--                android:drawableEnd="@drawable/baseline_event_24"-->
+<!--                android:drawablePadding="@dimen/ten"-->
+<!--                android:fontFamily="@font/sf_compact_medium"-->
+<!--                android:hint="@string/UOM"-->
+<!--                android:importantForAutofill="no"-->
+<!--                android:inputType="text"-->
+<!--                android:padding="8dp"-->
+<!--                android:requiresFadingEdge="vertical"-->
+<!--                android:textSize="14dp" />-->
 
             <EditText
                 android:id="@+id/et_uom_product"
@@ -134,6 +166,7 @@
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint="UOM Product"
+                android:visibility="gone"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:padding="8dp"

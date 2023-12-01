@@ -66,6 +66,9 @@ public class ProductListFragment extends Fragment {
         searchEditTxt = view.findViewById(R.id.seacrEditTxt);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         noDataFound = view.findViewById(R.id.noDataFound);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
         searchEditTxt.setHint("Search...");
         if (Utility.isNetworkAvailable(getActivity())) {
             getCropRequest();
@@ -178,6 +181,9 @@ public class ProductListFragment extends Fragment {
 
     }
     private void prepareProducts(String id) {
+        productListAdapter = new ProductListAdapter(getActivity(), productList);
+        recyclerView.setAdapter(productListAdapter);
+
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
@@ -194,7 +200,8 @@ public class ProductListFragment extends Fragment {
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         JSONArray jsonArray = obj.getJSONArray("data");
                         JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
-                        productList = new ArrayList<>();
+                      //  productList = new ArrayList<>();
+                        productList.clear();
                         if (productArray.length() > 0) {
                             for (int i = 0; i < productArray.length(); i++) {
                                 Product product = new Product();
@@ -214,12 +221,10 @@ public class ProductListFragment extends Fragment {
                                 product.setProductImage(image);
                                 productList.add(product);
                             }
-                            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
-                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            productListAdapter = new ProductListAdapter(getActivity(), productList);
-                            recyclerView.setAdapter(productListAdapter);
-                            recyclerView.setLayoutManager(layoutManager);
+
+
                         }
+
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

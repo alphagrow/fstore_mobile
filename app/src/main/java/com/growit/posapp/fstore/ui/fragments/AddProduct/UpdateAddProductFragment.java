@@ -53,6 +53,8 @@ import com.growit.posapp.fstore.adapters.ImageAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
 import com.growit.posapp.fstore.databinding.FragmentUpdateAddProductBinding;
+import com.growit.posapp.fstore.model.AttributeModel;
+import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -71,6 +73,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -108,6 +111,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     DatePickerDialog.OnDateSetListener date_mfd,date_exp,date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
     FragmentUpdateAddProductBinding binding;
+    List<Product> list=null;
+    int  position;
+    String product_id;
 
     //    private static final int SELECT_VIDEO = 3;
     public UpdateAddProductFragment() {
@@ -138,33 +144,16 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     }
 
     private void init() {
-//        imageView = view.findViewById(R.id.imageView);
-//        et_product_name = view.findViewById(R.id.et_product_name);
-//        et_product_price = view.findViewById(R.id.et_product_price);
-//        et_uom = view.findViewById(R.id.et_uom);
-//        submit_btn = view.findViewById(R.id.submit_btn);
-//        et_size = view.findViewById(R.id.et_size);
-//        et_color = view.findViewById(R.id.et_color);
-//        et_whole_pattern = view.findViewById(R.id.et_whole_pattern);
-//        product_image = view.findViewById(R.id.image);
-//        idPBLoading = view.findViewById(R.id.idPBLoading);
-//        video_text = view.findViewById(R.id.video_text);
-//        video_image = view.findViewById(R.id.video);
-//        videoView = view.findViewById(R.id.simpleVideoView);
-//        image_set = view.findViewById(R.id.image_set);
-//        mfd_date = view.findViewById(R.id.mfd_date);
-//        exp_date =view.findViewById(R.id.exp_date);
-//        exp_date_alarm = view.findViewById(R.id.exp_date_alarm);
-//        tech_name_pest = view.findViewById(R.id.tech_name_pest);
-//        brand_name = view.findViewById(R.id.brand_name);
-//        mkt_by =view.findViewById(R.id.mkt_by);
-//        batch_number = view.findViewById(R.id.batch_number);
-//        cir_number = view.findViewById(R.id.cir_number);
-//        which_crop = view.findViewById(R.id.which_crop);
-//        which_pest =view.findViewById(R.id.which_pest);
-//        packing_std = view.findViewById(R.id.packing_std);
-//        layout = view.findViewById(R.id.imageLayout);
-//        recy_image = view.findViewById(R.id.recy_image);
+
+        if (getArguments() != null) {
+
+            list = (List<Product>) getArguments().getSerializable("product_list");
+            int position = getArguments().getInt("position");
+           product_id= list.get(position).getProductID();
+            binding.etProductName.setText(list.get(position).getProductName());
+            binding.etProductPrice.setText(String.valueOf(list.get(position).getPrice()));
+
+        }
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         progressBar = new ProgressBar(getActivity());
@@ -296,9 +285,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             String str_cirNumber = binding.cirNumber.getText().toString();
             String str_whichCrop = binding.whichCrop.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
-            String str_etUom = binding.etUom.getText().toString();
+          //  String str_etUom = binding.etUom.getText().toString();
             String str_description = binding.description.getText().toString();
-            String str_uomProduct = binding.etUomProduct.getText().toString();
+         //   String str_uomProduct = binding.etUomProduct.getText().toString();
 
 //            if (str_product_name.length() == 0 || str_product_price.length() == 0 || str_uom.length() == 0) {
 //                Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
@@ -308,11 +297,11 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            updateProductRequest(str_product_name, str_product_price, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop,str_whichPest,str_etUom,str_description,str_uomProduct);
+            updateProductRequest(str_product_name, str_product_price, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop,str_whichPest,str_description);
         }
     }
 
-    private void updateProductRequest(String str_product_name,String str_product_price, String str_size,String str_color, String str_whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String str_cirNumber,String str_whichCrop,String str_whichPest,String str_etUom,String str_description,String str_uomProduct) {
+    private void updateProductRequest(String str_product_name,String str_product_price, String str_size,String str_color, String str_whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String str_cirNumber,String str_whichCrop,String str_whichPest,String str_description) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("name", str_product_name);
@@ -332,12 +321,13 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         params.put("exp_date", str_whichPest);
 //        params.put("uom_id",str_etUom);   //kg,ml
 //        params.put("uom_po_id", "str_uomProduct");
-        params.put("uom_id", "Days");
-        params.put("uom_po_id", "Days");
+//        params.put("uom_id", "Days");
+//        params.put("uom_po_id", "Days");
+
         params.put("detailed_type", "product");
        params.put("description", str_description);
 
-        params.put("product_id", "34");
+        params.put("product_id", product_id);
 
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_PRODUCT, new VolleyCallback() {
             private String message = "Update failed!!";

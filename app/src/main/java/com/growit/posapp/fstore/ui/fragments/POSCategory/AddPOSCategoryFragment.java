@@ -154,6 +154,9 @@ public class AddPOSCategoryFragment extends Fragment {
                 if (isAllFieldsChecked) {
                     if(str_image_crop !=null) {
                         getPosCategory(binding.cropName.getText().toString(),str_image_crop);
+                    }else {
+                        Toast.makeText(getContext(), "Select image", Toast.LENGTH_SHORT).show();
+
                     }
                 }
             }

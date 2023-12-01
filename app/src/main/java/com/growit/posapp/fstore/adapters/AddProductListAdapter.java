@@ -32,6 +32,7 @@ import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.model.StockInventoryModelList;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.CreateAttributeFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -59,14 +60,16 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView qty,order_no,dateTxt,amountTxt,case_id;
-        ImageView images,deleteBtn;
+        ImageView images,deleteBtn,update;
         ShowMoreTextView product_name;
+
         public ViewHolder(View itemView) {
             super(itemView);
             product_name = itemView.findViewById(R.id.product_name_text);
             qty= itemView.findViewById(R.id.Qty_avl_text);
             images = itemView.findViewById(R.id.images);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            update = itemView.findViewById(R.id.update);
 
 
         }
@@ -98,25 +101,20 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
                 .error(R.drawable.no_image)
                 .into(holder.images);
 
-holder.itemView.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-//        Bundle bundle = new Bundle();
-//        if(isSearch) {
-//            bundle.putSerializable("CustomerOBJ", (Serializable) searchCustomerDataList);
-//            bundle.putInt("position", position);
-//        }else{
-//            bundle.putSerializable("CustomerOBJ", (Serializable) customerDataList);
-//            bundle.putInt("position", position);
-//        }
+        holder.update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product_list", (Serializable) list);
+                bundle.putInt("position", position);
+                Fragment fragment = UpdateAddProductFragment.newInstance();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
 
-        Fragment fragment = UpdateAddProductFragment.newInstance();
-       // fragment.setArguments(bundle);
-        FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-    }
-});
+            }
+        });
 holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
