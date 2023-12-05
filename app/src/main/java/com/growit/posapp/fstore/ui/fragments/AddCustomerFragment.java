@@ -92,7 +92,7 @@ public class AddCustomerFragment extends Fragment implements
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMax(100);
         progressDialog.setMessage(message);
-        progressDialog.setTitle("GStore");
+        progressDialog.setTitle("FStore");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
     }
@@ -111,6 +111,7 @@ public class AddCustomerFragment extends Fragment implements
         cstTypeSpinner = view.findViewById(R.id.cstTypeSpinner);
         land_size = view.findViewById(R.id.land_size);
         gst_no_edit = view.findViewById(R.id.gst_edit);
+
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cstTpeArray);
         cstTypeSpinner.setAdapter(spinnerArrayAdapter);
         stateSpinner = view.findViewById(R.id.stateSpinner);

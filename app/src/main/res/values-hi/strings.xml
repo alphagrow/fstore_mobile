@@ -38,6 +38,7 @@
     <!--    Login page-->
     <string name="Password">Enter the Password</string>
     <string name="store_id">Enter the Store Id</string>
+    <string name="vendor_create_success">Vendor  created successfully</string>
 
     <string name="navigation_drawer_open">नेविगेशन ड्रॉअर खोलें</string>
     <string name="navigation_drawer_close">नेविगेशन ड्रॉअर बंद करें</string>

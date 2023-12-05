@@ -43,7 +43,7 @@
     <string name="Add_Variants">Please add variants</string>
     <string name="Add_card">Added to cart</string>
     <string name="No_Variants">No variants</string>
-
+    <string name="vendor_create_success">Vendor  created successfully</string>
         <string name="navigation_drawer_open">नेव्हिगेशन ड्रॉवर उघडा</string>
         <string name="navigation_drawer_close">नेव्हिगेशन ड्रॉवर बंद करा</string>
         <string name="nav_header_title">Android स्टुडिओ</string>

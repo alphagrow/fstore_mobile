@@ -478,11 +478,11 @@ public class MainActivity extends AppCompatActivity {
         vendor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                toolbar.setVisibility(View.GONE);
-//                Fragment fragment = VendorListFragment.newInstance();
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-//                drawer_layout.close();
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = VendorListFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
             }
         });
     }

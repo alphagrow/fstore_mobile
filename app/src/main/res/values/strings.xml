@@ -23,6 +23,7 @@
     <string name="NO_DATA">No Data Found..</string>
     <string name="ORDER_FAIL">Order failed!!</string>
     <string name="cust_create_success">Customer  created successfully</string>
+    <string name="vendor_create_success">Vendor  created successfully</string>
 
     <!--    add customer-->
     <string name="customer_mobile">Enter the Mobile Number</string>

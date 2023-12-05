@@ -49,6 +49,11 @@ public class ApiConstants {
     public final static String GET_ATTRIBUTES_LIST = "/api/list_attributes_and_values?";
     public final static String DELETE_ATTRIBUTE_VALUES = "/api/delete_attribute_and_values?";
     public final static String PUT_UPDATE_ATTRIBUTE = "/api/update_attribute_and_values?";
+    public final static String GET_VENDOR_LIST = "/api/list_vendors?";
+    public final static String ADD_VENDOR = "/api/create_vendor?";
+    public final static String DELETE_ARCHIVE_VENDOR = "/api/archive_vendor?";
+
+    public final static String UPDATE_Vendor = "/api/update_vendor/?";
 }
 
 

@@ -34,7 +34,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_height="45dp"
                 android:drawableEnd="@drawable/baseline_search_24"
-                android:hint="Search by Crop name"
+                android:hint="Search by Vendor name"
                 android:textSize="16sp"
                 android:textStyle="normal"
                 android:textColor="#fff"
@@ -108,7 +108,7 @@
                 </ImageView>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_pos"
+                    android:id="@+id/recycler_vendor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="15dp"

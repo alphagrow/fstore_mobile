@@ -1,8 +1,5 @@
 package com.growit.posapp.fstore.ui.fragments.SaleManagement;
 
-import static com.growit.posapp.fstore.utils.Utility.showDialoge;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,28 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddVendorBinding;
-import com.growit.posapp.fstore.databinding.FragmentVendorBinding;
+import com.growit.posapp.fstore.databinding.FragmentUpdateVendorBinding;
 import com.growit.posapp.fstore.model.StateModel;
-import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.model.VendorModelList;
-import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
+import com.growit.posapp.fstore.tables.Customer;
+import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,23 +37,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+public class UpdateVendorFragment extends Fragment {
 
-public class AddVendorFragment extends Fragment {
-    FragmentAddVendorBinding binding;
-
+   FragmentAddVendorBinding binding;
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
     private String str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     List<VendorModelList> vendor_model=null;
-    int position;
-    public AddVendorFragment() {
+    private int position = 0;
+    public UpdateVendorFragment() {
         // Required empty public constructor
     }
 
-    public static AddVendorFragment newInstance() {
-        return new AddVendorFragment();
+
+    public static UpdateVendorFragment newInstance() {
+        return new UpdateVendorFragment();
     }
 
 
@@ -76,36 +67,39 @@ public class AddVendorFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_vendor, container, false);
         init();
+        if (getArguments() != null) {
+            position = getArguments().getInt("position");
+            vendor_model = (List<VendorModelList>) getArguments().getSerializable("vendor_list");
+            binding.etUsername.setText(vendor_model.get(position).getName());
+            binding.etUsermobile.setText(vendor_model.get(position).getMobile());
+            binding.etUseraddress.setText(vendor_model.get(position).getStreet());
+//            et_pincode.setText(vendor_model.get(position).getZipcode());
+            binding.etUseremail.setText(vendor_model.get(position).getEmail());
 
+            getStateData();
+            getDistrictData(vendor_model.get(position).getStateId());
+            getTalukaData(vendor_model.get(position).getDistrictId());
+            binding.submitBtn.setVisibility(View.GONE);
+            binding.update.setVisibility(View.VISIBLE);
 
+        }
         return binding.getRoot();
     }
-
     private void init() {
-        binding.titleTxt.setText("Create Vendor");
+        binding.titleTxt.setText("Update Vendor");
 
-        if (Utility.isNetworkAvailable(getContext())) {
-            getStateData();
-        } else {
-            Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
-        }
-        StateModel st = new StateModel();
-        st.setName("--Select District--");
-        districtNames.add(st);
-        StateModel st2 = new StateModel();
-        st2.setName("--Select Taluka--");
-        talukaNames.add(st2);
-        if (getContext() != null) {
-            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), districtNames);
-            binding.citySpinner.setAdapter(adapter);
-        }
-        if (getContext() != null) {
-            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), talukaNames);
-            binding.talukaSpinner.setAdapter(adapter);
-        }
+//        if (getContext() != null) {
+//            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), districtNames);
+//            binding.citySpinner.setAdapter(adapter);
+//        }
+//        if (getContext() != null) {
+//            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), talukaNames);
+//            binding.talukaSpinner.setAdapter(adapter);
+//        }
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,11 +114,7 @@ public class AddVendorFragment extends Fragment {
                 if (position != 0) {
                     districtStr = districtNames.get(position).getId() + "";
                     if (districtStr != null) {
-                        if (!Utility.isNetworkAvailable(getActivity())) {
-                            Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        getTalukaData();
+                        getTalukaData(districtStr);
                     }
                 }
             }
@@ -141,11 +131,7 @@ public class AddVendorFragment extends Fragment {
                 if (position != 0) {
                     stateStr = stateNames.get(position).getId() + "";
                     if (stateStr != null) {
-                        if (!Utility.isNetworkAvailable(getActivity())) {
-                            Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        getDistrictData();
+                        getDistrictData(stateStr);
                     }
                 }
             }
@@ -169,7 +155,7 @@ public class AddVendorFragment extends Fragment {
 
             }
         });
-        binding.submitBtn.setOnClickListener(new View.OnClickListener() {
+        binding.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 str_gst_no = binding.etGstNo.getText().toString();
@@ -200,7 +186,7 @@ public class AddVendorFragment extends Fragment {
                 }
 
                 if (isAllFieldsChecked) {
-                    VendorRequest();
+                    updateVendorRequest();
 
                 }
 
@@ -210,7 +196,6 @@ public class AddVendorFragment extends Fragment {
     }
 
     private void getStateData() {
-        Utility.showDialoge("Please wait while a configuring State...", getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("country_id", ApiConstants.COUNTRY_ID);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_STATES, new VolleyCallback() {
@@ -220,11 +205,11 @@ public class AddVendorFragment extends Fragment {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 stateNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                    Utility.dismissDialoge();
                     JSONArray jsonArray = obj.getJSONArray("data");
                     StateModel stateModel = new StateModel();
                     stateModel.setId(-1);
@@ -236,12 +221,17 @@ public class AddVendorFragment extends Fragment {
                         int id = data.optInt("id");
                         String name = data.optString("name");
                         stateModel.setId(id);
+                        if (name.equalsIgnoreCase(vendor_model.get(position).getStateId())) {
+                            spinnerPosition = i + 1;
+                        }
                         stateModel.setName(name);
                         stateNames.add(stateModel);
+
                     }
-                    if (getContext() != null) {
+                    if(getContext()!=null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), stateNames);
                         binding.stateSpinner.setAdapter(adapter);
+                        binding.stateSpinner.setSelection(spinnerPosition);
                     }
                 }
             }
@@ -249,16 +239,14 @@ public class AddVendorFragment extends Fragment {
             @Override
             public void onError(String result) {
                 Log.v("Response", result.toString());
-                Utility.dismissDialoge();
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void getDistrictData() {
-        Utility.showDialoge("Please wait while a configuring District...", getActivity());
+    private void getDistrictData(String id) {
         Map<String, String> params = new HashMap<>();
-        params.put("states_id", stateStr);
+        params.put("states_id", id);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
             private String message = "Registration failed!!";
 
@@ -266,11 +254,11 @@ public class AddVendorFragment extends Fragment {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 districtNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                    Utility.dismissDialoge();
                     JSONArray jsonArray = obj.getJSONArray("data");
                     StateModel stateModel = new StateModel();
                     stateModel.setId(-1);
@@ -280,14 +268,18 @@ public class AddVendorFragment extends Fragment {
                         stateModel = new StateModel();
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
+                        if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getDistrictId())) {
+                            spinnerPosition = i + 1;
+                        }
                         String name = data.optString("name");
                         stateModel.setId(id);
                         stateModel.setName(name);
                         districtNames.add(stateModel);
                     }
-                    if (getContext() != null) {
+                    if(getContext()!=null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), districtNames);
                         binding.citySpinner.setAdapter(adapter);
+                        binding.citySpinner.setSelection(spinnerPosition);
                     }
                 }
             }
@@ -295,28 +287,26 @@ public class AddVendorFragment extends Fragment {
             @Override
             public void onError(String result) {
                 Log.v("Response", result.toString());
-                Utility.dismissDialoge();
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void getTalukaData() {
-        Utility.showDialoge("Please wait while a configuring Taluka...", getActivity());
+    private void getTalukaData(String id) {
         Map<String, String> params = new HashMap<>();
-        params.put("district_id", districtStr);
+        params.put("district_id", id);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_TALUKA, new VolleyCallback() {
             private String message = "Registration failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
+                int spinnerPosition = 0;
                 talukaNames = new ArrayList<>();
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                    Utility.dismissDialoge();
                     JSONArray jsonArray = obj.getJSONArray("data");
                     StateModel stateModel = new StateModel();
                     stateModel.setId(-1);
@@ -326,26 +316,30 @@ public class AddVendorFragment extends Fragment {
                         stateModel = new StateModel();
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
+                        if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getTalukaId())) {
+                            spinnerPosition = i + 1;
+                        }
                         String name = data.optString("name");
                         stateModel.setId(id);
                         stateModel.setName(name);
                         talukaNames.add(stateModel);
                     }
-                    if (getContext() != null) {
+                    if(getContext()!=null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), talukaNames);
                         binding.talukaSpinner.setAdapter(adapter);
+                        binding.talukaSpinner.setSelection(spinnerPosition);
                     }
                 }
             }
 
             @Override
             public void onError(String result) {
-                Utility.dismissDialoge();
                 Log.v("Response", result.toString());
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private boolean CheckAllFields() {
         if (binding.etUsermobile.length() != 10) {
@@ -381,7 +375,7 @@ public class AddVendorFragment extends Fragment {
         return true;
     }
 
-    private void VendorRequest() {
+    private void updateVendorRequest() {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
@@ -395,25 +389,24 @@ public class AddVendorFragment extends Fragment {
         params.put("country_id", ApiConstants.COUNTRY_ID);
         params.put("street", streetStr);
         params.put("vat", str_gst_no);
+        params.put("vendor_id", vendor_model.get(position).getVendorId()+"");
 
-        Utility.showDialoge("", getActivity());
-        Log.v("add", String.valueOf(params));
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_VENDOR, new VolleyCallback() {
-            private String message = "Registration failed!!";
+        Log.d("vendoe_update",params.toString());
+        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.UPDATE_Vendor , new VolleyCallback() {
+            private String message = "Update failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
-                Log.v("Response", result.toString());
                 JSONObject obj = new JSONObject(result.toString());
-                int statusCode = obj.optInt("statuscode");
-                message = obj.optString("status");
-               String error_message = obj.optString("error_message");
-              String  str_message = obj.optString("message");
-                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-                    Utility.dismissDialoge();
-                    resetFields();
+                String status = obj.optString("status");
+                message = obj.optString("message");
+                String error_message = obj.optString("error_message");
+                String  str_message = obj.optString("message");
+                if (status.equalsIgnoreCase("success")) {
+
                     Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
 
+                    // resetFields();
                 }else {
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
                 }
@@ -421,9 +414,8 @@ public class AddVendorFragment extends Fragment {
 
             @Override
             public void onError(String result) throws Exception {
-                Utility.dismissDialoge();
-                Log.v("Response", result);
-                Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+                Log.v("Response", result.toString());
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }

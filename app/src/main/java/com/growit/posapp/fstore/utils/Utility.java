@@ -31,7 +31,7 @@ public class Utility {
         progressDialog = new ProgressDialog(context);
         progressDialog.setMax(100);
         progressDialog.setMessage(message);
-        progressDialog.setTitle("GStore");
+        progressDialog.setTitle("FStore");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
     }

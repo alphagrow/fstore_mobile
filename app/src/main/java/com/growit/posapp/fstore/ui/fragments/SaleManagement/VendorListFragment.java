@@ -30,6 +30,7 @@ import com.growit.posapp.fstore.adapters.VendorListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentPOSCategoryListBinding;
 import com.growit.posapp.fstore.databinding.FragmentVendorBinding;
 import com.growit.posapp.fstore.model.StockInventoryModel;
+import com.growit.posapp.fstore.model.VendorModel;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
@@ -45,7 +46,7 @@ import java.lang.reflect.Type;
 
 public class VendorListFragment extends Fragment {
     FragmentVendorBinding binding;
-    StockInventoryModel stockInventoryModel;
+    VendorModel vendormodel;
     VendorListAdapter adapter;
     public VendorListFragment() {
         // Required empty public constructor
@@ -75,19 +76,20 @@ public class VendorListFragment extends Fragment {
 
     private void init(){
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
-        binding.recyclerPos.setLayoutManager(layoutManager);
+        binding.recyclerVendor.setLayoutManager(layoutManager);
         if (Utility.isNetworkAvailable(getContext())) {
-            getProductList();
+            getVendorList();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
         }
+
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
-                    getProductList();
+                    getVendorList();
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -111,10 +113,10 @@ public class VendorListFragment extends Fragment {
             }
         });
     }
-    private void getProductList(){
+    private void getVendorList(){
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -131,21 +133,21 @@ public class VendorListFragment extends Fragment {
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
                         Gson gson = new Gson();
-                        Type listType = new TypeToken<StockInventoryModel>() {
+                        Type listType = new TypeToken<VendorModel>() {
                         }.getType();
 
-                        stockInventoryModel = gson.fromJson(response.toString(), listType);
-                        if (stockInventoryModel.getData() == null || stockInventoryModel.getData().size() == 0) {
+                        vendormodel = gson.fromJson(response.toString(), listType);
+                        if (vendormodel.getVendors() == null || vendormodel.getVendors().size() == 0) {
                             binding.noItem.setVisibility(View.VISIBLE);
-                            binding.noItem.setVisibility(View.GONE);
+                            binding.recyclerVendor.setVisibility(View.GONE);
                         } else {
                             binding.noItem.setVisibility(View.GONE);
-                            binding.recyclerPos.setVisibility(View.VISIBLE);
+                            binding.recyclerVendor.setVisibility(View.VISIBLE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            adapter = new VendorListAdapter(getActivity(), stockInventoryModel.getData());
-                            binding.recyclerPos.setAdapter(adapter);
-                            binding.recyclerPos.setLayoutManager(layoutManager);
+                            adapter = new VendorListAdapter(getActivity(), vendormodel.getVendors());
+                            binding.recyclerVendor.setAdapter(adapter);
+                            binding.recyclerVendor.setLayoutManager(layoutManager);
 
                         }
                     }
@@ -157,7 +159,7 @@ public class VendorListFragment extends Fragment {
             }
         }, error -> {
             binding.noItem.setVisibility(View.VISIBLE);
-            binding.recyclerPos.setVisibility(View.GONE);
+            binding.recyclerVendor.setVisibility(View.GONE);
         });
         queue.add(jsonObjectRequest);
     }
