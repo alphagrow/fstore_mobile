@@ -122,9 +122,6 @@ public class AddProductListFragment extends Fragment {
                    Fragment fragment = AddProductFragment.newInstance();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-
-
             }
         });
     }

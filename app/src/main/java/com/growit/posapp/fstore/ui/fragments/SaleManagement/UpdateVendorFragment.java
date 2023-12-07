@@ -76,9 +76,9 @@ public class UpdateVendorFragment extends Fragment {
             binding.etUsername.setText(vendor_model.get(position).getName());
             binding.etUsermobile.setText(vendor_model.get(position).getMobile());
             binding.etUseraddress.setText(vendor_model.get(position).getStreet());
-//            et_pincode.setText(vendor_model.get(position).getZipcode());
+            binding.etGstNo.setText(vendor_model.get(position).getVat());
             binding.etUseremail.setText(vendor_model.get(position).getEmail());
-
+            binding.etPincode.setText(vendor_model.get(position).getZip());
             getStateData();
             getDistrictData(vendor_model.get(position).getStateId());
             getTalukaData(vendor_model.get(position).getDistrictId());
@@ -92,14 +92,7 @@ public class UpdateVendorFragment extends Fragment {
         binding.titleTxt.setText("Update Vendor");
 
 
-//        if (getContext() != null) {
-//            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), districtNames);
-//            binding.citySpinner.setAdapter(adapter);
-//        }
-//        if (getContext() != null) {
-//            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), talukaNames);
-//            binding.talukaSpinner.setAdapter(adapter);
-//        }
+
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,7 +214,7 @@ public class UpdateVendorFragment extends Fragment {
                         int id = data.optInt("id");
                         String name = data.optString("name");
                         stateModel.setId(id);
-                        if (name.equalsIgnoreCase(vendor_model.get(position).getStateId())) {
+                        if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getStateId())) {
                             spinnerPosition = i + 1;
                         }
                         stateModel.setName(name);
@@ -378,6 +371,7 @@ public class UpdateVendorFragment extends Fragment {
     private void updateVendorRequest() {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
+        params.put("token", sm.getJWTToken());
         params.put("user_id", sm.getUserID() + "");
         params.put("name", nameStr);
         params.put("mobile", mobileStr);
@@ -391,7 +385,7 @@ public class UpdateVendorFragment extends Fragment {
         params.put("vat", str_gst_no);
         params.put("vendor_id", vendor_model.get(position).getVendorId()+"");
 
-        Log.d("vendoe_update",params.toString());
+        Log.d("vendoe_update",ApiConstants.UPDATE_Vendor+params.toString());
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.UPDATE_Vendor , new VolleyCallback() {
             private String message = "Update failed!!";
 
@@ -403,8 +397,7 @@ public class UpdateVendorFragment extends Fragment {
                 String error_message = obj.optString("error_message");
                 String  str_message = obj.optString("message");
                 if (status.equalsIgnoreCase("success")) {
-
-                    Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Vendor  Update successfully ", Toast.LENGTH_SHORT).show();
 
                     // resetFields();
                 }else {

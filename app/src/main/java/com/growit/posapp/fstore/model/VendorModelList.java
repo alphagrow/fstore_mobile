@@ -1,18 +1,27 @@
 package com.growit.posapp.fstore.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+@Entity
 public class VendorModelList {
+    @PrimaryKey(autoGenerate = false)
+
     @SerializedName("vendor_id")
     @Expose
     private Integer vendorId;
+    @ColumnInfo(name = "name")
+
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("email")
     @Expose
     private String email;
+    @ColumnInfo(name = "mobile")
     @SerializedName("mobile")
     @Expose
     private String mobile;
@@ -38,6 +47,17 @@ public class VendorModelList {
     @Expose
     private String talukaId;
 
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    @SerializedName("zip")
+    @Expose
+    private String zip;
     public Integer getVendorId() {
         return vendorId;
     }

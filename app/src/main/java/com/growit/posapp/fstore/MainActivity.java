@@ -40,12 +40,14 @@ import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
+import com.growit.posapp.fstore.ui.fragments.Inventory.CreateWarehouseFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
+import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
-import com.growit.posapp.fstore.ui.fragments.StoreInventoryFragment;
+import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -69,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
     TextView home_text,customer_text,cart_text,transaction_text,order_text;
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
     LinearLayout  sale_menu_lay;
-    TextView vendor;
+    LinearLayout inventory_menu;
+    TextView vendor,purchase,inventory_text,warehouses;
     boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -456,19 +459,42 @@ public class MainActivity extends AppCompatActivity {
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
         TextView ivHeaderPhoto = headerLayout.findViewById(R.id.avatorIamge);
         TextView name = headerLayout.findViewById(R.id.nameTxtHeaderView);
-       View view_sale = nvDrawer.inflateHeaderView(R.layout.menu_button);
+
+        View view_inventory = nvDrawer.inflateHeaderView(R.layout.inventory);
+        inventory_menu = view_inventory.findViewById(R.id.inventory_menu_lay);
+        inventory_text = view_inventory.findViewById(R.id.inventory_text);
+        warehouses = view_inventory.findViewById(R.id.warehouses);
+
+        View view_sale = nvDrawer.inflateHeaderView(R.layout.menu_button);
         sale_menu_lay = view_sale.findViewById(R.id.sale_menu_lay);
         vendor = view_sale.findViewById(R.id.vendor);
+        purchase = view_sale.findViewById(R.id.purchase);
+
         name.setText(sm.getUserName());
         headerLayout.setOnClickListener(view -> {
             Intent profileIntent = new Intent(MainActivity.this, MyProfileActivity.class);
             startActivity(profileIntent);
         });
+        inventory_menu.setOnClickListener(view -> {
+            if (!isClicked) {
+                inventory_text.setVisibility(View.VISIBLE);
+                warehouses.setVisibility(View.VISIBLE);
+                isClicked = true;
+            }else {
+                inventory_text.setVisibility(View.GONE);
+                warehouses.setVisibility(View.GONE);
+                isClicked = false;
+            }
+
+        });
+
         sale_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                purchase.setVisibility(View.VISIBLE);
                 vendor.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                purchase.setVisibility(View.GONE);
                 vendor.setVisibility(View.GONE);
                 isClicked = false;
             }
@@ -485,6 +511,39 @@ public class MainActivity extends AppCompatActivity {
                 drawer_layout.close();
             }
         });
+
+        purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = CreatePurchaseOrderFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+
+        inventory_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = StoreInventoryFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        warehouses.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = CreateWarehouseFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+
     }
 
     private void logoutAlert() {

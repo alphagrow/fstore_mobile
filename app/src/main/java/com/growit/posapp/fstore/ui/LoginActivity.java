@@ -19,15 +19,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.VendorListAdapter;
 import com.growit.posapp.fstore.db.DatabaseClient;
+import com.growit.posapp.fstore.model.VendorModel;
 import com.growit.posapp.fstore.tables.Customer;
 import com.growit.posapp.fstore.tables.GST;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -40,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView resetBtn,but_change_lang;
     Customer customerData = null;
     boolean isAllFieldsChecked = false;
+    VendorModel vendormodel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                     sm.createLoginSession(true, name, storeID, password, token);
                     sm.saveUserId(id);
                     Toast.makeText(LoginActivity.this, R.string.LOGIN_SUCCESS, Toast.LENGTH_SHORT).show();
-
+                    getVendorList();
                     getGSTRequest();
                     getCustomerRequest();
 
@@ -253,6 +260,50 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    private void getVendorList(){
+        SessionManagement sm = new SessionManagement(LoginActivity.this);
+        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+
+        // String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Log.v("url", url);
+        Utility.showDialoge("Please wait while a moment...", LoginActivity.this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<VendorModel>() {
+                        }.getType();
+
+                        vendormodel = gson.fromJson(response.toString(), listType);
+                        if (vendormodel.getVendors().size() != 0) {
+                            AsyncTask.execute(() -> {
+                                DatabaseClient.getInstance(LoginActivity.this).getAppDatabase()
+                                        .getVendorDao()
+                                        .insertAllVendor(vendormodel.getVendors());
+                            });
+
+                        }
+                    }
+                }catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        }, error -> Toast.makeText(LoginActivity.this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
 
     private void getGSTRequest() {
         SessionManagement sm = new SessionManagement(LoginActivity.this);

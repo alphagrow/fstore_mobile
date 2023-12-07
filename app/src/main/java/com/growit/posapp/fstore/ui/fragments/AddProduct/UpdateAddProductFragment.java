@@ -3,8 +3,10 @@ package com.growit.posapp.fstore.ui.fragments.AddProduct;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -114,6 +117,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     List<Product> list=null;
     int  position;
     String product_id;
+    Activity contexts;
 
     //    private static final int SELECT_VIDEO = 3;
     public UpdateAddProductFragment() {
@@ -170,14 +174,14 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         binding.expDateAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(getActivity(), date_exp_alarm, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(contexts, date_exp_alarm, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
             }
         });
         binding.expDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(getActivity(), date_exp, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(contexts, date_exp, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
             }
         });
@@ -251,6 +255,12 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         String date_e = sd.format(myCalendar.getTime());
         binding.mfdDate.setText(date_e);
     }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        contexts = getActivity();
+
+    }
     private void ExpireLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
         String   str_exp_date = sdf.format(myCalendar.getTime());
@@ -293,8 +303,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
 //                return;
 //            }
-            if (!Utility.isNetworkAvailable(getActivity())) {
-                Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+            if (!Utility.isNetworkAvailable(contexts)) {
+                Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
             updateProductRequest(str_product_name, str_product_price, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop,str_whichPest,str_description);
@@ -341,7 +351,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 if (status.equalsIgnoreCase("success")) {
                     Toast.makeText(getActivity(), "Update Product", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(contexts, error_message, Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -349,7 +359,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onError(String result) throws Exception {
                 Log.v("Response", result.toString());
-                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(contexts, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -386,8 +396,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
     }
     private void askForPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
+        if (ContextCompat.checkSelfPermission(contexts, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(contexts, new String[]{permission}, requestCode);
         } else {
             if (requestCode == 1) {
                 fromGallery();

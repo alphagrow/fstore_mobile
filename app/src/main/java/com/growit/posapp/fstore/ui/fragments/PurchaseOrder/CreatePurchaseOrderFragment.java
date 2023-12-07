@@ -1,25 +1,21 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,8 +25,11 @@ import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CropAdapter;
 import com.growit.posapp.fstore.adapters.ProductListAdapter;
+import com.growit.posapp.fstore.databinding.FragmentCreatePurchaseOrderBinding;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.ui.fragments.ProductDetailFragment;
+import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -43,73 +42,62 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductListFragment extends Fragment {
-    protected List<Product> productList = new ArrayList<>();
+
+public class CreatePurchaseOrderFragment extends Fragment {
+
+    FragmentCreatePurchaseOrderBinding binding;
+
+
+    Activity contexts;
     List<Value> cropList = new ArrayList<>();
-    private RecyclerView recyclerView, croplist_view;
     ProductListAdapter productListAdapter;
-    EditText searchEditTxt;
+    protected List<Product> productList = new ArrayList<>();
     private String cropID = "";
     private String cropName = "";
     CropAdapter cropAdapter=null;
-    SwipeRefreshLayout refreshLayout;
-    public static ProductListFragment newInstance() {
-        return new ProductListFragment();
+    public CreatePurchaseOrderFragment() {
+        // Required empty public constructor
     }
-    Activity contexts;
-    TextView noDataFound;
+
+    public static CreatePurchaseOrderFragment newInstance() {
+        return new CreatePurchaseOrderFragment();
+    }
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_fragment, parent, false);
-        recyclerView = view.findViewById(R.id.recycler_view);
-        croplist_view = view.findViewById(R.id.croplist_view);
-        searchEditTxt = view.findViewById(R.id.seacrEditTxt);
-        refreshLayout = view.findViewById(R.id.refreshLayout);
-        noDataFound = view.findViewById(R.id.noDataFound);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
 
+        }
+    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        contexts = getActivity();
 
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        searchEditTxt.setHint("Search...");
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+      //  return inflater.inflate(R.layout.fragment_create_purchase_order, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_purchase_order, container, false);
+        init();
+        return binding.getRoot();
+    }
+    private void init(){
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        binding.recyclerView.setLayoutManager(layoutManager);
+
         if (Utility.isNetworkAvailable(getActivity())) {
             getCropRequest();
         }else {
             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
         }
-        searchEditTxt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshLayout.setRefreshing(false);
-                if (!Utility.isNetworkAvailable(getActivity())) {
-                    Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                getCropRequest();
-            }
-        });
-        refreshLayout.setColorSchemeColors(0000);
-
-
-        croplist_view.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), croplist_view, new RecyclerItemClickListener.OnItemClickListener() {
+        binding.croplistView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(),  binding.croplistView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         cropID = cropList.get(position).getValueId() + "";
@@ -117,8 +105,8 @@ public class ProductListFragment extends Fragment {
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         cropAdapter = new CropAdapter(getActivity(), cropList,position);
-                        croplist_view.setAdapter(cropAdapter);
-                        croplist_view.setLayoutManager(layoutManager);
+                        binding.croplistView.setAdapter(cropAdapter);
+                        binding.croplistView.setLayoutManager(layoutManager);
                         prepareProducts(cropID);
                     }
 
@@ -128,8 +116,8 @@ public class ProductListFragment extends Fragment {
                     }
                 })
         );
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        binding.recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(),  binding.recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Bundle bundle = new Bundle();
@@ -149,61 +137,29 @@ public class ProductListFragment extends Fragment {
                 })
         );
 
-        return view;
     }
 
-    private void filter(String text) {
-        // creating a new array list to filter our data.
-        ArrayList<Product> filteredList = new ArrayList<>();
-        // running a for loop to compare elements.
-        for (Product item : productList) {
-            // checking if the entered string matched with any item of our recycler view.
-            if (item.getProductName().toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
-                filteredList.add(item);
-            }
-        }
-        if (filteredList.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
-//            productListAdapter.filterList(filteredList);
-            Toast.makeText(getActivity(), R.string.NO_DATA, Toast.LENGTH_SHORT).show();
-        } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
-            productListAdapter.filterList(filteredList);
-        }
-    }
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        contexts = getActivity();
-
-    }
     private void prepareProducts(String id) {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
-      Log.d("product_list",url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
+        Log.d("product_list",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-
                 JSONObject obj = null;
                 try {
+                    Utility.dismissDialoge();
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
-                        productList.clear();
                         JSONArray jsonArray = obj.getJSONArray("data");
                         JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
-//                        productList = new ArrayList<>();
-
+                         // productList = new ArrayList<>();
+                        productList.clear();
                         if (productArray.length() > 0) {
                             for (int i = 0; i < productArray.length(); i++) {
                                 Product product = new Product();
@@ -224,7 +180,7 @@ public class ProductListFragment extends Fragment {
                                 productList.add(product);
                             }
                             productListAdapter = new ProductListAdapter(getActivity(), productList);
-                            recyclerView.setAdapter(productListAdapter);
+                            binding.recyclerView.setAdapter(productListAdapter);
 
                         }
 
@@ -237,8 +193,6 @@ public class ProductListFragment extends Fragment {
         queue.add(jsonObjectRequest);
 
     }
-
-
     private void getCropRequest() {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
@@ -274,8 +228,8 @@ public class ProductListFragment extends Fragment {
                             GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
                             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                             cropAdapter = new CropAdapter(getActivity(), cropList,-1);
-                            croplist_view.setAdapter(cropAdapter);
-                            croplist_view.setLayoutManager(layoutManager);
+                            binding.croplistView.setAdapter(cropAdapter);
+                            binding.croplistView.setLayoutManager(layoutManager);
 
                             cropID = cropList.get(0).getValueId() + "";
                             cropName=cropList.get(0).getValueName();

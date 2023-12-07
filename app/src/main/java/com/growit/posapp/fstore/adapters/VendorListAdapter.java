@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.StockInventoryModelList;
+import com.growit.posapp.fstore.model.Transaction;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.model.VendorModelList;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
@@ -41,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.ViewHolder> {
@@ -52,7 +54,10 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
         list = contacts;
         mContext = context;
     }
-
+    public void updateList(ArrayList<VendorModelList> modellist) {
+        this.list=modellist;
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTxt,mobile,status;
         ImageView deleteBtn,acti_img,acti_img_2;

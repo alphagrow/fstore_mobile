@@ -1,5 +1,6 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.Inventory;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
 import com.growit.posapp.fstore.model.StockInventoryModel;
@@ -39,6 +42,7 @@ public class StoreInventoryFragment extends Fragment {
     private RecyclerView recyclerView;
     StoreInventoryAdapters orderHistoryAdapter;
     TextView noDataFound,total_order_text,add_text;
+    ImageView backBtn;
 
     public StoreInventoryFragment() {
         // Required empty public constructor
@@ -64,6 +68,7 @@ public class StoreInventoryFragment extends Fragment {
         noDataFound = view.findViewById(R.id.noDataFound);
         total_order_text = view.findViewById(R.id.total_order_text);
         add_text = view.findViewById(R.id.add_text);
+        backBtn = view.findViewById(R.id.backBtn);
         if (Utility.isNetworkAvailable(getActivity())) {
             getStoreInventory();
         }else {
@@ -71,6 +76,14 @@ public class StoreInventoryFragment extends Fragment {
         }
 
         noDataFound.setOnClickListener(v -> getStoreInventory());
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+            }
+        });
         return view;
     }
 

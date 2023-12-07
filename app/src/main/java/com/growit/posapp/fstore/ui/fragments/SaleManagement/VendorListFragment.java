@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,9 @@ import com.growit.posapp.fstore.adapters.VendorListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentPOSCategoryListBinding;
 import com.growit.posapp.fstore.databinding.FragmentVendorBinding;
 import com.growit.posapp.fstore.model.StockInventoryModel;
+import com.growit.posapp.fstore.model.Transaction;
 import com.growit.posapp.fstore.model.VendorModel;
+import com.growit.posapp.fstore.model.VendorModelList;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
@@ -42,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 
 public class VendorListFragment extends Fragment {
@@ -112,11 +117,30 @@ public class VendorListFragment extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
+        binding.seacrEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterList(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
     private void getVendorList(){
         SessionManagement sm = new SessionManagement(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+
+        // String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -163,7 +187,17 @@ public class VendorListFragment extends Fragment {
         });
         queue.add(jsonObjectRequest);
     }
+    private void filterList(String text){
+        ArrayList<VendorModelList> model = new ArrayList<>();
 
+        for (VendorModelList detail : vendormodel.getVendors()){
+            if (detail.getName().toLowerCase().contains(text.toLowerCase()) || detail.getMobile().toLowerCase().contains(text.toLowerCase())){
+                model.add(detail);
+            }
+        }
+
+        adapter.updateList(model);
+    }
 
 
 }
