@@ -16,15 +16,6 @@ public class Datum {
     @SerializedName("image_url")
     @Expose
     private String imageUrl;
-
-    public Integer getTotalQuantity() {
-        return totalQuantity;
-    }
-
-    public void setTotalQuantity(Integer totalQuantity) {
-        this.totalQuantity = totalQuantity;
-    }
-
     @SerializedName("total_quantity")
     @Expose
     private Integer totalQuantity;
@@ -50,6 +41,8 @@ public class Datum {
     @SerializedName("category_name")
     @Expose
     private String category_name;
+
+
     public String getProduct_package() {
         return product_package;
     }
@@ -57,7 +50,13 @@ public class Datum {
     public void setProduct_package(String product_package) {
         this.product_package = product_package;
     }
+    public Integer getTotalQuantity() {
+        return totalQuantity;
+    }
 
+    public void setTotalQuantity(Integer totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
     public String getDescription() {
         return description;
     }

@@ -165,7 +165,6 @@ public class AttributeListFragment extends Fragment {
                                 binding.noItem.setVisibility(View.GONE);
                             } else {
                                 binding.noItem.setVisibility(View.GONE);
-
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                 adapter = new AttributeAdapter(getActivity(), model);

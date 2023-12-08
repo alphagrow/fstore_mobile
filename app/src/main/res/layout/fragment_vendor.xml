@@ -52,6 +52,62 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp">
+<!--            <LinearLayout-->
+<!--                android:layout_marginStart="5dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="36dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <RadioGroup-->
+<!--                    android:id="@+id/rdGroup"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center_horizontal"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rdbVeg"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="2dp"-->
+<!--                        android:padding="2dp"-->
+<!--                        android:checked="true"-->
+<!--                        android:text="Active Vendor" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rdbFruits"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="2dp"-->
+<!--                        android:padding="2dp"-->
+<!--                        android:text="Inactive Vendor" />-->
+
+
+<!--                </RadioGroup>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/add_text"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_gravity="end|center"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    android:layout_marginRight="10dp"-->
+<!--                    android:layout_weight=".5"-->
+<!--                    android:fontFamily="@font/helveticaneuelight"-->
+<!--                    android:background="@drawable/custom_search"-->
+<!--                    android:drawableStart="@drawable/add"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="Add"-->
+<!--                    android:textColor="@color/colorPrimary"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="bold" />-->
+
+<!--            </LinearLayout>-->
+
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"

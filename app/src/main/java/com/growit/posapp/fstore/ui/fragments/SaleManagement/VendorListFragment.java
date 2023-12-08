@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -53,6 +55,7 @@ public class VendorListFragment extends Fragment {
     FragmentVendorBinding binding;
     VendorModel vendormodel;
     VendorListAdapter adapter;
+    String status="true";
     public VendorListFragment() {
         // Required empty public constructor
     }
@@ -133,6 +136,29 @@ public class VendorListFragment extends Fragment {
 
             }
         });
+
+//        binding.rdGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            public void onCheckedChanged(RadioGroup group, int checkedId)
+//            {
+//                // This will get the radiobutton that has changed in its check state
+//                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+//                // This puts the value (true/false) into the variable
+//                boolean isChecked = checkedRadioButton.isChecked();
+//                // If the radiobutton that has changed in check state is now checked...
+//                if (checkedRadioButton.getText().toString().equalsIgnoreCase("Active Vendor")) {
+//                    status="true";
+//                }else if (checkedRadioButton.getText().toString().equalsIgnoreCase("Inactive Vendor")) {
+//                    status="false";
+//                }
+//
+//                if (Utility.isNetworkAvailable(getActivity())) {
+//                    getVendorList();
+//                } else {
+//                    Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+
 
     }
     private void getVendorList(){

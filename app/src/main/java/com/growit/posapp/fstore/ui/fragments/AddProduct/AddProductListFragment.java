@@ -125,56 +125,7 @@ public class AddProductListFragment extends Fragment {
             }
         });
     }
-//    private void getProductList(){
-//        SessionManagement sm = new SessionManagement(getActivity());
-//        RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
-//        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-//        Log.v("url", url);
-//        Utility.showDialoge("Please wait while a moment...", getActivity());
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Log.v("Response", response.toString());
-//
-//                JSONObject obj = null;
-//                try {
-//                    obj = new JSONObject(response.toString());
-//                    int statusCode = obj.optInt("statuscode");
-//                    String status = obj.optString("status");
-//
-//                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-//                        Utility.dismissDialoge();
-//                        Gson gson = new Gson();
-//                        Type listType = new TypeToken<StockInventoryModel>() {
-//                        }.getType();
-//
-//                        stockInventoryModel = gson.fromJson(response.toString(), listType);
-//                        if (stockInventoryModel.getData() == null || stockInventoryModel.getData().size() == 0) {
-//                            binding.noItem.setVisibility(View.VISIBLE);
-//                            binding.noItem.setVisibility(View.GONE);
-//                        } else {
-//                            binding.noItem.setVisibility(View.GONE);
-//                            binding.recycler.setVisibility(View.VISIBLE);
-//                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//                            adapter = new AddProductListAdapter(getActivity(), stockInventoryModel);
-//                            binding.recycler.setAdapter(adapter);
-//                            binding.recycler.setLayoutManager(layoutManager);
-//
-//                        }
-//                    }
-//                }catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//
-//            }
-//        }, error -> {
-//            binding.noItem.setVisibility(View.VISIBLE);
-//            binding.recycler.setVisibility(View.GONE);
-//        });
-//        queue.add(jsonObjectRequest);
-//    }
+
 @Override
 public void onAttach(@NonNull Context context) {
     super.onAttach(context);

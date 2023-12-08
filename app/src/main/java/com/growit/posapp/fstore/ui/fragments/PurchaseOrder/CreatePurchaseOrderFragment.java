@@ -2,6 +2,7 @@ package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -22,12 +24,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CropAdapter;
+import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.ProductListAdapter;
+import com.growit.posapp.fstore.adapters.VendorListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentCreatePurchaseOrderBinding;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.model.VendorModel;
 import com.growit.posapp.fstore.ui.fragments.ProductDetailFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -39,6 +48,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +65,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private String cropID = "";
     private String cropName = "";
     CropAdapter cropAdapter=null;
+String vendor_id;
+    List<StateModel> vendorNames = new ArrayList<>();
     public CreatePurchaseOrderFragment() {
         // Required empty public constructor
     }
@@ -91,11 +103,20 @@ public class CreatePurchaseOrderFragment extends Fragment {
         binding.recyclerView.setLayoutManager(layoutManager);
 
         if (Utility.isNetworkAvailable(getActivity())) {
+            getVendorList();
             getCropRequest();
         }else {
             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
         }
+        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+            }
+        });
+
         binding.croplistView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(),  binding.croplistView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -116,8 +137,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     }
                 })
         );
-        binding.recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(),  binding.recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        binding.recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),  binding.recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Bundle bundle = new Bundle();
@@ -136,6 +156,20 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     }
                 })
         );
+        binding.vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    vendor_id = vendorNames.get(position).getId() + "";
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 
@@ -230,7 +264,6 @@ public class CreatePurchaseOrderFragment extends Fragment {
                             cropAdapter = new CropAdapter(getActivity(), cropList,-1);
                             binding.croplistView.setAdapter(cropAdapter);
                             binding.croplistView.setLayoutManager(layoutManager);
-
                             cropID = cropList.get(0).getValueId() + "";
                             cropName=cropList.get(0).getValueName();
                             prepareProducts(cropID);
@@ -240,6 +273,59 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+    private void getVendorList(){
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "active=" + "true";
+
+        // String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Log.v("url", url);
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                vendorNames = new ArrayList<>();
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+//                        Utility.dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("vendors");
+                        StateModel stateModel = new StateModel();
+                        stateModel.setId(-1);
+                        stateModel.setName("--Select Vendor--");
+                        vendorNames.add(stateModel);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            stateModel = new StateModel();
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            int id = data.optInt("vendor_id");
+                            String name = data.optString("name");
+                            stateModel.setId(id);
+                            stateModel.setName(name);
+                            vendorNames.add(stateModel);
+                        }
+
+
+
+                        if (getContext() != null) {
+                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), vendorNames);
+                            binding.vendorSpinner.setAdapter(adapter);
+                        }
+
+                    }
+                }catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);

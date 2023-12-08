@@ -50,6 +50,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
     private List<VendorModelList> list;
     private Context mContext;
 
+
     public VendorListAdapter(Context context, List<VendorModelList> contacts) {
         list = contacts;
         mContext = context;
@@ -107,7 +108,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
         });
 
 
-//            if (list.get(position).getStatus().equals("INACTIVE")) {
+//            if (status.equals("true")) {
 //                holder.status.setText(list.get(position).getStatus());
 //                holder.status.setTextColor(Color.parseColor("#F55625"));
 //                holder.acti_img_2.setVisibility(View.VISIBLE);

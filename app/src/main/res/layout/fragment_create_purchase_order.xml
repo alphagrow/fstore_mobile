@@ -59,7 +59,7 @@
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
-                        android:id="@+id/stateSpinner"
+                        android:id="@+id/vendorSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_centerHorizontal="true"

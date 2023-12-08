@@ -5,6 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class Product {
 
+
+
+    @SerializedName("id")
+    @Expose
+    private String productID;
     public String getProductID() {
         return productID;
     }
@@ -12,11 +17,6 @@ public class Product {
     public void setProductID(String productID) {
         this.productID = productID;
     }
-
-    @SerializedName("id")
-    @Expose
-    private String productID;
-
     public String getProduct_id() {
         return product_id;
     }
