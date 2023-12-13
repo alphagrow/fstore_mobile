@@ -68,6 +68,22 @@
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
 
+                <LinearLayout
+                    android:id="@+id/lay_detailed_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:background="@drawable/custom_edit_text_cut">
+
+                    <Spinner
+                        android:id="@+id/detailTypeSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"/>
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/et_product_price"
@@ -86,103 +102,31 @@
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
-
-
-<!--                <EditText-->
-<!--                    android:id="@+id/et_uom"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="55dp"-->
-<!--                    android:layout_marginStart="@dimen/twenty_five"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="@dimen/twenty_five"-->
-<!--                    android:background="@drawable/custom_edit_text_cut"-->
-<!--                    android:drawableEnd="@drawable/land_size"-->
-<!--                    android:drawablePadding="@dimen/ten"-->
-<!--                    android:fontFamily="@font/sf_compact_medium"-->
-<!--                    android:hint="@string/UOM"-->
-<!--                    android:importantForAutofill="no"-->
-<!--                    android:inputType="text"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:requiresFadingEdge="vertical"-->
-<!--                    android:textSize="14dp" />-->
-
-<!--                <EditText-->
-<!--                    android:id="@+id/et_uom_product"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="55dp"-->
-<!--                    android:layout_marginStart="@dimen/twenty_five"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="@dimen/twenty_five"-->
-<!--                    android:background="@drawable/custom_edit_text_cut"-->
-<!--                    android:drawableEnd="@drawable/land_size"-->
-<!--                    android:drawablePadding="@dimen/ten"-->
-<!--                    android:fontFamily="@font/sf_compact_medium"-->
-<!--                    android:hint="UOM Product"-->
-<!--                    android:importantForAutofill="no"-->
-<!--                    android:inputType="text"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:requiresFadingEdge="vertical"-->
-<!--                    android:textSize="14dp" />-->
-
-                <EditText
-                    android:visibility="gone"
-                    android:id="@+id/et_size"
+                <LinearLayout
+                    android:id="@+id/lay_et_uom_type"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/twenty_five"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:hint="@string/size"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                    android:background="@drawable/custom_edit_text_cut">
 
-
-                <EditText
-                    android:visibility="gone"
-
-                    android:id="@+id/et_color"
+                    <Spinner
+                        android:id="@+id/et_uom_Spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayoutMain"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_invert_colors_24"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:hint="@string/color"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:orientation="vertical" >
+                </LinearLayout>
 
-
-                <EditText
-                    android:visibility="gone"
-                    android:id="@+id/et_whole_pattern"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:hint="@string/whole_pattern"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
 
                 <EditText
                     android:id="@+id/tech_name_pest"
@@ -291,24 +235,38 @@
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
-
-                <EditText
-                    android:id="@+id/which_crop"
+                <TextView
+                    android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginStart="@dimen/twenty_five"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_centerInParent="true"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
+                    android:drawableRight="@android:drawable/arrow_down_float"
+                    android:drawablePadding="16dp"
                     android:hint="Which Crop"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:padding="8dp"
-                    android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                    android:padding="12dp" />
+
+<!--                <EditText-->
+<!--                    android:id="@+id/which_crop"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="55dp"-->
+<!--                    android:layout_marginStart="@dimen/twenty_five"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                    android:background="@drawable/custom_edit_text_cut"-->
+<!--                    android:drawableEnd="@drawable/land_size"-->
+<!--                    android:drawablePadding="@dimen/ten"-->
+<!--                    android:enabled = "false"-->
+<!--                    android:fontFamily="@font/sf_compact_medium"-->
+<!--                    android:hint="Which Crop"-->
+<!--                    android:importantForAutofill="no"-->
+<!--                    android:inputType="text"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:requiresFadingEdge="vertical"-->
+<!--                    android:textSize="14dp" />-->
 
                 <EditText
                     android:id="@+id/which_pest"
@@ -348,7 +306,6 @@
 
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/mfd_date"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -367,7 +324,6 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/exp_date"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -386,7 +342,6 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/exp_date_alarm"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
@@ -561,7 +516,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/submit_btn"
+                    android:id="@+id/update_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="35dp"

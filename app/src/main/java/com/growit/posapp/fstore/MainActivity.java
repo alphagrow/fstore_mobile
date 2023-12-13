@@ -46,6 +46,7 @@ import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFragment;
+import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
     LinearLayout  sale_menu_lay;
     LinearLayout inventory_menu;
-    TextView vendor,purchase,inventory_text,warehouses;
+    TextView vendor,purchase,inventory_text,warehouses,purchase_order_list;
     boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -469,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
         sale_menu_lay = view_sale.findViewById(R.id.sale_menu_lay);
         vendor = view_sale.findViewById(R.id.vendor);
         purchase = view_sale.findViewById(R.id.purchase);
+        purchase_order_list = view_sale.findViewById(R.id.purchase_order_list);
 
         name.setText(sm.getUserName());
         headerLayout.setOnClickListener(view -> {
@@ -490,10 +492,12 @@ public class MainActivity extends AppCompatActivity {
 
         sale_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                purchase_order_list.setVisibility(View.VISIBLE);
                 purchase.setVisibility(View.VISIBLE);
                 vendor.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                purchase_order_list.setVisibility(View.GONE);
                 purchase.setVisibility(View.GONE);
                 vendor.setVisibility(View.GONE);
                 isClicked = false;
@@ -517,6 +521,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 toolbar.setVisibility(View.GONE);
                 Fragment fragment = CreatePurchaseOrderFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        purchase_order_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = PurchaseOrderListFragment.newInstance();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 drawer_layout.close();

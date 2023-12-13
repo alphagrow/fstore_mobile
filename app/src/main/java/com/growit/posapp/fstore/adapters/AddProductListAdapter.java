@@ -28,6 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.Purchase.PurchaseCategoryModel;
+import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.model.StockInventoryModelList;
 import com.growit.posapp.fstore.model.Value;
@@ -50,23 +52,26 @@ import java.util.List;
 
 public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAdapter.ViewHolder> {
 
-    private List<Product> list;
+    private List<PurchaseProductModel> list;
     private Context mContext;
+    String crop_id,crop_name;
 
-    public AddProductListAdapter(Context context, List<Product> contacts) {
-        list = contacts;
-        mContext = context;
+    public AddProductListAdapter(Context context, List<PurchaseProductModel> contacts,String crop_id,String crop_name) {
+        this.crop_name = crop_name;
+        this.crop_id = crop_id;
+        this.list = contacts;
+        this.mContext = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView qty,order_no,dateTxt,amountTxt,case_id;
-        ImageView images,deleteBtn,update;
+        public TextView qty, order_no, dateTxt, amountTxt, case_id;
+        ImageView images, deleteBtn, update;
         ShowMoreTextView product_name;
 
         public ViewHolder(View itemView) {
             super(itemView);
             product_name = itemView.findViewById(R.id.product_name_text);
-            qty= itemView.findViewById(R.id.Qty_avl_text);
+            qty = itemView.findViewById(R.id.Qty_avl_text);
             images = itemView.findViewById(R.id.images);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             update = itemView.findViewById(R.id.update);
@@ -87,8 +92,8 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
 
     @Override
     public void onBindViewHolder(@NonNull AddProductListAdapter.ViewHolder holder, int position) {
-        Product model = list.get(position);
-        holder.qty.setText("Qty Avl. : "+String.valueOf(model.getQuantity()));
+        PurchaseProductModel model = list.get(position);
+        //   holder.qty.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
         holder.product_name.setText(model.getProductName());
         holder.product_name.setShowingChar(100);
         holder.product_name.setShowingLine(2);
@@ -96,48 +101,53 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
         holder.product_name.addShowLessText("Less");
         holder.product_name.setShowMoreColor(Color.BLACK); // or other color
         holder.product_name.setShowLessTextColor(Color.RED); // or other color
-        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getProductImage())
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.no_image)
-                .into(holder.images);
+
+
+//        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getProductImage())
+//                .placeholder(R.drawable.loading)
+//                .error(R.drawable.no_image)
+//                .into(holder.images);
 
         holder.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("product_list", (Serializable) list);
+                bundle.putString("crop_id",crop_id);
+                bundle.putString("crop_name",crop_name);
                 bundle.putInt("position", position);
                 Fragment fragment = UpdateAddProductFragment.newInstance();
                 fragment.setArguments(bundle);
-                FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
+                FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
 
             }
         });
-holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Are you sure you want to delete ?");
-        builder.setTitle("Alert !");
-        builder.setCancelable(false);
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            Product model = list.get(position);
-            getDelete(String.valueOf(model.getProductID()),position);
+        holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage("Are you sure you want to delete ?");
+                builder.setTitle("Alert !");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    PurchaseProductModel model = list.get(position);
+                    getDelete(String.valueOf(model.getProductId()), position);
 
+                });
+
+                builder.setNegativeButton("No", (dialog, which) -> {
+                    dialog.cancel();
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
         });
 
-        builder.setNegativeButton("No", (dialog, which) -> {
-            dialog.cancel();
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
-});
 
-    }
-    private void getDelete(String id,int position) {
+    private void getDelete(String id, int position) {
         SessionManagement sm = new SessionManagement(mContext);
         RequestQueue queue = Volley.newRequestQueue(mContext);//162.246.254.203:8069
         String url = ApiConstants.BASE_URL + ApiConstants.DELETE_PRODUCT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "product_id=" + id;
@@ -160,11 +170,11 @@ holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
                         list.remove(position);
                         notifyDataSetChanged();
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         Toast.makeText(mContext, error_message, Toast.LENGTH_SHORT).show();
 
                     }
-                }catch (JSONException e) {
+                } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
 

@@ -34,8 +34,11 @@ import com.growit.posapp.fstore.adapters.ProductListAdapter;
 import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
+import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.model.VendorModel;
 import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -58,7 +61,11 @@ public class AddProductListFragment extends Fragment {
     protected List<Product> productList = new ArrayList<>();
     Activity contexts;
     List<Value> crop_mode = null;
-    String crop_id;
+    String crop_id,crop_name;
+
+    PurchaseModel model;
+    List<PurchaseProductModel> purchaseProductModel;
+
     public AddProductListFragment() {
         // Required empty public constructor
     }
@@ -66,6 +73,7 @@ public class AddProductListFragment extends Fragment {
     public static AddProductListFragment newInstance() {
         return new AddProductListFragment();
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,19 +83,20 @@ public class AddProductListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding= DataBindingUtil.inflate(inflater,R.layout.fragment_add_product_list, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product_list, container, false);
         init();
         return binding.getRoot();
     }
-    private void init(){
+
+    private void init() {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recycler.setLayoutManager(layoutManager);
         if (getArguments() != null) {
             crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
-         int  position = getArguments().getInt("position");
-            crop_id =String.valueOf(crop_mode.get(position).getValueId());
+            int position = getArguments().getInt("position");
+            crop_id = String.valueOf(crop_mode.get(position).getValueId());
             if (Utility.isNetworkAvailable(getContext())) {
                 getProductList(crop_id);
             } else {
@@ -119,19 +128,19 @@ public class AddProductListFragment extends Fragment {
         binding.addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   Fragment fragment = AddProductFragment.newInstance();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                Fragment fragment = AddProductFragment.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
     }
 
-@Override
-public void onAttach(@NonNull Context context) {
-    super.onAttach(context);
-    contexts = getActivity();
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        contexts = getActivity();
 
-}
+    }
 
 
     private void getProductList(String pos_category_id) {
@@ -139,7 +148,7 @@ public void onAttach(@NonNull Context context) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + pos_category_id + "&" + "token=" + sm.getJWTToken();
-        Log.d("product_list",url);
+        Log.d("product_list", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -150,43 +159,53 @@ public void onAttach(@NonNull Context context) {
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        JSONArray jsonArray = obj.getJSONArray("data");
-                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
-                        productList = new ArrayList<>();
-                        if (productArray.length() > 0) {
-                            for (int i = 0; i < productArray.length(); i++) {
-                                Product product = new Product();
-                                JSONObject data = productArray.getJSONObject(i);
-                                int ID = data.optInt("product_id");
-                                String name = data.optString("product_name");
-                                double price = data.optDouble("list_price");
-                                product.setProductID(ID + "");
-                                product.setProductName(name);
-                                product.setPrice(price);
-                                String image = "";
-                                if (data.opt("image_url").equals(false)) {
-                                    image = "";
-                                } else {
-                                    image = data.optString("image_url");
-                                }
-                                product.setProductImage(image);
-                                productList.add(product);
-                            }
-                            if (productList == null || productList.size() == 0) {
-                                binding.noItem.setVisibility(View.GONE);
-                            } else {
-                                binding.noItem.setVisibility(View.GONE);
-
-                                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                                adapter = new AddProductListAdapter(getActivity(), productList);
-                                binding.recycler.setAdapter(adapter);
-                                binding.recycler.setLayoutManager(layoutManager);
-
-                            }
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<PurchaseModel>() {
+                        }.getType();
+                        model = gson.fromJson(response.toString(), listType);
+                        for (int i = 0; i < model.getData().size(); i++) {
+                            crop_id = String.valueOf(model.getData().get(i).getCategoryId());
+                            crop_name = model.getData().get(i).getCategoryName();
+                            purchaseProductModel = model.getData().get(i).getProducts();
+                        }
+                        //                       JSONArray jsonArray = obj.getJSONArray("data");
+//                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
+                        //                       productList = new ArrayList<>();
+                        //   if (productArray.length() > 0) {
+//                            for (int i = 0; i < productArray.length(); i++) {
+//                                Product product = new Product();
+//                                JSONObject data = productArray.getJSONObject(i);
+//                                int ID = data.optInt("product_id");
+//                                String name = data.optString("product_name");
+//                                double price = data.optDouble("list_price");
+//                                product.setProductID(ID + "");
+//                                product.setProductName(name);
+//                                product.setPrice(price);
+//                                String image = "";
+//                                if (data.opt("image_url").equals(false)) {
+//                                    image = "";
+//                                } else {
+//                                    image = data.optString("image_url");
+//                                }
+//                                product.setProductImage(image);
+//                                productList.add(product);
+//                            }
 
 
-                                                  }
+                        if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
+                            binding.noItem.setVisibility(View.GONE);
+                        } else {
+                            binding.noItem.setVisibility(View.GONE);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                            adapter = new AddProductListAdapter(getActivity(), purchaseProductModel,crop_id,crop_name);
+                            binding.recycler.setAdapter(adapter);
+                            binding.recycler.setLayoutManager(layoutManager);
+
+                        }
+
+
+                        //                               }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

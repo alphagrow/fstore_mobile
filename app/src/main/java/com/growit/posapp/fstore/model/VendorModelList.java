@@ -47,6 +47,17 @@ public class VendorModelList {
     @Expose
     private String talukaId;
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    @SerializedName("active")
+    @Expose
+    private Boolean active;
     public String getZip() {
         return zip;
     }

@@ -139,14 +139,14 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     ListAttributesModel model_attribute;
     List<AttributeModel> model = new ArrayList<>();
     List<Value> cropList = new ArrayList<>();
-    //    private static final int SELECT_VIDEO = 3;
+// private static final int SELECT_VIDEO = 3;
 
-
+    String str_crop_id;
     ArrayList<Integer> crop_id_list = new ArrayList<>();
     ArrayList<Integer> attribute_id_list = new ArrayList<>();
-    String  selected_crop_id;
+    String selected_crop_id;
     public AddProductFragment() {
-        // Required empty public constructor
+// Required empty public constructor
     }
 
     public static AddProductFragment newInstance() {
@@ -164,7 +164,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+// Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product, container, false);
 
         imagesUriArrayList = new ArrayList();
@@ -173,33 +173,33 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
     private void init() {
-//        imageView = view.findViewById(R.id.imageView);
-//        et_product_name = view.findViewById(R.id.et_product_name);
-//        et_product_price = view.findViewById(R.id.et_product_price);
-//        et_uom = view.findViewById(R.id.et_uom);
-//        submit_btn = view.findViewById(R.id.submit_btn);
-//        et_size = view.findViewById(R.id.et_size);
-//        et_color = view.findViewById(R.id.et_color);
-//        et_whole_pattern = view.findViewById(R.id.et_whole_pattern);
-//        product_image = view.findViewById(R.id.image);
-//        idPBLoading = view.findViewById(R.id.idPBLoading);
-//        video_text = view.findViewById(R.id.video_text);
-//        video_image = view.findViewById(R.id.video);
-//        videoView = view.findViewById(R.id.simpleVideoView);
-//        image_set = view.findViewById(R.id.image_set);
-//        mfd_date = view.findViewById(R.id.mfd_date);
-//        exp_date =view.findViewById(R.id.exp_date);
-//        exp_date_alarm = view.findViewById(R.id.exp_date_alarm);
-//        tech_name_pest = view.findViewById(R.id.tech_name_pest);
-//        brand_name = view.findViewById(R.id.brand_name);
-//        mkt_by =view.findViewById(R.id.mkt_by);
-//        batch_number = view.findViewById(R.id.batch_number);
-//        cir_number = view.findViewById(R.id.cir_number);
-//        which_crop = view.findViewById(R.id.which_crop);
-//        which_pest =view.findViewById(R.id.which_pest);
-//        packing_std = view.findViewById(R.id.packing_std);
-//        layout = view.findViewById(R.id.imageLayout);
-//        recy_image = view.findViewById(R.id.recy_image);
+// imageView = view.findViewById(R.id.imageView);
+// et_product_name = view.findViewById(R.id.et_product_name);
+// et_product_price = view.findViewById(R.id.et_product_price);
+// et_uom = view.findViewById(R.id.et_uom);
+// submit_btn = view.findViewById(R.id.submit_btn);
+// et_size = view.findViewById(R.id.et_size);
+// et_color = view.findViewById(R.id.et_color);
+// et_whole_pattern = view.findViewById(R.id.et_whole_pattern);
+// product_image = view.findViewById(R.id.image);
+// idPBLoading = view.findViewById(R.id.idPBLoading);
+// video_text = view.findViewById(R.id.video_text);
+// video_image = view.findViewById(R.id.video);
+// videoView = view.findViewById(R.id.simpleVideoView);
+// image_set = view.findViewById(R.id.image_set);
+// mfd_date = view.findViewById(R.id.mfd_date);
+// exp_date =view.findViewById(R.id.exp_date);
+// exp_date_alarm = view.findViewById(R.id.exp_date_alarm);
+// tech_name_pest = view.findViewById(R.id.tech_name_pest);
+// brand_name = view.findViewById(R.id.brand_name);
+// mkt_by =view.findViewById(R.id.mkt_by);
+// batch_number = view.findViewById(R.id.batch_number);
+// cir_number = view.findViewById(R.id.cir_number);
+// which_crop = view.findViewById(R.id.which_crop);
+// which_pest =view.findViewById(R.id.which_pest);
+// packing_std = view.findViewById(R.id.packing_std);
+// layout = view.findViewById(R.id.imageLayout);
+// recy_image = view.findViewById(R.id.recy_image);
 
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
         binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
@@ -211,7 +211,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.detailTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                  ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
+                ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
                 str_detailed_type = detailed_type[position];
             }
 
@@ -228,7 +228,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-                // TODO Auto-generated method stub
+// TODO Auto-generated method stub
                 ((TextView) arg0.getChildAt(0)).setTextColor(R.color.text_color);
                 str_uom = binding.etUomSpinner.getSelectedItem().toString();
 
@@ -236,7 +236,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
+// TODO Auto-generated method stub
             }
         });
 
@@ -267,7 +267,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         date_mfd = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // TODO Auto-generated method stub
+// TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -277,7 +277,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         date_exp = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // TODO Auto-generated method stub
+// TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -287,7 +287,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         date_exp_alarm = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // TODO Auto-generated method stub
+// TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -310,8 +310,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.selNonGov.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // checkedId is the RadioButton selected
-                //  RadioButton rb = view.findViewById(checkedId);
+// checkedId is the RadioButton selected
+// RadioButton rb = view.findViewById(checkedId);
                 if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Gov")) {
                     str_non_gov_product = "Non-Gov";
                 } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov Authorized")) {
@@ -333,8 +333,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private void updateLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         str_mfd_date = sdf.format(myCalendar.getTime());
-//        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
-//        String date_e = sd.format(myCalendar.getTime());
+// SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
+// String date_e = sd.format(myCalendar.getTime());
         binding.mfdDate.setText(str_mfd_date);
     }
 
@@ -368,7 +368,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             String str_batchNumber = binding.batchNumber.getText().toString();
             String str_cirNumber = binding.cirNumber.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
-//            String str_etUom = binding.etUom.getText().toString();
+// String str_etUom = binding.etUom.getText().toString();
             String str_description = binding.description.getText().toString();
             String str_uomProduct = binding.etUomProduct.getText().toString();
 
@@ -422,14 +422,14 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             Log.d("attribute_json_array", attribute_json_array.toString());
 
-            if (selected_crop_id !=null) {
-                if (selected_crop_id !=null) {
-                addProductRequest(str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
+            if (attribute_json_array !=null) {
+                if (str_crop_id.length() !=0) {
+                    addProductRequest(str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
                 }else {
                     Toast.makeText(getActivity(), "Select Crop", Toast.LENGTH_SHORT).show();
                 }
             }else {
-                Toast.makeText(getActivity(), "Select Crop", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Select Attribute", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -453,14 +453,14 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("non_gov_product", str_non_gov_product);
         params.put("mfd_date", str_mfd_date);
         params.put("exp_date", str_exp_date);
-//        params.put("uom_id", str_etUom); //kg,ml, etc by API
-//        params.put("uom_po_id", str_uomProduct);
+         // params.put("uom_id", str_etUom); //kg,ml, etc by API
+        // params.put("uom_po_id", str_uomProduct);
         params.put("uom_id", str_uom);
         params.put("uom_po_id", str_uom);
         params.put("detailed_type", str_detailed_type);
 
-        // params.put("pos_categ_id", crop_id_list.toString());
-        params.put("pos_categ_id", selected_crop_id);
+// params.put("pos_categ_id", crop_id_list.toString());
+        params.put("pos_categ_id", str_crop_id);
         params.put("attribute_lines", attribute_json_array.toString());
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMax(100);
@@ -518,7 +518,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                     askForPermission("android.permission.CAMERA", 2);
                 } else if (options[item].equals("Select multiple photos from Gallery")) {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        // Do something for lollipop and above versions
+// Do something for lollipop and above versions
                         askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
                     } else {
                         askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1);
@@ -536,7 +536,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+// String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
         Log.d("product_list", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -559,22 +559,22 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                         createTextDynamically(model_attribute.getAttributes().size());
 
 
-                        //  JSONArray attributesArray = jsonArray.getJSONObject(0).getJSONArray("attributes");
+// JSONArray attributesArray = jsonArray.getJSONObject(0).getJSONArray("attributes");
 
-//                        if (jsonArray.length() > 0) {
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                AttributeValue value_mode = new AttributeValue();
-//                                JSONObject data = jsonArray.getJSONObject(i);
-//                                Integer id = data.optInt("id");
-//                                String name = data.optString("name");
-//                                JSONArray value = data.optJSONArray("values");
-//                                value_mode.setId(value.getInt(0));
-//                                value_mode.setName(value.getString(1));
-//                                attributeValueList.add(value_mode);
+// if (jsonArray.length() > 0) {
+// for (int i = 0; i < jsonArray.length(); i++) {
+// AttributeValue value_mode = new AttributeValue();
+// JSONObject data = jsonArray.getJSONObject(i);
+// Integer id = data.optInt("id");
+// String name = data.optString("name");
+// JSONArray value = data.optJSONArray("values");
+// value_mode.setId(value.getInt(0));
+// value_mode.setName(value.getString(1));
+// attributeValueList.add(value_mode);
 //
-//                            }
+// }
 //
-//                        }
+// }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -610,11 +610,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             text.setHint("Select the " + model.get(j).getName());
 
-//            text.setText(name.get(1).getName());
+            // text.setText(name.get(1).getName());
             text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
             text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
-            //  et.setEnabled(false);
+            // et.setEnabled(false);
             binding.linearLayoutMain.addView(text, editTextParams);
 
             SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
@@ -662,9 +662,9 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             if (photo != null) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
-//                Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName(), photo);
-//                picture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                startActivityForResult(picture, PICK_FROM_CAMERA);
+// Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName(), photo);
+// picture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+// startActivityForResult(picture, PICK_FROM_CAMERA);
             }
 
         }
@@ -691,7 +691,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             Bundle extras1 = data.getExtras();
             Bitmap thumbnail_1 = (Bitmap) extras1.get("data");
             if (thumbnail_1 != null) {
-                //  imagesUriArrayList.add(new imagesUriArrayList.add(thumbnail_1));
+// imagesUriArrayList.add(new imagesUriArrayList.add(thumbnail_1));
                 imagesUriArrayList.add(thumbnail_1);
 
             } else {
@@ -713,8 +713,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-//                    String str_image_aa = getEncoded64ImageStringFromBitmap(bitmap);
-//                    api_array_list.add("data:image/jpeg;base64,"+str_image_aa);
+// String str_image_aa = getEncoded64ImageStringFromBitmap(bitmap);
+// api_array_list.add("data:image/jpeg;base64,"+str_image_aa);
                         imagesUriArrayList.add(bitmap);
                     }
 
@@ -734,18 +734,18 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         if (requestCode == PICK_FROM_VIDEO) {
             binding.simpleVideoView.setVisibility(View.VISIBLE);
             Uri selectedImageUri = data.getData();
-            //  String    selectedPath = getPath(selectedImageUri);
+// String selectedPath = getPath(selectedImageUri);
             if (mediaControls == null) {
-                // create an object of media controller class
+// create an object of media controller class
                 mediaControls = new MediaController(getActivity());
                 mediaControls.setAnchorView(videoView);
                 video_text.setText(selectedImageUri.toString());
             }
-            // set the media controller for video view
+// set the media controller for video view
             binding.simpleVideoView.setMediaController(mediaControls);
-            // set the uri for the video view
+// set the uri for the video view
             binding.simpleVideoView.setVideoURI(selectedImageUri);
-            // start a video
+// start a video
             binding.simpleVideoView.start();
 
         } else if (resultCode == getActivity().RESULT_CANCELED) {
@@ -772,7 +772,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byteFormat = stream.toByteArray();
-        // Get the Base64 string
+// Get the Base64 string
         String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
 
         return imgString;
@@ -784,9 +784,9 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName, /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
         );
 
         imageFilePath = image.getAbsolutePath();
@@ -845,11 +845,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     private void SetDataTextDataDynamically(TextView text_view, int text_id, List<AttributeValue> attribute_value, int att_id) {
         ArrayList<String> attribute_name = new ArrayList<>();
+        ArrayList<String> attribute_id = new ArrayList<>();
         ArrayList<Integer> langList = new ArrayList<>();
         for (int i = 0; i < attribute_value.size(); i++) {
-            String valueName = attribute_value.get(i).getName();
-            attribute_name.add(valueName);
-
+            attribute_name.add(attribute_value.get(i).getName());
+            attribute_id.add(String.valueOf(attribute_value.get(i).getId()));
         }
         final CharSequence[] items_value = attribute_name.toArray(new CharSequence[attribute_name.size()]);
         boolean[] selected_value = new boolean[attribute_name.size()];
@@ -878,14 +878,14 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
+// Initialize string builder
                         StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
+// use for loop
                         int attribute_value_id = 0;
                         List<String> item_value_list = null;
                         for (int j = 0; j < langList.size(); j++) {
                             stringBuilder.append(items_value[langList.get(j)]);
-                            attribute_value_id = attribute_value.get(j).getId();
+                            attribute_value_id = Integer.parseInt(attribute_id.get(langList.get(j)));
 
                             item_value_list = selected_value_map.get(String.valueOf(att_id));
                             if (item_value_list != null) {
@@ -904,7 +904,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                         }
                         attribute_id_list.add(attribute_value_id);
 
-                        // set text on textView
+// set text on textView
                         text_view.setText(stringBuilder.toString());
                     }
                 });
@@ -912,20 +912,20 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // dismiss dialog
+// dismiss dialog
                         dialogInterface.dismiss();
                     }
                 });
                 builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // use for loop
+// use for loop
                         for (int j = 0; j < selected_value.length; j++) {
-                            // remove all selection
+// remove all selection
                             selected_value[j] = false;
-                            // clear language list
+// clear language list
                             langList.clear();
-                            // clear text view value
+// clear text view value
                             text_view.setText("");
                         }
                     }
@@ -939,11 +939,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     private void setWhichCrop(List<Value> cropList) {
         ArrayList<String> crop_name = new ArrayList<>();
+        ArrayList<String> crop_id = new ArrayList<>();
         ArrayList<Integer> langList = new ArrayList<>();
         for (int i = 0; i < cropList.size(); i++) {
-            String name = cropList.get(i).getValueName();
-            crop_name.add(name);
-
+            crop_name.add(cropList.get(i).getValueName());
+            crop_id.add(String.valueOf(cropList.get(i).getValueId()));
         }
         final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
         boolean[] selected_crop = new boolean[crop_name.size()];
@@ -973,20 +973,25 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
+// Initialize string builder
                         StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
-//                        int ValueId = 0;
+                        StringBuilder builder_crop_id = new StringBuilder();
+// use for loop
+// int ValueId = 0;
                         for (int j = 0; j < langList.size(); j++) {
                             stringBuilder.append(items[langList.get(j)]);
-                            selected_crop_id = String.valueOf(cropList.get(j).getValueId());
+                            builder_crop_id.append(crop_id.get(langList.get(j)));
+// selected_crop_id = String.valueOf(cropList.get(j).getValueId());
                             if (j != langList.size() - 1) {
                                 stringBuilder.append(", ");
+                                builder_crop_id.append(",");
                             }
                         }
-                        // crop_id_list.add(ValueId);
+// crop_id_list.add(ValueId);
 
-                        // set text on textView
+// set text on textView
+                        str_crop_id=builder_crop_id.toString();
+                        Log.d("str_crop_id",str_crop_id);
                         binding.textView.setText(stringBuilder.toString());
                     }
                 });
@@ -994,14 +999,14 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // dismiss dialog
+// dismiss dialog
                         dialogInterface.dismiss();
                     }
                 });
                 builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // use for loop
+// use for loop
                         for (int j = 0; j < selected_crop.length; j++) {
                             selected_crop[j] = false;
                             langList.clear();

@@ -200,6 +200,7 @@ public class VendorListFragment extends Fragment {
                             binding.recyclerVendor.setLayoutManager(layoutManager);
 
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 }catch (JSONException e) {
                     throw new RuntimeException(e);

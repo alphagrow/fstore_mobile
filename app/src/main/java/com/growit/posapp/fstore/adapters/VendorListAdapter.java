@@ -61,7 +61,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTxt,mobile,status;
-        ImageView deleteBtn,acti_img,acti_img_2;
+        ImageView deleteBtn,acti_img,acti_img_2,update;
         ShowMoreTextView product_name;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -71,6 +71,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
             acti_img = itemView.findViewById(R.id.acti_img);
             acti_img_2 = itemView.findViewById(R.id.acti_img_2);
             status = itemView.findViewById(R.id.status);
+            update = itemView.findViewById(R.id.update);
 
 
         }
@@ -92,7 +93,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
         holder.nameTxt.setText(modelList.getName());
         holder.mobile.setText(modelList.getMobile());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -102,24 +103,21 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-
             }
         });
 
 
-//            if (status.equals("true")) {
-//                holder.status.setText(list.get(position).getStatus());
-//                holder.status.setTextColor(Color.parseColor("#F55625"));
-//                holder.acti_img_2.setVisibility(View.VISIBLE);
-//                holder.acti_img.setVisibility(View.GONE);
-//
-//            } else {
-//                holder.status.setTextColor(Color.parseColor("#008000"));
-//                holder.status.setText(list.get(position).getStatus());
-//                holder.acti_img.setVisibility(View.VISIBLE);
-//                holder.acti_img_2.setVisibility(View.GONE);
-//            }
+        if (String.valueOf(list.get(position).getActive()).equals("false")) {
+            holder.status.setText("INACTIVE");
+            holder.status.setTextColor(Color.parseColor("#F55625"));
+            holder.acti_img_2.setVisibility(View.VISIBLE);
+            holder.acti_img.setVisibility(View.GONE);
+        } else {
+            holder.status.setTextColor(Color.parseColor("#008000"));
+            holder.status.setText("ACTIVE");
+            holder.acti_img.setVisibility(View.VISIBLE);
+            holder.acti_img_2.setVisibility(View.GONE);
+        }
 
 
         holder.acti_img.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +129,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
                 builder.setCancelable(false);
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     VendorModelList model = list.get(position);
-                    getStatus(String.valueOf(model.getVendorId()),holder);
+                    getStatus(String.valueOf(model.getVendorId()),false,holder,position);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> {
                     dialog.cancel();
@@ -149,7 +147,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
                 builder.setCancelable(false);
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     VendorModelList model = list.get(position);
-                    getStatus(String.valueOf(model.getVendorId()),holder);
+                    getStatus(String.valueOf(model.getVendorId()),true,holder,position);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> {
                     dialog.cancel();
@@ -161,13 +159,15 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
 
 
     }
-    private void getStatus(String id,final VendorListAdapter.ViewHolder holder_h ) {
+    private void getStatus(String id,Boolean active,final VendorListAdapter.ViewHolder holder_h,int position ) {
         SessionManagement sm = new SessionManagement(mContext);
         RequestQueue queue = Volley.newRequestQueue(mContext);//162.246.254.203:8069
-        String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ARCHIVE_VENDOR + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "vendor_id=" + id;
+       // String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ARCHIVE_VENDOR + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "vendor_id=" + id;
+        String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ARCHIVE_VENDOR + "vendor_id=" + id + "&" + "active=" + active;
+
         Log.v("delete_Vendor_url", url);
         Utility.showDialoge("Please wait while a moment...", mContext);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
@@ -184,7 +184,6 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
                         if (holder_h.status.getText().toString().equalsIgnoreCase("INACTIVE")) {
                             holder_h.status.setText("ACTIVE");
                             holder_h.status.setTextColor(Color.parseColor("#008000"));
-
                             holder_h.acti_img.setVisibility(View.VISIBLE);
                             holder_h.acti_img_2.setVisibility(View.GONE);
                         } else {
@@ -193,6 +192,10 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
                             holder_h.acti_img.setVisibility(View.GONE);
                             holder_h.status.setText("INACTIVE");
                         }
+//                        list.remove(position);
+//                        notifyDataSetChanged();
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+
                     }else {
                         Toast.makeText(mContext, error_message, Toast.LENGTH_SHORT).show();
 

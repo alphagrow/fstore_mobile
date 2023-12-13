@@ -2,7 +2,6 @@ package com.growit.posapp.fstore.model.Purchase;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.growit.posapp.fstore.model.Datum;
 
 import java.util.List;
 
@@ -16,6 +15,17 @@ public class PurchaseModel {
     @SerializedName("data")
     @Expose
     private List<PurchaseCategoryModel> data;
+    @SerializedName("orders")
+    @Expose
+    private List<PurchaseOrder> orders;
+
+    public List<PurchaseOrder> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<PurchaseOrder> orders) {
+        this.orders = orders;
+    }
 
     public String getStatus() {
         return status;

@@ -28,11 +28,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -50,14 +56,21 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
-import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
-import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
+
+
 import com.growit.posapp.fstore.databinding.FragmentUpdateAddProductBinding;
+import com.growit.posapp.fstore.model.Attribute;
 import com.growit.posapp.fstore.model.AttributeModel;
+import com.growit.posapp.fstore.model.AttributeValue;
+import com.growit.posapp.fstore.model.ListAttributesModel;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
+import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -65,15 +78,18 @@ import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -110,16 +126,28 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     RadioGroup sel_non_gov;
     ImageAdapter adapter;
     TextView mfd_date,exp_date,exp_date_alarm;
+    String str_detailed_type;
+    private String[] detailed_type = {"product"};
 
     DatePickerDialog.OnDateSetListener date_mfd,date_exp,date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
     FragmentUpdateAddProductBinding binding;
-    List<Product> list=null;
+    Map<String, List<String>> selected_value_map = new HashMap<>();
+    List<PurchaseProductModel> list=null;
     int  position;
     String product_id;
+    String crop_id,str_crop_name;
     Activity contexts;
-
+    List<AttributeModel> model = new ArrayList<>();
+    ArrayList<Integer> attribute_id_list = new ArrayList<>();
+    ListAttributesModel model_attribute;
+    String str_non_gov_product="Non-Gov";
+    List<Value> cropList = new ArrayList<>();
+    List<Attribute> attributes;
     //    private static final int SELECT_VIDEO = 3;
+ArrayList<String>crop_id_list = new ArrayList<>();
+   String str_crop_id;
+
     public UpdateAddProductFragment() {
         // Required empty public constructor
     }
@@ -140,7 +168,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       // R.layout.fragment_update_add_product
+        // R.layout.fragment_update_add_product
         binding= FragmentUpdateAddProductBinding.inflate(inflater, container, false);
         imagesUriArrayList = new ArrayList();
         init();
@@ -150,24 +178,62 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     private void init() {
 
         if (getArguments() != null) {
-
-            list = (List<Product>) getArguments().getSerializable("product_list");
+            list = (List<PurchaseProductModel>) getArguments().getSerializable("product_list");
             int position = getArguments().getInt("position");
-           product_id= list.get(position).getProductID();
+            str_crop_id = getArguments().getString("crop_id");
+            str_crop_name = getArguments().getString("crop_name");
+            product_id= String.valueOf(list.get(position).getProductId());
             binding.etProductName.setText(list.get(position).getProductName());
-            binding.etProductPrice.setText(String.valueOf(list.get(position).getPrice()));
+            binding.etProductPrice.setText(String.valueOf(list.get(position).getListPrice()));
+            binding.techNamePest.setText(list.get(position).getTechnicalPest());
+            binding.brandName.setText(list.get(position).getBrandName());
+//            binding.companyName.setText(list.get(position).getCo);
+            binding.packingStd.setText(list.get(position).getProductPackage());
+            binding.mktBy.setText(list.get(position).getMkdBy());
+            binding.batchNumber.setText(list.get(position).getBatchNumber());
+            binding.cirNumber.setText(list.get(position).getCirNo());
+          //  binding.whichCrop.setText(crop_name);
+            binding.whichPest.setText(list.get(position).getWhichPest());
+            binding.mfdDate.setText(list.get(position).getMfdDate());
+            binding.expDate.setText(list.get(position).getExpDate());
+            binding.description.setText(list.get(position).getDescription());
+             attributes = list.get(position).getAttributes();
+
+            if (Utility.isNetworkAvailable(getContext())) {
+                getCropRequest();
+                getAttributeList();
+            } else {
+                Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+            }
 
         }
+
+
+
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         progressBar = new ProgressBar(getActivity());
         progressBar.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        binding.submitBtn.setOnClickListener(this);
+        binding.updateBtn.setOnClickListener(this);
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
+        binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
+        binding.detailTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
+                str_detailed_type = detailed_type[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         binding.mfdDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(getActivity(), date_mfd, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(contexts, date_mfd, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
             }
         });
@@ -215,6 +281,25 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 AlarmLabel();
             }
         };
+        final ArrayAdapter<CharSequence> user_typespinner = ArrayAdapter.createFromResource(getActivity(), R.array.uom_list, android.R.layout.simple_spinner_dropdown_item);
+        user_typespinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.etUomSpinner.setAdapter(user_typespinner);
+        binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+                // TODO Auto-generated method stub
+                ((TextView) arg0.getChildAt(0)).setTextColor(R.color.text_color);
+                str_uom = binding.etUomSpinner.getSelectedItem().toString();
+
+//
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+
         binding.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -247,31 +332,40 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 getActivity().finish();
             }
         });
+
+        binding.selNonGov.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // checkedId is the RadioButton selected
+                //  RadioButton rb = view.findViewById(checkedId);
+                if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Gov")) {
+                    str_non_gov_product = "Non-Gov";
+                } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov Authorized")) {
+                    str_non_gov_product = "Gov Authorized";
+                }
+            }
+        });
+
     }
     private void updateLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String   str_mfd_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         String date_e = sd.format(myCalendar.getTime());
         binding.mfdDate.setText(date_e);
     }
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        contexts = getActivity();
 
-    }
     private void ExpireLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String   str_exp_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         String date_e = sd.format(myCalendar.getTime());
         binding.expDate.setText(date_e);
     }
     private void AlarmLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy'   'HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String   str_exp_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         String date_e = sd.format(myCalendar.getTime());
         binding.expDateAlarm.setText(date_e);
     }
@@ -282,62 +376,82 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
      */
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.submit_btn) {
+        if (view.getId() == R.id.update_btn) {
             str_product_name = binding.etProductName.getText().toString();
             str_product_price = binding.etProductPrice.getText().toString();
-            str_size = binding.etSize.getText().toString();
-            str_color = binding.etColor.getText().toString();
-            str_whole_pattern = binding.etWholePattern.getText().toString();
             String str_techNamePest = binding.techNamePest.getText().toString();
             String str_brand_name = binding.brandName.getText().toString();
             String str_mkt_by = binding.mktBy.getText().toString();
             String str_batchNumber = binding.batchNumber.getText().toString();
             String str_cirNumber = binding.cirNumber.getText().toString();
-            String str_whichCrop = binding.whichCrop.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
-          //  String str_etUom = binding.etUom.getText().toString();
             String str_description = binding.description.getText().toString();
-         //   String str_uomProduct = binding.etUomProduct.getText().toString();
+            String str_exp_date = binding.expDate.getText().toString();
+            String str_mfd_date = binding.mfdDate.getText().toString();
+            //   String str_uomProduct = binding.etUomProduct.getText().toString();
 
 //            if (str_product_name.length() == 0 || str_product_price.length() == 0 || str_uom.length() == 0) {
 //                Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
 //                return;
 //            }
+
+
+            JSONArray attribute_json_array = new JSONArray();
+            selected_value_map.forEach((key, value) -> {
+                if (value != null) {
+                    JSONObject attribute_object = new JSONObject();
+                    try {
+                        ArrayList<Integer> numbers = new ArrayList<Integer>();
+                        for (int i = 0; i < value.size(); i++) {
+                            numbers.add(Integer.parseInt(value.get(i)));
+                        }
+                        attribute_object.put("attribute_id", Integer.parseInt(key));
+                        attribute_object.put("value_ids", (new JSONArray(numbers)));
+                        attribute_json_array.put(attribute_object);
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+
+                    Log.d("crop_id_list",crop_id_list.toString());
+            Log.d("attribute_json_array", attribute_json_array.toString());
+
+
             if (!Utility.isNetworkAvailable(contexts)) {
                 Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            updateProductRequest(str_product_name, str_product_price, str_size, str_color, str_whole_pattern,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichCrop,str_whichPest,str_description);
+            updateProductRequest(str_product_name, str_product_price,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichPest,str_description,str_exp_date,str_mfd_date,attribute_json_array);
         }
     }
 
-    private void updateProductRequest(String str_product_name,String str_product_price, String str_size,String str_color, String str_whole_pattern,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String str_cirNumber,String str_whichCrop,String str_whichPest,String str_description) {
+    private void updateProductRequest(String str_product_name,String str_product_price,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String str_cirNumber,String str_whichPest,String str_description,String str_exp_date,String str_mfd_date,JSONArray attribute_json_array) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-        params.put("name", str_product_name);
         params.put("user_id", sm.getUserID() + "");
         params.put("token", sm.getJWTToken());
+        params.put("name", str_product_name);
+        params.put("description", str_description);
+        params.put("list_price", str_product_price);
         params.put("technical_pest", str_techNamePest);
         params.put("brand_name", str_brand_name);
         params.put("mkd_by", str_mkt_by);
         params.put("batch_number", str_batchNumber);
         params.put("cir_no", str_cirNumber);
-        params.put("which_crop", str_whichCrop);
         params.put("which_pest", str_whichPest);
-        params.put("list_price", str_product_price);
-
-        params.put("non_gov_product", str_whichPest);
-        params.put("mfd_date", str_whichPest);
-        params.put("exp_date", str_whichPest);
-//        params.put("uom_id",str_etUom);   //kg,ml
-//        params.put("uom_po_id", "str_uomProduct");
-//        params.put("uom_id", "Days");
-//        params.put("uom_po_id", "Days");
-
-        params.put("detailed_type", "product");
-       params.put("description", str_description);
-
+        params.put("non_gov_product", str_non_gov_product);
+        params.put("mfd_date", str_mfd_date);
+        params.put("exp_date", str_exp_date);
+//        params.put("uom_id", str_uom);
+//        params.put("uom_po_id", str_uom);
+        params.put("detailed_type", str_detailed_type);
+        params.put("pos_categ_id", str_crop_id);
+        params.put("attribute_lines", attribute_json_array.toString());
         params.put("product_id", product_id);
+        Log.d("update_product",params.toString());
 
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_PRODUCT, new VolleyCallback() {
             private String message = "Update failed!!";
@@ -345,14 +459,16 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onSuccess(Object result) throws JSONException {
                 JSONObject obj = new JSONObject(result.toString());
+
+                Log.d("result",result.toString());
                 String status = obj.optString("status");
                 message = obj.optString("message");
-               String error_message = obj.optString("error_message");
+                String error_message = obj.optString("error_message");
                 if (status.equalsIgnoreCase("success")) {
                     Toast.makeText(getActivity(), "Update Product", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(contexts, error_message, Toast.LENGTH_SHORT).show();
-
+                    Log.v("error_message", error_message.toString());
                 }
             }
 
@@ -364,7 +480,11 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         });
     }
 
-
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        contexts = getActivity();
+        //  hideKeyboard(activity);
+    }
     private void takePhoto() {
         final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -567,4 +687,311 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
+
+    private void getAttributeList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+        Log.d("product_list", url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        JSONArray jsonArray = obj.getJSONArray("attributes");
+
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<ListAttributesModel>() {
+                        }.getType();
+
+                        model_attribute = gson.fromJson(response.toString(), listType);
+                        model.addAll(model_attribute.getAttributes());
+                        createTextDynamically(model_attribute.getAttributes().size());
+
+
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+
+    }
+    private void createTextDynamically(int n) {
+        Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = display.getWidth();
+        LinearLayout l = new LinearLayout(getActivity());
+        binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
+        for (int j = 0; j < n; j++) {
+            TextView text = new TextView(getActivity());
+            LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
+
+            editTextParams.setMargins(20, 20, 20, 0);
+            text.setLayoutParams(editTextParams);
+            text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size));
+            text.setTextSize(16);
+            text.setId(j);
+            final int id_ = text.getId();
+            int att_id = model.get(j).getId();
+            selected_value_map.put(String.valueOf(att_id), null);
+            text.setHint("Select the " + model.get(j).getName());
+
+            ////set data in textview
+            int attribute_value_id=0;
+            List<String> item_value_list = null;
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for(int i=0;i<attributes.get(j).getValues().size();i++){
+                item_value_list = selected_value_map.get(String.valueOf(att_id));
+                attribute_value_id =attributes.get(j).getValues().get(i).getValueId();
+                stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
+                if (item_value_list != null) {
+                    item_value_list.add(String.valueOf(attribute_value_id));
+                    selected_value_map.put(String.valueOf(att_id), item_value_list);
+                } else {
+                    item_value_list = new ArrayList<>();
+                    item_value_list.add(String.valueOf(attribute_value_id));
+                    selected_value_map.put(String.valueOf(att_id), item_value_list);
+
+                }
+                if (i != attributes.get(j).getValues().size() - 1) {
+                    stringBuilder.append(", ");
+                }
+            }
+            attribute_id_list.add(attribute_value_id);
+
+            Log.d("set_attribute_json_array", String.valueOf(stringBuilder));
+            text.setHint(stringBuilder);
+//////
+            text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
+            text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
+            //  et.setEnabled(false);
+            binding.linearLayoutMain.addView(text, editTextParams);
+
+           SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
+
+        }
+
+    }
+    private void SetDataTextDataDynamically(TextView text_view, int text_id, List<AttributeValue> attribute_value, int att_id) {
+        ArrayList<String> attribute_name = new ArrayList<>();
+        ArrayList<String> attribute_id = new ArrayList<>();
+        ArrayList<Integer> langList = new ArrayList<>();
+        for (int i = 0; i < attribute_value.size(); i++) {
+            attribute_name.add(attribute_value.get(i).getName());
+            attribute_id.add(String.valueOf(attribute_value.get(i).getId()));
+        }
+        final CharSequence[] items_value = attribute_name.toArray(new CharSequence[attribute_name.size()]);
+        boolean[] selected_value = new boolean[attribute_name.size()];
+
+
+        text_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Attribute value");
+                builder.setCancelable(false);
+                selected_value_map.put(String.valueOf(att_id), null);
+                builder.setMultiChoiceItems(items_value, selected_value, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+                            langList.add(i);
+                            Collections.sort(langList);
+                        } else {
+
+                            langList.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+// Initialize string builder
+                        StringBuilder stringBuilder = new StringBuilder();
+// use for loop
+                        int attribute_value_id = 0;
+                        List<String> item_value_list = null;
+                        for (int j = 0; j < langList.size(); j++) {
+                            stringBuilder.append(items_value[langList.get(j)]);
+                            attribute_value_id = Integer.parseInt(attribute_id.get(langList.get(j)));
+
+                            item_value_list = selected_value_map.get(String.valueOf(att_id));
+                            if (item_value_list != null) {
+                                item_value_list.add(String.valueOf(attribute_value_id));
+                                selected_value_map.put(String.valueOf(att_id), item_value_list);
+                            } else {
+                                item_value_list = new ArrayList<>();
+                                item_value_list.add(String.valueOf(attribute_value_id));
+                                selected_value_map.put(String.valueOf(att_id), item_value_list);
+
+                            }
+                            Log.d("selected_value_map", selected_value_map + "");
+                            if (j != langList.size() - 1) {
+                                stringBuilder.append(", ");
+                            }
+                        }
+                        attribute_id_list.add(attribute_value_id);
+
+// set text on textView
+                        text_view.setText(stringBuilder.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+// dismiss dialog
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+// use for loop
+                        for (int j = 0; j < selected_value.length; j++) {
+// remove all selection
+                            selected_value[j] = false;
+// clear language list
+                            langList.clear();
+// clear text view value
+                            text_view.setText("");
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+    }
+    private void getCropRequest() {
+        SessionManagement sm = new SessionManagement(contexts);
+        RequestQueue queue = Volley.newRequestQueue(contexts);
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Utility.showDialoge("Please wait while a moment...", contexts);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("data");
+
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Value cropPattern = new Value();
+                                JSONObject data = jsonArray.getJSONObject(i);
+                                Integer cropID = data.optInt("category_id");
+                                String name = data.optString("name");
+                                cropPattern.setValueId(Integer.valueOf(cropID + ""));
+                                cropPattern.setValueName(name);
+
+                                cropList.add(cropPattern);
+                            }
+                            Log.d("url_string", String.valueOf(cropList.size()));
+                            setWhichCrop(cropList);
+
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+    private void setWhichCrop(List<Value> cropList) {
+        ArrayList<String> crop_name = new ArrayList<>();
+        ArrayList<String> crop_id = new ArrayList<>();
+        ArrayList<Integer> langList = new ArrayList<>();
+        for (int i = 0; i < cropList.size(); i++) {
+            crop_name.add(cropList.get(i).getValueName());
+            crop_id.add(String.valueOf(cropList.get(i).getValueId()));
+        }
+        final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
+        boolean[] selected_crop = new boolean[crop_name.size()];
+binding.textView.setText(str_crop_name);
+
+        binding.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Select Crop Name");
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(items, selected_crop, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+
+                            langList.add(i);
+                            Collections.sort(langList);
+                        } else {
+
+                            langList.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        StringBuilder builder_crop_id = new StringBuilder();
+                        for (int j = 0; j < langList.size(); j++) {
+                            stringBuilder.append(items[langList.get(j)]);
+                            builder_crop_id.append(crop_id.get(langList.get(j)));
+// selected_crop_id = String.valueOf(cropList.get(j).getValueId());
+                            if (j != langList.size() - 1) {
+                                stringBuilder.append(", ");
+                                builder_crop_id.append(",");
+                            }
+                        }
+
+                        str_crop_id=builder_crop_id.toString();
+                        Log.d("str_crop_id",str_crop_id);
+                        binding.textView.setText(stringBuilder.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+// dismiss dialog
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+// use for loop
+                        for (int j = 0; j < selected_crop.length; j++) {
+                            selected_crop[j] = false;
+                            langList.clear();
+                            binding.textView.setText("");
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+    }
+
 }
