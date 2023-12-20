@@ -327,7 +327,6 @@ public class AddPOSCategoryFragment extends Fragment {
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     binding.cropName.setText("");
                     binding.profileImage.setImageResource(R.drawable.no_image);
-
                 }
             }
 

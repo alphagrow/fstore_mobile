@@ -35,7 +35,7 @@ public class PurchaseOrder {
     private String invoiceStatus;
     @SerializedName("amount_total")
     @Expose
-    private Double amountTotal;
+    private String amountTotal;
     @SerializedName("order_lines")
     @Expose
     private List<PurchaseOrderLine> orderLines;
@@ -112,11 +112,11 @@ public class PurchaseOrder {
         this.invoiceStatus = invoiceStatus;
     }
 
-    public Double getAmountTotal() {
+    public String getAmountTotal() {
         return amountTotal;
     }
 
-    public void setAmountTotal(Double amountTotal) {
+    public void setAmountTotal(String amountTotal) {
         this.amountTotal = amountTotal;
     }
 

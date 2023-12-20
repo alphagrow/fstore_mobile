@@ -235,38 +235,38 @@
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawableRight="@android:drawable/arrow_down_float"
-                    android:drawablePadding="16dp"
-                    android:hint="Which Crop"
-                    android:padding="12dp" />
-
-<!--                <EditText-->
-<!--                    android:id="@+id/which_crop"-->
+<!--                <TextView-->
+<!--                    android:id="@+id/textView"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="55dp"-->
 <!--                    android:layout_marginStart="@dimen/twenty_five"-->
 <!--                    android:layout_marginTop="10dp"-->
 <!--                    android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                    android:layout_centerInParent="true"-->
 <!--                    android:background="@drawable/custom_edit_text_cut"-->
-<!--                    android:drawableEnd="@drawable/land_size"-->
-<!--                    android:drawablePadding="@dimen/ten"-->
-<!--                    android:enabled = "false"-->
-<!--                    android:fontFamily="@font/sf_compact_medium"-->
+<!--                    android:drawableRight="@android:drawable/arrow_down_float"-->
+<!--                    android:drawablePadding="16dp"-->
 <!--                    android:hint="Which Crop"-->
-<!--                    android:importantForAutofill="no"-->
-<!--                    android:inputType="text"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:requiresFadingEdge="vertical"-->
-<!--                    android:textSize="14dp" />-->
+<!--                    android:padding="12dp" />-->
+
+                <EditText
+                    android:id="@+id/which_crop"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/land_size"
+                    android:drawablePadding="@dimen/ten"
+                    android:enabled = "false"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint="Which Crop"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:requiresFadingEdge="vertical"
+                    android:textSize="14dp" />
 
                 <EditText
                     android:id="@+id/which_pest"

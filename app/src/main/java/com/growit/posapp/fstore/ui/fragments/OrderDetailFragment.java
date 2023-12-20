@@ -29,11 +29,13 @@ import java.lang.reflect.Type;
 
 public class OrderDetailFragment extends Fragment {
 
-    ProductDetail productDetail;
-    int position=-1;
+
     private RecyclerView recyclerView;
-    OrderDetailAdapter orderHistoryAdapter;
+
     LinearLayout invoiceDownload;
+    ProductDetail productDetail;
+    OrderDetailAdapter orderHistoryAdapter;
+    int position=-1;
     SessionManagement sm;
     int orderID=0;
     TextView noDataFound,orderNo,total_product,date,total_value,paid_by;
@@ -66,6 +68,7 @@ public class OrderDetailFragment extends Fragment {
         total_value=view.findViewById(R.id.total_value);
         paid_by=view.findViewById(R.id.paid_by);
         noDataFound = view.findViewById(R.id.noDataFound);
+
         if (getArguments() != null) {
             position = getArguments().getInt("position");
             String orderDetail = getArguments().getString("OrderDetail");

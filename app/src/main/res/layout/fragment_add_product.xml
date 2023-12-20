@@ -390,7 +390,40 @@
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical"
                 android:textSize="14dp" />
-
+            <EditText
+                android:id="@+id/ed_hsn_code"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Hsn Code"
+                android:importantForAutofill="no"
+                android:inputType="none"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
+            <EditText
+                android:id="@+id/ed_hsn_code_description"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/land_size"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="Hsn Code Description"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="8dp"
+                android:requiresFadingEdge="vertical"
+                android:textSize="14dp" />
 
             <TextView
                 android:id="@+id/mfd_date"

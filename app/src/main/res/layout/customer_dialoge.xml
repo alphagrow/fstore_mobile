@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <RadioGroup
+            android:visibility="visible"
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,6 +42,7 @@
         </RadioGroup>
 
         <TextView
+            android:id="@+id/text_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"

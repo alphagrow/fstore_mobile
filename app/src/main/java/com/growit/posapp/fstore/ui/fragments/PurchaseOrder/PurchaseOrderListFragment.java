@@ -35,8 +35,10 @@ import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseOrder;
 import com.growit.posapp.fstore.model.VendorModel;
 import com.growit.posapp.fstore.model.VendorModelList;
+import com.growit.posapp.fstore.ui.fragments.OrderDetailFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.AddVendorFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
+import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 
@@ -52,7 +54,7 @@ public class PurchaseOrderListFragment extends Fragment {
   FragmentPurchaseOrderListBinding binding;
     PurchaseModel model;
     PurchaseOrderAdapter adapter;
-
+    private  String mResponse="";
     public PurchaseOrderListFragment() {
         // Required empty public constructor
     }
@@ -75,7 +77,7 @@ public class PurchaseOrderListFragment extends Fragment {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_purchase_order_list, container, false);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_purchase_order_list, container, false);
-init();
+      init();
         return binding.getRoot();
     }
     private  void init(){
@@ -89,7 +91,26 @@ init();
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
         }
+        binding.noDataFound.setOnClickListener(v -> getPurchaseList());
+        binding.transactionRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(),  binding.transactionRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("OrderDetail", mResponse);
+                        bundle.putInt("position", position);
+                        Fragment fragment = PurchaseOrderDetailFragment.newInstance();
+                        fragment.setArguments(bundle);
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                    }
 
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,15 +140,13 @@ init();
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.POST_PURCHASE_ORDER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-
-
         Log.v("url", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-
+                mResponse=response.toString();
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
@@ -171,7 +190,6 @@ init();
     }
     private void filterList(String text){
         ArrayList<PurchaseOrder> model_list = new ArrayList<>();
-
         for (PurchaseOrder detail : model.getOrders()){
             if (detail.getName().toLowerCase().contains(text.toLowerCase()) || detail.getPartnerId().toLowerCase().contains(text.toLowerCase())){
                 model_list.add(detail);

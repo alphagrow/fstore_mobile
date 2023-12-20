@@ -415,6 +415,7 @@ public class AddVendorFragment extends Fragment {
                     Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
 
                 }else {
+                    Utility.dismissDialoge();
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
                 }
             }

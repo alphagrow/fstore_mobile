@@ -1,9 +1,11 @@
 package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,16 +44,24 @@ import com.growit.posapp.fstore.adapters.AttributeSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.CropAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.ProductListAdapter;
+import com.growit.posapp.fstore.adapters.PurchaseItemListAdapter;
 import com.growit.posapp.fstore.adapters.PurchaseProductListAdapter;
 import com.growit.posapp.fstore.adapters.VendorListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentCreatePurchaseOrderBinding;
+import com.growit.posapp.fstore.db.AppDatabase;
+import com.growit.posapp.fstore.db.DatabaseClient;
+import com.growit.posapp.fstore.interfaces.ItemClickListener;
 import com.growit.posapp.fstore.model.Attribute;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.ProductVariantQuantity;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.model.VendorModel;
+import com.growit.posapp.fstore.tables.PosOrder;
+import com.growit.posapp.fstore.tables.PurchaseOrder;
+import com.growit.posapp.fstore.ui.fragments.ConfirmOrderFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductDetailFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -57,16 +70,22 @@ import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
+import com.squareup.picasso.Picasso;
+import com.travijuu.numberpicker.library.Enums.ActionEnum;
+import com.travijuu.numberpicker.library.Interface.ValueChangedListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class CreatePurchaseOrderFragment extends Fragment {
@@ -79,23 +98,43 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private String cropID = "";
     private String cropName = "";
     CropAdapter cropAdapter = null;
-    String vendor_id;
-    List<StateModel> vendorNames = new ArrayList<>();
-    String crop_id, crop_name;
+    String vendor_id="";
 
+    String crop_id, crop_name;
+    private double quantity = 1.0;
     PurchaseModel model;
     List<PurchaseProductModel> purchaseProductModel;
     PurchaseProductListAdapter adapter;
     private LinearLayout containerLL;
     List<Attribute> attributes;
+    List<ProductVariantQuantity> productVariantQuantities;
     List<Value> value;
     Spinner spinner;
     String str_variant;
-    String product_name;
+    String product_name, product_image;
+    double basePrice = 0.0;
     int patternType = -1;
-    String[] variantArray = null;
+    //  String[] variantArray = null;
+    ArrayList<String> variantArray = new ArrayList<>();
+    Map<String, String> variant_value = new HashMap<>();
     StringBuilder stringBuilder;
+    JSONArray prjsonArray;
+    JSONObject productOBJ;
+    String variants;
+    double product_list_price = 0.0;
+    int product_qty = 1;
+    int product_id;
+    int taxes_id;
+    private int addGSTValue = 0;
 
+    private int total_quant = 1;
+    List<StateModel> vendorNames = new ArrayList<>();
+
+    List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
+    PurchaseItemListAdapter purchaseItemListAdapter;
+    Spinner cstSpinner;
+    int variant_id=0;
+   String var_product_name;
     public CreatePurchaseOrderFragment() {
         // Required empty public constructor
     }
@@ -130,10 +169,11 @@ public class CreatePurchaseOrderFragment extends Fragment {
     }
 
     private void init() {
-
-
         if (Utility.isNetworkAvailable(getActivity())) {
             getVendorList();
+            GetTasks gt = new GetTasks();
+            gt.execute();
+
             getCropRequest();
         } else {
             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -146,11 +186,30 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 getActivity().finish();
             }
         });
+        binding.orderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(vendor_id.length()==0) {
+                    Toast.makeText(getContext(), "Select Vendor Name", Toast.LENGTH_SHORT).show();
 
+                }else {
+                    CreatePurchaseOrder(vendor_id);
+                }
+            }
+        });
         binding.croplistView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), binding.croplistView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        binding.idLLContainer.removeAllViews();
+                        variant_value.clear();
+                        variantArray.clear();
+                        //   binding.setPatternsTxt.setText("");
+                        //    binding.detailLayout.removeAllViews();
                         cropID = cropList.get(position).getValueId() + "";
                         cropName = cropList.get(position).getValueName();
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
@@ -171,15 +230,36 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(), binding.recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        binding.idLLContainer.removeAllViews();
+                        variant_value.clear();
+                        variantArray.clear();
+                        //   binding.numberPicker.setMin(1);
+                        //  binding.setPatternsTxt.setText("");
+                        binding.itemPriceTxt.setText("");
+                        //  binding.detailLayout.removeAllViews();
+                        binding.productImage.setVisibility(View.VISIBLE);
+                        product_id = purchaseProductModel.get(position).getProductId();
                         product_name = purchaseProductModel.get(position).getProductName();
+                        product_image = purchaseProductModel.get(position).getImageUrl();
+                        product_list_price = purchaseProductModel.get(position).getListPrice();
                         attributes = purchaseProductModel.get(position).getAttributes();
+                        productVariantQuantities = purchaseProductModel.get(position).getProductVariantQuantities();
+
+                        binding.productName.setText(product_name);
+                        taxes_id = Integer.parseInt(purchaseProductModel.get(position).getTaxesId().replaceAll("[^0-9]+", ""));
+                        //   Log.d("taxes_id",taxes_id);
                         if (!Utility.isNetworkAvailable(getActivity())) {
                             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
                         }
-
-                        createDynamicSpinner(attributes.size(),product_name);
-
+                        new GetGSTValueTasks().execute();
+                        createDynamicSpinner(attributes.size(), product_name);
+                        binding.productName.setText(purchaseProductModel.get(position).getProductName());
+                        binding.itemPriceTxt.setText(String.valueOf(purchaseProductModel.get(position).getListPrice()));
+                        Picasso.with(getActivity()).load(ApiConstants.BASE_URL + purchaseProductModel.get(position).getImageUrl())
+                                .placeholder(R.drawable.loading)
+                                .error(R.drawable.no_image)
+                                .into(binding.productImage);
 
                     }
 
@@ -191,62 +271,162 @@ public class CreatePurchaseOrderFragment extends Fragment {
         );
 
 
+//        binding.decre.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Double tprice=0.0;
+//                Increment();
+//                binding.quantityText.setText(""+product_qty);
+//                tprice= product_list_price * Integer.valueOf(product_qty);
+//                binding.priceTotal.setText(""+tprice);
+//
+//            }
+//        });
+//        binding.productPrice.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                product_list_price= Double.parseDouble(s.toString());
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
 
-        binding.vendorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//        binding.incre.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Double tprice=0.0;
+//                Deccrement();
+//                binding.quantityText.setText(""+product_qty);
+//                tprice= product_list_price * Integer.valueOf(product_qty);
+//                binding.priceTotal.setText(""+tprice);
+//
+//            }
+//        });
+        binding.numberPicker.setMin(1);
+        binding.numberPicker.setUnit(1);
+        binding.numberPicker.setValue(1);
+//        binding.numberPicker.setVisibility(View.GONE);
+//        binding.submitBtn.setVisibility(View.GONE);
+//        binding.proCurrText.setVisibility(View.GONE);
+
+        binding.numberPicker.setValueChangedListener(new ValueChangedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    vendor_id = vendorNames.get(position).getId() + "";
-
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void valueChanged(int value, ActionEnum action) {
+                quantity = value;
+                DecimalFormat form = new DecimalFormat("0.00");
+                binding.itemPriceTxt.setText("₹ " + String.valueOf(form.format(Double.valueOf(product_list_price * quantity))));
+                //  binding.itemPriceTxt.setText("₹ " + basePrice * quantity + "");
             }
         });
 
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(vendor_id !=null) {
-                    CreatePurchaseOrder();
-                }else {
-                    Toast.makeText(getContext(), "Select Vendor", Toast.LENGTH_SHORT).show();
+                variants = binding.setPatternsTxt.getText().toString().trim();
+
+                //  String product_quantity = binding.quantityText.getText().toString().trim();
+                boolean empty = true;
+                if (variantArray != null) {
+                    for (int i = 0; i < variantArray.size(); i++) {
+                        if (variantArray.get(i) == null) {
+                            empty = false;
+                            break;
+                        }
+                    }
+                    if (!empty) {
+                        Toast.makeText(getActivity(), R.string.Add_Variants, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    PurchaseOrder order = new PurchaseOrder();
+                    order.setProductID(product_id);
+                    order.setProductImage(product_image);
+                    order.setVariantID(variant_id);
+                    order.setProductName(var_product_name);
+                    order.setCropID(Integer.parseInt(cropID));
+                    order.setCrop_name(cropName);
+                    order.setQuantity(quantity);
+                    order.setTotalQuantity(total_quant);
+                    order.setTaxID(taxes_id);
+                    order.setUnitPrice(product_list_price);
+                    order.setGst(addGSTValue);
+
+                    if (variants != null) {
+                        order.setProductVariants(variants);
+                        AsyncTask.execute(() -> {
+                            int prodCount = 0;
+                            prodCount = DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().getProductDetailById(order.getProductID(), order.getProductVariants());
+                            if (prodCount > 0) {
+                                DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().updateProductQuantity((int) order.getQuantity(), order.getProductID(), order.getProductVariants());
+                                GetTasks gt = new GetTasks();
+                                gt.execute();
+
+                            } else {
+                                DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().insert(order);
+//                                GetTasks gt = new GetTasks();
+//                                gt.execute();
+
+                            }
+                        });
+                    }
+
+                    //                Toast.makeText(getActivity(), R.string.Add_card, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), R.string.No_Variants, Toast.LENGTH_SHORT).show();
 
                 }
+
+
             }
         });
 
     }
 
-    private void val(int position) {
-                                variantArray[patternType] = purchaseProductModel.get(0).getAttributes().get(patternType).getValues().get(position).getValueName();
+    class GetGSTValueTasks extends AsyncTask<Void, Void, Void> {
 
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (int i = 0; i < variantArray.length; i++) {
-                            stringBuilder.append(variantArray[i]).append(",");
-                        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            addGSTValue = DatabaseClient.getInstance(getActivity()).getAppDatabase().gstDao().getGSTValueById(taxes_id);
+            return null;
+        }
 
-
-        binding.setPatternsTxt.setText(stringBuilder);
+        @Override
+        protected void onPostExecute(Void tasks) {
+            super.onPostExecute(tasks);
+//            createLayoutDynamically(productDetail.getData().get(0).getAttributes().size());
+        }
     }
+    //    private void Increment(){
+//        product_qty++;
+//    }
+//    private void Deccrement(){
+//        if (product_qty==1)
+//            return;
+//        else {
+//            product_qty--;
+//        }
+//    }
 
-    private void createDynamicSpinner(int n,String product_name) {
-        variantArray = new String[n];
+
+    private void createDynamicSpinner(int n, String product_name) {
         for (int j = 0; j < n; j++) {
             LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            txtLayoutParam.gravity = Gravity.CENTER;
+            txtLayoutParam.gravity = Gravity.START;
             LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             spinnerLayoutParam.gravity = Gravity.CENTER;
             TextView headingTV = new TextView(getActivity());
+            headingTV.setTextColor(R.color.text_color);
             headingTV.setText(attributes.get(j).getAttributeName());
 
             value = new ArrayList<>();
@@ -271,12 +451,14 @@ public class CreatePurchaseOrderFragment extends Fragment {
             binding.idLLContainer.addView(headingTV);
             binding.idLLContainer.addView(spinner);
 
-            getSpinner(spinner, spinner.getId(), value,product_name);
+            getSpinner(spinner, spinner.getId(), value, product_name);
         }
 
     }
 
-    private void getSpinner(Spinner spinner, int spinner_id, List<Value> value,String product_name ) {
+
+
+    private void getSpinner(Spinner spinner, int spinner_id, List<Value> value, String product_name) {
         AttributeSpinnerAdapter adapter = new AttributeSpinnerAdapter(getActivity(), value);
         spinner.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -285,17 +467,58 @@ public class CreatePurchaseOrderFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position != 0) {
-//                    String variant_Array  = value.get(position).getValueName();
-                    Toast.makeText(contexts, ""+value.get(position).getValueName(), Toast.LENGTH_SHORT).show();
-                 //   variantArray.add(value.get(position).getValueName());
-                    val(position);
+                //  if(position != 0) {
+                //   variantArray.add(value.get(position).getValueName());
+                //  val(position);
+                if (!variantArray.contains(String.valueOf(spinner_id))) {
+                    variantArray.add(String.valueOf(spinner_id));
+
                 }
-//                stringBuilder = new StringBuilder();
-//                for (int i = 0; i < variantArray.size(); i++) {
-//                    stringBuilder.append(variantArray.get(i)).append(",");
-//                }
-//                binding.setPatternsTxt.setText(product_name+"("+ stringBuilder +")");
+                variant_value.put(String.valueOf(spinner_id), value.get(position).getValueName());
+                //   }
+
+                stringBuilder = new StringBuilder();
+                for (int i = 0; i < variantArray.size(); i++) {
+                    stringBuilder.append(variant_value.get(variantArray.get(i)));
+                    if (i != variantArray.size() - 1) {
+                        stringBuilder.append(",");
+                    }
+
+                }
+                binding.setPatternsTxt.setText(product_name + " (" + stringBuilder + ")");
+                 var_product_name = binding.setPatternsTxt.getText().toString();
+                for (int i = 0; i < productVariantQuantities.size(); i++) {
+                    String quantities = productVariantQuantities.get(i).getVariantDisplayName();
+
+                    if (quantities.contains(var_product_name)) {
+                        total_quant = productVariantQuantities.get(i).getQuantity();
+                        variant_id = Integer.parseInt(productVariantQuantities.get(i).getVariant_id());
+
+                        if ((int) total_quant > 0) {
+                            binding.numberPicker.setMax(total_quant);
+                            binding.numberPicker.setVisibility(View.VISIBLE);
+                            binding.submitBtn.setVisibility(View.VISIBLE);
+                            binding.proCurrText.setVisibility(View.GONE);//                            pro_curr_text.setVisibility(View.GONE);
+                        } else {
+                            binding.submitBtn.setVisibility(View.GONE);
+                            binding.numberPicker.setValue(1);
+                            binding.numberPicker.setVisibility(View.GONE);
+                            binding.submitBtn.setVisibility(View.GONE);
+                            binding.proCurrText.setVisibility(View.VISIBLE);
+                        }
+//                        break;
+//                    } else {
+//                        binding.numberPicker.setValue(1);
+//                        binding.numberPicker.setVisibility(View.GONE);
+//                        binding.submitBtn.setVisibility(View.GONE);
+//                        binding.proCurrText.setVisibility(View.VISIBLE);
+//                        binding.itemPriceTxt.setText("");
+////                        mrpPriceTxt.setText("");
+////                        b2bPriceTxt.setText("");
+                    }
+                }
+
+
             }
 
             @Override
@@ -304,6 +527,21 @@ public class CreatePurchaseOrderFragment extends Fragment {
             }
         });
 
+        binding.cstSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    vendor_id = vendorNames.get(position).getId()+"";
+                    //  binding.customerTxt.setText(vendorNames.get(position).getName());
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
     }
@@ -338,8 +576,12 @@ public class CreatePurchaseOrderFragment extends Fragment {
                             purchaseProductModel = model.getData().get(i).getProducts();
                         }
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
-                            Toast.makeText(contexts, "Data not Found", Toast.LENGTH_SHORT).show();
+                            binding.noDataFound.setVisibility(View.VISIBLE);
+                            binding.recyclerView.setVisibility(View.GONE);
+                            //  Toast.makeText(contexts, "Data not Found", Toast.LENGTH_SHORT).show();
                         } else {
+                            binding.noDataFound.setVisibility(View.GONE);
+                            binding.recyclerView.setVisibility(View.VISIBLE);
                             GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
                             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                             adapter = new PurchaseProductListAdapter(getActivity(), purchaseProductModel);
@@ -409,6 +651,181 @@ public class CreatePurchaseOrderFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
+
+    class GetTasks extends AsyncTask<Void, Void, List<PurchaseOrder>> {
+
+        @Override
+        protected List<PurchaseOrder> doInBackground(Void... voids) {
+            AppDatabase dbClient = DatabaseClient.getInstance(getActivity()).getAppDatabase();
+            purchaseOrderList = dbClient.purchaseDao().getPurchaseOrder();
+            if (purchaseOrderList == null || purchaseOrderList.size() == 0) {
+                return null;
+            }
+
+            return purchaseOrderList;
+        }
+
+        @Override
+        protected void onPostExecute(List<PurchaseOrder> tasks) {
+            super.onPostExecute(tasks);
+            // tasks_model = tasks;
+
+            if (tasks != null && tasks.size() > 0) {
+                setBillPanel(tasks.size());
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                purchaseItemListAdapter = new PurchaseItemListAdapter(getActivity(), tasks);
+                purchaseItemListAdapter.setOnClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        setBillPanel(tasks.size());
+                    }
+                });
+                binding.itemList.setAdapter(purchaseItemListAdapter);
+                binding.itemList.setLayoutManager(layoutManager);
+
+            }
+        }
+    }
+
+    private void setBillPanel(int size) {
+        double sumTotalAmount = 0.0;
+        double taxesTotalAmount = 0.0;
+        double lineDiscountAmount = 0.0;
+        double totalDiscount = 0.0;
+        prjsonArray = new JSONArray();
+        for (int i = 0; i < size; i++) {
+            sumTotalAmount += purchaseOrderList.get(i).getUnitPrice() * purchaseOrderList.get(i).getQuantity();
+            double lineAmount = purchaseOrderList.get(i).getUnitPrice() * purchaseOrderList.get(i).getQuantity();
+            lineDiscountAmount = lineAmount * purchaseOrderList.get(i).getTaxID() / 100;
+            double amountAfterLineDiscount = lineAmount - lineDiscountAmount;
+            totalDiscount += amountAfterLineDiscount;
+            try {
+                binding.textTaxes.setText("Total Discount ");
+
+                productOBJ = new JSONObject();
+                productOBJ.putOpt("product_id", purchaseOrderList.get(i).getProductID());
+                productOBJ.putOpt("name", purchaseOrderList.get(i).getProductVariants());
+                productOBJ.putOpt("variant_id", purchaseOrderList.get(i).getVariantID());
+//            productOBJ.putOpt("name", purchaseOrderList.get(i).getProductName() + purchaseOrderList.get(i).getProductVariants());
+                //               productOBJ.putOpt("price_unit", purchaseOrderList.get(i).getUnitPrice());
+                productOBJ.putOpt("price_unit", amountAfterLineDiscount);
+
+                productOBJ.putOpt("product_qty", purchaseOrderList.get(i).getQuantity());
+                productOBJ.putOpt("taxes_id", purchaseOrderList.get(i).getTaxID());
+                prjsonArray.put(productOBJ);
+            } catch (JSONException e) {
+
+            }
+
+        }
+        double   paid_amount = sumTotalAmount - totalDiscount ;
+        binding.txtAmount.setText("₹ "+String.valueOf(paid_amount));
+        binding.amountTxt.setText("₹ "+String.valueOf(sumTotalAmount));
+        binding.itemCountTxt.setText(String.valueOf(size));
+        binding.payAmount.setText("₹"+String.valueOf(totalDiscount));
+    }
+    private void callOrderConfirmFragment() {
+        Fragment fragment = ConfirmOrderFragment.newInstance();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+    }
+
+    private void CreatePurchaseOrder(String str_vendor_id) {
+        SessionManagement sm = new SessionManagement(getActivity());
+        Map<String, String> params = new HashMap<>();
+        // params.put("user_id", sm.getUserID()+ "");
+        //   params.put("token", sm.getJWTToken());
+        params.put("vendor_id", str_vendor_id);
+        params.put("products", prjsonArray.toString());
+//        params.put("products", prjsonArray.toString());
+        params.put("picking_type_id", 8+"");
+        Utility.showDialoge("Please wait while a moment...", getActivity());
+        Log.v("Pur_create_order", String.valueOf(params));
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_PURCHASE_ORDER, new VolleyCallback() {
+
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                String status = obj.optString("status");
+                String message = obj.optString("message");
+                String error_message = obj.optString("error_message");
+
+                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                    AsyncTask.execute(() -> {
+                        DatabaseClient.getInstance(getActivity()).getAppDatabase()
+                                .purchaseDao()
+                                .delete();
+                    });
+                    callOrderConfirmFragment();
+
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                } else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Utility.dismissDialoge();
+                Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    //    void showDialogeCustomer() {
+//        Dialog dialog = new Dialog(getActivity());
+//        dialog.setContentView(R.layout.customer_dialoge);
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog.setCancelable(false);
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+//
+//        RadioGroup radioGroup = dialog.findViewById(R.id.radioGroup);
+//        radioGroup.setVisibility(View.GONE);
+//        TextView okay_text = dialog.findViewById(R.id.ok_text);
+//        TextView cancel_text = dialog.findViewById(R.id.cancel_text);
+//        cstSpinner = dialog.findViewById(R.id.cstSpinner);
+//        TextView  text_list= dialog.findViewById(R.id.text_list);
+//        text_list.setText("Vendor List");
+//        cstSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                if (position != 0) {
+//                    vendor_id = vendorNames.get(position).getId()+"";
+//                    binding.customerTxt.setText(vendorNames.get(position).getName());
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//        okay_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                dialog.dismiss();
+//
+//            }
+//        });
+//
+//        cancel_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
     private void getVendorList() {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
@@ -416,7 +833,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
         // String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
-//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        //   Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -433,20 +850,23 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         JSONArray jsonArray = obj.getJSONArray("vendors");
                         StateModel stateModel = new StateModel();
                         stateModel.setId(-1);
-                        stateModel.setName("--Select Vendor--");
+                        stateModel.setName("Select Vendor");
                         vendorNames.add(stateModel);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             stateModel = new StateModel();
                             JSONObject data = jsonArray.getJSONObject(i);
-                            int id = data.optInt("vendor_id");
-                            String name = data.optString("name");
-                            stateModel.setId(id);
-                            stateModel.setName(name);
-                            vendorNames.add(stateModel);
+                            Boolean active = data.optBoolean("active");
+                            if(active == true) {
+                                int id = data.optInt("vendor_id");
+                                String name = data.optString("name");
+                                stateModel.setId(id);
+                                stateModel.setName(name);
+                                vendorNames.add(stateModel);
+                            }
                         }
                         if (getContext() != null) {
                             CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), vendorNames);
-                            binding.vendorSpinner.setAdapter(adapter);
+                            binding.cstSpinner.setAdapter(adapter);
                         }
 
                     }
@@ -456,48 +876,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
 
             }
-        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
-    }
-    private void CreatePurchaseOrder(){
-        SessionManagement sm = new SessionManagement(getActivity());
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", sm.getUserID()+ "");
-        params.put("token", sm.getJWTToken());
-        params.put("vendor_id", vendor_id);
-        params.put("products", "[]");
-        params.put("picking_type_id", "8");
-        Utility.showDialoge("Please wait while a moment...", getActivity());
-        Log.v("Pur_create_order", String.valueOf(params));
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_POS_CATEGORY, new VolleyCallback() {
-
-
-            @Override
-            public void onSuccess(Object result) throws JSONException {
-                Log.v("Response", result.toString());
-                JSONObject obj = new JSONObject(result.toString());
-                int statusCode = obj.optInt("statuscode");
-              String  status = obj.optString("status");
-                String  message = obj.optString("message");
-
-                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                    Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
-
-                }else {
-                    Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onError(String result) throws Exception {
-                Utility.dismissDialoge();
-                Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
 }

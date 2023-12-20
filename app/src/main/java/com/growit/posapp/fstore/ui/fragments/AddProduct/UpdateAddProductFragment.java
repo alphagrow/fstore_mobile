@@ -192,7 +192,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             binding.mktBy.setText(list.get(position).getMkdBy());
             binding.batchNumber.setText(list.get(position).getBatchNumber());
             binding.cirNumber.setText(list.get(position).getCirNo());
-          //  binding.whichCrop.setText(crop_name);
+            binding.whichCrop.setText(str_crop_name);
             binding.whichPest.setText(list.get(position).getWhichPest());
             binding.mfdDate.setText(list.get(position).getMfdDate());
             binding.expDate.setText(list.get(position).getExpDate());
@@ -200,7 +200,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
              attributes = list.get(position).getAttributes();
 
             if (Utility.isNetworkAvailable(getContext())) {
-                getCropRequest();
+//                getCropRequest();
                 getAttributeList();
             } else {
                 Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -712,7 +712,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
 
                         model_attribute = gson.fromJson(response.toString(), listType);
                         model.addAll(model_attribute.getAttributes());
-                        createTextDynamically(model_attribute.getAttributes().size());
+                        createTextDynamically(model_attribute.getAttributes());
 
 
                     }
@@ -724,12 +724,12 @@ ArrayList<String>crop_id_list = new ArrayList<>();
         queue.add(jsonObjectRequest);
 
     }
-    private void createTextDynamically(int n) {
+    private void createTextDynamically(List<AttributeModel> model) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int width = display.getWidth();
         LinearLayout l = new LinearLayout(getActivity());
         binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < model.size(); j++) {
             TextView text = new TextView(getActivity());
             LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
 
@@ -748,24 +748,24 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             List<String> item_value_list = null;
             StringBuilder stringBuilder = new StringBuilder();
 
-            for(int i=0;i<attributes.get(j).getValues().size();i++){
-                item_value_list = selected_value_map.get(String.valueOf(att_id));
-                attribute_value_id =attributes.get(j).getValues().get(i).getValueId();
-                stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
-                if (item_value_list != null) {
-                    item_value_list.add(String.valueOf(attribute_value_id));
-                    selected_value_map.put(String.valueOf(att_id), item_value_list);
-                } else {
-                    item_value_list = new ArrayList<>();
-                    item_value_list.add(String.valueOf(attribute_value_id));
-                    selected_value_map.put(String.valueOf(att_id), item_value_list);
-
-                }
-                if (i != attributes.get(j).getValues().size() - 1) {
-                    stringBuilder.append(", ");
-                }
-            }
-            attribute_id_list.add(attribute_value_id);
+//            for(int i=0;i<model.get(j).getValues().size();i++){
+//                item_value_list = selected_value_map.get(String.valueOf(att_id));
+//                attribute_value_id =attributes.get(j).getValues().get(i).getValueId();
+//                stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
+//                if (item_value_list != null) {
+//                    item_value_list.add(String.valueOf(attribute_value_id));
+//                    selected_value_map.put(String.valueOf(att_id), item_value_list);
+//                } else {
+//                    item_value_list = new ArrayList<>();
+//                    item_value_list.add(String.valueOf(attribute_value_id));
+//                    selected_value_map.put(String.valueOf(att_id), item_value_list);
+//
+//                }
+//                if (i != attributes.get(j).getValues().size() - 1) {
+//                    stringBuilder.append(", ");
+//                }
+//            }
+//            attribute_id_list.add(attribute_value_id);
 
             Log.d("set_attribute_json_array", String.valueOf(stringBuilder));
             text.setHint(stringBuilder);
@@ -873,125 +873,125 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             }
         });
     }
-    private void getCropRequest() {
-        SessionManagement sm = new SessionManagement(contexts);
-        RequestQueue queue = Volley.newRequestQueue(contexts);
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Utility.showDialoge("Please wait while a moment...", contexts);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.v("Response", response.toString());
-                JSONObject obj = null;
-                try {
-                    obj = new JSONObject(response.toString());
-                    int statusCode = obj.optInt("statuscode");
-                    String status = obj.optString("status");
-
-                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
-                        JSONArray jsonArray = obj.getJSONArray("data");
-
-                        if (jsonArray.length() > 0) {
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                Value cropPattern = new Value();
-                                JSONObject data = jsonArray.getJSONObject(i);
-                                Integer cropID = data.optInt("category_id");
-                                String name = data.optString("name");
-                                cropPattern.setValueId(Integer.valueOf(cropID + ""));
-                                cropPattern.setValueName(name);
-
-                                cropList.add(cropPattern);
-                            }
-                            Log.d("url_string", String.valueOf(cropList.size()));
-                            setWhichCrop(cropList);
-
-                        }
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-        queue.add(jsonObjectRequest);
-    }
-    private void setWhichCrop(List<Value> cropList) {
-        ArrayList<String> crop_name = new ArrayList<>();
-        ArrayList<String> crop_id = new ArrayList<>();
-        ArrayList<Integer> langList = new ArrayList<>();
-        for (int i = 0; i < cropList.size(); i++) {
-            crop_name.add(cropList.get(i).getValueName());
-            crop_id.add(String.valueOf(cropList.get(i).getValueId()));
-        }
-        final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
-        boolean[] selected_crop = new boolean[crop_name.size()];
-binding.textView.setText(str_crop_name);
-
-        binding.textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Select Crop Name");
-                builder.setCancelable(false);
-
-                builder.setMultiChoiceItems(items, selected_crop, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        if (b) {
-
-                            langList.add(i);
-                            Collections.sort(langList);
-                        } else {
-
-                            langList.remove(Integer.valueOf(i));
-                        }
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        StringBuilder builder_crop_id = new StringBuilder();
-                        for (int j = 0; j < langList.size(); j++) {
-                            stringBuilder.append(items[langList.get(j)]);
-                            builder_crop_id.append(crop_id.get(langList.get(j)));
-// selected_crop_id = String.valueOf(cropList.get(j).getValueId());
-                            if (j != langList.size() - 1) {
-                                stringBuilder.append(", ");
-                                builder_crop_id.append(",");
-                            }
-                        }
-
-                        str_crop_id=builder_crop_id.toString();
-                        Log.d("str_crop_id",str_crop_id);
-                        binding.textView.setText(stringBuilder.toString());
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-// dismiss dialog
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-// use for loop
-                        for (int j = 0; j < selected_crop.length; j++) {
-                            selected_crop[j] = false;
-                            langList.clear();
-                            binding.textView.setText("");
-                        }
-                    }
-                });
-
-                builder.show();
-            }
-        });
-    }
+//    private void getCropRequest() {
+//        SessionManagement sm = new SessionManagement(contexts);
+//        RequestQueue queue = Volley.newRequestQueue(contexts);
+//        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+//        Utility.showDialoge("Please wait while a moment...", contexts);
+//
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.v("Response", response.toString());
+//                JSONObject obj = null;
+//                try {
+//                    obj = new JSONObject(response.toString());
+//                    int statusCode = obj.optInt("statuscode");
+//                    String status = obj.optString("status");
+//
+//                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+//                        Utility.dismissDialoge();
+//                        JSONArray jsonArray = obj.getJSONArray("data");
+//
+//                        if (jsonArray.length() > 0) {
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                Value cropPattern = new Value();
+//                                JSONObject data = jsonArray.getJSONObject(i);
+//                                Integer cropID = data.optInt("category_id");
+//                                String name = data.optString("name");
+//                                cropPattern.setValueId(Integer.valueOf(cropID + ""));
+//                                cropPattern.setValueName(name);
+//
+//                                cropList.add(cropPattern);
+//                            }
+//                            Log.d("url_string", String.valueOf(cropList.size()));
+//                            setWhichCrop(cropList);
+//
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+//        queue.add(jsonObjectRequest);
+//    }
+//    private void setWhichCrop(List<Value> cropList) {
+//        ArrayList<String> crop_name = new ArrayList<>();
+//        ArrayList<String> crop_id = new ArrayList<>();
+//        ArrayList<Integer> langList = new ArrayList<>();
+//        for (int i = 0; i < cropList.size(); i++) {
+//            crop_name.add(cropList.get(i).getValueName());
+//            crop_id.add(String.valueOf(cropList.get(i).getValueId()));
+//        }
+//        final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
+//        boolean[] selected_crop = new boolean[crop_name.size()];
+//binding.textView.setText(str_crop_name);
+//
+//        binding.textView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setTitle("Select Crop Name");
+//                builder.setCancelable(false);
+//
+//                builder.setMultiChoiceItems(items, selected_crop, new DialogInterface.OnMultiChoiceClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+//                        if (b) {
+//
+//                            langList.add(i);
+//                            Collections.sort(langList);
+//                        } else {
+//
+//                            langList.remove(Integer.valueOf(i));
+//                        }
+//                    }
+//                });
+//
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        StringBuilder stringBuilder = new StringBuilder();
+//                        StringBuilder builder_crop_id = new StringBuilder();
+//                        for (int j = 0; j < langList.size(); j++) {
+//                            stringBuilder.append(items[langList.get(j)]);
+//                            builder_crop_id.append(crop_id.get(langList.get(j)));
+//// selected_crop_id = String.valueOf(cropList.get(j).getValueId());
+//                            if (j != langList.size() - 1) {
+//                                stringBuilder.append(", ");
+//                                builder_crop_id.append(",");
+//                            }
+//                        }
+//
+//                        str_crop_id=builder_crop_id.toString();
+//                        Log.d("str_crop_id",str_crop_id);
+//                        binding.textView.setText(stringBuilder.toString());
+//                    }
+//                });
+//
+//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//// dismiss dialog
+//                        dialogInterface.dismiss();
+//                    }
+//                });
+//                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//// use for loop
+//                        for (int j = 0; j < selected_crop.length; j++) {
+//                            selected_crop[j] = false;
+//                            langList.clear();
+//                            binding.textView.setText("");
+//                        }
+//                    }
+//                });
+//
+//                builder.show();
+//            }
+//        });
+//    }
 
 }

@@ -17,7 +17,7 @@ public class PurchaseProductModel {
     private String productName;
     @SerializedName("image_url")
     @Expose
-    private Boolean imageUrl;
+    private String imageUrl;
     @SerializedName("detailed_type")
     @Expose
     private String detailedType;
@@ -98,11 +98,11 @@ public class PurchaseProductModel {
         this.productName = productName;
     }
 
-    public Boolean getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(Boolean imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 

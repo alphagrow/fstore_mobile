@@ -46,6 +46,7 @@ import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFragment;
+import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
     LinearLayout  sale_menu_lay;
     LinearLayout inventory_menu;
-    TextView vendor,purchase,inventory_text,warehouses,purchase_order_list;
+    TextView vendor,purchase,inventory_text,warehouses,purchase_order_list,purchase_item;
     boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 home_icon.setImageResource(R.drawable.home_menu);
                 transaction_icon.setImageResource(R.drawable.transaction);
                 order_icon.setImageResource(R.drawable.order);
-
                 /////****
                 customer_text.setTextColor(getResources().getColor(R.color.colorPrimary));
                 home_text.setTextColor(getResources().getColor(R.color.black));
@@ -470,7 +470,8 @@ public class MainActivity extends AppCompatActivity {
         sale_menu_lay = view_sale.findViewById(R.id.sale_menu_lay);
         vendor = view_sale.findViewById(R.id.vendor);
         purchase = view_sale.findViewById(R.id.purchase);
-        purchase_order_list = view_sale.findViewById(R.id.purchase_order_list);
+     //   purchase_item = view_sale.findViewById(R.id.purchase_item);
+       purchase_order_list = view_sale.findViewById(R.id.purchase_order_list);
 
         name.setText(sm.getUserName());
         headerLayout.setOnClickListener(view -> {
@@ -492,11 +493,13 @@ public class MainActivity extends AppCompatActivity {
 
         sale_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
-                purchase_order_list.setVisibility(View.VISIBLE);
+           //     purchase_item.setVisibility(View.VISIBLE);
+               purchase_order_list.setVisibility(View.VISIBLE);
                 purchase.setVisibility(View.VISIBLE);
                 vendor.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+            //    purchase_item.setVisibility(View.GONE);
                 purchase_order_list.setVisibility(View.GONE);
                 purchase.setVisibility(View.GONE);
                 vendor.setVisibility(View.GONE);
@@ -526,6 +529,17 @@ public class MainActivity extends AppCompatActivity {
                 drawer_layout.close();
             }
         });
+//        purchase_item.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toolbar.setVisibility(View.GONE);
+//                Fragment fragment = PurchaseItemCartFragment.newInstance();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//                drawer_layout.close();
+//            }
+//        });
+
         purchase_order_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

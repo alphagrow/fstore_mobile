@@ -1,5 +1,8 @@
 package com.growit.posapp.fstore.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class StateModel {
     private int id;
 
@@ -20,4 +23,14 @@ public class StateModel {
     }
 
     private String name="";
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    private Boolean active;
 }

@@ -30,6 +30,7 @@ import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.skyhope.showmoretextview.ShowMoreTextView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,7 +59,7 @@ public class PurchaseProductListAdapter extends RecyclerView.Adapter<PurchasePro
             super(itemView);
             product_name = itemView.findViewById(R.id.name_product);
             qty = itemView.findViewById(R.id.Qty_avl_text);
-            images = itemView.findViewById(R.id.images);
+            images = itemView.findViewById(R.id.productThumb);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             update = itemView.findViewById(R.id.update);
 
@@ -89,10 +90,10 @@ public class PurchaseProductListAdapter extends RecyclerView.Adapter<PurchasePro
 //        holder.product_name.setShowLessTextColor(Color.RED); // or other color
 
 
-//        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getProductImage())
-//                .placeholder(R.drawable.loading)
-//                .error(R.drawable.no_image)
-//                .into(holder.images);
+        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getImageUrl())
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.no_image)
+                .into(holder.images);
 
 
     }

@@ -267,7 +267,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         date_mfd = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-// TODO Auto-generated method stub
+               // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -368,9 +368,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             String str_batchNumber = binding.batchNumber.getText().toString();
             String str_cirNumber = binding.cirNumber.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
-// String str_etUom = binding.etUom.getText().toString();
+           // String str_etUom = binding.etUom.getText().toString();
             String str_description = binding.description.getText().toString();
-            String str_uomProduct = binding.etUomProduct.getText().toString();
+            String str_hsn_code = binding.edHsnCode.getText().toString();
+            String str_hsn_code_dec = binding.edHsnCodeDescription.getText().toString();
 
             if (str_product_name.length() == 0) {
                 Toast.makeText(getActivity(), "Enter the Product Name", Toast.LENGTH_SHORT).show();
@@ -424,7 +425,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             if (attribute_json_array !=null) {
                 if (str_crop_id.length() !=0) {
-                    addProductRequest(str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
+                    addProductRequest(str_hsn_code,str_hsn_code_dec,str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
                 }else {
                     Toast.makeText(getActivity(), "Select Crop", Toast.LENGTH_SHORT).show();
                 }
@@ -435,7 +436,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
 
-    private void addProductRequest(String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id,JSONArray attribute_json_array) {
+    private void addProductRequest(String hsn_code,String str_hsn_code_dec,String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id,JSONArray attribute_json_array) {
 
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
@@ -457,6 +458,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         // params.put("uom_po_id", str_uomProduct);
         params.put("uom_id", str_uom);
         params.put("uom_po_id", str_uom);
+        params.put("hsn_code", hsn_code);
+        params.put("hsn_code_description", str_hsn_code_dec);
         params.put("detailed_type", str_detailed_type);
 
 // params.put("pos_categ_id", crop_id_list.toString());

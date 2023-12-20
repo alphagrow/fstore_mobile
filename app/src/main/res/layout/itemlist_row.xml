@@ -23,6 +23,7 @@
                 android:id="@+id/itemImage"
                 android:layout_width="100dp"
                 android:layout_weight="1.6"
+                android:src="@drawable/no_image"
                 android:layout_height="100dp"
                 android:layout_gravity="center" />
         </androidx.cardview.widget.CardView>
