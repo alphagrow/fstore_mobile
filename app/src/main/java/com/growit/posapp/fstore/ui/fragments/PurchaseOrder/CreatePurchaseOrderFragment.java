@@ -86,9 +86,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 public class CreatePurchaseOrderFragment extends Fragment {
+
 
     FragmentCreatePurchaseOrderBinding binding;
     Activity contexts;
@@ -98,7 +100,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private String cropID = "";
     private String cropName = "";
     CropAdapter cropAdapter = null;
-    String vendor_id="";
+    String vendor_id = "";
 
     String crop_id, crop_name;
     private double quantity = 1.0;
@@ -133,8 +135,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
     List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
     PurchaseItemListAdapter purchaseItemListAdapter;
     Spinner cstSpinner;
-    int variant_id=0;
-   String var_product_name;
+    int str_variant_id;
+
     public CreatePurchaseOrderFragment() {
         // Required empty public constructor
     }
@@ -193,10 +195,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(vendor_id.length()==0) {
+                if (vendor_id.length() == 0) {
                     Toast.makeText(getContext(), "Select Vendor Name", Toast.LENGTH_SHORT).show();
 
-                }else {
+                } else {
                     CreatePurchaseOrder(vendor_id);
                 }
             }
@@ -208,6 +210,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         binding.idLLContainer.removeAllViews();
                         variant_value.clear();
                         variantArray.clear();
+                       // binding.numberPicker.setValue(1);
                         //   binding.setPatternsTxt.setText("");
                         //    binding.detailLayout.removeAllViews();
                         cropID = cropList.get(position).getValueId() + "";
@@ -233,8 +236,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         binding.idLLContainer.removeAllViews();
                         variant_value.clear();
                         variantArray.clear();
-                        //   binding.numberPicker.setMin(1);
-                        //  binding.setPatternsTxt.setText("");
+
+                        binding.numberPicker.setValue(1);
                         binding.itemPriceTxt.setText("");
                         //  binding.detailLayout.removeAllViews();
                         binding.productImage.setVisibility(View.VISIBLE);
@@ -247,7 +250,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
                         binding.productName.setText(product_name);
                         taxes_id = Integer.parseInt(purchaseProductModel.get(position).getTaxesId().replaceAll("[^0-9]+", ""));
-                        //   Log.d("taxes_id",taxes_id);
+                          // Log.d("taxes_id",taxes_id+"");
                         if (!Utility.isNetworkAvailable(getActivity())) {
                             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
@@ -334,8 +337,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                variants = binding.setPatternsTxt.getText().toString().trim();
-
+//                variants = binding.setPatternsTxt.getText().toString().trim();
+                String var_pr_name = binding.setPatternsTxt.getText().toString();
+                variants = var_pr_name.replaceAll("\\s", "");
                 //  String product_quantity = binding.quantityText.getText().toString().trim();
                 boolean empty = true;
                 if (variantArray != null) {
@@ -352,8 +356,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     PurchaseOrder order = new PurchaseOrder();
                     order.setProductID(product_id);
                     order.setProductImage(product_image);
-                    order.setVariantID(variant_id);
-                    order.setProductName(var_product_name);
+                    order.setVariantID(str_variant_id);
+                    order.setProductName(product_name);
                     order.setCropID(Integer.parseInt(cropID));
                     order.setCrop_name(cropName);
                     order.setQuantity(quantity);
@@ -374,8 +378,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
                             } else {
                                 DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().insert(order);
-//                                GetTasks gt = new GetTasks();
-//                                gt.execute();
+                                GetTasks gt = new GetTasks();
+                                gt.execute();
 
                             }
                         });
@@ -390,7 +394,6 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
             }
         });
-
     }
 
     class GetGSTValueTasks extends AsyncTask<Void, Void, Void> {
@@ -457,7 +460,6 @@ public class CreatePurchaseOrderFragment extends Fragment {
     }
 
 
-
     private void getSpinner(Spinner spinner, int spinner_id, List<Value> value, String product_name) {
         AttributeSpinnerAdapter adapter = new AttributeSpinnerAdapter(getActivity(), value);
         spinner.setAdapter(adapter);
@@ -467,7 +469,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //  if(position != 0) {
+                // if(position != 0) {
                 //   variantArray.add(value.get(position).getValueName());
                 //  val(position);
                 if (!variantArray.contains(String.valueOf(spinner_id))) {
@@ -481,43 +483,30 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 for (int i = 0; i < variantArray.size(); i++) {
                     stringBuilder.append(variant_value.get(variantArray.get(i)));
                     if (i != variantArray.size() - 1) {
-                        stringBuilder.append(",");
+                        stringBuilder.append(", ");
                     }
 
                 }
                 binding.setPatternsTxt.setText(product_name + " (" + stringBuilder + ")");
-                 var_product_name = binding.setPatternsTxt.getText().toString();
-                for (int i = 0; i < productVariantQuantities.size(); i++) {
-                    String quantities = productVariantQuantities.get(i).getVariantDisplayName();
+                String var_pr_name = binding.setPatternsTxt.getText().toString();
+                for (int j = 0; j < productVariantQuantities.size(); j++) {
+                  //  String variantDisplay_name = productVariantQuantities.get(j).getVariantDisplayName();
 
-                    if (quantities.contains(var_product_name)) {
-                        total_quant = productVariantQuantities.get(i).getQuantity();
-                        variant_id = Integer.parseInt(productVariantQuantities.get(i).getVariant_id());
+                    Log.d("var_product_name", var_pr_name + "");
 
-                        if ((int) total_quant > 0) {
-                            binding.numberPicker.setMax(total_quant);
-                            binding.numberPicker.setVisibility(View.VISIBLE);
-                            binding.submitBtn.setVisibility(View.VISIBLE);
-                            binding.proCurrText.setVisibility(View.GONE);//                            pro_curr_text.setVisibility(View.GONE);
-                        } else {
-                            binding.submitBtn.setVisibility(View.GONE);
-                            binding.numberPicker.setValue(1);
-                            binding.numberPicker.setVisibility(View.GONE);
-                            binding.submitBtn.setVisibility(View.GONE);
-                            binding.proCurrText.setVisibility(View.VISIBLE);
+                    for (ProductVariantQuantity variantDisplay_name : productVariantQuantities) {
+                        if (variantDisplay_name.getVariantDisplayName().contains(var_pr_name)) {
+                            total_quant = variantDisplay_name.getQuantity();
+                            str_variant_id = Integer.parseInt(variantDisplay_name.getVariant_id());
+
+                            Log.d("ss_variant", str_variant_id + "");
                         }
-//                        break;
-//                    } else {
-//                        binding.numberPicker.setValue(1);
-//                        binding.numberPicker.setVisibility(View.GONE);
-//                        binding.submitBtn.setVisibility(View.GONE);
-//                        binding.proCurrText.setVisibility(View.VISIBLE);
-//                        binding.itemPriceTxt.setText("");
-////                        mrpPriceTxt.setText("");
-////                        b2bPriceTxt.setText("");
                     }
                 }
 
+
+
+                // }
 
             }
 
@@ -531,7 +520,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    vendor_id = vendorNames.get(position).getId()+"";
+                    vendor_id = vendorNames.get(position).getId() + "";
                     //  binding.customerTxt.setText(vendorNames.get(position).getName());
 
                 }
@@ -701,16 +690,14 @@ public class CreatePurchaseOrderFragment extends Fragment {
             double amountAfterLineDiscount = lineAmount - lineDiscountAmount;
             totalDiscount += amountAfterLineDiscount;
             try {
-                binding.textTaxes.setText("Total Discount ");
-
+                binding.textTaxes.setText("Total Tax Amount ");
                 productOBJ = new JSONObject();
                 productOBJ.putOpt("product_id", purchaseOrderList.get(i).getProductID());
                 productOBJ.putOpt("name", purchaseOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("variant_id", purchaseOrderList.get(i).getVariantID());
 //            productOBJ.putOpt("name", purchaseOrderList.get(i).getProductName() + purchaseOrderList.get(i).getProductVariants());
-                //               productOBJ.putOpt("price_unit", purchaseOrderList.get(i).getUnitPrice());
-                productOBJ.putOpt("price_unit", amountAfterLineDiscount);
-
+                productOBJ.putOpt("price_unit", purchaseOrderList.get(i).getUnitPrice());
+       //         productOBJ.putOpt("price_unit", lineAmount);
                 productOBJ.putOpt("product_qty", purchaseOrderList.get(i).getQuantity());
                 productOBJ.putOpt("taxes_id", purchaseOrderList.get(i).getTaxID());
                 prjsonArray.put(productOBJ);
@@ -719,12 +706,13 @@ public class CreatePurchaseOrderFragment extends Fragment {
             }
 
         }
-        double   paid_amount = sumTotalAmount - totalDiscount ;
-        binding.txtAmount.setText("₹ "+String.valueOf(paid_amount));
-        binding.amountTxt.setText("₹ "+String.valueOf(sumTotalAmount));
+        double paid_amount = sumTotalAmount - totalDiscount;
+        binding.txtAmount.setText("₹ " + String.valueOf(paid_amount));
+        binding.amountTxt.setText("₹ " + String.valueOf(sumTotalAmount));
         binding.itemCountTxt.setText(String.valueOf(size));
-        binding.payAmount.setText("₹"+String.valueOf(totalDiscount));
+        binding.payAmount.setText("₹" + String.valueOf(sumTotalAmount+paid_amount));
     }
+
     private void callOrderConfirmFragment() {
         Fragment fragment = ConfirmOrderFragment.newInstance();
         FragmentManager fragmentManager = getParentFragmentManager();
@@ -739,7 +727,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
         params.put("vendor_id", str_vendor_id);
         params.put("products", prjsonArray.toString());
 //        params.put("products", prjsonArray.toString());
-        params.put("picking_type_id", 8+"");
+        params.put("picking_type_id", 8 + "");
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("Pur_create_order", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_PURCHASE_ORDER, new VolleyCallback() {
@@ -856,7 +844,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                             stateModel = new StateModel();
                             JSONObject data = jsonArray.getJSONObject(i);
                             Boolean active = data.optBoolean("active");
-                            if(active == true) {
+                            if (active == true) {
                                 int id = data.optInt("vendor_id");
                                 String name = data.optString("name");
                                 stateModel.setId(id);

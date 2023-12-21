@@ -744,28 +744,30 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             text.setHint("Select the " + model.get(j).getName());
 
             ////set data in textview
-            int attribute_value_id=0;
+//            int attribute_value_id=0;
+            int attribute_value_id;
             List<String> item_value_list = null;
             StringBuilder stringBuilder = new StringBuilder();
 
-//            for(int i=0;i<model.get(j).getValues().size();i++){
-//                item_value_list = selected_value_map.get(String.valueOf(att_id));
-//                attribute_value_id =attributes.get(j).getValues().get(i).getValueId();
-//                stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
-//                if (item_value_list != null) {
-//                    item_value_list.add(String.valueOf(attribute_value_id));
-//                    selected_value_map.put(String.valueOf(att_id), item_value_list);
-//                } else {
-//                    item_value_list = new ArrayList<>();
-//                    item_value_list.add(String.valueOf(attribute_value_id));
-//                    selected_value_map.put(String.valueOf(att_id), item_value_list);
-//
-//                }
-//                if (i != attributes.get(j).getValues().size() - 1) {
-//                    stringBuilder.append(", ");
-//                }
-//            }
-//            attribute_id_list.add(attribute_value_id);
+            for(int i=0;i<model.get(j).getValues().size();i++){
+                item_value_list = selected_value_map.get(String.valueOf(att_id));
+                attribute_value_id =attributes.get(j).getValues().get(i).getValueId();
+                stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
+                if (item_value_list != null) {
+                    item_value_list.add(String.valueOf(attribute_value_id));
+                    selected_value_map.put(String.valueOf(att_id), item_value_list);
+                } else {
+                    item_value_list = new ArrayList<>();
+                    item_value_list.add(String.valueOf(attribute_value_id));
+                    selected_value_map.put(String.valueOf(att_id), item_value_list);
+
+                }
+                if (i != attributes.get(j).getValues().size() - 1) {
+                    stringBuilder.append(", ");
+                }
+                attribute_id_list.add(attribute_value_id);
+            }
+
 
             Log.d("set_attribute_json_array", String.valueOf(stringBuilder));
             text.setHint(stringBuilder);

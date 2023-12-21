@@ -58,7 +58,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
     PurchaseOrderDetailAdapter orderHistoryAdapter;
     int position=-1;
     SessionManagement sm;
-    int orderID=0;
+    int orderID;
     int purchase_order_id;
     public PurchaseOrderDetailFragment() {
         // Required empty public constructor
@@ -149,6 +149,13 @@ public class PurchaseOrderDetailFragment extends Fragment {
             binding.noDataFound.setVisibility(View.GONE);
             binding.orderRecyclerView.setVisibility(View.VISIBLE);
             binding.orderId.setText(productDetail.getOrders().get(position).getName());
+            if(productDetail.getOrders().get(position).getReceiptStatus().equalsIgnoreCase("false")) {
+            }else if(productDetail.getOrders().get(position).getReceiptStatus().equalsIgnoreCase("full")) {
+                binding.status.setText("Received");
+            }else {
+                binding.status.setText("Pending");
+            }
+
             orderID=productDetail.getOrders().get(position).getId();
             if(productDetail.getOrders().get(position).getOrderLines()!=null) {
                 int size=productDetail.getOrders().get(position).getOrderLines().size();
@@ -156,7 +163,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
             }else{
                 binding.totalProduct.setText("0");
             }
-            //  purchase_order_id= productDetail.getOrders().get(position).getId();
+         //     purchase_order_id= productDetail.getOrders().get(position).getId();
             binding.date.setText(productDetail.getOrders().get(position).getOrderDate());
             double paidAmount= Utility.decimalFormat(Double.parseDouble(productDetail.getOrders().get(position).getAmountTotal()));
             binding.totalValue.setText(paidAmount+"");
@@ -170,7 +177,6 @@ public class PurchaseOrderDetailFragment extends Fragment {
         }
     }
     private void cancelOrder(int purchase_order_id){
-
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
 //            params.put("user_id", sm.getUserID()+"");
@@ -178,7 +184,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
         params.put("purchase_order_id", purchase_order_id+"");
 
         Utility.showDialoge("Please wait while a moment...", getActivity());
-//        Log.v("add", String.valueOf(params));
+        Log.v("cancel", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CANCEL_PURCHASE_ORDER, new VolleyCallback() {
             private String message = " failed!!";
 
@@ -195,6 +201,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }else {
+                    Utility.dismissDialoge();
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
 
                 }
@@ -203,6 +210,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
             @Override
             public void onError(String result) throws Exception {
                 Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+                Utility.dismissDialoge();
             }
         });
 
@@ -228,7 +236,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
 
                 String str_qut= qut_text.getText().toString();
                 if(!str_qut.isEmpty()) {
-                    getReceiveProducts(str_qut);
+                    getReceiveProducts(str_qut,productDetail.getOrders().get(position).getId());
                 }else {
                     Toast.makeText(getActivity(), "Enter the quantity", Toast.LENGTH_SHORT).show();
 
@@ -248,17 +256,17 @@ public class PurchaseOrderDetailFragment extends Fragment {
         dialog.show();
     }
 
-    private void getReceiveProducts(String qut){
+    private void getReceiveProducts(String qut,int purchase_order_id){
 
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
 //            params.put("user_id", sm.getUserID()+"");
 //            params.put("token", sm.getJWTToken());
-        params.put("quantity", qut);
+        params.put("quantity", qut+"");
         params.put("purchase_order_id", purchase_order_id+"");
 
         Utility.showDialoge("Please wait while a moment...", getActivity());
-//        Log.v("add", String.valueOf(params));
+        Log.v("POST_RECEIVE_PRODUCTS", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_RECEIVE_PRODUCTS, new VolleyCallback() {
             private String message = " failed!!";
 

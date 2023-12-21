@@ -342,7 +342,7 @@
                                     android:layout_weight=".8"
                                     android:textColor="#E1626262"
                                     android:textStyle="bold"
-                                    android:text="Customer Name"
+                                    android:text="Vendor Name"
                                     android:textSize="14sp" />
                                 <Spinner
                                     android:id="@+id/cstSpinner"

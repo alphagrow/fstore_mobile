@@ -145,6 +145,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     ArrayList<Integer> crop_id_list = new ArrayList<>();
     ArrayList<Integer> attribute_id_list = new ArrayList<>();
     String selected_crop_id;
+
     public AddProductFragment() {
 // Required empty public constructor
     }
@@ -228,12 +229,13 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-// TODO Auto-generated method stub
+                // TODO Auto-generated method stub
                 ((TextView) arg0.getChildAt(0)).setTextColor(R.color.text_color);
                 str_uom = binding.etUomSpinner.getSelectedItem().toString();
 
-//
+                //
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
 // TODO Auto-generated method stub
@@ -267,7 +269,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         date_mfd = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-               // TODO Auto-generated method stub
+                // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -277,7 +279,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         date_exp = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-// TODO Auto-generated method stub
+                // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -287,7 +289,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         date_exp_alarm = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-// TODO Auto-generated method stub
+                // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -368,7 +370,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             String str_batchNumber = binding.batchNumber.getText().toString();
             String str_cirNumber = binding.cirNumber.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
-           // String str_etUom = binding.etUom.getText().toString();
+            // String str_etUom = binding.etUom.getText().toString();
             String str_description = binding.description.getText().toString();
             String str_hsn_code = binding.edHsnCode.getText().toString();
             String str_hsn_code_dec = binding.edHsnCodeDescription.getText().toString();
@@ -378,7 +380,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 return;
             }
 
-            if (str_product_price.length()==0) {
+            if (str_product_price.length() == 0) {
                 Toast.makeText(getActivity(), "Enter the Product price", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -386,11 +388,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "Select UOM", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (binding.expDate.getText().toString().length()==0) {
+            if (binding.expDate.getText().toString().length() == 0) {
                 Toast.makeText(getActivity(), " Select Expiry date", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (binding.mfdDate.getText().toString().length()==0) {
+            if (binding.mfdDate.getText().toString().length() == 0) {
                 Toast.makeText(getActivity(), " Select Manufacturing date", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -420,23 +422,22 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             });
 
 
-
             Log.d("attribute_json_array", attribute_json_array.toString());
 
-            if (attribute_json_array !=null) {
-                if (str_crop_id.length() !=0) {
-                    addProductRequest(str_hsn_code,str_hsn_code_dec,str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
-                }else {
+            if (attribute_json_array != null) {
+                if (str_crop_id.length() != 0) {
+                    addProductRequest(str_hsn_code, str_hsn_code_dec, str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
+                } else {
                     Toast.makeText(getActivity(), "Select Crop", Toast.LENGTH_SHORT).show();
                 }
-            }else {
+            } else {
                 Toast.makeText(getActivity(), "Select Attribute", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
 
-    private void addProductRequest(String hsn_code,String str_hsn_code_dec,String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id,JSONArray attribute_json_array) {
+    private void addProductRequest(String hsn_code, String str_hsn_code_dec, String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id, JSONArray attribute_json_array) {
 
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
@@ -454,7 +455,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("non_gov_product", str_non_gov_product);
         params.put("mfd_date", str_mfd_date);
         params.put("exp_date", str_exp_date);
-         // params.put("uom_id", str_etUom); //kg,ml, etc by API
+        // params.put("uom_id", str_etUom); //kg,ml, etc by API
         // params.put("uom_po_id", str_uomProduct);
         params.put("uom_id", str_uom);
         params.put("uom_po_id", str_uom);
@@ -505,7 +506,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private void resetFields() {
         binding.etProductName.setText("");
         binding.etProductPrice.setText("");
-
 
 
     }
@@ -993,8 +993,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 // crop_id_list.add(ValueId);
 
 // set text on textView
-                        str_crop_id=builder_crop_id.toString();
-                        Log.d("str_crop_id",str_crop_id);
+                        str_crop_id = builder_crop_id.toString();
+                        Log.d("str_crop_id", str_crop_id);
                         binding.textView.setText(stringBuilder.toString());
                     }
                 });

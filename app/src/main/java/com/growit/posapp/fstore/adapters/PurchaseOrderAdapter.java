@@ -35,7 +35,7 @@ public class PurchaseOrderAdapter extends RecyclerView.Adapter<PurchaseOrderAdap
         notifyDataSetChanged();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView qty,order_no,dateTxt,amountTxt,product_name,case_id;
+        public TextView qty,order_no,dateTxt,amountTxt,product_name,case_id,status;
         ImageView images;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -46,6 +46,7 @@ public class PurchaseOrderAdapter extends RecyclerView.Adapter<PurchaseOrderAdap
             images = itemView.findViewById(R.id.images);
             order_no = itemView.findViewById(R.id.order_no);
             case_id = itemView.findViewById(R.id.case_id);
+            status = itemView.findViewById(R.id.status);
 
         }
     }
@@ -55,7 +56,7 @@ public class PurchaseOrderAdapter extends RecyclerView.Adapter<PurchaseOrderAdap
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View contactView = inflater.inflate(R.layout.order_history_item_row, parent, false);
+        View contactView = inflater.inflate(R.layout.order_purchase_item_row, parent, false);
         PurchaseOrderAdapter.ViewHolder viewHolder = new PurchaseOrderAdapter.ViewHolder(contactView);
         return viewHolder;
     }
@@ -68,6 +69,14 @@ public class PurchaseOrderAdapter extends RecyclerView.Adapter<PurchaseOrderAdap
         holder.dateTxt.setText(orders.getOrderDate());
         holder.order_no.setText(orders.getName());
         holder.product_name.setText(orders.getPartnerId());
+        if(orders.getReceiptStatus().equalsIgnoreCase("false")) {
+        }else if(orders.getReceiptStatus().equalsIgnoreCase("full")) {
+            holder.status.setText("Received");
+        }else {
+            holder.status.setText("Pending");
+        }
+
+
         DecimalFormat form = new DecimalFormat("0.00");
 //        Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getProducts().get(0).getProductImageUrl())
 //                .placeholder(R.drawable.loading)
