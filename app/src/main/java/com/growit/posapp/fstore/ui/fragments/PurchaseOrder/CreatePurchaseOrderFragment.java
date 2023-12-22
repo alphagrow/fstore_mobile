@@ -232,10 +232,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(), binding.recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        binding.cardDetail.setVisibility(View.VISIBLE);
                         binding.idLLContainer.removeAllViews();
                         variant_value.clear();
                         variantArray.clear();
-
                         binding.numberPicker.setValue(1);
                         binding.uomText.setText("");
                         binding.itemPriceTxt.setText("");
@@ -244,7 +244,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         product_id = purchaseProductModel.get(position).getProductId();
                         product_name = purchaseProductModel.get(position).getProductName();
                         product_image = purchaseProductModel.get(position).getImageUrl();
-                        product_list_price = purchaseProductModel.get(position).getListPrice();
+                      //  product_list_price = purchaseProductModel.get(position).getListPrice();
                         attributes = purchaseProductModel.get(position).getAttributes();
                         productVariantQuantities = purchaseProductModel.get(position).getProductVariantQuantities();
 
@@ -428,7 +428,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
     private void createDynamicSpinner(int n, String product_name) {
         for (int j = 0; j < n; j++) {
-            LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             txtLayoutParam.gravity = Gravity.START;
             LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             spinnerLayoutParam.gravity = Gravity.CENTER;
@@ -445,7 +445,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 //  value_name= attributes.get(j).getValues().get(i).getValueName();
                 value.add(value1);
             }
-            headingTV.setTextSize(20f);
+            headingTV.setTextSize(14f);
             headingTV.setTextColor(getResources().getColor(R.color.black));
             headingTV.setTypeface(Typeface.DEFAULT_BOLD);
             headingTV.setPadding(20, 20, 20, 20);
@@ -453,6 +453,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
             headingTV.setLayoutParams(txtLayoutParam);
             spinner = new Spinner(getActivity());
             spinner.setPadding(20, 20, 20, 20);
+//            spinner.setBackgroundColor(R.drawable.spinner_bg);
             spinner.setLayoutParams(spinnerLayoutParam);
             spinner.setId(j);
             binding.idLLContainer.addView(headingTV);
