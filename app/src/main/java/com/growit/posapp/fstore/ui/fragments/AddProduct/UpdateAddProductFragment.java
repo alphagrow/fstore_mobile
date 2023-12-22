@@ -187,7 +187,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             binding.etProductPrice.setText(String.valueOf(list.get(position).getListPrice()));
             binding.techNamePest.setText(list.get(position).getTechnicalPest());
             binding.brandName.setText(list.get(position).getBrandName());
-//            binding.companyName.setText(list.get(position).getCo);
+//          binding.companyName.setText(list.get(position).getCo);
             binding.packingStd.setText(list.get(position).getProductPackage());
             binding.mktBy.setText(list.get(position).getMkdBy());
             binding.batchNumber.setText(list.get(position).getBatchNumber());
@@ -414,9 +414,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
                     }
                 }
             });
-
-
-                    Log.d("crop_id_list",crop_id_list.toString());
+            Log.d("crop_id_list",crop_id_list.toString());
             Log.d("attribute_json_array", attribute_json_array.toString());
 
 
@@ -818,9 +816,9 @@ ArrayList<String>crop_id_list = new ArrayList<>();
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-// Initialize string builder
+                        // Initialize string builder
                         StringBuilder stringBuilder = new StringBuilder();
-// use for loop
+                        // use for loop
                         int attribute_value_id = 0;
                         List<String> item_value_list = null;
                         for (int j = 0; j < langList.size(); j++) {

@@ -35,6 +35,16 @@ public class PurchaseOrder implements Serializable {
 
     @ColumnInfo(name = "taxid")
     private int taxID;
+    @ColumnInfo(name = "taxName")
+    private int taxName;
+
+    public int getTaxName() {
+        return taxName;
+    }
+
+    public void setTaxName(int taxName) {
+        this.taxName = taxName;
+    }
 
     @ColumnInfo(name = "unitPrice")
     private double unitPrice;

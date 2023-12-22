@@ -56,17 +56,17 @@
         android:layout_weight="1"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/item_total_amount"
-        android:padding="3dp"
-        android:fontFamily="@font/helvetica_neue_medium"
-        android:maxLines="2"
-        android:textColor="@color/colorPrimary"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content" />
+<!--    <TextView-->
+<!--        android:id="@+id/item_total_amount"-->
+<!--        android:padding="3dp"-->
+<!--        android:fontFamily="@font/helvetica_neue_medium"-->
+<!--        android:maxLines="2"-->
+<!--        android:textColor="@color/colorPrimary"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textStyle="normal"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_height="wrap_content" />-->
 
 </LinearLayout>
                 <TextView

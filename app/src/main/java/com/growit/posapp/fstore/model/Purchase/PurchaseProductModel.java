@@ -71,7 +71,19 @@ public class PurchaseProductModel {
     private String productPackage;
     @SerializedName("taxes_id")
     @Expose
-    private String taxesId;
+    private Integer taxesId;
+    @SerializedName("taxes_name")
+    @Expose
+    private String taxes_name;
+
+    public String getTaxes_name() {
+        return taxes_name;
+    }
+
+    public void setTaxes_name(String taxes_name) {
+        this.taxes_name = taxes_name;
+    }
+
     @SerializedName("attributes")
     @Expose
     private List<Attribute> attributes;
@@ -242,11 +254,11 @@ public class PurchaseProductModel {
         this.productPackage = productPackage;
     }
 
-    public String getTaxesId() {
+    public Integer getTaxesId() {
         return taxesId;
     }
 
-    public void setTaxesId(String taxesId) {
+    public void setTaxesId(Integer taxesId) {
         this.taxesId = taxesId;
     }
 

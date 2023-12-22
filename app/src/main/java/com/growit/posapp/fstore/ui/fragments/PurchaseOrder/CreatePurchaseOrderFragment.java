@@ -90,8 +90,6 @@ import java.util.stream.Collectors;
 
 
 public class CreatePurchaseOrderFragment extends Fragment {
-
-
     FragmentCreatePurchaseOrderBinding binding;
     Activity contexts;
     List<Value> cropList = new ArrayList<>();
@@ -126,7 +124,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
     double product_list_price = 0.0;
     int product_qty = 1;
     int product_id;
-    int taxes_id;
+    int taxes_id,taxes_name;
+
     private int addGSTValue = 0;
 
     private int total_quant = 1;
@@ -238,6 +237,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         variantArray.clear();
 
                         binding.numberPicker.setValue(1);
+                        binding.uomText.setText("");
                         binding.itemPriceTxt.setText("");
                         //  binding.detailLayout.removeAllViews();
                         binding.productImage.setVisibility(View.VISIBLE);
@@ -249,7 +249,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         productVariantQuantities = purchaseProductModel.get(position).getProductVariantQuantities();
 
                         binding.productName.setText(product_name);
-                        taxes_id = Integer.parseInt(purchaseProductModel.get(position).getTaxesId().replaceAll("[^0-9]+", ""));
+                        taxes_id = purchaseProductModel.get(position).getTaxesId();
+
+                        taxes_name = Integer.parseInt(purchaseProductModel.get(position).getTaxes_name().replaceAll("[^0-9]+", ""));
                           // Log.d("taxes_id",taxes_id+"");
                         if (!Utility.isNetworkAvailable(getActivity())) {
                             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -257,6 +259,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         }
                         new GetGSTValueTasks().execute();
                         createDynamicSpinner(attributes.size(), product_name);
+                        binding.uomText.setText(purchaseProductModel.get(position).getUomPoId());
                         binding.productName.setText(purchaseProductModel.get(position).getProductName());
                         binding.itemPriceTxt.setText(String.valueOf(purchaseProductModel.get(position).getListPrice()));
                         Picasso.with(getActivity()).load(ApiConstants.BASE_URL + purchaseProductModel.get(position).getImageUrl())
@@ -285,7 +288,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
 //
 //            }
 //        });
-//        binding.productPrice.addTextChangedListener(new TextWatcher() {
+//        binding.itemPriceTxt.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 //
@@ -324,9 +327,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
             @Override
             public void valueChanged(int value, ActionEnum action) {
                 quantity = value;
-                DecimalFormat form = new DecimalFormat("0.00");
-                binding.itemPriceTxt.setText("₹ " + String.valueOf(form.format(Double.valueOf(product_list_price * quantity))));
-                //  binding.itemPriceTxt.setText("₹ " + basePrice * quantity + "");
+                product_list_price = Double.parseDouble(binding.itemPriceTxt.getText().toString());
+              //  DecimalFormat form = new DecimalFormat("0.00");
+               // binding.mrpPriceTxt.setText("₹ " + String.valueOf(product_list_price * quantity));
             }
         });
 
@@ -362,6 +365,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     order.setCrop_name(cropName);
                     order.setQuantity(quantity);
                     order.setTotalQuantity(total_quant);
+                    order.setTaxName(taxes_name);
                     order.setTaxID(taxes_id);
                     order.setUnitPrice(product_list_price);
                     order.setGst(addGSTValue);
@@ -498,7 +502,6 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         if (variantDisplay_name.getVariantDisplayName().contains(var_pr_name)) {
                             total_quant = variantDisplay_name.getQuantity();
                             str_variant_id = Integer.parseInt(variantDisplay_name.getVariant_id());
-
                             Log.d("ss_variant", str_variant_id + "");
                         }
                     }
@@ -686,7 +689,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
         for (int i = 0; i < size; i++) {
             sumTotalAmount += purchaseOrderList.get(i).getUnitPrice() * purchaseOrderList.get(i).getQuantity();
             double lineAmount = purchaseOrderList.get(i).getUnitPrice() * purchaseOrderList.get(i).getQuantity();
-            lineDiscountAmount = lineAmount * purchaseOrderList.get(i).getTaxID() / 100;
+            lineDiscountAmount = lineAmount * purchaseOrderList.get(i).getTaxName() / 100;
             double amountAfterLineDiscount = lineAmount - lineDiscountAmount;
             totalDiscount += amountAfterLineDiscount;
             try {
@@ -695,7 +698,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 productOBJ.putOpt("product_id", purchaseOrderList.get(i).getProductID());
                 productOBJ.putOpt("name", purchaseOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("variant_id", purchaseOrderList.get(i).getVariantID());
-//            productOBJ.putOpt("name", purchaseOrderList.get(i).getProductName() + purchaseOrderList.get(i).getProductVariants());
+//              productOBJ.putOpt("name", purchaseOrderList.get(i).getProductName() + purchaseOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("price_unit", purchaseOrderList.get(i).getUnitPrice());
        //         productOBJ.putOpt("price_unit", lineAmount);
                 productOBJ.putOpt("product_qty", purchaseOrderList.get(i).getQuantity());
