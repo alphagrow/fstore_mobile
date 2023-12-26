@@ -54,7 +54,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
             super(itemView);
             number_picker= itemView.findViewById(R.id.number_picker);
             itemName = itemView.findViewById(R.id.itemName);
-            itemPriceTxt = itemView.findViewById(R.id.itemPriceTxt);
+            itemPriceTxt = itemView.findViewById(R.id.unit_price);
             itemVariants = itemView.findViewById(R.id.itemVariants);
             itemImage = itemView.findViewById(R.id.itemImage);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);

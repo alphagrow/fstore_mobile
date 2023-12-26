@@ -209,7 +209,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         binding.idLLContainer.removeAllViews();
                         variant_value.clear();
                         variantArray.clear();
-                       // binding.numberPicker.setValue(1);
+                        // binding.numberPicker.setValue(1);
                         //   binding.setPatternsTxt.setText("");
                         //    binding.detailLayout.removeAllViews();
                         cropID = cropList.get(position).getValueId() + "";
@@ -244,7 +244,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         product_id = purchaseProductModel.get(position).getProductId();
                         product_name = purchaseProductModel.get(position).getProductName();
                         product_image = purchaseProductModel.get(position).getImageUrl();
-                      //  product_list_price = purchaseProductModel.get(position).getListPrice();
+                        //  product_list_price = purchaseProductModel.get(position).getListPrice();
                         attributes = purchaseProductModel.get(position).getAttributes();
                         productVariantQuantities = purchaseProductModel.get(position).getProductVariantQuantities();
 
@@ -252,7 +252,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         taxes_id = purchaseProductModel.get(position).getTaxesId();
 
                         taxes_name = Integer.parseInt(purchaseProductModel.get(position).getTaxes_name().replaceAll("[^0-9]+", ""));
-                          // Log.d("taxes_id",taxes_id+"");
+                        // Log.d("taxes_id",taxes_id+"");
                         if (!Utility.isNetworkAvailable(getActivity())) {
                             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
@@ -328,8 +328,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
             public void valueChanged(int value, ActionEnum action) {
                 quantity = value;
                 product_list_price = Double.parseDouble(binding.itemPriceTxt.getText().toString());
-              //  DecimalFormat form = new DecimalFormat("0.00");
-               // binding.mrpPriceTxt.setText("₹ " + String.valueOf(product_list_price * quantity));
+                //  DecimalFormat form = new DecimalFormat("0.00");
+                // binding.mrpPriceTxt.setText("₹ " + String.valueOf(product_list_price * quantity));
             }
         });
 
@@ -340,6 +340,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
+                product_list_price = Double.parseDouble(binding.itemPriceTxt.getText().toString());
+
 //                variants = binding.setPatternsTxt.getText().toString().trim();
                 String var_pr_name = binding.setPatternsTxt.getText().toString();
                 variants = var_pr_name.replaceAll("\\s", "");
@@ -374,9 +376,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         order.setProductVariants(variants);
                         AsyncTask.execute(() -> {
                             int prodCount = 0;
-                            prodCount = DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().getProductDetailById(order.getProductID(), order.getProductVariants());
+                            prodCount = DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().getProductDetailById(order.getProductID(), order.getProductVariants(),order.getUnitPrice());
                             if (prodCount > 0) {
-                                DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().updateProductQuantity((int) order.getQuantity(), order.getProductID(), order.getProductVariants());
+                                DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().updateProductQuantity((int) order.getQuantity(), order.getProductID(),order.getProductVariants(),order.getUnitPrice());
                                 GetTasks gt = new GetTasks();
                                 gt.execute();
 
@@ -398,6 +400,22 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
             }
         });
+        binding.cstSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    vendor_id = vendorNames.get(position).getId() + "";
+                    //  binding.customerTxt.setText(vendorNames.get(position).getName());
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     class GetGSTValueTasks extends AsyncTask<Void, Void, Void> {
@@ -495,7 +513,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 binding.setPatternsTxt.setText(product_name + " (" + stringBuilder + ")");
                 String var_pr_name = binding.setPatternsTxt.getText().toString();
                 for (int j = 0; j < productVariantQuantities.size(); j++) {
-                  //  String variantDisplay_name = productVariantQuantities.get(j).getVariantDisplayName();
+                    //  String variantDisplay_name = productVariantQuantities.get(j).getVariantDisplayName();
 
                     Log.d("var_product_name", var_pr_name + "");
 
@@ -520,21 +538,6 @@ public class CreatePurchaseOrderFragment extends Fragment {
             }
         });
 
-        binding.cstSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    vendor_id = vendorNames.get(position).getId() + "";
-                    //  binding.customerTxt.setText(vendorNames.get(position).getName());
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 
     }
@@ -701,7 +704,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 productOBJ.putOpt("variant_id", purchaseOrderList.get(i).getVariantID());
 //              productOBJ.putOpt("name", purchaseOrderList.get(i).getProductName() + purchaseOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("price_unit", purchaseOrderList.get(i).getUnitPrice());
-       //         productOBJ.putOpt("price_unit", lineAmount);
+                //         productOBJ.putOpt("price_unit", lineAmount);
                 productOBJ.putOpt("product_qty", purchaseOrderList.get(i).getQuantity());
                 productOBJ.putOpt("taxes_id", purchaseOrderList.get(i).getTaxID());
                 prjsonArray.put(productOBJ);

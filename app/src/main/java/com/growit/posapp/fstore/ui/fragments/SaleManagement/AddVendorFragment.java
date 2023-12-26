@@ -53,9 +53,11 @@ public class AddVendorFragment extends Fragment {
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
+    private String codeStr = "", cityStr ="",str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     List<VendorModelList> vendor_model=null;
+
+   private String type_of_vendor_warehouse;
     int position;
     public AddVendorFragment() {
         // Required empty public constructor
@@ -77,20 +79,34 @@ public class AddVendorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_vendor, container, false);
+        if (getArguments() != null) {
+            type_of_vendor_warehouse = getArguments().getString("type_of_vendor_warehouse");
+        }
         init();
 
-
-        return binding.getRoot();
+         return binding.getRoot();
     }
 
     private void init() {
-        binding.titleTxt.setText("Create Vendor");
-
+        if(type_of_vendor_warehouse.equals("warehouse")) {
+            binding.titleTxt.setText("Create Warehouse");
+            binding.etCity.setVisibility(View.VISIBLE);
+            binding.etGstNo.setVisibility(View.GONE);
+            binding.etUsermobile.setVisibility(View.GONE);
+            binding.etUseremail.setVisibility(View.GONE);
+            binding.etUsername.setHint("Ware House Name");
+        }else {
+            binding.titleTxt.setText("Create Vendor");
+            binding.etCity.setVisibility(View.GONE);
+            binding.etCode.setVisibility(View.GONE);
+            binding.etUseremail.setVisibility(View.VISIBLE);
+            binding.etGstNo.setVisibility(View.VISIBLE);
+            binding.etUsermobile.setVisibility(View.VISIBLE);
+        }
         if (Utility.isNetworkAvailable(getContext())) {
             getStateData();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-
         }
         StateModel st = new StateModel();
         st.setName("--Select District--");
@@ -135,7 +151,7 @@ public class AddVendorFragment extends Fragment {
             }
         });
 
-        binding.stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
@@ -178,8 +194,8 @@ public class AddVendorFragment extends Fragment {
                 emailStr = binding.etUseremail.getText().toString();
                 zipStr = binding.etPincode.getText().toString();
                 streetStr = binding.etUseraddress.getText().toString();
-
-                isAllFieldsChecked = CheckAllFields();
+                cityStr = binding.etCity.getText().toString();
+                codeStr = binding.etCode.getText().toString();
                 if (stateStr.length() == 0) {
                     Toast.makeText(getActivity(), R.string.Select_state, Toast.LENGTH_SHORT).show();
                     return;
@@ -199,10 +215,23 @@ public class AddVendorFragment extends Fragment {
                     return;
                 }
 
-                if (isAllFieldsChecked) {
-                    VendorRequest();
+                if(type_of_vendor_warehouse.equals("warehouse")) {
 
+                    if (nameStr.length() == 0) {
+                        Toast.makeText(getActivity(), "Enter the Ware House Name", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    WareHouseRequest();
+                }else {
+                    binding.titleTxt.setText("Create Vendor");
+
+                    isAllFieldsChecked = CheckAllFields();
+                    if (isAllFieldsChecked) {
+                        VendorRequest();
+
+                    }
                 }
+
 
             }
         });
@@ -429,12 +458,64 @@ public class AddVendorFragment extends Fragment {
         });
     }
 
+    private void WareHouseRequest() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        Map<String, String> params = new HashMap<>();
+        params.put("name", nameStr);
+        params.put("code", codeStr);
+        params.put("street", streetStr);
+        params.put("city", cityStr);
+        params.put("state_id", stateStr);
+        params.put("country_id", ApiConstants.COUNTRY_ID);
+        params.put("zip", zipStr);
+        params.put("district_id", districtStr);
+        params.put("taluka_id", talukaStr);
+        params.put("l10n_in_purchase_journal_id", "2");
+        params.put("l10n_in_purchase_journal_id", "1");
+        params.put("company_id", "1");
+
+        Utility.showDialoge("", getActivity());
+        Log.v("create_ware_house", String.valueOf(params));
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.CREATE_WAREHOUSE, new VolleyCallback() {
+            private String message = "Registration failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                message = obj.optString("status");
+                String error_message = obj.optString("error_message");
+                String  str_message = obj.optString("message");
+                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    resetFields();
+                    Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Utility.dismissDialoge();
+                Log.v("Response", result);
+                Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private void resetFields() {
         binding.etUsername.setText("");
         binding.etUsermobile.setText("");
         binding.etUseraddress.setText("");
         binding.etPincode.setText("");
         binding.etUseremail.setText("");
+        binding.etCode.setText("");
+        binding.etCity.setText("");
         binding.stateSpinner.setSelection(0);
         binding.citySpinner.setSelection(0);
         binding.talukaSpinner.setSelection(0);

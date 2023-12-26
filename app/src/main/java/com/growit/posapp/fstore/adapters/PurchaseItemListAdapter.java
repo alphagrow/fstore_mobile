@@ -160,9 +160,9 @@ public class PurchaseItemListAdapter extends RecyclerView.Adapter<PurchaseItemLi
         AsyncTask.execute(() -> {
             int prodCount = 0;
 
-            prodCount = DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().getProductDetailById(product.getProductID(), product.getProductVariants());
+            prodCount = DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().getProductDetailById(product.getProductID(), product.getProductVariants(),product.getUnitPrice());
             if (prodCount > 0) {
-                DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().updateProductCardQuantity((int) product.getQuantity(), product.getProductID(), product.getProductVariants());
+                DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().updateProductCardQuantity((int) product.getQuantity(), product.getProductID(),product.getProductVariants(),product.getUnitPrice());
 
             } else {
                 DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().insert(product);

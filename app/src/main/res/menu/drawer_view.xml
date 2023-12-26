@@ -29,10 +29,7 @@
             android:id="@+id/Viewcst_fragment"
             android:title="@string/view_customer" />
 
-    <item
-        android:icon="@drawable/user_add"
-        android:id="@+id/ViewInventory_fragment"
-        android:title="@string/view_inventory" />
+
 
         <item
             android:icon="@drawable/warning"

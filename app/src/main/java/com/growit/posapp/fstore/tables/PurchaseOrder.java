@@ -92,9 +92,6 @@ public class PurchaseOrder implements Serializable {
     public void setAmount_tax(double amount_tax) {
         this.amount_tax = amount_tax;
     }
-
-
-
     private double amount_tax;
 
     @ColumnInfo(name = "productName")

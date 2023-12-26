@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
     ProgressDialog progressDialog;
     SessionManagement sm;
-    TextView resetBtn,but_change_lang;
+    TextView resetBtn,but_change_lang,signupBtn;
     Customer customerData = null;
     boolean isAllFieldsChecked = false;
     VendorModel vendormodel;
@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordView = findViewById(R.id.et_password);
         resetBtn = findViewById(R.id.reset_btn);
         but_change_lang = findViewById(R.id.but_change_lang);
+        signupBtn = findViewById(R.id.signupBtn);
 //        userStoreIDView.setText("admin");
 //        passwordView.setText("admin");
         loadLocale();
@@ -106,6 +107,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intentLogin = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                startActivity(intentLogin);
+                finish();
+            }
+        });
+        signupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentLogin = new Intent(LoginActivity.this, UserRegistrationActivity.class);
                 startActivity(intentLogin);
                 finish();
             }

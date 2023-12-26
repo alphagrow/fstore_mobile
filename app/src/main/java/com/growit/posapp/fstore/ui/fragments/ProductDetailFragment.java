@@ -1,23 +1,25 @@
 package com.growit.posapp.fstore.ui.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.growit.posapp.fstore.adapters.VariantAdapter;
-
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,26 +32,27 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.google.gson.Gson;
+
 import com.google.gson.reflect.TypeToken;
+import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.AttributeSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.SimilarProductAdapter;
+import com.growit.posapp.fstore.adapters.VariantAdapter;
 import com.growit.posapp.fstore.db.DatabaseClient;
-import com.growit.posapp.fstore.tables.PosOrder;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.ProductDetail;
+import com.growit.posapp.fstore.model.ProductVariantQuantity;
 import com.growit.posapp.fstore.model.Value;
-
+import com.growit.posapp.fstore.tables.PosOrder;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
-
 import com.travijuu.numberpicker.library.Enums.ActionEnum;
 import com.travijuu.numberpicker.library.Interface.ValueChangedListener;
 import com.travijuu.numberpicker.library.NumberPicker;
@@ -63,63 +66,65 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDetailFragment extends Fragment implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
     private TextView add_btn, setPatternsTxt, nameTxt;
-    private RecyclerView  recyclerView;//horizontalView
-    String s1 = "", s2 = "", s3 = "";
-    String[] variantArray = null;
+    private RecyclerView recyclerView;
+//    String[] variantArray = null;
     int patternType = -1;
     private ImageView productImage;
     ProductDetail productDetail;
-    double discount = 0.0;
     private double quantity = 1.0;
     private int totaQquantity = 1;
     StringBuilder stringBuilder;
     SessionManagement sm;
-
+    Activity contexts;
+    Spinner spinner;
     public static ProductDetailFragment newInstance() {
         return new ProductDetailFragment();
     }
 
     private String productID = "";
     private String variantID = "";
-    private String cropID = "",cropName="";
+    private String cropID = "", cropName = "";
     protected List<Product> productList = new ArrayList<>();
     SimilarProductAdapter productListAdapter;
-    private LinearLayout buttonsLayout;
+    private LinearLayout idLLContainer;
     private TextView itemPriceTxt, mrpPriceTxt;
-    private SliderLayout sliderLayout;
-    private HashMap<String, String> sliderImages;
     NumberPicker numberPicker;
     private int addGSTValue = 0;
     double basePrice = 0.0;
     String variants;
-    ProgressBar progress_5, progress_4, progress_3, progress_2, progress_1;
 
-    TextView pro_curr_text, menu_lay, info_lay, description_text, pac_text;
+    TextView pro_curr_text, menu_lay, info_lay, description_text, b2bPriceTxt, pac_text;
     LinearLayout recy_lay_menu, review_lay, review_layout_xml, info_xml;
     RecyclerView recy_rating;
+    ImageView backBtn;
+    List<Value> value;
+    Map<String, String> variant_value = new HashMap<>();
     Spinner spinner_1, spinner_2, spinner_3, spinner_4;
     LinearLayout spinner_layout_1, spinner_layout_2, spinner_layout_3, spinner_layout_4;
+
     List<Value> variant_model_1, variant_model_2, variant_model_3, variant_model_4;
-    String str_variant_1,str_variant_2,str_variant_3,str_variant_4;
+    ArrayList<String> variantArray = new ArrayList<>();
+//    String str_variant_2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.product_detail, parent, false);
         add_btn = view.findViewById(R.id.add_btn);
+        backBtn = view.findViewById(R.id.backBtn);
         nameTxt = view.findViewById(R.id.nameTxt);
         numberPicker = view.findViewById(R.id.number_picker);
-        buttonsLayout = view.findViewById(R.id.buttons);
+        idLLContainer = view.findViewById(R.id.idLLContainer);
         itemPriceTxt = view.findViewById(R.id.itemPriceTxt);
         mrpPriceTxt = view.findViewById(R.id.mrpPriceTxt);
+//        b2bPriceTxt = view.findViewById(R.id.b2bPriceTxt);
         mrpPriceTxt.setPaintFlags(mrpPriceTxt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         productImage = view.findViewById(R.id.productImage);
         setPatternsTxt = view.findViewById(R.id.setPatternsTxt);
-//        horizontalView = view.findViewById(R.id.horizontal_view);
         recyclerView = view.findViewById(R.id.recycler_view);
-        sliderLayout = view.findViewById(R.id.sliderLayout);
         pro_curr_text = view.findViewById(R.id.pro_curr_text);
         ///****************
         description_text = view.findViewById(R.id.description_text);
@@ -141,54 +146,30 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
         info_lay = view.findViewById(R.id.ifo_lay);
 
         //spinner
-        spinner_1 = view.findViewById(R.id.spinner_1);
-        spinner_2 = view.findViewById(R.id.spinner_2);
-        spinner_3 = view.findViewById(R.id.spinner_3);
-        spinner_4 = view.findViewById(R.id.spinner_4);
-
-        spinner_layout_1 = view.findViewById(R.id.spinner_layout_1);
-        spinner_layout_2 = view.findViewById(R.id.spinner_layout_2);
-        spinner_layout_3 = view.findViewById(R.id.spinner_layout_3);
-        spinner_layout_4 = view.findViewById(R.id.spinner_layout_4);
+//        spinner_1 = view.findViewById(R.id.spinner_1);
+//        spinner_2 = view.findViewById(R.id.spinner_2);
+//        spinner_3 = view.findViewById(R.id.spinner_3);
+//        spinner_4 = view.findViewById(R.id.spinner_4);
+//
+//        spinner_layout_1 = view.findViewById(R.id.spinner_layout_1);
+//        spinner_layout_2 = view.findViewById(R.id.spinner_layout_2);
+//        spinner_layout_3 = view.findViewById(R.id.spinner_layout_3);
+//        spinner_layout_4 = view.findViewById(R.id.spinner_layout_4);
         ///review recyclerView
         recy_rating = view.findViewById(R.id.recy_rag);// get the reference of ViewFlipper
         GridLayoutManager layoutManager_rating = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         recy_rating.setLayoutManager(layoutManager_rating);
 
-        progress_5 = view.findViewById(R.id.progress_5);
-        progress_4 = view.findViewById(R.id.progress_4);
-        progress_3 = view.findViewById(R.id.progress_3);
-        progress_3 = view.findViewById(R.id.progress_3);
-        progress_2 = view.findViewById(R.id.progress_2);
-
-        progress_5.setMax(100);
-        progress_5.setProgress(80);
-        // progress_5.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
-        progress_4.setMax(100);
-        progress_4.setProgress(70);
-        //  progress_4.setProgressTintList(ColorStateList.valueOf(Color.YELLOW));
-        progress_3.setMax(100);
-        progress_3.setProgress(50);
-        //  progress_3.setProgressTintList(ColorStateList.valueOf(Color.DKGRAY));
-        progress_2.setMax(100);
-        progress_2.setProgress(40);
-        // progress_2.setProgressTintList(ColorStateList.valueOf(Color.MAGENTA));
-
-
-        ////**************************///
-
         sm = new SessionManagement(getActivity());
-        sliderImages = new HashMap<>();
         if (getArguments() != null) {
             productID = getArguments().getString("PID");
             cropID = getArguments().getString("CPID");
-            cropName= getArguments().getString("CropName");
+            cropName = getArguments().getString("CropName");
             if (Utility.isNetworkAvailable(getActivity())) {
                 getProductDetail(productID);
                 prepareProducts(cropID);
             } else {
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-
             }
 
         }
@@ -204,16 +185,22 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
             public void valueChanged(int value, ActionEnum action) {
                 quantity = value;
                 DecimalFormat form = new DecimalFormat("0.00");
-                itemPriceTxt.setText("₹ " + String.valueOf(form.format(Double.valueOf(basePrice * quantity))));
+                itemPriceTxt.setText("₹ " + form.format(Double.valueOf(basePrice * quantity)));
                 // itemPriceTxt.setText("₹ " + basePrice * quantity + "");
             }
         });
 
+//        backBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getActivity(), MainActivity.class));
+//            }
+//        });
         add_btn.setOnClickListener(v -> {
             boolean empty = true;
             if (variantArray != null) {
-                for (int i = 0; i < variantArray.length; i++) {
-                    if (variantArray[i] == null) {
+                for (int i = 0; i < variantArray.size(); i++) {
+                    if (variantArray.get(i) == null) {
                         empty = false;
                         break;
                     }
@@ -259,65 +246,6 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
 
             }
         });
-//        horizontalView.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getActivity(), horizontalView, new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        variantArray[patternType] = productDetail.getData().get(0).getAttributes().get(patternType).getValues().get(position).getValueName();
-//
-//                        StringBuilder stringBuilder = new StringBuilder();
-//                        for (int i = 0; i < variantArray.length; i++) {
-//                            stringBuilder.append(variantArray[i]).append(",");
-//                        }
-//                        variants = stringBuilder.substring(0, stringBuilder.length() - 1);
-////                        Log.v("variantArray", variants.toString());
-////                        Log.i("ProductName--", stringBuilder.substring(0, stringBuilder.length() - 1));
-//                        String R1 = nameTxt.getText().toString() + "(" + variants + ")";
-//                        String productNameSearchStr = R1.replaceAll("\\s", "");
-//                        String variantid = "";
-//                        for (int i = 0; i < productDetail.getData().get(0).getExtraPriceLists().size(); i++) {
-//                            String variantName = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_name().trim().replaceAll("\\s", "");
-//
-//                            ///****************/////////
-//                            //   categoryName = productDetail.getData().get(0).getCategory_name();
-//                            ////////////******
-//
-//                            if (productNameSearchStr.equalsIgnoreCase(variantName)) {
-//                                basePrice = productDetail.getData().get(0).getExtraPriceLists().get(i).getPrice_extra();
-//                                itemPriceTxt.setText("₹ " + basePrice * quantity + "");
-//                                mrpPriceTxt.setText("₹ " + productDetail.getData().get(0).getExtraPriceLists().get(i).getMrp_price() + "");
-//                                productDetail.getData().get(0).setListPrice(basePrice);
-//
-//                                variantid = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_id();
-//                            }
-//                        }
-//
-//                        for (int i = 0; i < productDetail.getData().get(0).getProductVariantQuantities().size(); i++) {
-//                            String id = productDetail.getData().get(0).getProductVariantQuantities().get(i).getVariant_id();
-//                            if (variantid.equalsIgnoreCase(id)) {
-//                                totaQquantity = productDetail.getData().get(0).getProductVariantQuantities().get(i).getQuantity();
-//                                if ((int) totaQquantity > 0) {
-//                                    numberPicker.setMax(totaQquantity);
-//                                    variantID = productDetail.getData().get(0).getProductVariantQuantities().get(i).getVariant_id();
-//                                    numberPicker.setVisibility(View.VISIBLE);
-//                                    add_btn.setVisibility(View.VISIBLE);
-//                                    pro_curr_text.setVisibility(View.GONE);
-//                                } else {
-//                                    numberPicker.setVisibility(View.GONE);
-//                                    add_btn.setVisibility(View.GONE);
-//                                    pro_curr_text.setVisibility(View.VISIBLE);
-//                                }
-//                            }
-//                        }
-//
-//                        setPatternsTxt.setText(productNameSearchStr);
-//                        horizontalView.setVisibility(View.GONE);
-//                    }
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//                        // do whatever
-//                    }
-//                }));
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -377,89 +305,83 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
 
             }
         });
-        spinner_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //    str_variant_1 = variant_model_1.get(position).getValueName() + "";
-                patternType=0;
-                val(position);
-            }
+//        spinner_1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                patternType = 0;
+//                val(position);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//        spinner_2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                patternType = 1;
+//                val(position);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                patternType=1;
-
-                str_variant_2 = variant_model_2.get(position).getValueName() + "";
-                val(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        spinner_3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // str_variant_3 = variant_model_3.get(position).getValueName() + "";
-                patternType=2;
-                val(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner_4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // str_variant_4 = variant_model_4.get(position).getValueName() + "";
-                patternType=3;
-                val(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        spinner_3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                patternType = 2;
+//                val(position);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//        spinner_4.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                patternType = 3;
+//                val(position);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
 
         return view;
     }
 
-    private void setupSlider(String pName, String productImage) {
-        Log.i("-------------", productImage);
-        sliderImages = new HashMap<>();
-        sliderImages.put(pName, productImage);
-        for (String name : sliderImages.keySet()) {
-
-            TextSliderView textSliderView = new TextSliderView(getActivity());
-            textSliderView
-                    .description(name)
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra", name);
-            sliderLayout.addSlider(textSliderView);
-        }
-        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
-        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        sliderLayout.setCustomAnimation(new DescriptionAnimation());
-        sliderLayout.setDuration(3000);
-        sliderLayout.stopAutoCycle();
-        sliderLayout.addOnPageChangeListener(this);
-    }
+//    private void setupSlider(String pName, String productImage) {
+//        Log.i("-------------", productImage);
+//        sliderImages = new HashMap<>();
+//        sliderImages.put(pName, productImage);
+//        for (String name : sliderImages.keySet()) {
+//
+//            TextSliderView textSliderView = new TextSliderView(getActivity());
+//            textSliderView
+//                    .description(name)
+//                    .setScaleType(BaseSliderView.ScaleType.Fit)
+//                    .setOnSliderClickListener(this);
+//            textSliderView.bundle(new Bundle());
+//            textSliderView.getBundle()
+//                    .putString("extra", name);
+//            sliderLayout.addSlider(textSliderView);
+//        }
+//        sliderLayout.setPresetTransformer(SliderLayout.Transformer.Accordion);
+//        sliderLayout.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+//        sliderLayout.setCustomAnimation(new DescriptionAnimation());
+//        sliderLayout.setDuration(3000);
+//        sliderLayout.stopAutoCycle();
+//        sliderLayout.addOnPageChangeListener(this);
+//    }
 
     private void sendToSomeActivity() {
         Intent intent = new Intent();
@@ -468,86 +390,108 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
         getActivity().sendBroadcast(intent);
     }
 
-//    private void colorPatterns(List<Value> valueList) {
-//        if (valueList != null && valueList.size() > 0) {
-//            horizontalView.setVisibility(View.VISIBLE);
-//            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-//            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//            HorizontalWidgetAdapter patternListAdapter = new HorizontalWidgetAdapter(getActivity(), valueList);
-//            horizontalView.setAdapter(patternListAdapter);
-//            horizontalView.setLayoutManager(layoutManager);
+
+    private void createLayoutDynamically(int n ,String str_name) {
+//        variantArray = new String[n];
+        idLLContainer.removeAllViews();
+        idLLContainer.invalidate();
+
+//        if (n == 1) {
+//            patternType = 0;
+//            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
+//            spinner_layout_1.setVisibility(View.VISIBLE);
+//            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
+//            spinner_1.setAdapter(variantAdapter);
+//        } else if (n == 2) {
+//            patternType = 1;
+//            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
+//            variant_model_2 = productDetail.getData().get(0).getAttributes().get(1).getValues();
+//
+//            spinner_layout_1.setVisibility(View.VISIBLE);
+//            spinner_layout_2.setVisibility(View.VISIBLE);
+//            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
+//            spinner_1.setAdapter(variantAdapter);
+//
+//            VariantAdapter variantAdapter_2 = new VariantAdapter(getActivity(), variant_model_2);
+//            spinner_2.setAdapter(variantAdapter_2);
+//        } else if (n == 3) {
+//            patternType = 2;
+//            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
+//            variant_model_2 = productDetail.getData().get(0).getAttributes().get(1).getValues();
+//            variant_model_3 = productDetail.getData().get(0).getAttributes().get(2).getValues();
+//
+//            spinner_layout_1.setVisibility(View.VISIBLE);
+//            spinner_layout_2.setVisibility(View.VISIBLE);
+//            spinner_layout_3.setVisibility(View.VISIBLE);
+//
+//            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
+//            spinner_1.setAdapter(variantAdapter);
+//
+//            VariantAdapter variantAdapter_2 = new VariantAdapter(getActivity(), variant_model_2);
+//            spinner_2.setAdapter(variantAdapter_2);
+//
+//            VariantAdapter variantAdapter_3 = new VariantAdapter(getActivity(), variant_model_3);
+//            spinner_3.setAdapter(variantAdapter_3);
+//        } else if (n == 4) {
+//            patternType = 3;
+//            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
+//            variant_model_2 = productDetail.getData().get(0).getAttributes().get(1).getValues();
+//            variant_model_3 = productDetail.getData().get(0).getAttributes().get(2).getValues();
+//            variant_model_4 = productDetail.getData().get(0).getAttributes().get(3).getValues();
+//
+//            spinner_layout_1.setVisibility(View.VISIBLE);
+//            spinner_layout_2.setVisibility(View.VISIBLE);
+//            spinner_layout_3.setVisibility(View.VISIBLE);
+//            spinner_layout_4.setVisibility(View.VISIBLE);
+//
+//            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
+//            spinner_1.setAdapter(variantAdapter);
+//
+//            VariantAdapter variantAdapter_2 = new VariantAdapter(getActivity(), variant_model_2);
+//            spinner_2.setAdapter(variantAdapter_2);
+//
+//            VariantAdapter variantAdapter_3 = new VariantAdapter(getActivity(), variant_model_3);
+//            spinner_3.setAdapter(variantAdapter_3);
+//
+//            VariantAdapter variantAdapter_4 = new VariantAdapter(getActivity(), variant_model_4);
+//            spinner_1.setAdapter(variantAdapter_4);
 //        }
-//    }
-
-    private void createLayoutDynamically(int n) {
-        variantArray = new String[n];
-        buttonsLayout.removeAllViews();
-        buttonsLayout.invalidate();
-
-        ////////////////************
-
-        if (n == 1) {
-            patternType=0;
-            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
-            spinner_layout_1.setVisibility(View.VISIBLE);
-            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
-            spinner_1.setAdapter(variantAdapter);
-        } else if (n == 2) {
-            patternType=1;
-            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
-            variant_model_2 = productDetail.getData().get(0).getAttributes().get(1).getValues();
-
-            spinner_layout_1.setVisibility(View.VISIBLE);
-            spinner_layout_2.setVisibility(View.VISIBLE);
-            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
-            spinner_1.setAdapter(variantAdapter);
-
-            VariantAdapter variantAdapter_2 = new VariantAdapter(getActivity(), variant_model_2);
-            spinner_2.setAdapter(variantAdapter_2);
-        } else if (n == 3) {
-            patternType=2;
-            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
-            variant_model_2 = productDetail.getData().get(0).getAttributes().get(1).getValues();
-            variant_model_3 = productDetail.getData().get(0).getAttributes().get(2).getValues();
-
-            spinner_layout_1.setVisibility(View.VISIBLE);
-            spinner_layout_2.setVisibility(View.VISIBLE);
-            spinner_layout_3.setVisibility(View.VISIBLE);
-
-            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
-            spinner_1.setAdapter(variantAdapter);
-
-            VariantAdapter variantAdapter_2 = new VariantAdapter(getActivity(), variant_model_2);
-            spinner_2.setAdapter(variantAdapter_2);
-
-            VariantAdapter variantAdapter_3 = new VariantAdapter(getActivity(), variant_model_3);
-            spinner_3.setAdapter(variantAdapter_3);
-        } else if (n == 4) {
-            patternType=3;
-            variant_model_1 = productDetail.getData().get(0).getAttributes().get(0).getValues();
-            variant_model_2 = productDetail.getData().get(0).getAttributes().get(1).getValues();
-            variant_model_3 = productDetail.getData().get(0).getAttributes().get(2).getValues();
-            variant_model_4 = productDetail.getData().get(0).getAttributes().get(3).getValues();
-
-            spinner_layout_1.setVisibility(View.VISIBLE);
-            spinner_layout_2.setVisibility(View.VISIBLE);
-            spinner_layout_3.setVisibility(View.VISIBLE);
-            spinner_layout_4.setVisibility(View.VISIBLE);
-
-            VariantAdapter variantAdapter = new VariantAdapter(getActivity(), variant_model_1);
-            spinner_1.setAdapter(variantAdapter);
-
-            VariantAdapter variantAdapter_2 = new VariantAdapter(getActivity(), variant_model_2);
-            spinner_2.setAdapter(variantAdapter_2);
-
-            VariantAdapter variantAdapter_3 = new VariantAdapter(getActivity(), variant_model_3);
-            spinner_3.setAdapter(variantAdapter_3);
-
-            VariantAdapter variantAdapter_4 = new VariantAdapter(getActivity(), variant_model_4);
-            spinner_1.setAdapter(variantAdapter_4);
-        }
         ////************
 
+        for (int j = 0; j < n; j++) {
+            LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            txtLayoutParam.gravity = Gravity.START;
+            LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            spinnerLayoutParam.gravity = Gravity.CENTER;
+            TextView headingTV = new TextView(getActivity());
+            headingTV.setTextColor(R.color.text_color);
+            headingTV.setText(productDetail.getData().get(0).getAttributes().get(j).getAttributeName());
+
+            value = new ArrayList<>();
+            String value_name = null;
+            for (int i = 0; i < productDetail.getData().get(0).getAttributes().get(j).getValues().size(); i++) {
+                Value value1 = new Value();
+                value1.setValueId(productDetail.getData().get(0).getAttributes().get(j).getValues().get(i).getValueId());
+                value1.setValueName(productDetail.getData().get(0).getAttributes().get(j).getValues().get(i).getValueName());
+                //  value_name= attributes.get(j).getValues().get(i).getValueName();
+                value.add(value1);
+            }
+            headingTV.setTextSize(14f);
+            headingTV.setTextColor(getResources().getColor(R.color.black));
+            headingTV.setTypeface(Typeface.DEFAULT_BOLD);
+            headingTV.setPadding(20, 20, 20, 20);
+            headingTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            headingTV.setLayoutParams(txtLayoutParam);
+            spinner = new Spinner(getActivity());
+            spinner.setPadding(20, 20, 20, 20);
+//            spinner.setBackgroundColor(R.drawable.spinner_bg);
+            spinner.setLayoutParams(spinnerLayoutParam);
+            spinner.setId(j);
+            idLLContainer.addView(headingTV);
+            idLLContainer.addView(spinner);
+
+            getSpinner(spinner, spinner.getId(), value, str_name);
+        }
 
 //        for (int i = 0; i < n; i++) {
 //            Button myButton = new Button(getActivity());
@@ -577,9 +521,11 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_DETAIL + "user_id=" + sm.getUserID() + "&" + "product_id=" + pid + "&" + "token=" + sm.getJWTToken();
         Log.v("url_product", url.toString());
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
                 Log.v("Response_product", response.toString());
                 JSONObject obj = null;
                 try {
@@ -588,6 +534,7 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                     String status = obj.optString("status");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<ProductDetail>() {
                         }.getType();
@@ -606,7 +553,7 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                                 .skipMemoryCache(true)
                                 .into(productImage);
 
-
+                        new GetGSTValueTasks().execute();
                         if (productDetail.getData().get(0).getExtraPriceLists() == null || productDetail.getData().get(0).getExtraPriceLists().size() == 0) {
                             return;
                         }
@@ -621,22 +568,39 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                         }
                         Log.i("Price--", basePrice + "");
                         itemPriceTxt.setText("₹ " + basePrice);
-
                         productDetail.getData().get(0).setListPrice(basePrice);
-                        AsyncTask.execute(() -> {
-                            addGSTValue = DatabaseClient.getInstance(getActivity()).getAppDatabase()
-                                    .gstDao().getGSTValueById(productDetail.getData().get(0).getTaxesId());
-                        });
-                        createLayoutDynamically(productDetail.getData().get(0).getAttributes().size());
+
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             }
-        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        }, error -> Toast.makeText(getActivity(), "Fail to get data..", Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
     }
 
+    class GetGSTValueTasks extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            addGSTValue = DatabaseClient.getInstance(getActivity()).getAppDatabase()
+                    .gstDao().getGSTValueById(productDetail.getData().get(0).getTaxesId());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void tasks) {
+            super.onPostExecute(tasks);
+            createLayoutDynamically(productDetail.getData().get(0).getAttributes().size(),productDetail.getData().get(0).getProductName());
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        contexts = getActivity();
+
+    }
     private void prepareProducts(String id) {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
@@ -681,9 +645,9 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                                 product.setProductImage(image);
                                 productList.add(product);
                             }
-                            GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+                            GridLayoutManager layoutManager = new GridLayoutManager(contexts, 2);
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            productListAdapter = new SimilarProductAdapter(getActivity(), productList);
+                            productListAdapter = new SimilarProductAdapter(getContext(), productList);
                             recyclerView.setAdapter(productListAdapter);
                             recyclerView.setLayoutManager(layoutManager);
                         }
@@ -693,7 +657,7 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                     throw new RuntimeException(e);
                 }
             }
-        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
     }
 
@@ -716,54 +680,124 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
     public void onPageScrollStateChanged(int state) {
 
     }
-    private void val(int position){
-        variantArray[patternType] = productDetail.getData().get(0).getAttributes().get(patternType).getValues().get(position).getValueName();
+    private void getSpinner(Spinner spinner, int spinner_id, List<Value> value, String product_name) {
+        AttributeSpinnerAdapter adapter = new AttributeSpinnerAdapter(getActivity(), value);
+        spinner.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // if(position != 0) {
+                //   variantArray.add(value.get(position).getValueName());
+                //  val(position);
+                if (!variantArray.contains(String.valueOf(spinner_id))) {
+                    variantArray.add(String.valueOf(spinner_id));
 
-        stringBuilder = new StringBuilder();
-        for (int i = 0; i < variantArray.length; i++) {
-            stringBuilder.append(variantArray[i]).append(",");
-        }
-        variants = stringBuilder.substring(0, stringBuilder.length() - 1);
-//                        Log.v("variantArray", variants.toString());
-//                        Log.i("ProductName--", stringBuilder.substring(0, stringBuilder.length() - 1));
-        String R1 = nameTxt.getText().toString() + "(" + variants + ")";
-        String productNameSearchStr = R1.replaceAll("\\s", "");
-        String variantid = "";
-        for (int i = 0; i < productDetail.getData().get(0).getExtraPriceLists().size(); i++) {
-            String variantName = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_name().trim().replaceAll("\\s", "");
-
-            ///****************/////////
-            //   categoryName = productDetail.getData().get(0).getCategory_name();
-            ////////////******
-
-            if (productNameSearchStr.equalsIgnoreCase(variantName)) {
-                basePrice = productDetail.getData().get(0).getExtraPriceLists().get(i).getPrice_extra();
-                itemPriceTxt.setText("₹ " + basePrice * quantity + "");
-                mrpPriceTxt.setText("₹ " + productDetail.getData().get(0).getExtraPriceLists().get(i).getMrp_price() + "");
-                productDetail.getData().get(0).setListPrice(basePrice);
-
-                variantid = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_id();
-            }
-        }
-
-        for (int i = 0; i < productDetail.getData().get(0).getProductVariantQuantities().size(); i++) {
-            String id = productDetail.getData().get(0).getProductVariantQuantities().get(i).getVariant_id();
-            if (variantid.equalsIgnoreCase(id)) {
-                totaQquantity = productDetail.getData().get(0).getProductVariantQuantities().get(i).getQuantity();
-                if ((int) totaQquantity > 0) {
-                    numberPicker.setMax(totaQquantity);
-                    variantID = productDetail.getData().get(0).getProductVariantQuantities().get(i).getVariant_id();
-                    numberPicker.setVisibility(View.VISIBLE);
-                    add_btn.setVisibility(View.VISIBLE);
-                    pro_curr_text.setVisibility(View.GONE);
-                } else {
-                    numberPicker.setVisibility(View.GONE);
-                    add_btn.setVisibility(View.GONE);
-                    pro_curr_text.setVisibility(View.VISIBLE);
                 }
-            }
-        }
+                variant_value.put(String.valueOf(spinner_id), value.get(position).getValueName());
+                //   }
 
-        setPatternsTxt.setText(productNameSearchStr);
+                stringBuilder = new StringBuilder();
+                for (int i = 0; i < variantArray.size(); i++) {
+                    stringBuilder.append(variant_value.get(variantArray.get(i)));
+                    if (i != variantArray.size() - 1) {
+                        stringBuilder.append(", ");
+                    }
+
+                }
+                setPatternsTxt.setText(product_name + " (" + stringBuilder + ")");
+                String var_pr_name = setPatternsTxt.getText().toString();
+                for (int i = 0; i < productDetail.getData().get(0).getExtraPriceLists().size(); i++) {
+                    variants = var_pr_name.replaceAll("\\s", "");
+                    String variantName = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_name();
+                    if (var_pr_name.contains(variantName)) {
+                        basePrice = productDetail.getData().get(0).getExtraPriceLists().get(i).getPrice_extra();
+                        itemPriceTxt.setText("₹ " + basePrice * quantity + "");
+                        mrpPriceTxt.setText("₹ " + productDetail.getData().get(0).getExtraPriceLists().get(i).getMrp_price() + "");
+                        productDetail.getData().get(0).setListPrice(basePrice);
+
+                        totaQquantity = productDetail.getData().get(0).getExtraPriceLists().get(i).getQuantity();
+                        if (totaQquantity > 0) {
+                            numberPicker.setMax(totaQquantity);
+                            numberPicker.setValue(1);
+                            variantID = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_id();
+                            numberPicker.setVisibility(View.VISIBLE);
+                            add_btn.setVisibility(View.VISIBLE);
+                            pro_curr_text.setVisibility(View.GONE);
+                        } else {
+                            numberPicker.setValue(1);
+                            numberPicker.setVisibility(View.GONE);
+                            add_btn.setVisibility(View.GONE);
+                            pro_curr_text.setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    } else {
+                        numberPicker.setValue(1);
+                        numberPicker.setVisibility(View.GONE);
+                        add_btn.setVisibility(View.GONE);
+                        pro_curr_text.setVisibility(View.VISIBLE);
+                        itemPriceTxt.setText("");
+                        mrpPriceTxt.setText("");
+                    }
+                }
+                // }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
     }
+
+//    private void val(int position) {
+//        variantArray[patternType] = productDetail.getData().get(0).getAttributes().get(patternType).getValues().get(position).getValueName();
+//
+//        stringBuilder = new StringBuilder();
+//        for (int i = 0; i < variantArray.length; i++) {
+//            stringBuilder.append(variantArray[i]).append(",");
+//        }
+//        variants = stringBuilder.substring(0, stringBuilder.length() - 1);
+//        String R1 = nameTxt.getText().toString() + "(" + variants + ")";
+//        String productNameSearchStr = R1.replaceAll("\\s", "");
+//        for (int i = 0; i < productDetail.getData().get(0).getExtraPriceLists().size(); i++) {
+//            String variantName = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_name().trim().replaceAll("\\s", "");
+//
+//            if (productNameSearchStr.equalsIgnoreCase(variantName)) {
+//                basePrice = productDetail.getData().get(0).getExtraPriceLists().get(i).getPrice_extra();
+//                itemPriceTxt.setText("₹ " + basePrice * quantity + "");
+//                mrpPriceTxt.setText("₹ " + productDetail.getData().get(0).getExtraPriceLists().get(i).getMrp_price() + "");
+//                productDetail.getData().get(0).setListPrice(basePrice);
+//
+//                totaQquantity = productDetail.getData().get(0).getExtraPriceLists().get(i).getQuantity();
+//                if (totaQquantity > 0) {
+//                    numberPicker.setMax(totaQquantity);
+//                    numberPicker.setValue(1);
+//                    variantID = productDetail.getData().get(0).getExtraPriceLists().get(i).getProduct_variant_id();
+//                    numberPicker.setVisibility(View.VISIBLE);
+//                    add_btn.setVisibility(View.VISIBLE);
+//                    pro_curr_text.setVisibility(View.GONE);
+//                } else {
+//                    numberPicker.setValue(1);
+//                    numberPicker.setVisibility(View.GONE);
+//                    add_btn.setVisibility(View.GONE);
+//                    pro_curr_text.setVisibility(View.VISIBLE);
+//                }
+//                break;
+//            } else {
+//                numberPicker.setValue(1);
+//                numberPicker.setVisibility(View.GONE);
+//                add_btn.setVisibility(View.GONE);
+//                pro_curr_text.setVisibility(View.VISIBLE);
+//                itemPriceTxt.setText("");
+//                mrpPriceTxt.setText("");
+//
+//            }
+//        }
+//
+//        setPatternsTxt.setText(productNameSearchStr);
+//    }
 }

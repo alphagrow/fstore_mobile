@@ -56,6 +56,7 @@ public class VendorListFragment extends Fragment {
     VendorModel vendormodel;
     VendorListAdapter adapter;
     String status="true";
+    private  String type_of_vendor_warehouse;
     public VendorListFragment() {
         // Required empty public constructor
     }
@@ -77,6 +78,9 @@ public class VendorListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding= FragmentVendorBinding.inflate(inflater, container, false);
+        if (getArguments() != null) {
+            type_of_vendor_warehouse = getArguments().getString("type_of_vendor_warehouse");
+        }
         init();
 
         return binding.getRoot();
@@ -115,7 +119,10 @@ public class VendorListFragment extends Fragment {
         binding.addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("type_of_vendor_warehouse", "vendor");
                 Fragment fragment = AddVendorFragment.newInstance();
+                fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
@@ -137,27 +144,7 @@ public class VendorListFragment extends Fragment {
             }
         });
 
-//        binding.rdGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            public void onCheckedChanged(RadioGroup group, int checkedId)
-//            {
-//                // This will get the radiobutton that has changed in its check state
-//                RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
-//                // This puts the value (true/false) into the variable
-//                boolean isChecked = checkedRadioButton.isChecked();
-//                // If the radiobutton that has changed in check state is now checked...
-//                if (checkedRadioButton.getText().toString().equalsIgnoreCase("Active Vendor")) {
-//                    status="true";
-//                }else if (checkedRadioButton.getText().toString().equalsIgnoreCase("Inactive Vendor")) {
-//                    status="false";
-//                }
-//
-//                if (Utility.isNetworkAvailable(getActivity())) {
-//                    getVendorList();
-//                } else {
-//                    Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+
 
 
     }

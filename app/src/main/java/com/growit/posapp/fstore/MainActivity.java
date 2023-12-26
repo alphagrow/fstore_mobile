@@ -40,14 +40,13 @@ import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
-import com.growit.posapp.fstore.ui.fragments.Inventory.CreateWarehouseFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFragment;
-import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
+import com.growit.posapp.fstore.ui.fragments.SaleManagement.AddVendorFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
@@ -409,14 +408,7 @@ public class MainActivity extends AppCompatActivity {
             titleTxt.setVisibility(View.VISIBLE);
             titleTxt.setText("View Customer");
             fragment = CustomerRecyclerViewFragment.newInstance();
-        } else if (menuItem.getItemId() == R.id.ViewInventory_fragment) {
-            ///toolbar vistble
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_image_lay.setVisibility(View.GONE);
-            titleTxt.setVisibility(View.VISIBLE);
-            titleTxt.setText(R.string.view_inventory);
-            fragment = StoreInventoryFragment.newInstance();
-        } else if (menuItem.getItemId() == R.id.about_fragment) {
+        }  else if (menuItem.getItemId() == R.id.about_fragment) {
             ///toolbar vistble
             toolbar.setVisibility(View.GONE);
 
@@ -512,7 +504,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toolbar.setVisibility(View.GONE);
+                Bundle bundle = new Bundle();
+                bundle.putString("type_of_vendor_warehouse", "vendor");
                 Fragment fragment = VendorListFragment.newInstance();
+                fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 drawer_layout.close();
@@ -565,7 +560,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toolbar.setVisibility(View.GONE);
-                Fragment fragment = CreateWarehouseFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("type_of_vendor_warehouse", "warehouse");
+                Fragment fragment = AddVendorFragment.newInstance();
+                fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 drawer_layout.close();

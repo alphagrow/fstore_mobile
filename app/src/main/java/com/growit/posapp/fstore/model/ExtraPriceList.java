@@ -8,7 +8,9 @@ public class ExtraPriceList {
     @SerializedName("price_extra")
     @Expose
     private Double price_extra;
-
+    @SerializedName("quantity")
+    @Expose
+    private Integer quantity;
     public Double getMrp_price() {
         return mrp_price;
     }
@@ -37,6 +39,10 @@ public class ExtraPriceList {
         this.product_variant_name = product_variant_name;
     }
 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     @SerializedName("product_variant_name")
     @Expose
     private String product_variant_name;
@@ -45,7 +51,9 @@ public class ExtraPriceList {
     public String getProduct_variant_id() {
         return product_variant_id;
     }
-
+    public Integer getQuantity() {
+        return quantity;
+    }
     public void setProduct_variant_id(String product_variant_id) {
         this.product_variant_id = product_variant_id;
     }

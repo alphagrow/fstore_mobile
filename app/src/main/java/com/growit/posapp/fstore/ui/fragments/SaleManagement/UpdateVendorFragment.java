@@ -90,9 +90,6 @@ public class UpdateVendorFragment extends Fragment {
     }
     private void init() {
         binding.titleTxt.setText("Update Vendor");
-
-
-
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

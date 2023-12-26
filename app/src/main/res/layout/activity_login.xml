@@ -140,13 +140,41 @@
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/fifteen"
-                    android:layout_marginTop="@dimen/thirty"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:text="Not Register Yet ? "
+                        android:textColor="#000"
+                        android:textSize="18sp"
+                        android:textStyle="normal">
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/signupBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:fontFamily="@font/sf_compact_regular"
+                        android:gravity="center"
+                        android:text=" Register"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        android:textStyle="normal">
+
+                    </TextView>
                 </LinearLayout>
                 <Button
                     android:visibility="gone"

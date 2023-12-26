@@ -59,8 +59,9 @@ public class ApiConstants {
     public final static String POST_RECEIVE_PRODUCTS = "/api/receive_products?";
     public final static String POST_CANCEL_PURCHASE_ORDER = "/api/cancel_purchase_order?";
     public final static String GET_PURCHASE_ORDER_DOWNLOAD = "/api/purchase_order/download?";
-  //  public final static String GET_PURCHASE_ORDER_DOWNLOAD = "/pdf/download?pos_order_id=";
-
+    public final static String CREATE_WAREHOUSE = "/api/create_warehouse?";
+    public final static String GET_COMPANIES = "/api/get_companies";
+    public final static String ADD_COMPANY = "/api/user/company?";
 }
 
 
