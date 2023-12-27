@@ -102,6 +102,7 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("crop_list", (Serializable) list);
                 bundle.putInt("position", position);
+
                 Fragment fragment = AddPOSCategoryFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
@@ -116,6 +117,7 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("crop_list", (Serializable) list);
                 bundle.putInt("position", position);
+                bundle.putString("product_list", "crop_product");
                 Fragment fragment = AddProductListFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();

@@ -64,6 +64,7 @@ public class AddProductListFragment extends Fragment {
     String crop_id,crop_name;
 
     PurchaseModel model;
+    String product_data;
     List<PurchaseProductModel> purchaseProductModel;
 
     public AddProductListFragment() {
@@ -86,6 +87,10 @@ public class AddProductListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product_list, container, false);
+        if (getArguments() != null) {
+
+
+        }
         init();
         return binding.getRoot();
     }
@@ -94,11 +99,19 @@ public class AddProductListFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recycler.setLayoutManager(layoutManager);
         if (getArguments() != null) {
-            crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
+            product_data = getArguments().getString("product_list");
+
             int position = getArguments().getInt("position");
-            crop_id = String.valueOf(crop_mode.get(position).getValueId());
+
+
             if (Utility.isNetworkAvailable(getContext())) {
-                getProductList(crop_id);
+                if(product_data.equals("crop_product")) {
+                    crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
+                    crop_id = String.valueOf(crop_mode.get(position).getValueId());
+                    getProductList(crop_id);
+                }else {
+                    getAllProductList();
+                }
             } else {
                 Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -148,6 +161,78 @@ public class AddProductListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + pos_category_id + "&" + "token=" + sm.getJWTToken();
+        Log.d("product_list", url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Gson gson = new Gson();
+                        Type listType = new TypeToken<PurchaseModel>() {
+                        }.getType();
+                        model = gson.fromJson(response.toString(), listType);
+                        for (int i = 0; i < model.getData().size(); i++) {
+                            crop_id = String.valueOf(model.getData().get(i).getCategoryId());
+                            crop_name = model.getData().get(i).getCategoryName();
+                            purchaseProductModel = model.getData().get(i).getProducts();
+                        }
+                        //                       JSONArray jsonArray = obj.getJSONArray("data");
+//                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
+                        //                       productList = new ArrayList<>();
+                        //   if (productArray.length() > 0) {
+//                            for (int i = 0; i < productArray.length(); i++) {
+//                                Product product = new Product();
+//                                JSONObject data = productArray.getJSONObject(i);
+//                                int ID = data.optInt("product_id");
+//                                String name = data.optString("product_name");
+//                                double price = data.optDouble("list_price");
+//                                product.setProductID(ID + "");
+//                                product.setProductName(name);
+//                                product.setPrice(price);
+//                                String image = "";
+//                                if (data.opt("image_url").equals(false)) {
+//                                    image = "";
+//                                } else {
+//                                    image = data.optString("image_url");
+//                                }
+//                                product.setProductImage(image);
+//                                productList.add(product);
+//                            }
+
+
+                        if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
+                            binding.noItem.setVisibility(View.GONE);
+                        } else {
+                            binding.noItem.setVisibility(View.GONE);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                            adapter = new AddProductListAdapter(getActivity(), purchaseProductModel,crop_id,crop_name);
+                            binding.recycler.setAdapter(adapter);
+                            binding.recycler.setLayoutManager(layoutManager);
+
+                        }
+
+
+                        //                               }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+
+    }
+    private void getAllProductList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

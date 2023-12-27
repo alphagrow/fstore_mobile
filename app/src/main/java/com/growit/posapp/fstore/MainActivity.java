@@ -36,6 +36,7 @@ import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
@@ -429,10 +430,17 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setVisibility(View.GONE);
             fragment = AttributeListFragment.newInstance();
 
-        }
-        else if (menuItem.getItemId() == R.id.add_pos_category) {
+        } else if (menuItem.getItemId() == R.id.add_pos_category) {
             toolbar.setVisibility(View.GONE);
             fragment = POSCategoryListFragment.newInstance();
+
+        }else if (menuItem.getItemId() == R.id.product_list) {
+            toolbar.setVisibility(View.GONE);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("product_list", "All_product");
+             fragment = AddProductListFragment.newInstance();
+             fragment.setArguments(bundle);
 
         }
         else if (menuItem.getItemId() == R.id.logout_id) {
