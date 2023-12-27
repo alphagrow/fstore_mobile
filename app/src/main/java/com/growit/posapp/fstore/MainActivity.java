@@ -46,8 +46,8 @@ import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
-import com.growit.posapp.fstore.ui.fragments.SaleManagement.AddVendorFragment;
-import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
+import com.growit.posapp.fstore.ui.fragments.SaleManagement.AddVendorAndCreateWareHouseFragment;
+import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListAndWareHouseListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -506,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
                 toolbar.setVisibility(View.GONE);
                 Bundle bundle = new Bundle();
                 bundle.putString("type_of_vendor_warehouse", "vendor");
-                Fragment fragment = VendorListFragment.newInstance();
+                Fragment fragment = VendorListAndWareHouseListFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -562,7 +562,7 @@ public class MainActivity extends AppCompatActivity {
                 toolbar.setVisibility(View.GONE);
                 Bundle bundle = new Bundle();
                 bundle.putString("type_of_vendor_warehouse", "warehouse");
-                Fragment fragment = AddVendorFragment.newInstance();
+                Fragment fragment = VendorListAndWareHouseListFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();

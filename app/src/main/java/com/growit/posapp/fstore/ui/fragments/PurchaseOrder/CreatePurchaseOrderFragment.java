@@ -1,7 +1,6 @@
 package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -15,17 +14,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,14 +34,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
-import com.growit.posapp.fstore.adapters.AddProductListAdapter;
 import com.growit.posapp.fstore.adapters.AttributeSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.CropAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.ProductListAdapter;
 import com.growit.posapp.fstore.adapters.PurchaseItemListAdapter;
 import com.growit.posapp.fstore.adapters.PurchaseProductListAdapter;
-import com.growit.posapp.fstore.adapters.VendorListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentCreatePurchaseOrderBinding;
 import com.growit.posapp.fstore.db.AppDatabase;
 import com.growit.posapp.fstore.db.DatabaseClient;
@@ -58,12 +51,8 @@ import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
-import com.growit.posapp.fstore.model.VendorModel;
-import com.growit.posapp.fstore.tables.PosOrder;
 import com.growit.posapp.fstore.tables.PurchaseOrder;
 import com.growit.posapp.fstore.ui.fragments.ConfirmOrderFragment;
-import com.growit.posapp.fstore.ui.fragments.ProductDetailFragment;
-import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -79,14 +68,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 public class CreatePurchaseOrderFragment extends Fragment {

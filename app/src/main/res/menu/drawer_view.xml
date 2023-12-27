@@ -18,6 +18,10 @@
         android:title="Add Product" />
     <item
         android:icon="@drawable/user_add"
+        android:id="@+id/product_list"
+        android:title="Product List"/>
+    <item
+        android:icon="@drawable/user_add"
         android:id="@+id/add_pos_category"
         android:title="Add POS Category" />
     <item

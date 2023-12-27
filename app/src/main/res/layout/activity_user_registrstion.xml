@@ -91,7 +91,7 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="User Id"
+                    android:hint="Mail Id"
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />

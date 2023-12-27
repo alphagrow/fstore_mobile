@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.VendorModelList;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.UpdateVendorFragment;
 import com.skyhope.showmoretextview.ShowMoreTextView;
 
@@ -25,31 +26,28 @@ import java.util.List;
 
 public class WareHouseAdapter extends RecyclerView.Adapter<WareHouseAdapter.ViewHolder> {
 
-    private List<VendorModelList> list;
+    private List<WarehouseModel> list;
     private Context mContext;
 
 
-    public WareHouseAdapter(Context context, List<VendorModelList> contacts) {
+    public WareHouseAdapter(Context context, List<WarehouseModel> contacts) {
         list = contacts;
         mContext = context;
     }
-    public void updateList(ArrayList<VendorModelList> modellist) {
+    public void updateList(ArrayList<WarehouseModel> modellist) {
         this.list=modellist;
         notifyDataSetChanged();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView nameTxt,mobile,status;
-        ImageView deleteBtn,acti_img,acti_img_2,update;
+        public TextView nameTxt,code,company_id;
         ShowMoreTextView product_name;
         public ViewHolder(View itemView) {
             super(itemView);
             nameTxt = itemView.findViewById(R.id.nameTxt);
-            mobile= itemView.findViewById(R.id.mobile);
-            deleteBtn= itemView.findViewById(R.id.deleteBtn);
-            acti_img = itemView.findViewById(R.id.acti_img);
-            acti_img_2 = itemView.findViewById(R.id.acti_img_2);
-            status = itemView.findViewById(R.id.status);
-            update = itemView.findViewById(R.id.update);
+            code= itemView.findViewById(R.id.code);
+            company_id = itemView.findViewById(R.id.company_id);
+
+
 
 
         }
@@ -59,7 +57,7 @@ public class WareHouseAdapter extends RecyclerView.Adapter<WareHouseAdapter.View
     public WareHouseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.vendor_item_row, parent, false);
+        View contactView = inflater.inflate(R.layout.ware_house_item_row, parent, false);
         WareHouseAdapter.ViewHolder viewHolder = new WareHouseAdapter.ViewHolder(contactView);
         return viewHolder;
     }
@@ -67,16 +65,18 @@ public class WareHouseAdapter extends RecyclerView.Adapter<WareHouseAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull WareHouseAdapter.ViewHolder holder, int position) {
-        VendorModelList modelList = list.get(position);
+        WarehouseModel modelList = list.get(position);
         holder.nameTxt.setText(modelList.getName());
-        holder.mobile.setText(modelList.getMobile());
+        holder.code.setText(modelList.getCode());
+        holder.company_id.setText(modelList.getCompanyId());
 
-        holder.update.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("vendor_list", (Serializable) list);
+                bundle.putSerializable("warehouse_list", (Serializable) list);
                 bundle.putInt("position", position);
+                bundle.putString("type_of_vendor_warehouse","warehouse");
                 Fragment fragment = UpdateVendorFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();

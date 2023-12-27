@@ -1,8 +1,5 @@
 package com.growit.posapp.fstore.ui.fragments.SaleManagement;
 
-import static com.growit.posapp.fstore.utils.Utility.showDialoge;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,28 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddVendorBinding;
-import com.growit.posapp.fstore.databinding.FragmentVendorBinding;
 import com.growit.posapp.fstore.model.StateModel;
-import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.model.VendorModelList;
-import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class AddVendorFragment extends Fragment {
+public class AddVendorAndCreateWareHouseFragment extends Fragment {
     FragmentAddVendorBinding binding;
 
     List<StateModel> stateNames = new ArrayList<>();
@@ -59,12 +47,12 @@ public class AddVendorFragment extends Fragment {
 
    private String type_of_vendor_warehouse;
     int position;
-    public AddVendorFragment() {
+    public AddVendorAndCreateWareHouseFragment() {
         // Required empty public constructor
     }
 
-    public static AddVendorFragment newInstance() {
-        return new AddVendorFragment();
+    public static AddVendorAndCreateWareHouseFragment newInstance() {
+        return new AddVendorAndCreateWareHouseFragment();
     }
 
 

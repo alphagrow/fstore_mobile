@@ -33,24 +33,26 @@ import java.util.List;
 import java.util.Map;
 
 public class UserRegistrationActivity extends AppCompatActivity {
-ActivityUserRegistrstionBinding binding;
+    ActivityUserRegistrstionBinding binding;
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String login_id = "", str_password ="",str_comp_name ="",str_city = "",str_phone ="",str_website = "",str_insectLicNo="",str_seedLicNo = "",str_fertLicNo ="",str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
+    private String login_id = "", str_password = "", str_comp_name = "", str_city = "", str_phone = "", str_website = "", str_insectLicNo = "", str_seedLicNo = "", str_fertLicNo = "", str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  setContentView(R.layout.activity_user_registrstion);
+        //  setContentView(R.layout.activity_user_registrstion);
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryVariant));
         binding = DataBindingUtil.setContentView(UserRegistrationActivity.this, R.layout.activity_user_registrstion);
-init();
+        init();
     }
-    private void init(){
+
+    private void init() {
         if (Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
             getStateData();
         } else {
@@ -59,47 +61,18 @@ init();
         StateModel st = new StateModel();
         st.setName("--Select District--");
         districtNames.add(st);
-//        StateModel st2 = new StateModel();
-//        st2.setName("--Select Taluka--");
-//        talukaNames.add(st2);
-//        if (UserRegistrationActivity.this!= null) {
-//            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, districtNames);
-//            binding.citySpinner.setAdapter(adapter);
-//        }
-//        if (UserRegistrationActivity.this != null) {
-//            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, talukaNames);
-//            binding.talukaSpinner.setAdapter(adapter);
-//        }
+
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UserRegistrationActivity.this, MainActivity.class));
+                startActivity(new Intent(UserRegistrationActivity.this, LoginActivity.class));
                 finish();
             }
         });
 
-//        binding.citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                if (position != 0) {
-//                    districtStr = districtNames.get(position).getId() + "";
-//                    if (districtStr != null) {
-//                        if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
-//                            Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        getTalukaData();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
 
-        binding.stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+        binding.stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
@@ -120,19 +93,7 @@ init();
             }
         });
 
-//        binding.talukaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                if (position != 0) {
-//                    talukaStr = talukaNames.get(position).getId() + "";
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,15 +117,6 @@ init();
                     Toast.makeText(UserRegistrationActivity.this, R.string.Select_state, Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                if (districtStr.length() == 0) {
-//                    Toast.makeText(UserRegistrationActivity.this, R.string.Select_district, Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if (talukaStr.length() == 0) {
-//                    Toast.makeText(UserRegistrationActivity.this, R.string.Select_taluka, Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
 
                 if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
                     Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -172,19 +124,18 @@ init();
                 }
 
 
+                isAllFieldsChecked = CheckAllFields();
+                if (isAllFieldsChecked) {
+                    UserRegistration();
 
-                    isAllFieldsChecked = CheckAllFields();
-                    if (isAllFieldsChecked) {
-                        UserRegistration();
-
-                    }
-
+                }
 
 
             }
         });
 
     }
+
     private void getStateData() {
         Utility.showDialoge("Please wait while a configuring State...", UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
@@ -231,110 +182,55 @@ init();
         });
     }
 
-//    private void getDistrictData() {
-//        Utility.showDialoge("Please wait while a configuring District...", UserRegistrationActivity.this);
-//        Map<String, String> params = new HashMap<>();
-//        params.put("states_id", stateStr);
-//        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
-//            private String message = "Registration failed!!";
-//
-//            @Override
-//            public void onSuccess(Object result) throws JSONException {
-//                Log.v("Response", result.toString());
-//                districtNames = new ArrayList<>();
-//                JSONObject obj = new JSONObject(result.toString());
-//                int statusCode = obj.optInt("statuscode");
-//                String status = obj.optString("status");
-//                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-//                    Utility.dismissDialoge();
-//                    JSONArray jsonArray = obj.getJSONArray("data");
-//                    StateModel stateModel = new StateModel();
-//                    stateModel.setId(-1);
-//                    stateModel.setName("--Select District--");
-//                    districtNames.add(stateModel);
-//                    for (int i = 0; i < jsonArray.length(); i++) {
-//                        stateModel = new StateModel();
-//                        JSONObject data = jsonArray.getJSONObject(i);
-//                        int id = data.optInt("id");
-//                        String name = data.optString("name");
-//                        stateModel.setId(id);
-//                        stateModel.setName(name);
-//                        districtNames.add(stateModel);
-//                    }
-//                    if (UserRegistrationActivity.this != null) {
-//                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, districtNames);
-//                        binding.citySpinner.setAdapter(adapter);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onError(String result) {
-//                Log.v("Response", result.toString());
-//                Utility.dismissDialoge();
-//                Toast.makeText(UserRegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 
-//    private void getTalukaData() {
-//        Utility.showDialoge("Please wait while a configuring Taluka...", UserRegistrationActivity.this);
-//        Map<String, String> params = new HashMap<>();
-//        params.put("district_id", districtStr);
-//        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.GET_TALUKA, new VolleyCallback() {
-//            private String message = "Registration failed!!";
-//
-//            @Override
-//            public void onSuccess(Object result) throws JSONException {
-//                Log.v("Response", result.toString());
-//                talukaNames = new ArrayList<>();
-//                JSONObject obj = new JSONObject(result.toString());
-//                int statusCode = obj.optInt("statuscode");
-//                String status = obj.optString("status");
-//                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-//                    Utility.dismissDialoge();
-//                    JSONArray jsonArray = obj.getJSONArray("data");
-//                    StateModel stateModel = new StateModel();
-//                    stateModel.setId(-1);
-//                    stateModel.setName("--Select Taluka--");
-//                    talukaNames.add(stateModel);
-//                    for (int i = 0; i < jsonArray.length(); i++) {
-//                        stateModel = new StateModel();
-//                        JSONObject data = jsonArray.getJSONObject(i);
-//                        int id = data.optInt("id");
-//                        String name = data.optString("name");
-//                        stateModel.setId(id);
-//                        stateModel.setName(name);
-//                        talukaNames.add(stateModel);
-//                    }
-//                    if (UserRegistrationActivity.this != null) {
-//                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, talukaNames);
-//                        binding.talukaSpinner.setAdapter(adapter);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onError(String result) {
-//                Utility.dismissDialoge();
-//                Log.v("Response", result.toString());
-//                Toast.makeText(UserRegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
     private boolean CheckAllFields() {
-        if (binding.etMobile.length() != 10) {
-            binding.etMobile.setError("Enter a 10-digit mobile number");
-            Toast.makeText(UserRegistrationActivity.this, R.string.customer_mobile, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
         if (binding.etUsername.length() == 0) {
             binding.etUsername.setError("This field is required");
             Toast.makeText(UserRegistrationActivity.this, R.string.CUSTOMER_NAME, Toast.LENGTH_SHORT).show();
 
             return false;
         }
+        if (binding.edUserId.length() == 0) {
+            binding.edUserId.setError("This field is required");
+            Toast.makeText(UserRegistrationActivity.this, "Enter the User Id", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.etPassword.length() == 0) {
+            binding.etPassword.setError("This field is required");
+            Toast.makeText(UserRegistrationActivity.this, "Enter the Password", Toast.LENGTH_SHORT).show();
+
+            return false;
+        }
+        if (binding.etCompanyName.length() == 0) {
+            binding.etCompanyName.setError("This field is required");
+            Toast.makeText(UserRegistrationActivity.this, "Enter the company Name", Toast.LENGTH_SHORT).show();
+
+            return false;
+        }
+        if (binding.etPhone.length() == 0) {
+            binding.etPhone.setError("This field is required");
+            Toast.makeText(UserRegistrationActivity.this, "Enter the Phone Number", Toast.LENGTH_SHORT).show();
+
+            return false;
+        }
+        if (binding.etCity.length() == 0) {
+            binding.etCity.setError("This field is required");
+            Toast.makeText(UserRegistrationActivity.this, "Enter the City", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.etWebsite.length() == 0) {
+            binding.etWebsite.setError("This field is required");
+            Toast.makeText(UserRegistrationActivity.this, "Enter the Website", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (binding.etMobile.length() != 10) {
+            binding.etMobile.setError("Enter a 10-digit mobile number");
+            Toast.makeText(UserRegistrationActivity.this, R.string.customer_mobile, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+
         if (binding.etUseraddress.length() == 0) {
             binding.etUseraddress.setError("Address is required");
             Toast.makeText(UserRegistrationActivity.this, R.string.ADDRESS, Toast.LENGTH_SHORT).show();
@@ -355,21 +251,23 @@ init();
         // after all validation return true.
         return true;
     }
+
     private void UserRegistration() {
         SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
-       // params.put("user_id", sm.getUserID() + "");
+        // params.put("user_id", sm.getUserID() + "");
         params.put("name", nameStr);
         params.put("login", login_id);
+        //  params.put("company_logo", "");
         params.put("password", str_password);
         params.put("company_name", str_comp_name);
-        params.put("mobile", mobileStr);
         params.put("street", streetStr);
         params.put("country_id", ApiConstants.COUNTRY_ID);
         params.put("state_id", stateStr);
         params.put("city", str_city);
         params.put("zip", zipStr);
         params.put("phone", str_phone);
+        params.put("mobile", mobileStr);
         params.put("email", emailStr);
         params.put("website", str_website);
         params.put("insect_lic_no", str_insectLicNo);
@@ -389,13 +287,17 @@ init();
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
                 String error_message = obj.optString("error_message");
-                String  str_message = obj.optString("message");
+                String str_message = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     resetFields();
-                    Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
+                    Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                    finish();
+                    //  Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
 
-                }else {
+                } else {
                     Utility.dismissDialoge();
                     Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
                 }
@@ -409,6 +311,7 @@ init();
             }
         });
     }
+
     private void resetFields() {
         binding.etUsername.setText("");
         binding.etMobile.setText("");
@@ -416,6 +319,14 @@ init();
         binding.etPincode.setText("");
         binding.etUseremail.setText("");
         binding.etCity.setText("");
+        binding.etPassword.setText("");
+        binding.edUserId.setText("");
+        binding.etCompanyName.setText("");
+        binding.etPhone.setText("");
+        binding.etGstNo.setText("");
+        binding.etInsectLicNo.setText("");
+        binding.etFertLicNo.setText("");
+        binding.etSeedLicNo.setText("");
         binding.stateSpinner.setSelection(0);
 
     }

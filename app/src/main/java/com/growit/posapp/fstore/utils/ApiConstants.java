@@ -62,6 +62,8 @@ public class ApiConstants {
     public final static String CREATE_WAREHOUSE = "/api/create_warehouse?";
     public final static String GET_COMPANIES = "/api/get_companies";
     public final static String ADD_COMPANY = "/api/user/company?";
+    public final static String GET_WareHouses = "/api/get_warehouses?";
+    public final static String UPDATE_WAREHOUSE = "/api/update_warehouse?";
 }
 
 

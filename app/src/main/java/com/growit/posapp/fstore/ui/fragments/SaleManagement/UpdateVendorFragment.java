@@ -20,6 +20,7 @@ import com.growit.posapp.fstore.databinding.FragmentAddVendorBinding;
 import com.growit.posapp.fstore.databinding.FragmentUpdateVendorBinding;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.VendorModelList;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.tables.Customer;
 import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -43,10 +44,12 @@ public class UpdateVendorFragment extends Fragment {
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
+    private String str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "",str_code="",str_city ="", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     List<VendorModelList> vendor_model=null;
+    List<WarehouseModel> warehouse_model=null;
     private int position = 0;
+    String type_of_vendor_warehouse;
     public UpdateVendorFragment() {
         // Required empty public constructor
     }
@@ -72,19 +75,48 @@ public class UpdateVendorFragment extends Fragment {
         init();
         if (getArguments() != null) {
             position = getArguments().getInt("position");
-            vendor_model = (List<VendorModelList>) getArguments().getSerializable("vendor_list");
-            binding.etUsername.setText(vendor_model.get(position).getName());
-            binding.etUsermobile.setText(vendor_model.get(position).getMobile());
-            binding.etUseraddress.setText(vendor_model.get(position).getStreet());
-            binding.etGstNo.setText(vendor_model.get(position).getVat());
-            binding.etUseremail.setText(vendor_model.get(position).getEmail());
-            binding.etPincode.setText(vendor_model.get(position).getZip());
-            getStateData();
-            getDistrictData(vendor_model.get(position).getStateId());
-            getTalukaData(vendor_model.get(position).getDistrictId());
-            binding.submitBtn.setVisibility(View.GONE);
-            binding.update.setVisibility(View.VISIBLE);
+            type_of_vendor_warehouse = getArguments().getString("type_of_vendor_warehouse");
+            if(type_of_vendor_warehouse.equals("vendor")) {
+                binding.titleTxt.setText("Update Vendor");
+                binding.etCity.setVisibility(View.GONE);
+                binding.etCode.setVisibility(View.GONE);
+                binding.etUseremail.setVisibility(View.VISIBLE);
+                binding.etGstNo.setVisibility(View.VISIBLE);
+                binding.etUsermobile.setVisibility(View.VISIBLE);
+                vendor_model = (List<VendorModelList>) getArguments().getSerializable("vendor_list");
+                binding.etUsername.setText(vendor_model.get(position).getName());
+                binding.etUsermobile.setText(vendor_model.get(position).getMobile());
+                binding.etUseraddress.setText(vendor_model.get(position).getStreet());
+                binding.etGstNo.setText(vendor_model.get(position).getVat());
+                binding.etUseremail.setText(vendor_model.get(position).getEmail());
+                binding.etPincode.setText(vendor_model.get(position).getZip());
+                getStateData();
+                getDistrictData(vendor_model.get(position).getStateId());
+                getTalukaData(vendor_model.get(position).getDistrictId());
+                binding.etCode.setVisibility(View.GONE);
+                binding.submitBtn.setVisibility(View.GONE);
+                binding.update.setVisibility(View.VISIBLE);
+            }else {
+                binding.submitBtn.setVisibility(View.GONE);
+                binding.update.setVisibility(View.VISIBLE);
+                warehouse_model = (List<WarehouseModel>) getArguments().getSerializable("warehouse_list");
+                binding.titleTxt.setText("Update Warehouse");
+                binding.etCity.setVisibility(View.VISIBLE);
+                binding.etGstNo.setVisibility(View.GONE);
+                binding.etUsermobile.setVisibility(View.GONE);
+                binding.etUseremail.setVisibility(View.GONE);
+                binding.etUsername.setHint("Ware House Name");
 
+                binding.etUsername.setText(warehouse_model.get(position).getName());
+                binding.etCode.setText(warehouse_model.get(position).getCode());
+                binding.etUseraddress.setText(warehouse_model.get(position).getAddress().getStreet());
+                binding.etCity.setText(warehouse_model.get(position).getAddress().getCity());
+                binding.etPincode.setText(warehouse_model.get(position).getAddress().getZip());
+                getStateData();
+                getDistrictData(String.valueOf(warehouse_model.get(position).getAddress().getStateId()));
+                getTalukaData(String.valueOf(warehouse_model.get(position).getAddress().getDistrictId()));
+
+            }
         }
         return binding.getRoot();
     }
@@ -154,8 +186,10 @@ public class UpdateVendorFragment extends Fragment {
                 emailStr = binding.etUseremail.getText().toString();
                 zipStr = binding.etPincode.getText().toString();
                 streetStr = binding.etUseraddress.getText().toString();
+                str_code = binding.etCode.getText().toString();
+                str_city = binding.etCity.getText().toString();
 
-                isAllFieldsChecked = CheckAllFields();
+
                 if (stateStr.length() == 0) {
                     Toast.makeText(getActivity(), R.string.Select_state, Toast.LENGTH_SHORT).show();
                     return;
@@ -174,11 +208,18 @@ public class UpdateVendorFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(type_of_vendor_warehouse.equals("vendor")) {
+                    isAllFieldsChecked = CheckAllFields();
+                    if (isAllFieldsChecked) {
+                        updateVendorRequest();
 
-                if (isAllFieldsChecked) {
-                    updateVendorRequest();
+                    }
+                }else {
+
+                        updateWareHouse();
 
                 }
+
 
             }
         });
@@ -211,8 +252,14 @@ public class UpdateVendorFragment extends Fragment {
                         int id = data.optInt("id");
                         String name = data.optString("name");
                         stateModel.setId(id);
-                        if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getStateId())) {
-                            spinnerPosition = i + 1;
+                        if(type_of_vendor_warehouse.equals("vendor")) {
+                            if (String.valueOf(id).equals(vendor_model.get(position).getStateId())) {
+                                spinnerPosition = i + 1;
+                            }
+                        }else {
+                            if (String.valueOf(id).equals(String.valueOf(warehouse_model.get(position).getAddress().getStateId()))) {
+                                spinnerPosition = i + 1;
+                            }
                         }
                         stateModel.setName(name);
                         stateNames.add(stateModel);
@@ -258,8 +305,14 @@ public class UpdateVendorFragment extends Fragment {
                         stateModel = new StateModel();
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
-                        if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getDistrictId())) {
-                            spinnerPosition = i + 1;
+                        if(type_of_vendor_warehouse.equals("vendor")) {
+                            if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getDistrictId())) {
+                                spinnerPosition = i + 1;
+                            }
+                        }else {
+                            if (String.valueOf(id).equalsIgnoreCase(String.valueOf(warehouse_model.get(position).getAddress().getDistrictId()))) {
+                                spinnerPosition = i + 1;
+                            }
                         }
                         String name = data.optString("name");
                         stateModel.setId(id);
@@ -306,8 +359,14 @@ public class UpdateVendorFragment extends Fragment {
                         stateModel = new StateModel();
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
-                        if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getTalukaId())) {
-                            spinnerPosition = i + 1;
+                        if(type_of_vendor_warehouse.equals("vendor")) {
+                            if (String.valueOf(id).equalsIgnoreCase(vendor_model.get(position).getTalukaId())) {
+                                spinnerPosition = i + 1;
+                            }
+                        }else {
+                            if (String.valueOf(id).equalsIgnoreCase(String.valueOf(warehouse_model.get(position).getAddress().getTalukaId()))) {
+                                spinnerPosition = i + 1;
+                            }
                         }
                         String name = data.optString("name");
                         stateModel.setId(id);
@@ -410,15 +469,52 @@ public class UpdateVendorFragment extends Fragment {
         });
     }
 
-    private void resetFields() {
-        binding.etUsername.setText("");
-        binding.etUsermobile.setText("");
-        binding.etUseraddress.setText("");
-        binding.etPincode.setText("");
-        binding.etUseremail.setText("");
-        binding.stateSpinner.setSelection(0);
-        binding.citySpinner.setSelection(0);
-        binding.talukaSpinner.setSelection(0);
+    private void updateWareHouse() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        Map<String, String> params = new HashMap<>();
+        params.put("name", nameStr);
+        params.put("code", str_code);
+        params.put("street", streetStr);
+        params.put("city", str_city);
+        params.put("state_id", stateStr);
+        params.put("country_id", ApiConstants.COUNTRY_ID);
+        params.put("zip", zipStr);
+        params.put("district_id", districtStr);
+        params.put("taluka_id", talukaStr);
+        params.put("warehouse_id", warehouse_model.get(position).getPartnerId()+"");
+
+        Utility.showDialoge("", getActivity());
+        Log.v("create_ware_house", String.valueOf(params));
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.UPDATE_WAREHOUSE, new VolleyCallback() {
+            private String message = "Update failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                message = obj.optString("status");
+                String error_message = obj.optString("error_message");
+                String  str_message = obj.optString("message");
+                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+
+                    Toast.makeText(getActivity(), "Ware House  Update successfully ", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Utility.dismissDialoge();
+                Log.v("Response", result);
+                Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
 }

@@ -24,19 +24,12 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.R;
-import com.growit.posapp.fstore.model.StockInventoryModelList;
-import com.growit.posapp.fstore.model.Transaction;
-import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.model.VendorModelList;
-import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
-import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
-import com.growit.posapp.fstore.ui.fragments.SaleManagement.AddVendorFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.UpdateVendorFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.skyhope.showmoretextview.ShowMoreTextView;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,6 +92,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("vendor_list", (Serializable) list);
                 bundle.putInt("position", position);
+                bundle.putString("type_of_vendor_warehouse","vendor");
                 Fragment fragment = UpdateVendorFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();

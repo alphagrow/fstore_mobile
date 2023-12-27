@@ -13,6 +13,17 @@ public class VendorModel {
     @SerializedName("vendors")
     @Expose
     private List<VendorModelList> vendors;
+    @SerializedName("warehouses")
+    @Expose
+    private List<WarehouseModel> warehouses;
+
+    public List<WarehouseModel> getWarehouses() {
+        return warehouses;
+    }
+
+    public void setWarehouses(List<WarehouseModel> warehouses) {
+        this.warehouses = warehouses;
+    }
 
     public String getStatus() {
         return status;
