@@ -18,6 +18,7 @@ public class ApiConstants {
     public final static String INVOICE_DOWNLOAD = "/pdf/download?pos_order_id=";
     public final static String ADD_CUSTOMER = "/api/customer?";
     public final static String POS_ORDER = "/api/pos/order?";
+    public final static String ADD_EXTRAPRICE = "/api/create_extra_pricelist?";
     public final static String GET_STATES = "/api/get_states?";
     public final static String GET_DISTRICT = "/api/get_district?";
     public final static String GET_TALUKA = "/api/get_taluka?";
@@ -34,6 +35,7 @@ public class ApiConstants {
     public static final String ACTION = "com.pos.ACTION_ADDITEM";
     public static final String ACTION_PAYMENT = "com.pos.ACTION_PAYMENT";
     public final static String GET_ORDERS_HISTORY = "/api/pos/order/list?";
+    public final static String GET_EXTRA_PRICE = "/api/product/variant/list?";
     public final static String GET_TRANSACTION_HISTORY = "/pos/payment/transactions?";
     public final static String GET_SMS = "api/mt/SendSMS?";
     public final static String POST_ORDER_DISCOUNT = "/api/get/order-discount?";

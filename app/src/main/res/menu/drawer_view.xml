@@ -1,60 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <item
-            android:icon="@drawable/home_menu"
-            android:id="@+id/home_fragment"
-            android:title="Home" />
+    <item
+        android:id="@+id/home_fragment"
+        android:icon="@drawable/home_menu"
+        android:title="Home" />
 
-
-        <item
-            android:icon="@drawable/user_add"
-            android:id="@+id/cst_fragment"
-            android:title="@string/add_customer" />
 
     <item
+        android:id="@+id/cst_fragment"
         android:icon="@drawable/user_add"
+        android:title="@string/add_customer" />
+
+    <item
         android:id="@+id/add_product"
+        android:icon="@drawable/user_add"
         android:title="Add Product" />
+
     <item
+        android:id="@+id/add_price"
         android:icon="@drawable/user_add"
+        android:title="Add Extra Price" />
+    <item
         android:id="@+id/product_list"
-        android:title="Product List"/>
-    <item
         android:icon="@drawable/user_add"
+        android:title="Product List" />
+    <item
         android:id="@+id/add_pos_category"
+        android:icon="@drawable/user_add"
         android:title="Add POS Category" />
     <item
-        android:icon="@drawable/user_add"
         android:id="@+id/create_attribute"
+        android:icon="@drawable/user_add"
         android:title="Create Attribute" />
-        <item
-            android:icon="@drawable/user_square"
-            android:id="@+id/Viewcst_fragment"
-            android:title="@string/view_customer" />
+    <item
+        android:id="@+id/Viewcst_fragment"
+        android:icon="@drawable/user_square"
+        android:title="@string/view_customer" />
 
-
-
-        <item
-            android:icon="@drawable/warning"
-            android:id="@+id/about_fragment"
-            android:title="@string/about_us" />
-
-
-        <item
-            android:icon="@drawable/user_octagon"
-            android:id="@+id/contact_fragment"
-            android:title="@string/contact_us" />
 
     <item
-        android:icon="@drawable/logout"
+        android:id="@+id/about_fragment"
+        android:icon="@drawable/warning"
+        android:title="@string/about_us" />
+
+
+    <item
+        android:id="@+id/contact_fragment"
+        android:icon="@drawable/user_octagon"
+        android:title="@string/contact_us" />
+
+    <item
         android:id="@+id/logout_id"
+        android:icon="@drawable/logout"
         android:title="Logout" />
 
     <group
         android:id="@+id/group5"
-        android:visible="false"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        android:visible="false">
         <item
             android:id="@+id/giftcard_fragment"
             android:title="@string/gift_card" />

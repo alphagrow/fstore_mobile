@@ -41,6 +41,7 @@ import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
+import com.growit.posapp.fstore.ui.fragments.ExtraPriceFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
@@ -409,7 +410,14 @@ public class MainActivity extends AppCompatActivity {
             titleTxt.setVisibility(View.VISIBLE);
             titleTxt.setText("View Customer");
             fragment = CustomerRecyclerViewFragment.newInstance();
-        }  else if (menuItem.getItemId() == R.id.about_fragment) {
+        }  else if (menuItem.getItemId() == R.id.add_price) {
+            ///toolbar gone
+            toolbar.setVisibility(View.GONE);
+            toolbar_image_lay.setVisibility(View.GONE);
+            titleTxt.setVisibility(View.VISIBLE);
+            titleTxt.setText("Extra Price");
+            fragment = ExtraPriceFragment.newInstance();
+        } else if (menuItem.getItemId() == R.id.about_fragment) {
             ///toolbar vistble
             toolbar.setVisibility(View.GONE);
 
