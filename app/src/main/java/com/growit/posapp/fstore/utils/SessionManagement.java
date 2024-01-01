@@ -132,7 +132,16 @@ public class SessionManagement {
         // return user
         return name;
     }
-
+    public int getShopID() {
+        int id=pref.getInt("shop_id",-1);
+        // return user
+        return id;
+    }
+    public void saveShopId(int shop_id) {
+        editor.putInt("shop_id", shop_id);
+        // commit changes
+        editor.commit();
+    }
     public int getUserID() {
         int id=pref.getInt("user_id",-1);
         // return user

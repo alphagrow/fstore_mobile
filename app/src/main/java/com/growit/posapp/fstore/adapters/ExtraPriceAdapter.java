@@ -42,7 +42,7 @@ public class ExtraPriceAdapter extends RecyclerView.Adapter<ExtraPriceAdapter.Vi
             // to access the context from any ViewHolder instance.
             super(itemView);
             nameTextView = (TextView) itemView.findViewById(R.id.variantName);
-            mrpTxt = (EditText) itemView.findViewById(R.id.mrpTxt);
+            mrpTxt = (EditText) itemView.findViewById(R.id.mrp_text);
             priceTxt = (EditText) itemView.findViewById(R.id.priceTxt);
         }
     }

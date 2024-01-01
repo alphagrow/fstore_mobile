@@ -82,21 +82,22 @@ public class ExtraPriceFragment extends Fragment {
                 JSONArray jsonArray = new JSONArray();
                 for (int i = 0; i < extraPriceData.getData().size()-1; i++) {
                     View view = linearLayoutManager.getChildAt(i);
-                    EditText mrpEditText = view.findViewById(R.id.mrpTxt);
-                    EditText priceEditText = view.findViewById(R.id.priceTxt);
-                    String mrp = mrpEditText.getText().toString();
-                    String extra_price = priceEditText.getText().toString();
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.putOpt("product_tmpl_id", extraPriceData.getData().get(i).getProductId());
-                        obj.putOpt("variant_id", Integer.parseInt(extraPriceData.getData().get(i).getProductVariant()));
-                        obj.putOpt("extra_price", Double.parseDouble(extra_price));
-                        obj.putOpt("mrp_price", Double.parseDouble(mrp));
-                        jsonArray.put(obj);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                    if(view !=null) {
+                        EditText mrpEditText = view.findViewById(R.id.mrp_text);
+                        EditText priceEditText = view.findViewById(R.id.priceTxt);
+                        String mrp = mrpEditText.getText().toString();
+                        String extra_price = priceEditText.getText().toString();
+                        JSONObject obj = new JSONObject();
+                        try {
+                            obj.putOpt("product_tmpl_id", extraPriceData.getData().get(i).getProductId());
+                            obj.putOpt("variant_id", Integer.parseInt(extraPriceData.getData().get(i).getProductVariant()));
+                            obj.putOpt("extra_price", Double.parseDouble(extra_price));
+                            obj.putOpt("mrp_price", Double.parseDouble(mrp));
+                            jsonArray.put(obj);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-
                 }
                 try {
                     createExtraPrice(jsonArray);
@@ -189,8 +190,10 @@ public class ExtraPriceFragment extends Fragment {
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
+              String  str_message = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
                 }
             }
 

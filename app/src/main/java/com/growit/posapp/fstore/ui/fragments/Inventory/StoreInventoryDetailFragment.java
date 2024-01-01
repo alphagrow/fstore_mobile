@@ -1,10 +1,8 @@
 package com.growit.posapp.fstore.ui.fragments.Inventory;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,15 +18,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
-import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
+import com.growit.posapp.fstore.adapters.StoreInventoryDetailAdapter;
 import com.growit.posapp.fstore.model.Product;
-import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
-import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 
@@ -37,25 +29,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class StoreInventoryFragment extends Fragment {
+public class StoreInventoryDetailFragment extends Fragment {
+
+
 
     protected List<Product> productList = new ArrayList<>();
     private RecyclerView recyclerView;
-    StoreInventoryAdapters orderHistoryAdapter;
+    StoreInventoryDetailAdapter orderHistoryAdapter;
     TextView noDataFound,total_order_text,add_text;
-
-    public StoreInventoryFragment() {
+    String productID="";
+    public StoreInventoryDetailFragment() {
         // Required empty public constructor
     }
 
 
-    public static StoreInventoryFragment newInstance() {
-        StoreInventoryFragment fragment = new StoreInventoryFragment();
+    public static StoreInventoryDetailFragment newInstance() {
+        StoreInventoryDetailFragment fragment = new StoreInventoryDetailFragment();
         return fragment;
     }
 
@@ -73,39 +66,27 @@ public class StoreInventoryFragment extends Fragment {
         noDataFound = view.findViewById(R.id.noDataFound);
         total_order_text = view.findViewById(R.id.total_order_text);
         add_text = view.findViewById(R.id.add_text);
-        if (Utility.isNetworkAvailable(getActivity())) {
-            getStoreInventory();
-        }else {
-            Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+        if (getArguments() != null) {
+            productID = getArguments().getString("PID");
+            if (Utility.isNetworkAvailable(getActivity())) {
+                getStoreInventory(productID);
+            }else {
+                Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+            }
+
         }
 
-        noDataFound.setOnClickListener(v -> getStoreInventory());
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("PID", productList.get(position).getProductID());
-                        Fragment fragment = StoreInventoryDetailFragment.newInstance();
-                        fragment.setArguments(bundle);
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                    }
 
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
+        noDataFound.setOnClickListener(v -> getStoreInventory(productID));
+
+
         return view;
     }
 
-    private void getStoreInventory() {
+    private void getStoreInventory(String productID) {
         SessionManagement sm = new SessionManagement(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Log.v("url", url);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_Detail + "user_id=" + sm.getUserID() + "&" +  "shop_id=" + sm.getShopID() + "&"+"product_id=" + productID+"&"+ "token=" + sm.getJWTToken();
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -121,23 +102,25 @@ public class StoreInventoryFragment extends Fragment {
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
-                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
+                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("product_variant_quantities");
                         productList = new ArrayList<>();
                         if (productArray.length() > 0) {
                             for (int i = 0; i < productArray.length(); i++) {
                                 Product product = new Product();
                                 JSONObject data = productArray.getJSONObject(i);
-                                int ID = data.optInt("product_id");
-                                String name = data.optString("product_name");
+                                int ID = data.optInt("variant_id");
+                                String name = data.optString("variant_display_name");
+                                double qty = data.optDouble("quantity");
                                 product.setProductID(ID + "");
                                 product.setProductName(name);
-                                String image = "";
-                                if (data.opt("image_url").equals(false)) {
-                                    image = "";
-                                } else {
-                                    image = data.optString("image_url");
-                                }
-                                product.setProductImage(image);
+                                product.setQuantity(qty);
+//                                String image = "";
+//                                if (data.opt("image_url").equals(false)) {
+//                                    image = "";
+//                                } else {
+//                                    image = data.optString("image_url");
+//                                }
+//                                product.setProductImage(image);
                                 productList.add(product);
                             }
                         }
@@ -149,8 +132,8 @@ public class StoreInventoryFragment extends Fragment {
                             recyclerView.setVisibility(View.VISIBLE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            total_order_text.setText("Total : "+productList.size()+" Products ");
-                            orderHistoryAdapter = new StoreInventoryAdapters(getActivity(), productList);
+                            total_order_text.setText("Total : "+productList.size()+" Variants ");
+                            orderHistoryAdapter = new StoreInventoryDetailAdapter(getActivity(), productList);
                             recyclerView.setAdapter(orderHistoryAdapter);
                             recyclerView.setLayoutManager(layoutManager);
 
@@ -168,5 +151,4 @@ public class StoreInventoryFragment extends Fragment {
         });
         queue.add(jsonObjectRequest);
     }
-
 }
