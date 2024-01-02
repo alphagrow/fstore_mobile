@@ -42,6 +42,7 @@ import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
 import com.growit.posapp.fstore.ui.fragments.ExtraPriceFragment;
+import com.growit.posapp.fstore.ui.fragments.Inventory.ConfigurationFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
     LinearLayout  sale_menu_lay;
     LinearLayout inventory_menu;
-    TextView vendor,purchase,inventory_text,warehouses,purchase_order_list,purchase_item;
+    TextView vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type;
     boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -473,6 +474,9 @@ public class MainActivity extends AppCompatActivity {
         inventory_menu = view_inventory.findViewById(R.id.inventory_menu_lay);
         inventory_text = view_inventory.findViewById(R.id.inventory_text);
         warehouses = view_inventory.findViewById(R.id.warehouses);
+        transfer = view_inventory.findViewById(R.id.transfer);
+        location = view_inventory.findViewById(R.id.location);
+        operation_type = view_inventory.findViewById(R.id.operation_type);
 
         View view_sale = nvDrawer.inflateHeaderView(R.layout.menu_button);
         sale_menu_lay = view_sale.findViewById(R.id.sale_menu_lay);
@@ -489,14 +493,48 @@ public class MainActivity extends AppCompatActivity {
         inventory_menu.setOnClickListener(view -> {
             if (!isClicked) {
                 inventory_text.setVisibility(View.VISIBLE);
+                transfer.setVisibility(View.VISIBLE);
                 warehouses.setVisibility(View.VISIBLE);
+                location.setVisibility(View.VISIBLE);
+                operation_type.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
                 inventory_text.setVisibility(View.GONE);
                 warehouses.setVisibility(View.GONE);
+                transfer.setVisibility(View.GONE);
+                location.setVisibility(View.GONE);
+                operation_type.setVisibility(View.GONE);
                 isClicked = false;
             }
 
+        });
+
+
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Bundle bundle = new Bundle();
+                bundle.putString("configuration_type", "location");
+                Fragment fragment = ConfigurationFragment.newInstance();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        operation_type.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Bundle bundle = new Bundle();
+                bundle.putString("configuration_type", "operation_types");
+                Fragment fragment = ConfigurationFragment.newInstance();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
         });
 
         sale_menu_lay.setOnClickListener(view -> {

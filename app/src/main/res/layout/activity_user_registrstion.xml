@@ -381,23 +381,6 @@
                     android:textSize="14dp"
                     android:padding="8dp" />
 
-                <Button
-                    android:id="@+id/update"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_marginStart="35dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginEnd="35dp"
-                    android:layout_marginBottom="50dp"
-                    android:background="@drawable/button"
-                    android:fontFamily="@font/helvetica_neue_medium"
-                    android:gravity="center"
-                    android:padding="@dimen/ten"
-                    android:text="Update"
-                    android:textAllCaps="false"
-                    android:textColor="#ffff"
-                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/submit_btn"
@@ -413,6 +396,23 @@
                     android:padding="@dimen/ten"
                     android:textSize="16sp"
                     android:text="Submit"
+                    android:textColor="#ffff"
+                    />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/update_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="@dimen/fifty"
+                    android:layout_marginEnd="30dp"
+                    android:background="@drawable/button"
+                    android:fontFamily="@font/sf_compact_regular"
+                    android:gravity="center"
+                    android:nextFocusUp="@+id/tv_register"
+                    android:padding="@dimen/ten"
+                    android:textSize="16sp"
+                    android:text="Update"
                     android:textColor="#ffff"
                     />
 

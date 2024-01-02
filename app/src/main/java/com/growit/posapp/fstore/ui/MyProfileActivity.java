@@ -60,7 +60,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     private static final int PICK_FROM_FILE = 3;
     private String nameStr, emailStr, mobileStr;
     ProgressBar idPBLoading;
-    CardView warehouses_list,company_list;
+    CardView company_profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +80,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         emailET = findViewById(R.id.et_useremail);
         idPBLoading = findViewById(R.id.idPBLoading);
         backBtn = findViewById(R.id.backBtn);
-        company_list = findViewById(R.id.company_list);
-        warehouses_list = findViewById(R.id.warehouses_list);
+        company_profile = findViewById(R.id.company_profile);
+
         nameET.setFocusable(false);
         emailET.setFocusable(false);
         mobileET = findViewById(R.id.et_usermobile);
@@ -93,11 +93,13 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.tv_gallery).setOnClickListener(this);
         findViewById(R.id.tv_camera).setOnClickListener(this);
         findViewById(R.id.tv_cross).setOnClickListener(this);
-        warehouses_list.setOnClickListener(new View.OnClickListener() {
+        company_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                Intent intent = new Intent(MyProfileActivity.this,UserRegistrationActivity.class);
+                intent.putExtra("company_profile", "update_company_profile");
+                startActivity(intent);
+                finish();
             }
         });
 

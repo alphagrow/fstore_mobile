@@ -50,7 +50,22 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="    Inventory "
+        android:text="    Stock Details "
+        android:textSize="13sp" />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/transfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_account_circle_24"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:drawableLeft="@drawable/icon_user"
+        android:text="    Transfer "
         android:textSize="13sp" />
 
     <TextView
@@ -66,10 +81,40 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text=" Warehouses "
+        android:text="    Warehouses "
         android:textSize="13sp" />
 
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_account_circle_24"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:drawableLeft="@drawable/icon_user"
+        android:text="     Location "
+        android:textSize="13sp" />
 
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/operation_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_account_circle_24"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:drawableLeft="@drawable/icon_user"
+        android:text="     Operation Type "
+        android:textSize="13sp" />
 
 
 </LinearLayout>

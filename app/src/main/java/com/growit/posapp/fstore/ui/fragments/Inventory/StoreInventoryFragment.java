@@ -8,10 +8,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +28,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.AddProductListAdapter;
 import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.StockInventoryModel;
+import com.growit.posapp.fstore.model.VendorModelList;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -48,7 +55,7 @@ public class StoreInventoryFragment extends Fragment {
     private RecyclerView recyclerView;
     StoreInventoryAdapters orderHistoryAdapter;
     TextView noDataFound,total_order_text,add_text;
-
+EditText seacrEditTxt;
     public StoreInventoryFragment() {
         // Required empty public constructor
     }
@@ -73,6 +80,7 @@ public class StoreInventoryFragment extends Fragment {
         noDataFound = view.findViewById(R.id.noDataFound);
         total_order_text = view.findViewById(R.id.total_order_text);
         add_text = view.findViewById(R.id.add_text);
+        seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
         if (Utility.isNetworkAvailable(getActivity())) {
             getStoreInventory();
         }else {
@@ -98,14 +106,31 @@ public class StoreInventoryFragment extends Fragment {
                     }
                 })
         );
+        seacrEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterList(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         return view;
     }
 
     private void getStoreInventory() {
         SessionManagement sm = new SessionManagement(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Log.v("url", url);
+        Log.d("product_list", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -169,4 +194,16 @@ public class StoreInventoryFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
+    private void filterList(String text){
+
+            ArrayList<Product> model = new ArrayList<>();
+            for (Product detail : productList){
+                if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){
+                    model.add(detail);
+                }
+            }
+
+        orderHistoryAdapter.updateList(model);
+
+    }
 }

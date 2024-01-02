@@ -39,7 +39,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     List<StateModel> talukaNames = new ArrayList<>();
     private String login_id = "", str_password = "", str_comp_name = "", str_city = "", str_phone = "", str_website = "", str_insectLicNo = "", str_seedLicNo = "", str_fertLicNo = "", str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
-
+    String update_companyProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
     private void init() {
+        Intent intent = getIntent();
+         update_companyProfile = intent.getStringExtra("company_profile");
+         if(update_companyProfile.equals("update_company_profile")){
+             binding.titleTxt.setText("Update Company Detail");
+             binding.updateBtn.setVisibility(View.VISIBLE);
+             binding.submitBtn.setVisibility(View.GONE);
+         }
         if (Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
             getStateData();
         } else {
@@ -65,8 +72,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UserRegistrationActivity.this, LoginActivity.class));
-                finish();
+                if(update_companyProfile.equals("update_company_profile")) {
+                    startActivity(new Intent(UserRegistrationActivity.this, MyProfileActivity.class));
+                    finish();
+                }else {
+                    startActivity(new Intent(UserRegistrationActivity.this, LoginActivity.class));
+                    finish();
+                }
             }
         });
 
@@ -127,6 +139,45 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
                     UserRegistration();
+
+                }
+
+
+            }
+        });
+        binding.updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str_gst_no = binding.etGstNo.getText().toString();
+                nameStr = binding.etUsername.getText().toString();
+                mobileStr = binding.etMobile.getText().toString();
+                emailStr = binding.etUseremail.getText().toString();
+                zipStr = binding.etPincode.getText().toString();
+                streetStr = binding.etUseraddress.getText().toString();
+                login_id = binding.edUserId.getText().toString();
+                str_password = binding.etPassword.getText().toString();
+                str_comp_name = binding.etCompanyName.getText().toString();
+                str_city = binding.etCity.getText().toString();
+                str_phone = binding.etPhone.getText().toString();
+                str_website = binding.etWebsite.getText().toString();
+                str_insectLicNo = binding.etInsectLicNo.getText().toString();
+                str_fertLicNo = binding.etFertLicNo.getText().toString();
+                str_seedLicNo = binding.etSeedLicNo.getText().toString();
+
+                if (stateStr.length() == 0) {
+                    Toast.makeText(UserRegistrationActivity.this, R.string.Select_state, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
+                    Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                isAllFieldsChecked = CheckAllFields();
+                if (isAllFieldsChecked) {
+                    UpdateUserRegistration();
 
                 }
 
@@ -296,6 +347,62 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     startActivity(intentLogin);
                     finish();
                     //  Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Utility.dismissDialoge();
+                Log.v("Response", result);
+                Toast.makeText(UserRegistrationActivity.this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void UpdateUserRegistration() {
+        SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
+        Map<String, String> params = new HashMap<>();
+        // params.put("user_id", sm.getUserID() + "");
+        params.put("name", nameStr);
+        params.put("login", login_id);
+        //  params.put("company_logo", "");
+        params.put("password", str_password);
+        params.put("company_name", str_comp_name);
+        params.put("street", streetStr);
+        params.put("country_id", ApiConstants.COUNTRY_ID);
+        params.put("state_id", stateStr);
+        params.put("city", str_city);
+        params.put("zip", zipStr);
+        params.put("phone", str_phone);
+        params.put("mobile", mobileStr);
+        params.put("email", emailStr);
+        params.put("website", str_website);
+        params.put("insect_lic_no", str_insectLicNo);
+        params.put("fert_lic_no", str_fertLicNo);
+        params.put("seed_lic_no", str_seedLicNo);
+        params.put("vat", str_gst_no);
+//        params.put("company_id", " ");
+
+        Utility.showDialoge("", UserRegistrationActivity.this);
+        Log.v("add", String.valueOf(params));
+        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.UPDATE_COMPANY, new VolleyCallback() {
+            private String message = "Registration failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                message = obj.optString("status");
+                String error_message = obj.optString("error_message");
+                String str_message = obj.optString("message");
+                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+
+                      Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
 
                 } else {
                     Utility.dismissDialoge();

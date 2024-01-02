@@ -1,15 +1,20 @@
 package com.growit.posapp.fstore.ui.fragments.Inventory;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.StoreInventoryDetailAdapter;
 import com.growit.posapp.fstore.model.Product;
@@ -34,14 +40,13 @@ import java.util.List;
 
 
 public class StoreInventoryDetailFragment extends Fragment {
-
-
-
     protected List<Product> productList = new ArrayList<>();
     private RecyclerView recyclerView;
     StoreInventoryDetailAdapter orderHistoryAdapter;
     TextView noDataFound,total_order_text,add_text;
     String productID="";
+    ImageView backBtn;
+    EditText seacrEditTxt;
     public StoreInventoryDetailFragment() {
         // Required empty public constructor
     }
@@ -65,7 +70,9 @@ public class StoreInventoryDetailFragment extends Fragment {
         recyclerView = view.findViewById(R.id.orderRecyclerView);
         noDataFound = view.findViewById(R.id.noDataFound);
         total_order_text = view.findViewById(R.id.total_order_text);
+        backBtn = view.findViewById(R.id.backBtn);
         add_text = view.findViewById(R.id.add_text);
+        seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
         if (getArguments() != null) {
             productID = getArguments().getString("PID");
             if (Utility.isNetworkAvailable(getActivity())) {
@@ -79,6 +86,29 @@ public class StoreInventoryDetailFragment extends Fragment {
 
         noDataFound.setOnClickListener(v -> getStoreInventory(productID));
 
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),MainActivity.class));
+                getActivity().finish();
+            }
+        });
+        seacrEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterList(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         return view;
     }
@@ -150,5 +180,17 @@ public class StoreInventoryDetailFragment extends Fragment {
             recyclerView.setVisibility(View.GONE);
         });
         queue.add(jsonObjectRequest);
+    }
+    private void filterList(String text){
+
+        ArrayList<Product> model = new ArrayList<>();
+        for (Product detail : productList){
+            if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){
+                model.add(detail);
+            }
+        }
+
+        orderHistoryAdapter.updateList(model);
+
     }
 }

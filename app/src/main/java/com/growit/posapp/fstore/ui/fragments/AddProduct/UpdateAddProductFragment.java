@@ -145,8 +145,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     List<Value> cropList = new ArrayList<>();
     List<Attribute> attributes;
     //    private static final int SELECT_VIDEO = 3;
-ArrayList<String>crop_id_list = new ArrayList<>();
+    ArrayList<String>crop_id_list = new ArrayList<>();
    String str_crop_id;
+    ArrayList<Integer>sel_value_id = new ArrayList<>();
 
     public UpdateAddProductFragment() {
         // Required empty public constructor
@@ -182,6 +183,16 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             int position = getArguments().getInt("position");
             str_crop_id = getArguments().getString("crop_id");
             str_crop_name = getArguments().getString("crop_name");
+            int value_id=0;
+            List<Attribute> attributeValue_list= list.get(position).getAttributes();
+            for (int i=0;i<attributeValue_list.size();i++){
+                for (int j=0;j<attributeValue_list.get(i).getValues().size();j++) {
+                 value_id = attributeValue_list.get(i).getValues().get(j).getValueId();
+                }
+                sel_value_id.add(value_id);
+            }
+
+            Log.d("sel_value",sel_value_id.toString());
             product_id= String.valueOf(list.get(position).getProductId());
             binding.etProductName.setText(list.get(position).getProductName());
             binding.etProductPrice.setText(String.valueOf(list.get(position).getListPrice()));
@@ -710,8 +721,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
 
                         model_attribute = gson.fromJson(response.toString(), listType);
                         model.addAll(model_attribute.getAttributes());
-                        createTextDynamically(model_attribute.getAttributes());
-
+                        createTextDynamically(model_attribute.getAttributes().size());
 
                     }
                 } catch (JSONException e) {
@@ -722,12 +732,12 @@ ArrayList<String>crop_id_list = new ArrayList<>();
         queue.add(jsonObjectRequest);
 
     }
-    private void createTextDynamically(List<AttributeModel> model) {
+    private void createTextDynamically(int n) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int width = display.getWidth();
         LinearLayout l = new LinearLayout(getActivity());
         binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
-        for (int j = 0; j < model.size(); j++) {
+        for (int j = 0; j < n; j++) {
             TextView text = new TextView(getActivity());
             LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
 
@@ -739,44 +749,17 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             final int id_ = text.getId();
             int att_id = model.get(j).getId();
             selected_value_map.put(String.valueOf(att_id), null);
+
             text.setHint("Select the " + model.get(j).getName());
 
-            ////set data in textview
-//            int attribute_value_id=0;
-            int attribute_value_id;
-            List<String> item_value_list = null;
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for(int i=0;i<model.get(j).getValues().size();i++){
-                item_value_list = selected_value_map.get(String.valueOf(att_id));
-                attribute_value_id =attributes.get(j).getValues().get(i).getValueId();
-                stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
-                if (item_value_list != null) {
-                    item_value_list.add(String.valueOf(attribute_value_id));
-                    selected_value_map.put(String.valueOf(att_id), item_value_list);
-                } else {
-                    item_value_list = new ArrayList<>();
-                    item_value_list.add(String.valueOf(attribute_value_id));
-                    selected_value_map.put(String.valueOf(att_id), item_value_list);
-
-                }
-                if (i != attributes.get(j).getValues().size() - 1) {
-                    stringBuilder.append(", ");
-                }
-                attribute_id_list.add(attribute_value_id);
-            }
-
-
-            Log.d("set_attribute_json_array", String.valueOf(stringBuilder));
-            text.setHint(stringBuilder);
-//////
+            // text.setText(name.get(1).getName());
             text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
             text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
-            //  et.setEnabled(false);
+            // et.setEnabled(false);
             binding.linearLayoutMain.addView(text, editTextParams);
 
-           SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
+            SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
 
         }
 
@@ -789,6 +772,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
             attribute_name.add(attribute_value.get(i).getName());
             attribute_id.add(String.valueOf(attribute_value.get(i).getId()));
         }
+
         final CharSequence[] items_value = attribute_name.toArray(new CharSequence[attribute_name.size()]);
         boolean[] selected_value = new boolean[attribute_name.size()];
 
@@ -800,6 +784,7 @@ ArrayList<String>crop_id_list = new ArrayList<>();
                 builder.setTitle("Attribute value");
                 builder.setCancelable(false);
                 selected_value_map.put(String.valueOf(att_id), null);
+
                 builder.setMultiChoiceItems(items_value, selected_value, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {

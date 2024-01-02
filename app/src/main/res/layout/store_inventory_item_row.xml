@@ -77,21 +77,6 @@
                     android:textSize="15sp"
                     android:text="Qty Avl. : 168 Packets"
                      />
-                <TextView
-                    android:visibility="visible"
-                    android:padding="6dp"
-                    android:id="@+id/order_more"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:textColor="@color/colorPrimary"
-                    android:background="@drawable/order_more"
-                    android:layout_weight=".8"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="Order more"
-                    android:textStyle="normal"
-                    android:textSize="16sp" />
 
 
             </LinearLayout>

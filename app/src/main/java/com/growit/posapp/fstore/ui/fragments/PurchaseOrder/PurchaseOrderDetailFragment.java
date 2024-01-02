@@ -152,8 +152,14 @@ public class PurchaseOrderDetailFragment extends Fragment {
             if(productDetail.getOrders().get(position).getReceiptStatus().equalsIgnoreCase("false")) {
             }else if(productDetail.getOrders().get(position).getReceiptStatus().equalsIgnoreCase("full")) {
                 binding.status.setText("Received");
+                binding.cancel.setVisibility(View.GONE);
+                binding.receive.setVisibility(View.GONE);
+
             }else {
                 binding.status.setText("Pending");
+                binding.cancel.setVisibility(View.VISIBLE);
+                binding.receive.setVisibility(View.VISIBLE);
+                binding.invoiceDownload.setVisibility(View.GONE);
             }
 
             orderID=productDetail.getOrders().get(position).getId();
@@ -179,8 +185,8 @@ public class PurchaseOrderDetailFragment extends Fragment {
     private void cancelOrder(int purchase_order_id){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-//            params.put("user_id", sm.getUserID()+"");
-//            params.put("token", sm.getJWTToken());
+            params.put("user_id", sm.getUserID()+"");
+            params.put("token", sm.getJWTToken());
         params.put("purchase_order_id", purchase_order_id+"");
 
         Utility.showDialoge("Please wait while a moment...", getActivity());
@@ -260,8 +266,8 @@ public class PurchaseOrderDetailFragment extends Fragment {
 
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-//            params.put("user_id", sm.getUserID()+"");
-//            params.put("token", sm.getJWTToken());
+            params.put("user_id", sm.getUserID()+"");
+            params.put("token", sm.getJWTToken());
         params.put("quantity", qut+"");
         params.put("purchase_order_id", purchase_order_id+"");
 
@@ -280,6 +286,9 @@ public class PurchaseOrderDetailFragment extends Fragment {
                 String error_message = obj.optString("error_message");
 
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
+                    binding.status.setText("Received");
+                    binding.receive.setVisibility(View.GONE);
+                    binding.cancel.setVisibility(View.GONE);
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }else {

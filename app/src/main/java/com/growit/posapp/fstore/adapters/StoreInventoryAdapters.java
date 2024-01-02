@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.StockInventoryModelList;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.skyhope.showmoretextview.ShowMoreTextView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StoreInventoryAdapters extends RecyclerView.Adapter<StoreInventoryAdapters.ViewHolder> {
@@ -29,7 +31,10 @@ public class StoreInventoryAdapters extends RecyclerView.Adapter<StoreInventoryA
         customerDataList = contacts;
         mContext = context;
     }
-
+    public void updateList(ArrayList<Product> modellist) {
+        this.customerDataList=modellist;
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView product_name;
         ImageView images;

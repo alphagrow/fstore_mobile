@@ -40,7 +40,6 @@ public class ApiConstants {
     public final static String GET_SMS = "api/mt/SendSMS?";
     public final static String POST_ORDER_DISCOUNT = "/api/get/order-discount?";
     public final static String LOGOUT_REQUEST = "api/close_pos_session?";//session_id
-    public final static String GET_STOCK_QUANT = "/api/stock_quant/details?";
     public final static String POST_ADD_PRODUCT = "/api/create_product?";
     public final static String DELETE_PRODUCT = "/api/delete_product?";
     public final static String PUT_UPDATE_PRODUCT = "/api/update_product?";
@@ -68,6 +67,12 @@ public class ApiConstants {
     public final static String UPDATE_WAREHOUSE = "/api/update_warehouse?";
     public final static String GET_ALL_PRODUCT_LIST = "/api/products/list?";
     public final static String GET_STOCK_Detail = "/api/stock_quant/details?";
+    public final static String UPDATE_COMPANY = "/api/user/company/update?";
+    public final static String GET_STOCK_QUANT = "/api/products/list?";
+    public final static String GET_OPERATION_LIST = "/api/operation_types";
+    public final static String GET_LOCATION_LIST = "/api/location/list?";
+    public final static String GET_TRANSFER_LIST = "/api/transfer/list";
+    public final static String GET_OPERATION_TYPE_LIST = "/api/operation_types";
 }
 
 

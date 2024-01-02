@@ -12,21 +12,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StoreInventoryDetailAdapter extends RecyclerView.Adapter<StoreInventoryDetailAdapter.ViewHolder> {
 
-    private List<Product> customerDataList;
+    private List<Product> list;
     private Context mContext;
 
     public StoreInventoryDetailAdapter(Context context, List<Product> contacts) {
-        customerDataList = contacts;
+        list = contacts;
         mContext = context;
     }
-
+    public void updateList(ArrayList<Product> modellist) {
+        this.list=modellist;
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView product_name ,qty;
         ImageView images;
@@ -51,7 +56,7 @@ public class StoreInventoryDetailAdapter extends RecyclerView.Adapter<StoreInven
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Product orders = customerDataList.get(position);
+        Product orders = list.get(position);
         holder.qty.setText("Qty Avl. : "+orders.getQuantity());
         holder.product_name.setText(orders.getProductName());
         Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getProductImage())
@@ -66,6 +71,6 @@ public class StoreInventoryDetailAdapter extends RecyclerView.Adapter<StoreInven
 
     @Override
     public int getItemCount() {
-        return customerDataList.size();
+        return list.size();
     }
 }

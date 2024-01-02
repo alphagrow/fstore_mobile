@@ -84,6 +84,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private String cropName = "";
     CropAdapter cropAdapter = null;
     String vendor_id = "";
+    String ware_house_id = "";
 
     String crop_id, crop_name;
     private double quantity = 1.0;
@@ -115,6 +116,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
     private int total_quant = 1;
     List<StateModel> vendorNames = new ArrayList<>();
+    List<StateModel> ware_houseNames = new ArrayList<>();
 
     List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
     PurchaseItemListAdapter purchaseItemListAdapter;
@@ -157,6 +159,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private void init() {
         if (Utility.isNetworkAvailable(getActivity())) {
             getVendorList();
+            getOperationTypes();
             GetTasks gt = new GetTasks();
             gt.execute();
 
@@ -177,6 +180,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
             public void onClick(View v) {
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (ware_house_id.length() == 0) {
+                    Toast.makeText(getContext(), "Select Ware House Name", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (vendor_id.length() == 0) {
@@ -390,6 +397,21 @@ public class CreatePurchaseOrderFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     vendor_id = vendorNames.get(position).getId() + "";
+                    //  binding.customerTxt.setText(vendorNames.get(position).getName());
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        binding.warehousesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    ware_house_id = ware_houseNames.get(position).getId() + "";
                     //  binding.customerTxt.setText(vendorNames.get(position).getName());
 
                 }
@@ -714,12 +736,12 @@ public class CreatePurchaseOrderFragment extends Fragment {
     private void CreatePurchaseOrder(String str_vendor_id) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-        // params.put("user_id", sm.getUserID()+ "");
-        //   params.put("token", sm.getJWTToken());
+         params.put("user_id", sm.getUserID()+ "");
+           params.put("token", sm.getJWTToken());
         params.put("vendor_id", str_vendor_id);
+        params.put("company_id", "1");
         params.put("products", prjsonArray.toString());
-//        params.put("products", prjsonArray.toString());
-        params.put("picking_type_id", 8 + "");
+        params.put("picking_type_id",ware_house_id);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("Pur_create_order", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_PURCHASE_ORDER, new VolleyCallback() {
@@ -847,6 +869,59 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         if (getContext() != null) {
                             CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), vendorNames);
                             binding.cstSpinner.setAdapter(adapter);
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+    private void getOperationTypes() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+    //    String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST;
+
+        Log.v("url", url);
+        //   Utility.showDialoge("Please wait while a moment...", getActivity());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                ware_houseNames = new ArrayList<>();
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (status.equalsIgnoreCase("success")) {
+//                        Utility.dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("operation_types");
+                        StateModel stateModel = new StateModel();
+                        stateModel.setId(-1);
+                        stateModel.setName("Select warehouse");
+                        ware_houseNames.add(stateModel);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            stateModel = new StateModel();
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            String name = data.optString("name");
+                            if (name.equalsIgnoreCase("Receipts")) {
+                                int id = data.optInt("id");
+                                String warehouse_id = data.optString("warehouse_id");
+                                stateModel.setId(id);
+                                stateModel.setName(warehouse_id);
+                                ware_houseNames.add(stateModel);
+                            }
+                        }
+                        if (getContext() != null) {
+                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), ware_houseNames);
+                            binding.warehousesSpinner.setAdapter(adapter);
                         }
 
                     }
