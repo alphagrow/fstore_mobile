@@ -11,8 +11,8 @@ public class ApiConstants {
 //HFpY4zcsWKqmAg
     public final static String RazorPayTestKey="rzp_test_rAuo7Wl2Inp0LP";
     public final static String RazorPayProductionKey="rzp_live_5JiuYm4kh7D4fT";
-    public final static String BASE_URL = "http://162.246.254.203:9090";
-    //public final static String BASE_URL = "http://192.168.18.36:9090";
+ //   public final static String BASE_URL = "http://162.246.254.203:9090";
+    public final static String BASE_URL = "http://192.168.18.36:9090";
     public final static String BASE_URL_SMS = "http://msg.jmdinfotek.in/";
     public final static String SIGN_IN = "/api/login";
     public final static String INVOICE_DOWNLOAD = "/pdf/download?pos_order_id=";
@@ -73,6 +73,7 @@ public class ApiConstants {
     public final static String GET_LOCATION_LIST = "/api/location/list?";
     public final static String GET_TRANSFER_LIST = "/api/transfer/list";
     public final static String GET_OPERATION_TYPE_LIST = "/api/operation_types";
+   public final static String POST_TRANSFER_ORDER = "/api/stock_transfer?";
 }
 
 

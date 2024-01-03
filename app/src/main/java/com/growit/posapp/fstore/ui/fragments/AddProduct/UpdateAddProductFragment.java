@@ -721,7 +721,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
                         model_attribute = gson.fromJson(response.toString(), listType);
                         model.addAll(model_attribute.getAttributes());
-                        createTextDynamically(model_attribute.getAttributes().size());
+                        createTextDynamically(model_attribute.getAttributes());
 
                     }
                 } catch (JSONException e) {
@@ -732,12 +732,46 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         queue.add(jsonObjectRequest);
 
     }
-    private void createTextDynamically(int n) {
+//    private void createTextDynamically(int n) {
+//        Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+//        int width = display.getWidth();
+//        LinearLayout l = new LinearLayout(getActivity());
+//        binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
+//        for (int j = 0; j < n; j++) {
+//            TextView text = new TextView(getActivity());
+//            LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
+//
+//            editTextParams.setMargins(20, 20, 20, 0);
+//            text.setLayoutParams(editTextParams);
+//            text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size));
+//            text.setTextSize(16);
+//            text.setId(j);
+//            final int id_ = text.getId();
+//            int att_id = model.get(j).getId();
+//            selected_value_map.put(String.valueOf(att_id), null);
+//
+//            text.setHint("Select the " + model.get(j).getName());
+//
+//            // text.setText(name.get(1).getName());
+//            text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+//
+//            text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
+//            // et.setEnabled(false);
+//            binding.linearLayoutMain.addView(text, editTextParams);
+//
+//            SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
+//
+//        }
+//
+//    }
+
+
+    private void createTextDynamically(List<AttributeModel> model) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int width = display.getWidth();
         LinearLayout l = new LinearLayout(getActivity());
         binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < model.size(); j++) {
             TextView text = new TextView(getActivity());
             LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
 
@@ -749,14 +783,45 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             final int id_ = text.getId();
             int att_id = model.get(j).getId();
             selected_value_map.put(String.valueOf(att_id), null);
-
             text.setHint("Select the " + model.get(j).getName());
 
-            // text.setText(name.get(1).getName());
+            ////set data in textview
+            int attribute_value_id=0;
+            List<String> item_value_list = null;
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i = 0; i < model.get(j).getValues().size(); i++) {
+                if(attributes.get(j).getValues() !=null&&attributes.get(j).getValues().size()==0) {
+                    if (model.get(j).getValues().get(i).getId().equals(attributes.get(j).getValues().get(i).getValueId())) {
+                        item_value_list = selected_value_map.get(String.valueOf(att_id));
+                        attribute_value_id = attributes.get(j).getValues().get(i).getValueId();
+                        stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
+                        Log.d("stringBuilder",stringBuilder.toString());
+                        if (item_value_list != null) {
+                            item_value_list.add(String.valueOf(attribute_value_id));
+                            selected_value_map.put(String.valueOf(att_id), item_value_list);
+                        } else {
+                            item_value_list = new ArrayList<>();
+                            item_value_list.add(String.valueOf(attribute_value_id));
+                            selected_value_map.put(String.valueOf(att_id), item_value_list);
+
+                        }
+                        if (i != attributes.get(j).getValues().size() - 1) {
+                            stringBuilder.append(", ");
+                        }
+                        attribute_id_list.add(attribute_value_id);
+                        text.setHint(stringBuilder);
+                    }
+                }
+            }
+
+            Log.d("set_attribute_json_array", String.valueOf(stringBuilder));
+
+
             text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
             text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
-            // et.setEnabled(false);
+            //  et.setEnabled(false);
             binding.linearLayoutMain.addView(text, editTextParams);
 
             SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
@@ -772,7 +837,6 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             attribute_name.add(attribute_value.get(i).getName());
             attribute_id.add(String.valueOf(attribute_value.get(i).getId()));
         }
-
         final CharSequence[] items_value = attribute_name.toArray(new CharSequence[attribute_name.size()]);
         boolean[] selected_value = new boolean[attribute_name.size()];
 
@@ -784,7 +848,6 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 builder.setTitle("Attribute value");
                 builder.setCancelable(false);
                 selected_value_map.put(String.valueOf(att_id), null);
-
                 builder.setMultiChoiceItems(items_value, selected_value, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean b) {
@@ -801,9 +864,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Initialize string builder
+// Initialize string builder
                         StringBuilder stringBuilder = new StringBuilder();
-                        // use for loop
+// use for loop
                         int attribute_value_id = 0;
                         List<String> item_value_list = null;
                         for (int j = 0; j < langList.size(); j++) {

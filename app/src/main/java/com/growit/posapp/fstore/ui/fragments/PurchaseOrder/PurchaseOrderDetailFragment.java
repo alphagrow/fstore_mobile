@@ -289,6 +289,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     binding.status.setText("Received");
                     binding.receive.setVisibility(View.GONE);
                     binding.cancel.setVisibility(View.GONE);
+                    binding.invoiceDownload.setVisibility(View.VISIBLE);
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }else {

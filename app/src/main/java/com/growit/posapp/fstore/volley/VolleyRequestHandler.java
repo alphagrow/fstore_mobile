@@ -2,6 +2,7 @@ package com.growit.posapp.fstore.volley;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -61,9 +62,9 @@ public class VolleyRequestHandler {
 
     // Custom JSON Request Handler
     public void createRequest(final String uri, final VolleyCallback callback) {
-        CustomJasonObjectRequest rq = new CustomJasonObjectRequest(Request.Method.POST,
-                ApiConstants.BASE_URL+uri, params,
+        CustomJasonObjectRequest rq = new CustomJasonObjectRequest(Request.Method.POST, ApiConstants.BASE_URL+uri, params,
                 response -> {
+
                     try {
                         callback.onSuccess(response);
                     } catch (JSONException e) {

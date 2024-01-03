@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("login", storeID);
         params.put("password", password);
+
         new VolleyRequestHandler(this, params).createRequest(ApiConstants.SIGN_IN, new VolleyCallback() {
 
             @Override

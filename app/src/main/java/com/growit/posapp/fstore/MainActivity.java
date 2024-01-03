@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.AddTransfersFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
@@ -49,7 +50,6 @@ import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
-import com.growit.posapp.fstore.ui.fragments.SaleManagement.AddVendorAndCreateWareHouseFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListAndWareHouseListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
@@ -578,16 +578,16 @@ public class MainActivity extends AppCompatActivity {
                 drawer_layout.close();
             }
         });
-//        purchase_item.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                toolbar.setVisibility(View.GONE);
-//                Fragment fragment = PurchaseItemCartFragment.newInstance();
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-//                drawer_layout.close();
-//            }
-//        });
+        transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = AddTransfersFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
 
         purchase_order_list.setOnClickListener(new View.OnClickListener() {
             @Override
