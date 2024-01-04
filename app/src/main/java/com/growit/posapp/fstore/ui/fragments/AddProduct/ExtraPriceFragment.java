@@ -1,7 +1,6 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.AddProduct;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,11 +27,10 @@ import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ExtraPriceAdapter;
-import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.model.ExtraPriceData;
+import com.growit.posapp.fstore.model.TransfersModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
-import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
@@ -52,13 +50,15 @@ public class ExtraPriceFragment extends Fragment {
     TextView searchEditTxt;
     private TextView total_customer_text;
     ImageView backBtn;
-
+    int position=-1;
     ExtraPriceData extraPriceData;
 
     public static ExtraPriceFragment newInstance() {
         return new ExtraPriceFragment();
     }
-
+    public ExtraPriceFragment() {
+        // Required empty public constructor
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.extraprice_fragment, parent, false);
@@ -71,16 +71,25 @@ public class ExtraPriceFragment extends Fragment {
         lay_add_customer.setVisibility(View.VISIBLE);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // set Horizontal Orientation
-        customAdapter = new ExtraPriceAdapter(getActivity(), null);
+
+        if (getArguments() != null) {
+            position = getArguments().getInt("position");
+            String orderDetail = getArguments().getString("OrderDetail");
+            Gson gson = new Gson();
+            Type listType = new TypeToken<ExtraPriceData>() {
+            }.getType();
+            extraPriceData = gson.fromJson(orderDetail, listType);
+
+        }
+        customAdapter = new ExtraPriceAdapter(getActivity(), extraPriceData.getData().get(position).getVariants());
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
-
 
         add_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JSONArray jsonArray = new JSONArray();
-                for (int i = 0; i < extraPriceData.getData().size()-1; i++) {
+                for (int i = 0; i < extraPriceData.getData().get(position).getVariants().size()-1; i++) {
                     View view = linearLayoutManager.getChildAt(i);
                     if(view !=null) {
                         EditText mrpEditText = view.findViewById(R.id.mrp_text);
@@ -89,8 +98,8 @@ public class ExtraPriceFragment extends Fragment {
                         String extra_price = priceEditText.getText().toString();
                         JSONObject obj = new JSONObject();
                         try {
-                            obj.putOpt("product_tmpl_id", extraPriceData.getData().get(i).getProductId());
-                            obj.putOpt("variant_id", Integer.parseInt(extraPriceData.getData().get(i).getProductVariant()));
+                            obj.putOpt("product_tmpl_id", extraPriceData.getData().get(position).getProductId());
+                            obj.putOpt("variant_id", Integer.parseInt(extraPriceData.getData().get(position).getVariants().get(i).getProductVariant()));
                             obj.putOpt("extra_price", Double.parseDouble(extra_price));
                             obj.putOpt("mrp_price", Double.parseDouble(mrp));
                             jsonArray.put(obj);
@@ -127,52 +136,52 @@ public class ExtraPriceFragment extends Fragment {
                     }
                 })
         );
-        getVariants();
+     //   getVariants();
         return view;
     }
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
     }
 
 
-    private void getVariants() {
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_EXTRA_PRICE;
-        Utility.showDialoge("Please wait while a moment...", getActivity());
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                JSONObject obj = null;
-                try {
-                    obj = new JSONObject(response.toString());
-                    int statusCode = obj.optInt("statuscode");
-                    String status = obj.optString("status");
-
-                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
-                        Gson gson = new Gson();
-                        Type listType = new TypeToken<ExtraPriceData>() {
-                        }.getType();
-                        extraPriceData = gson.fromJson(response.toString(), listType);
-                        customAdapter = new ExtraPriceAdapter(getActivity(), extraPriceData.getData());
-                        recyclerView.setAdapter(customAdapter);
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        total_customer_text.setText("Total: " + extraPriceData.getData().size() + " " + "Variants");
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-            }
-        }, error -> {
-            recyclerView.setVisibility(View.GONE);
-        });
-        queue.add(jsonObjectRequest);
-    }
+//    private void getVariants() {
+//        RequestQueue queue = Volley.newRequestQueue(getActivity());
+//        String url = ApiConstants.BASE_URL + ApiConstants.GET_EXTRA_PRICE;
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+//
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                JSONObject obj = null;
+//                try {
+//                    obj = new JSONObject(response.toString());
+//                    int statusCode = obj.optInt("statuscode");
+//                    String status = obj.optString("status");
+//                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+//                        Utility.dismissDialoge();
+//                        Gson gson = new Gson();
+//                        Type listType = new TypeToken<ExtraPriceData>() {
+//                        }.getType();
+//                        extraPriceData = gson.fromJson(response.toString(), listType);
+//                        customAdapter = new ExtraPriceAdapter(getActivity(), extraPriceData.getData());
+//                        recyclerView.setAdapter(customAdapter);
+//                        recyclerView.setLayoutManager(linearLayoutManager);
+//                        total_customer_text.setText("Total: " + extraPriceData.getData().size() + " " + "Variants");
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//
+//            }
+//        }, error -> {
+//            recyclerView.setVisibility(View.GONE);
+//        });
+//        queue.add(jsonObjectRequest);
+//    }
 
 
 
@@ -190,7 +199,7 @@ public class ExtraPriceFragment extends Fragment {
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
-              String  str_message = obj.optString("message");
+                String  str_message = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();

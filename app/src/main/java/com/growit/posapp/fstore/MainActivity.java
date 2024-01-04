@@ -37,12 +37,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.ProductExtraPriceListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.AddTransfersFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
-import com.growit.posapp.fstore.ui.fragments.ExtraPriceFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.ExtraPriceFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.ConfigurationFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.TransfersOrderListFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
@@ -417,8 +418,8 @@ public class MainActivity extends AppCompatActivity {
             toolbar.setVisibility(View.GONE);
             toolbar_image_lay.setVisibility(View.GONE);
             titleTxt.setVisibility(View.VISIBLE);
-            titleTxt.setText("Extra Price");
-            fragment = ExtraPriceFragment.newInstance();
+            titleTxt.setText("Product Extra Price");
+            fragment = ProductExtraPriceListFragment.newInstance();
         } else if (menuItem.getItemId() == R.id.about_fragment) {
             ///toolbar vistble
             toolbar.setVisibility(View.GONE);

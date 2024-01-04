@@ -32,6 +32,8 @@ import com.growit.posapp.fstore.databinding.FragmentPurchaseOrderListBinding;
 import com.growit.posapp.fstore.databinding.FragmentTransfersOrderListBinding;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseOrder;
+import com.growit.posapp.fstore.model.TransfersModel;
+import com.growit.posapp.fstore.model.TransfersModelList;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderDetailFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -49,7 +51,7 @@ import java.util.ArrayList;
 public class TransfersOrderListFragment extends Fragment {
 
     FragmentTransfersOrderListBinding binding;
-    PurchaseModel model;
+    TransfersModel model;
     TransfersOrderAdapter adapter;
     private  String mResponse="";
 
@@ -78,7 +80,6 @@ public class TransfersOrderListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transfers_order_list, container, false);
         init();
         return binding.getRoot();
@@ -102,7 +103,7 @@ public class TransfersOrderListFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("OrderDetail", mResponse);
                         bundle.putInt("position", position);
-                        Fragment fragment = PurchaseOrderDetailFragment.newInstance();
+                        Fragment fragment = TransfersDetailsFragment.newInstance();
                         fragment.setArguments(bundle);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -143,8 +144,7 @@ public class TransfersOrderListFragment extends Fragment {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST;
-
-     //   String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        //   String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -157,15 +157,15 @@ public class TransfersOrderListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
-                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                   // if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                    if (status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
                         Gson gson = new Gson();
-                        Type listType = new TypeToken<PurchaseModel>() {
+                        Type listType = new TypeToken<TransfersModel>() {
                         }.getType();
 
                         model = gson.fromJson(response.toString(), listType);
-                        if (model.getOrders() == null || model.getOrders().size() == 0) {
+                        if (model.getData() == null || model.getData().size() == 0) {
                             binding.noDataFound.setVisibility(View.VISIBLE);
                             binding.transactionRecyclerView.setVisibility(View.GONE);
 
@@ -174,7 +174,7 @@ public class TransfersOrderListFragment extends Fragment {
                             binding.transactionRecyclerView.setVisibility(View.VISIBLE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            adapter = new TransfersOrderAdapter(getActivity(), model.getOrders());
+                            adapter = new TransfersOrderAdapter(getActivity(), model.getData());
                             binding.transactionRecyclerView.setAdapter(adapter);
                             binding.transactionRecyclerView.setLayoutManager(layoutManager);
 
@@ -194,9 +194,9 @@ public class TransfersOrderListFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
     private void filterList(String text){
-        ArrayList<PurchaseOrder> model_list = new ArrayList<>();
-        for (PurchaseOrder detail : model.getOrders()){
-            if (detail.getName().toLowerCase().contains(text.toLowerCase()) || detail.getPartnerId().toLowerCase().contains(text.toLowerCase())){
+        ArrayList<TransfersModelList> model_list = new ArrayList<>();
+        for (TransfersModelList detail : model.getData()){
+            if (detail.getName().toLowerCase().contains(text.toLowerCase()) || detail.getOrigin().toLowerCase().contains(text.toLowerCase())){
                 model_list.add(detail);
             }
         }

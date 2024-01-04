@@ -11,23 +11,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.growit.posapp.fstore.R;
-import com.growit.posapp.fstore.model.Purchase.PurchaseOrder;
+import com.growit.posapp.fstore.model.ExtraVariantData;
 import com.growit.posapp.fstore.model.TransfersModelList;
+import com.growit.posapp.fstore.utils.ApiConstants;
+import com.squareup.picasso.Picasso;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransfersOrderAdapter extends RecyclerView.Adapter<TransfersOrderAdapter.ViewHolder> {
+public class ProductExtraPriceAdapter extends RecyclerView.Adapter<ProductExtraPriceAdapter.ViewHolder> {
 
-    private List<TransfersModelList> order;
+    private List<ExtraVariantData> order;
     private Context mContext;
 
-    public TransfersOrderAdapter(Context context, List<TransfersModelList> order_list) {
+    public ProductExtraPriceAdapter(Context context, List<ExtraVariantData> order_list) {
         order = order_list;
         mContext = context;
     }
-    public void updateList(ArrayList<TransfersModelList> modellist) {
+    public void updateList(ArrayList<ExtraVariantData> modellist) {
         this.order=modellist;
         notifyDataSetChanged();
     }
@@ -49,30 +50,29 @@ public class TransfersOrderAdapter extends RecyclerView.Adapter<TransfersOrderAd
     }
 
     @Override
-    public TransfersOrderAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProductExtraPriceAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.transfer_order_item_row, parent, false);
-        TransfersOrderAdapter.ViewHolder viewHolder = new TransfersOrderAdapter.ViewHolder(contactView);
+        ProductExtraPriceAdapter.ViewHolder viewHolder = new ProductExtraPriceAdapter.ViewHolder(contactView);
         return viewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(@NonNull TransfersOrderAdapter.ViewHolder holder, int position) {
-        TransfersModelList orders = order.get(position);
+    public void onBindViewHolder(@NonNull ProductExtraPriceAdapter.ViewHolder holder, int position) {
+        ExtraVariantData orders = order.get(position);
 
-        holder.order_no.setText(orders.getOrigin());
-        holder.product_name.setText(orders.getName());
-        holder.state.setText(orders.getState());
+        holder.product_name.setText(orders.getProductName());
+
 
 
 
 //        DecimalFormat form = new DecimalFormat("0.00");
-//        Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getProducts().get(0).getProductImageUrl())
-//                .placeholder(R.drawable.loading)
-//                .error(R.drawable.no_image)
-//                .into(holder.images);
+        Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getImageUrl())
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.no_image)
+                .into(holder.images);
 
 //        holder.amountTxt.setText("Rs. "+form.format(Double.valueOf(orders.getAmountPaid())));
 //        if(orders.getPayment_type()!=null) {

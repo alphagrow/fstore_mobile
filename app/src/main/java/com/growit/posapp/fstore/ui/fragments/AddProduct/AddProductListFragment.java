@@ -56,7 +56,7 @@ import java.util.List;
 
 public class AddProductListFragment extends Fragment {
     FragmentAddProductListBinding binding;
-    StockInventoryModel stockInventoryModel;
+
     AddProductListAdapter adapter;
     protected List<Product> productList = new ArrayList<>();
     Activity contexts;

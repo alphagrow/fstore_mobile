@@ -438,7 +438,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
 
     private void addProductRequest(String hsn_code, String str_hsn_code_dec, String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id, JSONArray attribute_json_array) {
-
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");

@@ -1,21 +1,17 @@
 package com.growit.posapp.fstore.model;
 
-
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExtraPriceData {
+import java.util.List;
 
+public class TransfersModel {
     @SerializedName("status")
     @Expose
     private String status;
-    @SerializedName("statuscode")
-    @Expose
-    private Integer statuscode;
     @SerializedName("data")
     @Expose
-    private List<ExtraVariantData> data;
+    private List<TransfersModelList> data;
 
     public String getStatus() {
         return status;
@@ -25,20 +21,11 @@ public class ExtraPriceData {
         this.status = status;
     }
 
-    public Integer getStatuscode() {
-        return statuscode;
-    }
-
-    public void setStatuscode(Integer statuscode) {
-        this.statuscode = statuscode;
-    }
-
-    public List<ExtraVariantData> getData() {
+    public List<TransfersModelList> getData() {
         return data;
     }
 
-    public void setData(List<ExtraVariantData> data) {
+    public void setData(List<TransfersModelList> data) {
         this.data = data;
     }
-
 }
