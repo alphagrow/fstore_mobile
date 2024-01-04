@@ -76,8 +76,7 @@ public class TransfersOrderListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transfers_order_list, container, false);
@@ -143,7 +142,9 @@ public class TransfersOrderListFragment extends Fragment {
     private void getPurchaseList(){
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = ApiConstants.BASE_URL + ApiConstants.POST_PURCHASE_ORDER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST;
+
+     //   String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

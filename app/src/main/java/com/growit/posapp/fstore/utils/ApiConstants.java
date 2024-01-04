@@ -74,6 +74,7 @@ public class ApiConstants {
     public final static String GET_TRANSFER_LIST = "/api/transfer/list";
     public final static String GET_OPERATION_TYPE_LIST = "/api/operation_types";
    public final static String POST_TRANSFER_ORDER = "/api/stock_transfer?";
+
 }
 
 

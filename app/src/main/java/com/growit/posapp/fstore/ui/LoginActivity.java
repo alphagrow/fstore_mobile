@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intentLogin = new Intent(LoginActivity.this, UserRegistrationActivity.class);
+                intentLogin.putExtra("company_profile", "company_profile");
                 startActivity(intentLogin);
                 finish();
             }
