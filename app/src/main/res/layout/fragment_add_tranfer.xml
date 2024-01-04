@@ -397,12 +397,49 @@
                             android:layout_marginBottom="10dp"
                             android:orientation="vertical">
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="15dp"
+                                android:orientation="horizontal"
+                                android:padding="7dp"
+                                android:weightSum="2">
 
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/helveticaneuelight"
+                                    android:text="Total Items"
+                                    android:textColor="#E1626262"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/itemCountTxt"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/helvetica_neue_medium"
+                                    android:gravity="end"
+                                    android:textColor="#E9171717"
+                                    android:textSize="16sp"
+                                    android:textStyle="normal" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                android:background="#E6E4E4E4" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginLeft="5dp"
                                 android:layout_marginRight="15dp"
                                 android:orientation="horizontal"
                                 android:padding="7dp"
@@ -415,7 +452,7 @@
                                     android:fontFamily="@font/helveticaneuelight"
                                     android:text="Contact : "
                                     android:textColor="#E1626262"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
 
                                 <Spinner
@@ -436,7 +473,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginLeft="5dp"
                                 android:layout_marginRight="15dp"
                                 android:orientation="horizontal"
                                 android:padding="7dp"
@@ -447,9 +484,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".8"
                                     android:fontFamily="@font/helveticaneuelight"
-                                    android:text="Operation Type"
+                                    android:text="Operation Type :"
                                     android:textColor="#E1626262"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
 
                                 <Spinner
@@ -472,7 +509,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginLeft="5dp"
                                 android:layout_marginRight="15dp"
                                 android:orientation="horizontal"
                                 android:padding="7dp"
@@ -485,7 +522,7 @@
                                     android:fontFamily="@font/helveticaneuelight"
                                     android:text="Source Location : "
                                     android:textColor="#E1626262"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
 
                                 <Spinner
@@ -506,7 +543,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
+                                android:layout_marginLeft="5dp"
                                 android:layout_marginRight="15dp"
                                 android:orientation="horizontal"
                                 android:padding="7dp"
@@ -519,7 +556,7 @@
                                     android:fontFamily="@font/helveticaneuelight"
                                     android:text="Destination Location : "
                                     android:textColor="#E1626262"
-                                    android:textSize="14sp"
+                                    android:textSize="12sp"
                                     android:textStyle="bold" />
 
                                 <Spinner
@@ -531,43 +568,6 @@
 
                             </LinearLayout>
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="2dp"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="5dp"
-                                android:background="#E6E4E4E4" />
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="15dp"
-                                android:layout_marginRight="15dp"
-                                android:orientation="horizontal"
-                                android:padding="7dp"
-                                android:weightSum="2">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/helveticaneuelight"
-                                    android:text="Total Items"
-                                    android:textColor="#E1626262"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/itemCountTxt"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/helvetica_neue_medium"
-                                    android:gravity="end"
-                                    android:textColor="#E9171717"
-                                    android:textSize="16sp"
-                                    android:textStyle="normal" />
-
-                            </LinearLayout>
 
 
 
@@ -577,7 +577,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="40dp"
-                                android:layout_marginTop="20dp"
+                                android:layout_marginTop="30dp"
                                 android:layout_marginEnd="40dp"
                                 android:layout_marginBottom="20dp"
                                 android:background="@drawable/button"
