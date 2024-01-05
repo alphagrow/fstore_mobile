@@ -201,7 +201,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
-// TODO Auto-generated method stub
+          // TODO Auto-generated method stub
             }
         });
 
@@ -275,8 +275,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.selNonGov.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-// checkedId is the RadioButton selected
-// RadioButton rb = view.findViewById(checkedId);
+             // checkedId is the RadioButton selected
+             // RadioButton rb = view.findViewById(checkedId);
                 if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Gov")) {
                     str_non_gov_product = "Non-Gov";
                 } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov Authorized")) {
@@ -386,7 +386,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
 
             Log.d("attribute_json_array", attribute_json_array.toString());
-
             if (attribute_json_array != null) {
                 if (str_crop_id.length() != 0) {
                     addProductRequest(str_hsn_code, str_hsn_code_dec, str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);

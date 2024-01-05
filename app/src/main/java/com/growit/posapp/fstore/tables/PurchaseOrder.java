@@ -216,4 +216,45 @@ public class PurchaseOrder implements Serializable {
 
     @ColumnInfo(name = "productVariants")
     private String productVariants;
+
+    @ColumnInfo(name = "batch_number")
+    private String batch_number;
+    @ColumnInfo(name = "cir_number")
+    private String cir_number;
+    @ColumnInfo(name = "mfd_date")
+    private String mfd_date;
+    @ColumnInfo(name = "mkd_by")
+    private String mkd_by;
+
+    public String getBatch_number() {
+        return batch_number;
+    }
+
+    public void setBatch_number(String batch_number) {
+        this.batch_number = batch_number;
+    }
+
+    public String getCir_number() {
+        return cir_number;
+    }
+
+    public void setCir_number(String cir_number) {
+        this.cir_number = cir_number;
+    }
+
+    public String getMfd_date() {
+        return mfd_date;
+    }
+
+    public void setMfd_date(String mfd_date) {
+        this.mfd_date = mfd_date;
+    }
+
+    public String getMkd_by() {
+        return mkd_by;
+    }
+
+    public void setMkd_by(String mkd_by) {
+        this.mkd_by = mkd_by;
+    }
 }

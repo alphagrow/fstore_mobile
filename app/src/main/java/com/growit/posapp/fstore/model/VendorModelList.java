@@ -43,10 +43,21 @@ public class VendorModelList {
     @SerializedName("district_id")
     @Expose
     private String districtId;
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
     @SerializedName("taluka_id")
     @Expose
     private String talukaId;
-
+    @SerializedName("license_number")
+    @Expose
+    private String licenseNumber;
     public Boolean getActive() {
         return active;
     }

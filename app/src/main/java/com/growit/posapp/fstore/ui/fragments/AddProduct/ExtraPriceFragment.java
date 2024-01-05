@@ -89,7 +89,7 @@ public class ExtraPriceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 JSONArray jsonArray = new JSONArray();
-                for (int i = 0; i < extraPriceData.getData().get(position).getVariants().size()-1; i++) {
+                for (int i = 0; i < extraPriceData.getData().get(position).getVariants().size(); i++) {
                     View view = linearLayoutManager.getChildAt(i);
                     if(view !=null) {
                         EditText mrpEditText = view.findViewById(R.id.mrp_text);

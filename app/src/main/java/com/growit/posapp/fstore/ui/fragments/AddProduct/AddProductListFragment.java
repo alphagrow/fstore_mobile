@@ -206,9 +206,9 @@ public class AddProductListFragment extends Fragment {
 
 
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
-                            binding.noItem.setVisibility(View.GONE);
+                            binding.noDataFound.setVisibility(View.GONE);
                         } else {
-                            binding.noItem.setVisibility(View.GONE);
+                            binding.noDataFound.setVisibility(View.GONE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             adapter = new AddProductListAdapter(getActivity(), purchaseProductModel,crop_id,crop_name);
@@ -278,9 +278,9 @@ public class AddProductListFragment extends Fragment {
 
 
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
-                            binding.noItem.setVisibility(View.GONE);
+                            binding.noDataFound.setVisibility(View.GONE);
                         } else {
-                            binding.noItem.setVisibility(View.GONE);
+                            binding.noDataFound.setVisibility(View.GONE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             adapter = new AddProductListAdapter(getActivity(), purchaseProductModel,crop_id,crop_name);

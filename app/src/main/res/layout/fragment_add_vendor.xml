@@ -67,6 +67,34 @@
                 android:maxLength="10"
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical" />
+            <CheckBox
+                android:id="@+id/checkBox_gst"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select GST Number"
+                android:textColor="#000"
+                android:checked="false"
+                android:onClick="checkbox_clicked" />
+
+            <EditText
+                android:id="@+id/et_gst_no"
+                android:visibility="gone"
+                android:importantForAutofill="no"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_person_pin_circle_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="GST "
+                android:inputType="text"
+                android:textSize="14dp"
+                android:padding="8dp" />
 
             <EditText
                 android:id="@+id/customer_type"
@@ -237,6 +265,24 @@
                 android:maxLength="6"
                 android:padding="8dp" />
             <EditText
+                android:id="@+id/et_license_number"
+                android:importantForAutofill="no"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:background="@drawable/custom_edit_text_cut"
+                android:drawableEnd="@drawable/baseline_person_pin_circle_24"
+                android:drawablePadding="@dimen/ten"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint="License number"
+                android:inputType="number"
+                android:textSize="14dp"
+                android:maxLength="6"
+                android:padding="8dp" />
+
+            <EditText
                 android:id="@+id/et_city"
                 android:importantForAutofill="no"
                 android:layout_width="match_parent"
@@ -255,22 +301,6 @@
                 android:padding="8dp" />
 
 
-            <EditText
-                android:id="@+id/et_gst_no"
-                android:importantForAutofill="no"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="25dp"
-                android:background="@drawable/custom_edit_text_cut"
-                android:drawableEnd="@drawable/baseline_person_pin_circle_24"
-                android:drawablePadding="@dimen/ten"
-                android:fontFamily="@font/sf_compact_medium"
-                android:hint="GST "
-                android:inputType="text"
-                android:textSize="14dp"
-                android:padding="8dp" />
             <Button
                 android:id="@+id/update"
                 android:layout_width="match_parent"

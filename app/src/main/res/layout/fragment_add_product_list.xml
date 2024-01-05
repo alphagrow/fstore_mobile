@@ -99,14 +99,15 @@
 
                 </LinearLayout>
 
-                <ImageView
-            android:id="@+id/no_item"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/sorry_data">
+                <TextView
+                    android:id="@+id/noDataFound"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    android:text="No Data Found !\nRetry Again." />
 
-        </ImageView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"

@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.CreateAttributeFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.ProductExtraPriceListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.AddTransfersFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
@@ -76,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout toolbar_image_lay;
     TextView home_text,customer_text,cart_text,transaction_text,order_text;
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
-    LinearLayout  sale_menu_lay;
+    LinearLayout  sale_menu_lay,setting_menu_lay,product_menu_lay,customer_menu_lay;
     LinearLayout inventory_menu;
-    TextView vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type,transfer_order_list;
+    TextView add_customer,view_cus,add_product_text,product_list_text,add_extra_price,add_attribute,add_pos_cat,vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type,transfer_order_list;
     boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -394,64 +395,29 @@ public class MainActivity extends AppCompatActivity {
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
-        if (menuItem.getItemId() == R.id.home_fragment) {
-            ///toolbar vistble
-            toolbar.setVisibility(View.VISIBLE);
-            toolbar_image_lay.setVisibility(View.VISIBLE);
-            titleTxt.setVisibility(View.GONE);
-            toolbar.setVisibility(View.VISIBLE);
-            // titleTxt.setText("Products");
-            fragment = ProductListFragment.newInstance();
-        } else if (menuItem.getItemId() == R.id.cst_fragment) {
-            toolbar.setVisibility(View.GONE);
-
-            fragment = AddCustomerFragment.newInstance();
-        } else if (menuItem.getItemId() == R.id.Viewcst_fragment) {
+//        if (menuItem.getItemId() == R.id.home_fragment) {
+//            ///toolbar vistble
+//            toolbar.setVisibility(View.VISIBLE);
+//            toolbar_image_lay.setVisibility(View.VISIBLE);
+//            titleTxt.setVisibility(View.GONE);
+//            toolbar.setVisibility(View.VISIBLE);
+//            // titleTxt.setText("Products");
+//            fragment = ProductListFragment.newInstance();
+//        } else
+//            if (menuItem.getItemId() == R.id.cst_fragment) {
+//            toolbar.setVisibility(View.GONE);
+//
+//            fragment = AddCustomerFragment.newInstance();
+//        } else if (menuItem.getItemId() == R.id.Viewcst_fragment) {
             ///toolbar gone
-            toolbar.setVisibility(View.GONE);
-            toolbar_image_lay.setVisibility(View.GONE);
-            titleTxt.setVisibility(View.VISIBLE);
-            titleTxt.setText("View Customer");
-            fragment = CustomerRecyclerViewFragment.newInstance();
-        }  else if (menuItem.getItemId() == R.id.add_price) {
-            ///toolbar gone
-            toolbar.setVisibility(View.GONE);
-            toolbar_image_lay.setVisibility(View.GONE);
-            titleTxt.setVisibility(View.VISIBLE);
-            titleTxt.setText("Product Extra Price");
-            fragment = ProductExtraPriceListFragment.newInstance();
-        } else if (menuItem.getItemId() == R.id.about_fragment) {
-            ///toolbar vistble
-            toolbar.setVisibility(View.GONE);
 
-            fragment = AboutFragment.newInstance();
-        } else if (menuItem.getItemId() == R.id.contact_fragment) {
+      if (menuItem.getItemId() == R.id.contact_fragment) {
             toolbar.setVisibility(View.GONE);
             ///toolbar vistble
 
 //            toolbar.setBackgroundResource(R.color.colorPrimary);
 //            toolbar_image_lay.setVisibility(View.GONE);
             fragment = ContactUsFragment.newInstance();
-
-        }  else if (menuItem.getItemId() == R.id.add_product) {
-            toolbar.setVisibility(View.GONE);
-            fragment = AddProductFragment.newInstance();
-
-        }else if (menuItem.getItemId() == R.id.create_attribute) {
-            toolbar.setVisibility(View.GONE);
-            fragment = AttributeListFragment.newInstance();
-
-        } else if (menuItem.getItemId() == R.id.add_pos_category) {
-            toolbar.setVisibility(View.GONE);
-            fragment = POSCategoryListFragment.newInstance();
-
-        }else if (menuItem.getItemId() == R.id.product_list) {
-            toolbar.setVisibility(View.GONE);
-
-            Bundle bundle = new Bundle();
-            bundle.putString("product_list", "All_product");
-             fragment = AddProductListFragment.newInstance();
-             fragment.setArguments(bundle);
 
         }
         else if (menuItem.getItemId() == R.id.logout_id) {
@@ -478,8 +444,7 @@ public class MainActivity extends AppCompatActivity {
         warehouses = view_inventory.findViewById(R.id.warehouses);
         transfer = view_inventory.findViewById(R.id.transfer);
         transfer_order_list = view_inventory.findViewById(R.id.transfer_order_list);
-        location = view_inventory.findViewById(R.id.location);
-        operation_type = view_inventory.findViewById(R.id.operation_type);
+
 
         View view_sale = nvDrawer.inflateHeaderView(R.layout.menu_button);
         sale_menu_lay = view_sale.findViewById(R.id.sale_menu_lay);
@@ -488,10 +453,68 @@ public class MainActivity extends AppCompatActivity {
      //   purchase_item = view_sale.findViewById(R.id.purchase_item);
        purchase_order_list = view_sale.findViewById(R.id.purchase_order_list);
 
+
+
+        View view_product = nvDrawer.inflateHeaderView(R.layout.product_button);
+        product_menu_lay = view_product.findViewById(R.id.product_menu_lay);
+        add_product_text = view_product.findViewById(R.id.add_product_text);
+        product_list_text = view_product.findViewById(R.id.product_list_text);
+        add_extra_price = view_product.findViewById(R.id.add_extra_price);
+        add_pos_cat = view_product.findViewById(R.id.add_pos_cat);
+        add_attribute = view_product.findViewById(R.id.add_attribute);
+
+        View view_customer = nvDrawer.inflateHeaderView(R.layout.customer_button);
+        customer_menu_lay = view_customer.findViewById(R.id.customer_menu_lay);
+        add_customer = view_customer.findViewById(R.id.add_customer);
+        view_cus = view_customer.findViewById(R.id.view_customer);
+
+        View view_setting = nvDrawer.inflateHeaderView(R.layout.setting_button);
+        setting_menu_lay = view_setting.findViewById(R.id.setting_menu_lay);
+        location = view_setting.findViewById(R.id.location);
+        operation_type = view_setting.findViewById(R.id.operation_type);
+
+
+
+
         name.setText(sm.getUserName());
         headerLayout.setOnClickListener(view -> {
             Intent profileIntent = new Intent(MainActivity.this, MyProfileActivity.class);
             startActivity(profileIntent);
+        });
+        customer_menu_lay.setOnClickListener(view -> {
+            if (!isClicked) {
+                add_customer.setVisibility(View.VISIBLE);
+                view_cus.setVisibility(View.VISIBLE);
+
+                isClicked = true;
+            }else {
+                add_customer.setVisibility(View.GONE);
+                view_cus.setVisibility(View.GONE);
+
+                isClicked = false;
+            }
+
+        });
+
+        add_customer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = AddCustomerFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        view_cus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = CustomerRecyclerViewFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
         });
         inventory_menu.setOnClickListener(view -> {
             if (!isClicked) {
@@ -499,21 +522,90 @@ public class MainActivity extends AppCompatActivity {
                 transfer_order_list.setVisibility(View.VISIBLE);
                 transfer.setVisibility(View.VISIBLE);
                 warehouses.setVisibility(View.VISIBLE);
-                location.setVisibility(View.VISIBLE);
-                operation_type.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
                 inventory_text.setVisibility(View.GONE);
                 warehouses.setVisibility(View.GONE);
                 transfer.setVisibility(View.GONE);
-                location.setVisibility(View.GONE);
-                operation_type.setVisibility(View.GONE);
                 transfer_order_list.setVisibility(View.GONE);
                 isClicked = false;
             }
 
         });
+        product_menu_lay.setOnClickListener(view -> {
+            if (!isClicked) {
+                add_product_text.setVisibility(View.VISIBLE);
+                product_list_text.setVisibility(View.VISIBLE);
+                add_extra_price.setVisibility(View.VISIBLE);
+                add_pos_cat.setVisibility(View.VISIBLE);
+                add_attribute.setVisibility(View.VISIBLE);
+                isClicked = true;
+            }else {
+                add_product_text.setVisibility(View.GONE);
+                product_list_text.setVisibility(View.GONE);
+                add_extra_price.setVisibility(View.GONE);
+                add_pos_cat.setVisibility(View.GONE);
+                add_attribute.setVisibility(View.GONE);
+                isClicked = false;
+            }
 
+        });
+
+        add_product_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = AddProductFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+
+
+        product_list_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Bundle bundle = new Bundle();
+                bundle.putString("product_list", "All_product");
+                Fragment fragment = AddProductListFragment.newInstance();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        add_extra_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = ProductExtraPriceListFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        add_pos_cat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = POSCategoryListFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        add_attribute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = CreateAttributeFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -638,6 +730,18 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 drawer_layout.close();
             }
+        });
+        setting_menu_lay.setOnClickListener(view -> {
+            if (!isClicked) {
+                location.setVisibility(View.VISIBLE);
+                operation_type.setVisibility(View.VISIBLE);
+                isClicked = true;
+            }else {
+                location.setVisibility(View.GONE);
+                operation_type.setVisibility(View.GONE);
+                isClicked = false;
+            }
+
         });
 
     }

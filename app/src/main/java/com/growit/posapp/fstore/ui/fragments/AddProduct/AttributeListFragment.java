@@ -162,9 +162,9 @@ public class AttributeListFragment extends Fragment {
                         model.addAll(model_attribute.getAttributes());
 
                         if (model_attribute.getAttributes() == null || model_attribute.getAttributes().size() == 0) {
-                                binding.noItem.setVisibility(View.GONE);
+                                binding.noDataFound.setVisibility(View.GONE);
                             } else {
-                                binding.noItem.setVisibility(View.GONE);
+                                binding.noDataFound.setVisibility(View.GONE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                 adapter = new AttributeAdapter(getActivity(), model);

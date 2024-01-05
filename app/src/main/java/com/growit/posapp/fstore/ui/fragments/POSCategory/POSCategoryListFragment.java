@@ -159,9 +159,9 @@ public class POSCategoryListFragment extends Fragment {
                                 cropList.add(cropPattern);
                             }
                             if (cropList == null || cropList.size() == 0) {
-                                binding.noItem.setVisibility(View.VISIBLE);
+                                binding.noDataFound.setVisibility(View.VISIBLE);
                             } else {
-                                binding.noItem.setVisibility(View.GONE);
+                                binding.noDataFound.setVisibility(View.GONE);
                                 adapter = new POSAdapter(getActivity(), cropList);
                                 binding.recyclerPos.setAdapter(adapter);
 

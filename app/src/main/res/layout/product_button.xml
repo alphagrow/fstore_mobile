@@ -13,7 +13,7 @@
     </View>
     <LinearLayout
         android:padding="5dp"
-        android:id="@+id/inventory_menu_lay"
+        android:id="@+id/product_menu_lay"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,7 +25,7 @@
             android:textStyle="bold"
             android:layout_marginLeft="40dp"
             android:fontFamily="serif"
-            android:text=" Inventory Management "
+            android:text=" Product Management "
             android:textColor="@color/black"
             android:textSize="16sp" />
         <ImageView
@@ -39,7 +39,7 @@
     </LinearLayout>
     <TextView
         android:layout_marginTop="10dp"
-        android:id="@+id/inventory_text"
+        android:id="@+id/add_product_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_account_circle_24"
@@ -50,11 +50,11 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="    Stock Details "
+        android:text="    Add Product "
         android:textSize="13sp" />
     <TextView
         android:layout_marginTop="10dp"
-        android:id="@+id/transfer"
+        android:id="@+id/product_list_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_account_circle_24"
@@ -65,11 +65,11 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="    Transfer "
+        android:text="    Product List "
         android:textSize="13sp" />
     <TextView
         android:layout_marginTop="10dp"
-        android:id="@+id/transfer_order_list"
+        android:id="@+id/add_extra_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_account_circle_24"
@@ -80,11 +80,11 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="  Transfer Order List "
+        android:text="  Add Extra Price "
         android:textSize="13sp" />
     <TextView
         android:layout_marginTop="10dp"
-        android:id="@+id/warehouses"
+        android:id="@+id/add_pos_cat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_account_circle_24"
@@ -95,9 +95,24 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="    Warehouses "
+        android:text="    Add POS Category "
         android:textSize="13sp" />
 
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/add_attribute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_account_circle_24"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:drawableLeft="@drawable/icon_user"
+        android:text="    Create Attribute "
+        android:textSize="13sp" />
 
 
 </LinearLayout>

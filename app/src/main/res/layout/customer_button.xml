@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -13,7 +14,7 @@
     </View>
     <LinearLayout
         android:padding="5dp"
-        android:id="@+id/inventory_menu_lay"
+        android:id="@+id/customer_menu_lay"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -25,7 +26,7 @@
             android:textStyle="bold"
             android:layout_marginLeft="40dp"
             android:fontFamily="serif"
-            android:text=" Inventory Management "
+            android:text=" Customer Management "
             android:textColor="@color/black"
             android:textSize="16sp" />
         <ImageView
@@ -37,9 +38,12 @@
 
         </ImageView>
     </LinearLayout>
+
+
+
     <TextView
         android:layout_marginTop="10dp"
-        android:id="@+id/inventory_text"
+        android:id="@+id/add_customer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_account_circle_24"
@@ -50,11 +54,12 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="    Stock Details "
+        android:text="     Add Customer "
         android:textSize="13sp" />
+
     <TextView
         android:layout_marginTop="10dp"
-        android:id="@+id/transfer"
+        android:id="@+id/view_customer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/baseline_account_circle_24"
@@ -65,37 +70,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="    Transfer "
-        android:textSize="13sp" />
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/transfer_order_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/baseline_account_circle_24"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="  Transfer Order List "
-        android:textSize="13sp" />
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/warehouses"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/baseline_account_circle_24"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="    Warehouses "
+        android:text="     View Customer "
         android:textSize="13sp" />
 
 

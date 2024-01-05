@@ -62,7 +62,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/helvetica_neue_medium"
-                    android:text="My Crops"
+                    android:text="Category"
                     android:textColor="#424242"
                     android:textSize="16sp"
                     android:textStyle="normal" />

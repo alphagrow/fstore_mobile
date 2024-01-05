@@ -61,7 +61,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/helvetica_neue_medium"
-                    android:text="My Crops"
+                    android:text="Category"
                     android:textColor="#424242"
                     android:textSize="16sp"
                     android:textStyle="normal" />
@@ -116,7 +116,7 @@
                     android:background="#E6E4E4E4" />
 
                 <androidx.cardview.widget.CardView
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/card_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -193,6 +193,130 @@
                             android:padding="5dp"
                             android:textColor="#8A8A8A"
                             android:textSize="15sp" />
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:weightSum="2"
+                            android:gravity="center"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:textStyle="normal"
+                                    android:textSize="14sp"
+                                    android:text="Batch Number"
+                                    android:textColor="#A8666666"
+                                    />
+                                <EditText
+                                    android:id="@+id/batch_number"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text=""
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp"
+                                    android:textStyle="normal"
+                                    android:visibility="visible"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:textStyle="normal"
+                                    android:textSize="14sp"
+                                    android:text="CIR Number"
+                                    android:textColor="#A8666666"
+                                    />
+                                <EditText
+                                    android:id="@+id/cir_no"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:hint=" "
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp"
+                                    android:textStyle="normal"
+                                    android:visibility="visible"/>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:weightSum="2"
+                            android:gravity="center"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:textStyle="normal"
+                                    android:textSize="14sp"
+                                    android:text="MFD Date"
+                                    android:textColor="#A8666666"
+                                    />
+                                <EditText
+                                    android:id="@+id/mfd_date"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:text=""
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp"
+                                    android:textStyle="normal"
+                                    android:visibility="visible"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:textStyle="normal"
+                                    android:textSize="14sp"
+                                    android:text="MKD By"
+                                    android:textColor="#A8666666"
+                                    />
+                                <EditText
+                                    android:id="@+id/mkd_by"
+                                    android:layout_width="150dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:hint=" "
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp"
+                                    android:textStyle="normal"
+                                    android:visibility="visible"/>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
 <!--                        <TextView-->
 <!--                            android:id="@+id/pro_curr_text"-->
@@ -228,8 +352,7 @@
                                 android:gravity="start"
                                 android:text="Unit Price"
                                 android:textSize="12sp"
-                                android:textStyle="bold"
-                                />
+                                android:textStyle="bold"/>
 
                             <LinearLayout
                                 android:layout_marginTop="10dp"
@@ -255,7 +378,7 @@
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
                                     android:textStyle="normal"
-                                    android:visibility="visible" />
+                                    android:visibility="visible"/>
                             </LinearLayout>
 
                         </LinearLayout>

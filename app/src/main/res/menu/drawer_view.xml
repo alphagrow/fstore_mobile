@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/home_fragment"
-        android:icon="@drawable/home_menu"
-        android:title="Home" />
+<!--    <item-->
+<!--        android:id="@+id/home_fragment"-->
+<!--        android:icon="@drawable/home_menu"-->
+<!--        android:title="Home" />-->
 
 
-    <item
-        android:id="@+id/cst_fragment"
-        android:icon="@drawable/user_add"
-        android:title="@string/add_customer" />
+<!--    <item-->
+<!--        android:id="@+id/cst_fragment"-->
+<!--        android:icon="@drawable/user_add"-->
+<!--        android:title="@string/add_customer" />-->
 
-    <item
-        android:id="@+id/add_product"
-        android:icon="@drawable/user_add"
-        android:title="Add Product" />
+<!--    <item-->
+<!--        android:id="@+id/add_product"-->
+<!--        android:icon="@drawable/user_add"-->
+<!--        android:title="Add Product" />-->
 
-    <item
-        android:id="@+id/add_price"
-        android:icon="@drawable/user_add"
-        android:title="Add Extra Price" />
-    <item
-        android:id="@+id/product_list"
-        android:icon="@drawable/user_add"
-        android:title="Product List" />
-    <item
-        android:id="@+id/add_pos_category"
-        android:icon="@drawable/user_add"
-        android:title="Add POS Category" />
-    <item
-        android:id="@+id/create_attribute"
-        android:icon="@drawable/user_add"
-        android:title="Create Attribute" />
-    <item
-        android:id="@+id/Viewcst_fragment"
-        android:icon="@drawable/user_square"
-        android:title="@string/view_customer" />
+<!--    <item-->
+<!--        android:id="@+id/add_price"-->
+<!--        android:icon="@drawable/user_add"-->
+<!--        android:title="Add Extra Price" />-->
+<!--    <item-->
+<!--        android:id="@+id/product_list"-->
+<!--        android:icon="@drawable/user_add"-->
+<!--        android:title="Product List" />-->
+<!--    <item-->
+<!--        android:id="@+id/add_pos_category"-->
+<!--        android:icon="@drawable/user_add"-->
+<!--        android:title="Add POS Category" />-->
+<!--    <item-->
+<!--        android:id="@+id/create_attribute"-->
+<!--        android:icon="@drawable/user_add"-->
+<!--        android:title="Create Attribute" />-->
+<!--    <item-->
+<!--        android:id="@+id/Viewcst_fragment"-->
+<!--        android:icon="@drawable/user_square"-->
+<!--        android:title="@string/view_customer" />-->
 
 
     <item

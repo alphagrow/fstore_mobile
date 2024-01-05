@@ -97,7 +97,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     List<Value> value;
     Spinner spinner;
     String str_variant;
-    String product_name, product_image;
+    String product_name, product_image,str_batch_no,str_cir_no,str_mfd,str_mfd_by;
     double basePrice = 0.0;
     int patternType = -1;
     //  String[] variantArray = null;
@@ -336,6 +336,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
 //                variants = binding.setPatternsTxt.getText().toString().trim();
                 String var_pr_name = binding.setPatternsTxt.getText().toString();
+                 str_batch_no = binding.batchNumber.getText().toString();
+                 str_cir_no = binding.cirNo.getText().toString();
+                 str_mfd = binding.mfdDate.getText().toString();
+                str_mfd_by = binding.mkdBy.getText().toString();
                 variants = var_pr_name.replaceAll("\\s", "");
                 //  String product_quantity = binding.quantityText.getText().toString().trim();
                 boolean empty = true;
@@ -355,6 +359,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     order.setProductImage(product_image);
                     order.setVariantID(str_variant_id);
                     order.setProductName(product_name);
+                    order.setBatch_number(str_batch_no);
+                    order.setCir_number(str_cir_no);
+                    order.setMfd_date(str_mfd);
+                    order.setMkd_by(str_mfd_by);
                     order.setCropID(Integer.parseInt(cropID));
                     order.setCrop_name(cropName);
                     order.setQuantity(quantity);
@@ -709,6 +717,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 productOBJ.putOpt("product_id", purchaseOrderList.get(i).getProductID());
                 productOBJ.putOpt("name", purchaseOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("variant_id", purchaseOrderList.get(i).getVariantID());
+                productOBJ.putOpt("batch_number", purchaseOrderList.get(i).getBatch_number());
+                productOBJ.putOpt("cir_number", purchaseOrderList.get(i).getCir_number());
+                productOBJ.putOpt("mfd_date", purchaseOrderList.get(i).getMfd_date());
+                productOBJ.putOpt("mkd_by", purchaseOrderList.get(i).getMkd_by());
 //              productOBJ.putOpt("name", purchaseOrderList.get(i).getProductName() + purchaseOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("price_unit", purchaseOrderList.get(i).getUnitPrice());
                 //         productOBJ.putOpt("price_unit", lineAmount);
@@ -861,8 +873,11 @@ public class CreatePurchaseOrderFragment extends Fragment {
                             if (active == true) {
                                 int id = data.optInt("vendor_id");
                                 String name = data.optString("name");
+                                String vat = data.optString("vat");
+                                String state_name = data.optString("state_name");
                                 stateModel.setId(id);
-                                stateModel.setName(name);
+
+                                stateModel.setName(name+"/"+vat+"/"+state_name);
                                 vendorNames.add(stateModel);
                             }
                         }

@@ -186,7 +186,7 @@ public class ProductListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
       Log.d("product_list",url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+    //    Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -198,7 +198,7 @@ public class ProductListFragment extends Fragment {
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+                 //       Utility.dismissDialoge();
                         productList.clear();
                         JSONArray jsonArray = obj.getJSONArray("data");
                         JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");

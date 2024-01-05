@@ -41,12 +41,13 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String codeStr = "", cityStr ="",str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
+    private String codeStr = "", cityStr ="",str_gst_no = "", nameStr = "",str_lic_no="", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     List<VendorModelList> vendor_model=null;
 
    private String type_of_vendor_warehouse;
     int position;
+    Boolean checkbox = false;
     public AddVendorAndCreateWareHouseFragment() {
         // Required empty public constructor
     }
@@ -59,7 +60,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if(getArguments() != null) {
 
         }
     }
@@ -79,23 +80,41 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         if(type_of_vendor_warehouse.equals("warehouse")) {
             binding.titleTxt.setText("Create Warehouse");
             binding.etCity.setVisibility(View.VISIBLE);
+            binding.checkBoxGst.setVisibility(View.GONE);
             binding.etGstNo.setVisibility(View.GONE);
             binding.etUsermobile.setVisibility(View.GONE);
             binding.etUseremail.setVisibility(View.GONE);
             binding.etUsername.setHint("Ware House Name");
+            binding.etLicenseNumber.setVisibility(View.GONE);
         }else {
             binding.titleTxt.setText("Create Vendor");
             binding.etCity.setVisibility(View.GONE);
             binding.etCode.setVisibility(View.GONE);
+            binding.etLicenseNumber.setVisibility(View.VISIBLE);
             binding.etUseremail.setVisibility(View.VISIBLE);
-            binding.etGstNo.setVisibility(View.VISIBLE);
+            binding.checkBoxGst.setVisibility(View.VISIBLE);
             binding.etUsermobile.setVisibility(View.VISIBLE);
+
         }
         if (Utility.isNetworkAvailable(getContext())) {
             getStateData();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
         }
+        binding.checkBoxGst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.checkBoxGst.isChecked()) {
+                    binding.etGstNo.setVisibility(View.VISIBLE);
+
+
+                } else {
+                    checkbox = false;
+                    binding.etGstNo.setVisibility(View.GONE);
+                    binding.etGstNo.setText("");
+                }
+            }
+        });
         StateModel st = new StateModel();
         st.setName("--Select District--");
         districtNames.add(st);
@@ -176,6 +195,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                str_lic_no = binding.etLicenseNumber.getText().toString();
                 str_gst_no = binding.etGstNo.getText().toString();
                 nameStr = binding.etUsername.getText().toString();
                 mobileStr = binding.etUsermobile.getText().toString();
@@ -196,7 +216,13 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
                     Toast.makeText(getActivity(), R.string.Select_taluka, Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+//                if (checkbox=true) {
+//                    if (str_gst_no.length() == 0) {
+//                        Toast.makeText(getActivity(), "Enter valid GST No.", Toast.LENGTH_SHORT).show();
+//                        return ;
+//                    }
+//
+//                }
 
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -212,7 +238,6 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
                     WareHouseRequest();
                 }else {
                     binding.titleTxt.setText("Create Vendor");
-
                     isAllFieldsChecked = CheckAllFields();
                     if (isAllFieldsChecked) {
                         VendorRequest();
@@ -387,11 +412,6 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
             Toast.makeText(getActivity(), R.string.PIN_CODE, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (binding.etGstNo.length() == 0) {
-            binding.etGstNo.setError("This field is required");
-            Toast.makeText(getActivity(), "Enter valid GST No.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
 
 
         // after all validation return true.
@@ -412,6 +432,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         params.put("country_id", ApiConstants.COUNTRY_ID);
         params.put("street", streetStr);
         params.put("vat", str_gst_no);
+        params.put("license_number", str_lic_no);
 
         Utility.showDialoge("", getActivity());
         Log.v("add", String.valueOf(params));
@@ -504,6 +525,8 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         binding.etUseremail.setText("");
         binding.etCode.setText("");
         binding.etCity.setText("");
+        binding.etGstNo.setText("");
+        binding.etLicenseNumber.setText("");
         binding.stateSpinner.setSelection(0);
         binding.citySpinner.setSelection(0);
         binding.talukaSpinner.setSelection(0);

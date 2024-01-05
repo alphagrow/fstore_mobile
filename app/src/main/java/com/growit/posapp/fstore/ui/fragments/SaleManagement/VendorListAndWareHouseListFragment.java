@@ -183,10 +183,10 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
                         vendormodel = gson.fromJson(response.toString(), listType);
                         if (vendormodel.getVendors() == null || vendormodel.getVendors().size() == 0) {
-                            binding.noItem.setVisibility(View.VISIBLE);
+                            binding.noDataFound.setVisibility(View.VISIBLE);
                             binding.recyclerVendor.setVisibility(View.GONE);
                         } else {
-                            binding.noItem.setVisibility(View.GONE);
+                            binding.noDataFound.setVisibility(View.GONE);
                             binding.recyclerVendor.setVisibility(View.VISIBLE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -204,7 +204,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
             }
         }, error -> {
-            binding.noItem.setVisibility(View.VISIBLE);
+            binding.noDataFound.setVisibility(View.VISIBLE);
             binding.recyclerVendor.setVisibility(View.GONE);
         });
         queue.add(jsonObjectRequest);
@@ -259,10 +259,10 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
                         vendormodel = gson.fromJson(response.toString(), listType);
                         if (vendormodel.getWarehouses() == null || vendormodel.getWarehouses().size() == 0) {
-                            binding.noItem.setVisibility(View.VISIBLE);
+                            binding.noDataFound.setVisibility(View.VISIBLE);
                             binding.recyclerVendor.setVisibility(View.GONE);
                         } else {
-                            binding.noItem.setVisibility(View.GONE);
+                            binding.noDataFound.setVisibility(View.GONE);
                             binding.recyclerVendor.setVisibility(View.VISIBLE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -280,7 +280,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
             }
         }, error -> {
-            binding.noItem.setVisibility(View.VISIBLE);
+            binding.noDataFound.setVisibility(View.VISIBLE);
             binding.recyclerVendor.setVisibility(View.GONE);
         });
         queue.add(jsonObjectRequest);

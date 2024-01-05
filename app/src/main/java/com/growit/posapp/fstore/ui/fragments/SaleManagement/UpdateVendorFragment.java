@@ -44,7 +44,7 @@ public class UpdateVendorFragment extends Fragment {
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "",str_code="",str_city ="", zipStr = "", stateStr = "", talukaStr = "";
+    private String str_lic_no ="",str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "",str_code="",str_city ="", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     List<VendorModelList> vendor_model=null;
     List<WarehouseModel> warehouse_model=null;
@@ -83,6 +83,7 @@ public class UpdateVendorFragment extends Fragment {
                 binding.etUseremail.setVisibility(View.VISIBLE);
                 binding.etGstNo.setVisibility(View.VISIBLE);
                 binding.etUsermobile.setVisibility(View.VISIBLE);
+                binding.checkBoxGst.setVisibility(View.VISIBLE);
                 vendor_model = (List<VendorModelList>) getArguments().getSerializable("vendor_list");
                 binding.etUsername.setText(vendor_model.get(position).getName());
                 binding.etUsermobile.setText(vendor_model.get(position).getMobile());
@@ -90,6 +91,8 @@ public class UpdateVendorFragment extends Fragment {
                 binding.etGstNo.setText(vendor_model.get(position).getVat());
                 binding.etUseremail.setText(vendor_model.get(position).getEmail());
                 binding.etPincode.setText(vendor_model.get(position).getZip());
+                binding.etLicenseNumber.setText(vendor_model.get(position).getLicenseNumber());
+
                 getStateData();
                 getDistrictData(vendor_model.get(position).getStateId());
                 getTalukaData(vendor_model.get(position).getDistrictId());
@@ -105,6 +108,7 @@ public class UpdateVendorFragment extends Fragment {
                 binding.etGstNo.setVisibility(View.GONE);
                 binding.etUsermobile.setVisibility(View.GONE);
                 binding.etUseremail.setVisibility(View.GONE);
+                binding.checkBoxGst.setVisibility(View.GONE);
                 binding.etUsername.setHint("Ware House Name");
 
                 binding.etUsername.setText(warehouse_model.get(position).getName());
@@ -127,6 +131,18 @@ public class UpdateVendorFragment extends Fragment {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), MainActivity.class));
                 getActivity().finish();
+            }
+        });
+        binding.checkBoxGst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.checkBoxGst.isChecked()) {
+                    binding.etGstNo.setVisibility(View.VISIBLE);
+
+                } else {
+                    binding.etGstNo.setVisibility(View.GONE);
+
+                }
             }
         });
 
@@ -180,6 +196,7 @@ public class UpdateVendorFragment extends Fragment {
         binding.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                str_lic_no = binding.etLicenseNumber.getText().toString();
                 str_gst_no = binding.etGstNo.getText().toString();
                 nameStr = binding.etUsername.getText().toString();
                 mobileStr = binding.etUsermobile.getText().toString();
@@ -413,11 +430,11 @@ public class UpdateVendorFragment extends Fragment {
             Toast.makeText(getActivity(), R.string.PIN_CODE, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (binding.etGstNo.length() == 0) {
-            binding.etGstNo.setError("This field is required");
-            Toast.makeText(getActivity(), "Enter valid GST No.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (binding.etGstNo.length() == 0) {
+//            binding.etGstNo.setError("This field is required");
+//            Toast.makeText(getActivity(), "Enter valid GST No.", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
 
 
         // after all validation return true.
@@ -440,7 +457,7 @@ public class UpdateVendorFragment extends Fragment {
         params.put("street", streetStr);
         params.put("vat", str_gst_no);
         params.put("vendor_id", vendor_model.get(position).getVendorId()+"");
-
+        params.put("license_number", str_lic_no);
         Log.d("vendoe_update",ApiConstants.UPDATE_Vendor+params.toString());
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.UPDATE_Vendor , new VolleyCallback() {
             private String message = "Update failed!!";

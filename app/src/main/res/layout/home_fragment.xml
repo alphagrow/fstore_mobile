@@ -55,7 +55,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/helvetica_neue_medium"
-                        android:text="My Crops"
+                        android:text="Category"
                         android:textColor="#424242"
                         android:textSize="18sp"
                         android:textStyle="normal" />
@@ -116,7 +116,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="2dp"
                         android:fontFamily="@font/helvetica_neue_medium"
-                        android:text=" Growit Products"
+                        android:text=" Products"
                         android:textColor="#424242"
                         android:textIsSelectable="true"
                         android:textSize="18sp"
