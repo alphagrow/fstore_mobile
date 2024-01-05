@@ -96,15 +96,7 @@ import java.util.Map;
 
 
 public class AddProductFragment extends Fragment implements View.OnClickListener {
-    private EditText et_product_name, et_product_price, et_uom, et_size, et_color, et_whole_pattern,
-            tech_name_pest, brand_name, mkt_by, batch_number, cir_number, which_crop, which_pest, packing_std;
-    private ImageView product_image, image_set;
-    private Button submit_btn;
 
-    ArrayList<String> api_array_list;
-
-    ArrayList<String> cammer_api_array_list;
-    LinearLayout layout;
     ArrayList<Bitmap> imagesUriArrayList;
     private ProgressBar progressBar;
     private ImageView imageView, video_image;
@@ -120,11 +112,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private String str_image_aa;
     ProgressDialog progressDialog;
     MediaController mediaControls;
-    private RecyclerView recy_image;
+//    private RecyclerView recy_image;
     Bitmap bitmap = null;
-    RadioGroup sel_non_gov;
+//    RadioGroup sel_non_gov;
     ImageAdapter adapter;
-    TextView mfd_date, exp_date, exp_date_alarm;
+//    TextView mfd_date, exp_date, exp_date_alarm;
 
     DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
@@ -132,14 +124,13 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     String str_mfd_date, str_exp_date;
     private String[] detailed_type = {"product"};
-    private String[] uom_list = {"Days"};
+//    private String[] uom_list = {"Days"};
     String str_detailed_type;
     String str_non_gov_product = "Non-Gov";
-    String crop_id;
+//    String crop_id;
     ListAttributesModel model_attribute;
     List<AttributeModel> model = new ArrayList<>();
     List<Value> cropList = new ArrayList<>();
-// private static final int SELECT_VIDEO = 3;
 
     String str_crop_id;
     ArrayList<Integer> crop_id_list = new ArrayList<>();
@@ -147,7 +138,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     String selected_crop_id;
 
     public AddProductFragment() {
-// Required empty public constructor
     }
 
     public static AddProductFragment newInstance() {
@@ -174,33 +164,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
     private void init() {
-// imageView = view.findViewById(R.id.imageView);
-// et_product_name = view.findViewById(R.id.et_product_name);
-// et_product_price = view.findViewById(R.id.et_product_price);
-// et_uom = view.findViewById(R.id.et_uom);
-// submit_btn = view.findViewById(R.id.submit_btn);
-// et_size = view.findViewById(R.id.et_size);
-// et_color = view.findViewById(R.id.et_color);
-// et_whole_pattern = view.findViewById(R.id.et_whole_pattern);
-// product_image = view.findViewById(R.id.image);
-// idPBLoading = view.findViewById(R.id.idPBLoading);
-// video_text = view.findViewById(R.id.video_text);
-// video_image = view.findViewById(R.id.video);
-// videoView = view.findViewById(R.id.simpleVideoView);
-// image_set = view.findViewById(R.id.image_set);
-// mfd_date = view.findViewById(R.id.mfd_date);
-// exp_date =view.findViewById(R.id.exp_date);
-// exp_date_alarm = view.findViewById(R.id.exp_date_alarm);
-// tech_name_pest = view.findViewById(R.id.tech_name_pest);
-// brand_name = view.findViewById(R.id.brand_name);
-// mkt_by =view.findViewById(R.id.mkt_by);
-// batch_number = view.findViewById(R.id.batch_number);
-// cir_number = view.findViewById(R.id.cir_number);
-// which_crop = view.findViewById(R.id.which_crop);
-// which_pest =view.findViewById(R.id.which_pest);
-// packing_std = view.findViewById(R.id.packing_std);
-// layout = view.findViewById(R.id.imageLayout);
-// recy_image = view.findViewById(R.id.recy_image);
 
         ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
         binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
@@ -392,10 +355,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), " Select Expiry date", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (binding.mfdDate.getText().toString().length() == 0) {
-                Toast.makeText(getActivity(), " Select Manufacturing date", Toast.LENGTH_SHORT).show();
-                return;
-            }
+//            if (binding.mfdDate.getText().toString().length() == 0) {
+//                Toast.makeText(getActivity(), " Select Manufacturing date", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
 //
 
             if (!Utility.isNetworkAvailable(getActivity())) {
@@ -445,24 +408,15 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("name", product_name);
         params.put("description", str_description);
         params.put("list_price", product_price);
-        params.put("technical_pest", str_techNamePest);
-        params.put("brand_name", str_brand_name);
-        params.put("mkd_by", str_mkt_by);
-        params.put("batch_number", str_batchNumber);
-        params.put("cir_no", cir_no);
         params.put("which_pest", str_whichPest);
         params.put("non_gov_product", str_non_gov_product);
-        params.put("mfd_date", str_mfd_date);
         params.put("exp_date", str_exp_date);
-        // params.put("uom_id", str_etUom); //kg,ml, etc by API
-        // params.put("uom_po_id", str_uomProduct);
+        params.put("expire_alarm",binding.expDateAlarm.getText().toString());
         params.put("uom_id", str_uom);
         params.put("uom_po_id", str_uom);
         params.put("hsn_code", hsn_code);
         params.put("hsn_code_description", str_hsn_code_dec);
         params.put("detailed_type", str_detailed_type);
-
-// params.put("pos_categ_id", crop_id_list.toString());
         params.put("pos_categ_id", str_crop_id);
         params.put("attribute_lines", attribute_json_array.toString());
         progressDialog = new ProgressDialog(getActivity());
@@ -560,23 +514,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                         model.addAll(model_attribute.getAttributes());
                         createTextDynamically(model_attribute.getAttributes().size());
 
-
-// JSONArray attributesArray = jsonArray.getJSONObject(0).getJSONArray("attributes");
-
-// if (jsonArray.length() > 0) {
-// for (int i = 0; i < jsonArray.length(); i++) {
-// AttributeValue value_mode = new AttributeValue();
-// JSONObject data = jsonArray.getJSONObject(i);
-// Integer id = data.optInt("id");
-// String name = data.optString("name");
-// JSONArray value = data.optJSONArray("values");
-// value_mode.setId(value.getInt(0));
-// value_mode.setName(value.getString(1));
-// attributeValueList.add(value_mode);
-//
-// }
-//
-// }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -594,8 +531,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     private void createTextDynamically(int n) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int width = display.getWidth();
-        LinearLayout l = new LinearLayout(getActivity());
         binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
         for (int j = 0; j < n; j++) {
             TextView text = new TextView(getActivity());
