@@ -48,19 +48,32 @@
 
 
             </LinearLayout>
+            <TextView
+                android:id="@+id/text_vend_mob_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Vendor Mobile Number"
+                android:textColor="@color/edt_top_text_color"
+                />
 
             <EditText
                 android:id="@+id/et_usermobile"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/baseline_phone_enabled_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="Vendor Mobile Number"
+                android:hint=""
                 android:importantForAutofill="no"
                 android:textSize="14dp"
                 android:inputType="number"
@@ -112,6 +125,19 @@
                 android:paddingStart="@dimen/ten"
                 android:paddingEnd="@dimen/ten"
                 android:visibility="gone" />
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text=""
+                android:textColor="@color/edt_top_text_color"
+                />
 
             <EditText
                 android:importantForAutofill="no"
@@ -125,10 +151,24 @@
                 android:drawableEnd="@drawable/baseline_account_circle_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="Vendor Name"
+                android:hint=""
                 android:inputType="text"
                 android:textSize="14dp"
                 android:padding="8dp" />
+            <TextView
+                android:id="@+id/text_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Code"
+                android:textColor="@color/edt_top_text_color"
+                />
+
             <EditText
                 android:importantForAutofill="no"
                 android:id="@+id/et_code"
@@ -141,10 +181,23 @@
                 android:drawableEnd="@drawable/baseline_account_circle_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="Code"
+                android:hint=""
                 android:inputType="text"
                 android:textSize="14dp"
                 android:padding="8dp" />
+            <TextView
+                android:id="@+id/vendor_email_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Vendor email"
+                android:textColor="@color/edt_top_text_color"
+                />
 
             <EditText
                 android:importantForAutofill="no"
@@ -158,30 +211,31 @@
                 android:drawableEnd="@drawable/baseline_mail_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="Vendor email"
+                android:hint=""
                 android:inputType="textEmailAddress"
                 android:textSize="14dp"
                 android:padding="8dp" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/state_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="@dimen/twenty_five"
-                android:text=" State "
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="State"
+                android:textColor="@color/edt_top_text_color"
+                />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut">
 
@@ -194,6 +248,18 @@
                     android:padding="5dp" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="District"
+                android:textColor="@color/edt_top_text_color"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -211,6 +277,18 @@
                     android:padding="5dp" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Taluka"
+                android:textColor="@color/edt_top_text_color"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -227,6 +305,18 @@
                     android:layout_centerHorizontal="true"
                     android:padding="5dp" />
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Village/Address"
+                android:textColor="@color/edt_top_text_color"
+                />
 
 
             <EditText
@@ -241,10 +331,22 @@
                 android:drawableEnd="@drawable/baseline_home_work_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="@string/address"
+                android:hint=""
                 android:inputType="text"
                 android:textSize="14dp"
                 android:padding="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Pin code"
+                android:textColor="@color/edt_top_text_color"
+                />
 
 
             <EditText
@@ -259,11 +361,25 @@
                 android:drawableEnd="@drawable/baseline_person_pin_circle_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="@string/pincode"
+                android:hint=""
                 android:inputType="number"
                 android:textSize="14dp"
                 android:maxLength="6"
                 android:padding="8dp" />
+            <TextView
+                android:id="@+id/text_lic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="License number"
+                android:textColor="@color/edt_top_text_color"
+                />
+
             <EditText
                 android:id="@+id/et_license_number"
                 android:importantForAutofill="no"
@@ -276,11 +392,24 @@
                 android:drawableEnd="@drawable/baseline_person_pin_circle_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="License number"
+                android:hint=""
                 android:inputType="number"
                 android:textSize="14dp"
                 android:maxLength="6"
                 android:padding="8dp" />
+            <TextView
+                android:id="@+id/city_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="City"
+                android:textColor="@color/edt_top_text_color"
+                />
 
             <EditText
                 android:id="@+id/et_city"
@@ -295,7 +424,7 @@
                 android:drawableEnd="@drawable/baseline_person_pin_circle_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
-                android:hint="city "
+                android:hint=" "
                 android:inputType="text"
                 android:textSize="14dp"
                 android:padding="8dp" />

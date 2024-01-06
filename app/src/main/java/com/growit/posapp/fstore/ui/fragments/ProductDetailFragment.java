@@ -459,10 +459,12 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
         ////************
 
         for (int j = 0; j < n; j++) {
-            LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            txtLayoutParam.gravity = Gravity.START;
-            LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            spinnerLayoutParam.gravity = Gravity.CENTER;
+            LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            txtLayoutParam.gravity = Gravity.START;
+            txtLayoutParam.setMargins(0, 16, 0, 0); // Set margins as needed
+
+            LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            spinnerLayoutParam.gravity = Gravity.CENTER;
             TextView headingTV = new TextView(getActivity());
             headingTV.setTextColor(R.color.text_color);
             headingTV.setText(productDetail.getData().get(0).getAttributes().get(j).getAttributeName());
@@ -479,11 +481,11 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
             headingTV.setTextSize(14f);
             headingTV.setTextColor(getResources().getColor(R.color.black));
             headingTV.setTypeface(Typeface.DEFAULT_BOLD);
-            headingTV.setPadding(20, 20, 20, 20);
-            headingTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//            headingTV.setPadding(0, 20, 0, 20);
+            headingTV.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             headingTV.setLayoutParams(txtLayoutParam);
             spinner = new Spinner(getActivity());
-            spinner.setPadding(20, 20, 20, 20);
+//            spinner.setPadding(2, 20, 2, 20);
 //            spinner.setBackgroundColor(R.drawable.spinner_bg);
             spinner.setLayoutParams(spinnerLayoutParam);
             spinner.setId(j);

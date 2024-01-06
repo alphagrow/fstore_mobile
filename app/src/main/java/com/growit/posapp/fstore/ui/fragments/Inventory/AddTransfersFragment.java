@@ -123,7 +123,7 @@ public class AddTransfersFragment extends Fragment {
     List<StateModel> location = new ArrayList<>();
 
     List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
-    PurchaseItemListAdapter purchaseItemListAdapter;
+    TransferItemListAdapter purchaseItemListAdapter;
     Spinner cstSpinner;
     int str_variant_id;
 
@@ -195,12 +195,12 @@ public class AddTransfersFragment extends Fragment {
                         Toast.makeText(getContext(), "Select Destination Location", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (customer_id.length() == 0) {
-                        Toast.makeText(getContext(), "Select Customer ", Toast.LENGTH_SHORT).show();
-
-                    } else {
+//                    if (customer_id.length() == 0) {
+//                        Toast.makeText(getContext(), "Select Customer ", Toast.LENGTH_SHORT).show();
+//
+//                    } else {
                         TransfersOrder(customer_id,operation_type_id,location_id,dis_location_id);
-                    }
+                   // }
                 }
             });
             binding.croplistView.addOnItemTouchListener(
@@ -671,7 +671,7 @@ public class AddTransfersFragment extends Fragment {
                     setBillPanel(tasks.size());
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    purchaseItemListAdapter = new PurchaseItemListAdapter(getActivity(), tasks);
+                    purchaseItemListAdapter = new TransferItemListAdapter(getActivity(), tasks);
                     purchaseItemListAdapter.setOnClickListener(new ItemClickListener() {
                         @Override
                         public void onClick(int position) {
@@ -728,13 +728,12 @@ public class AddTransfersFragment extends Fragment {
         private void TransfersOrder(String str_customer_id,String dis_location_id,String source_location_id,String destination_location_id) {
             SessionManagement sm = new SessionManagement(getActivity());
             Map<String, String> params = new HashMap<>();
-//            params.put("user_id", sm.getUserID()+ "");
-//            params.put("token", sm.getJWTToken());
+            params.put("user_id", sm.getUserID()+ "");
+            params.put("token", sm.getJWTToken());
             params.put("partner_id", str_customer_id);
             params.put("operation_type_id", dis_location_id);
             params.put("source_location_id", source_location_id);
             params.put("destination_location_id", destination_location_id);
-
             params.put("products", prjsonArray.toString());
 
             Utility.showDialoge("Please wait while a moment...", getActivity());
@@ -893,7 +892,7 @@ public class AddTransfersFragment extends Fragment {
         String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST;
 
         //  String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+    //    Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

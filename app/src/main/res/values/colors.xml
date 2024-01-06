@@ -45,4 +45,6 @@
     <color name="yellow">#FFC000</color>
     <color name="green_color">#2b6731</color>
     <color name="text_color">#393939</color>
+<!--Edit text-->
+    <color name="edt_top_text_color">#A4000000</color>
 </resources>

@@ -63,7 +63,18 @@
                     android:textSize="18sp"
                     android:text="User Details"
                     android:textColor="#A4000000" />
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="User Name"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:importantForAutofill="no"
@@ -76,10 +87,23 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="User Name"
+                    android:hint=" "
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Email Id"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
                 <EditText
                     android:importantForAutofill="no"
                     android:id="@+id/ed_user_id"
@@ -91,11 +115,22 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Mail Id"
+                    android:hint=""
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
-
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Password"
+                    android:textColor="@color/edt_top_text_color"
+                    />
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,7 +146,7 @@
                         android:layout_height="60dp"
                         android:id="@+id/et_password"
                         android:textColorHint="@color/dark_grey"
-                        android:hint="@string/user_password"
+                        android:hint=""
                         android:drawablePadding="@dimen/ten"
                         android:layout_width="match_parent"
                         android:background="@drawable/custom_edit_text_cut"
@@ -134,6 +169,19 @@
                     android:textSize="18sp"
                     android:text="Company Details"
                     android:textColor="#A4000000" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Company Name"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
                 <EditText
                     android:importantForAutofill="no"
                     android:id="@+id/et_company_name"
@@ -145,10 +193,22 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Company Name"
+                    android:hint=""
                     android:inputType="textEmailAddress"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Mobile"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:importantForAutofill="no"
@@ -161,11 +221,24 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Mobile"
+                    android:hint=""
                     android:maxLength="10"
                     android:inputType="number"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Phone"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
                 <EditText
                     android:importantForAutofill="no"
                     android:id="@+id/et_phone"
@@ -177,11 +250,23 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Phone"
+                    android:hint=""
                     android:maxLength="10"
                     android:inputType="number"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Email"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:importantForAutofill="no"
@@ -194,12 +279,24 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="email"
+                    android:hint=" "
                     android:inputType="textEmailAddress"
                     android:textSize="14dp"
                     android:padding="8dp" />
 
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="State"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -252,6 +349,18 @@
 <!--                        android:padding="5dp" />-->
 <!--                </LinearLayout>-->
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Address"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/et_useraddress"
@@ -264,10 +373,23 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Address"
+                    android:hint=""
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="City"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
                 <EditText
                     android:id="@+id/et_city"
                     android:importantForAutofill="no"
@@ -279,10 +401,22 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="City"
+                    android:hint=""
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Pincode"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
 
                 <EditText
@@ -296,12 +430,24 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="@string/pincode"
+                    android:hint=""
                     android:inputType="number"
                     android:textSize="14dp"
                     android:maxLength="6"
                     android:padding="8dp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="GST"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/et_gst_no"
@@ -314,11 +460,23 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="GST "
+                    android:hint=" "
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Website"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/et_website"
@@ -331,10 +489,23 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Website "
+                    android:hint=" "
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Insect Lic no"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
                 <EditText
                     android:id="@+id/et_insect_lic_no"
                     android:importantForAutofill="no"
@@ -346,10 +517,23 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Insect Lic no "
+                    android:hint=" "
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Fert Lic no"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
                 <EditText
                     android:id="@+id/et_fert_lic_no"
                     android:importantForAutofill="no"
@@ -361,10 +545,23 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Fert Lic no"
+                    android:hint=" "
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Seed Lic No"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
                 <EditText
                     android:id="@+id/et_seed_lic_no"
                     android:importantForAutofill="no"
@@ -376,7 +573,7 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Seed Lic No"
+                    android:hint=""
                     android:inputType="text"
                     android:textSize="14dp"
                     android:padding="8dp" />

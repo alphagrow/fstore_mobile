@@ -78,12 +78,22 @@ public class UpdateVendorFragment extends Fragment {
             type_of_vendor_warehouse = getArguments().getString("type_of_vendor_warehouse");
             if(type_of_vendor_warehouse.equals("vendor")) {
                 binding.titleTxt.setText("Update Vendor");
+                binding.cityText.setVisibility(View.GONE);
                 binding.etCity.setVisibility(View.GONE);
+                binding.textCode.setVisibility(View.GONE);
                 binding.etCode.setVisibility(View.GONE);
+                binding.textVendMobNo.setVisibility(View.VISIBLE);
+                binding.textLic.setVisibility(View.VISIBLE);
+                binding.etLicenseNumber.setVisibility(View.VISIBLE);
                 binding.etUseremail.setVisibility(View.VISIBLE);
-                binding.etGstNo.setVisibility(View.VISIBLE);
-                binding.etUsermobile.setVisibility(View.VISIBLE);
                 binding.checkBoxGst.setVisibility(View.VISIBLE);
+                binding.etUsermobile.setVisibility(View.VISIBLE);
+//                binding.etCity.setVisibility(View.GONE);
+//                binding.etCode.setVisibility(View.GONE);
+//                binding.etUseremail.setVisibility(View.VISIBLE);
+//                binding.etGstNo.setVisibility(View.VISIBLE);
+//                binding.etUsermobile.setVisibility(View.VISIBLE);
+//                binding.checkBoxGst.setVisibility(View.VISIBLE);
                 vendor_model = (List<VendorModelList>) getArguments().getSerializable("vendor_list");
                 binding.etUsername.setText(vendor_model.get(position).getName());
                 binding.etUsermobile.setText(vendor_model.get(position).getMobile());
@@ -96,7 +106,7 @@ public class UpdateVendorFragment extends Fragment {
                 getStateData();
                 getDistrictData(vendor_model.get(position).getStateId());
                 getTalukaData(vendor_model.get(position).getDistrictId());
-                binding.etCode.setVisibility(View.GONE);
+//                binding.etCode.setVisibility(View.GONE);
                 binding.submitBtn.setVisibility(View.GONE);
                 binding.update.setVisibility(View.VISIBLE);
             }else {
@@ -104,12 +114,22 @@ public class UpdateVendorFragment extends Fragment {
                 binding.update.setVisibility(View.VISIBLE);
                 warehouse_model = (List<WarehouseModel>) getArguments().getSerializable("warehouse_list");
                 binding.titleTxt.setText("Update Warehouse");
+                binding.textName.setHint("Ware House Name");
                 binding.etCity.setVisibility(View.VISIBLE);
+                binding.textCode.setVisibility(View.VISIBLE);
+                binding.checkBoxGst.setVisibility(View.GONE);
                 binding.etGstNo.setVisibility(View.GONE);
+                binding.textVendMobNo.setVisibility(View.GONE);
                 binding.etUsermobile.setVisibility(View.GONE);
                 binding.etUseremail.setVisibility(View.GONE);
-                binding.checkBoxGst.setVisibility(View.GONE);
-                binding.etUsername.setHint("Ware House Name");
+                binding.vendorEmailText.setVisibility(View.GONE);
+                binding.textLic.setVisibility(View.GONE);
+                binding.etLicenseNumber.setVisibility(View.GONE);
+//                binding.etCity.setVisibility(View.VISIBLE);
+//                binding.etGstNo.setVisibility(View.GONE);
+//                binding.etUsermobile.setVisibility(View.GONE);
+//                binding.etUseremail.setVisibility(View.GONE);
+//                binding.checkBoxGst.setVisibility(View.GONE);
 
                 binding.etUsername.setText(warehouse_model.get(position).getName());
                 binding.etCode.setText(warehouse_model.get(position).getCode());

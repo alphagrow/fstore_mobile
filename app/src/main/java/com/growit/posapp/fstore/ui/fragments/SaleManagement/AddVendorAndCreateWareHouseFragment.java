@@ -78,18 +78,27 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
 
     private void init() {
         if(type_of_vendor_warehouse.equals("warehouse")) {
+            binding.textName.setHint("Ware House Name");
             binding.titleTxt.setText("Create Warehouse");
             binding.etCity.setVisibility(View.VISIBLE);
+            binding.textCode.setVisibility(View.VISIBLE);
             binding.checkBoxGst.setVisibility(View.GONE);
             binding.etGstNo.setVisibility(View.GONE);
+            binding.textVendMobNo.setVisibility(View.GONE);
             binding.etUsermobile.setVisibility(View.GONE);
             binding.etUseremail.setVisibility(View.GONE);
-            binding.etUsername.setHint("Ware House Name");
+            binding.vendorEmailText.setVisibility(View.GONE);
+            binding.textLic.setVisibility(View.GONE);
             binding.etLicenseNumber.setVisibility(View.GONE);
         }else {
             binding.titleTxt.setText("Create Vendor");
+            binding.textName.setHint("Vendor Name");
+            binding.cityText.setVisibility(View.GONE);
             binding.etCity.setVisibility(View.GONE);
+            binding.textCode.setVisibility(View.GONE);
             binding.etCode.setVisibility(View.GONE);
+            binding.textVendMobNo.setVisibility(View.VISIBLE);
+            binding.textLic.setVisibility(View.VISIBLE);
             binding.etLicenseNumber.setVisibility(View.VISIBLE);
             binding.etUseremail.setVisibility(View.VISIBLE);
             binding.checkBoxGst.setVisibility(View.VISIBLE);

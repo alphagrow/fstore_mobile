@@ -50,6 +50,18 @@
 
 
                 </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Product Name"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/et_product_name"
@@ -62,12 +74,24 @@
                     android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Product Name"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Customer Type"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <LinearLayout
                     android:id="@+id/lay_detailed_type"
@@ -86,6 +110,18 @@
                         android:layout_marginTop="10dp" />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Product price"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/et_product_price"
@@ -98,12 +134,24 @@
                     android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="@string/product_price"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="number"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="UOM Type"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <LinearLayout
                     android:id="@+id/lay_et_uom_type"
@@ -186,6 +234,18 @@
                     android:visibility="gone"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Company Name"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/company_name"
@@ -198,12 +258,24 @@
                     android:drawableEnd="@drawable/baseline_home_work_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Company Name"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Company Name"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/mkt_by"
@@ -216,7 +288,7 @@
                     android:drawableEnd="@drawable/baseline_apartment_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="MKT BY"
+                    android:hint=" "
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:visibility="gone"
@@ -273,9 +345,21 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawableRight="@android:drawable/arrow_down_float"
                     android:drawablePadding="16dp"
-                    android:hint="Category"
+                    android:hint=" "
                     android:padding="12dp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Which Pest"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/which_pest"
@@ -288,12 +372,24 @@
                     android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Which Pest"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Packing Std"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/packing_std"
@@ -306,12 +402,24 @@
                     android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Packing Std"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Hsn Code"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/ed_hsn_code"
@@ -324,12 +432,24 @@
                     android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Hsn Code"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="none"
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Hsn Code Description"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/ed_hsn_code_description"
@@ -342,7 +462,7 @@
                     android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Hsn Code Description"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:padding="8dp"
@@ -367,6 +487,18 @@
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textSize="15sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Exp. Date"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <TextView
                     android:id="@+id/exp_date"
@@ -379,12 +511,24 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawableEnd="@drawable/baseline_calendar_month_24"
                     android:gravity="center|start"
-                    android:hint="Exp. Date"
+                    android:hint=""
                     android:inputType="date"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textSize="15sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Expire Date Alarm"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/exp_date_alarm"
@@ -397,12 +541,24 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawableEnd="@drawable/baseline_alarm_on_24"
                     android:gravity="center|start"
-                    android:hint="Expire Date Alarm"
+                    android:hint=""
                     android:inputType="number"
                     android:maxLines="1"
                     android:padding="8dp"
                     android:singleLine="true"
                     android:textSize="15sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Description"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <EditText
                     android:id="@+id/description"
@@ -415,7 +571,7 @@
                     android:drawableEnd="@drawable/land_size"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint="Description"
+                    android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:padding="8dp"
