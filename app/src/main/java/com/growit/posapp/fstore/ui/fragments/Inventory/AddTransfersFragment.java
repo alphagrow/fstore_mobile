@@ -735,8 +735,8 @@ public class AddTransfersFragment extends Fragment {
             params.put("source_location_id", source_location_id);
             params.put("destination_location_id", destination_location_id);
             params.put("products", prjsonArray.toString());
-
             Utility.showDialoge("Please wait while a moment...", getActivity());
+
             Log.v("transfer_order", String.valueOf(params));
             new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_TRANSFER_ORDER, new VolleyCallback() {
                 @Override

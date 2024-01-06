@@ -1,6 +1,7 @@
 package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -68,7 +70,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +126,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
     PurchaseItemListAdapter purchaseItemListAdapter;
     Spinner cstSpinner;
     int str_variant_id;
-
+    DatePickerDialog.OnDateSetListener date_mfd;
+    final Calendar myCalendar = Calendar.getInstance();
     public CreatePurchaseOrderFragment() {
         // Required empty public constructor
     }
@@ -188,10 +193,15 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 }
                 if (vendor_id.length() == 0) {
                     Toast.makeText(getContext(), "Select Vendor Name", Toast.LENGTH_SHORT).show();
+                    return;
 
-                } else {
-                    CreatePurchaseOrder(vendor_id);
                 }
+                    if(prjsonArray !=null) {
+                        CreatePurchaseOrder(vendor_id, prjsonArray.toString());
+                    }else {
+                        Toast.makeText(getContext(), "Select Items", Toast.LENGTH_SHORT).show();
+
+                    }
             }
         });
         binding.croplistView.addOnItemTouchListener(
@@ -314,6 +324,23 @@ public class CreatePurchaseOrderFragment extends Fragment {
 //        binding.numberPicker.setVisibility(View.GONE);
 //        binding.submitBtn.setVisibility(View.GONE);
 //        binding.proCurrText.setVisibility(View.GONE);
+        binding.mfdDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(getActivity(),date_mfd, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
+            }
+        });
+        date_mfd = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                mfdLabel();
+            }
+        };
 
         binding.numberPicker.setValueChangedListener(new ValueChangedListener() {
             @Override
@@ -340,6 +367,25 @@ public class CreatePurchaseOrderFragment extends Fragment {
                  str_cir_no = binding.cirNo.getText().toString();
                  str_mfd = binding.mfdDate.getText().toString();
                 str_mfd_by = binding.mkdBy.getText().toString();
+
+                if(str_batch_no.length() == 0){
+                    Toast.makeText(getActivity(), "Enter the Batch Number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(str_cir_no.length() == 0){
+                    Toast.makeText(getActivity(), "Enter the CIR Number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(str_mfd.length() == 0){
+                    Toast.makeText(getActivity(), "Enter the Manufacturing date ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(str_mfd_by.length() == 0){
+                    Toast.makeText(getActivity(), "Enter the MFD By", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 variants = var_pr_name.replaceAll("\\s", "");
                 //  String product_quantity = binding.quantityText.getText().toString().trim();
                 boolean empty = true;
@@ -405,6 +451,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     vendor_id = vendorNames.get(position).getId() + "";
+                    binding.gstNo.setText(vendorNames.get(position).getGST_NO());
+                    binding.stateText.setText(vendorNames.get(position).getState());
+
                     //  binding.customerTxt.setText(vendorNames.get(position).getName());
 
                 }
@@ -431,6 +480,11 @@ public class CreatePurchaseOrderFragment extends Fragment {
             }
         });
 
+    }
+    private void mfdLabel() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        str_mfd = sdf.format(myCalendar.getTime());
+        binding.mfdDate.setText(str_mfd);
     }
 
     class GetGSTValueTasks extends AsyncTask<Void, Void, Void> {
@@ -682,6 +736,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
             // tasks_model = tasks;
 
             if (tasks != null && tasks.size() > 0) {
+                binding.layPurOrdList.setVisibility(View.VISIBLE);
                 setBillPanel(tasks.size());
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -745,14 +800,14 @@ public class CreatePurchaseOrderFragment extends Fragment {
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
 
-    private void CreatePurchaseOrder(String str_vendor_id) {
+    private void CreatePurchaseOrder(String str_vendor_id,String prjsonArray) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
          params.put("user_id", sm.getUserID()+ "");
            params.put("token", sm.getJWTToken());
         params.put("vendor_id", str_vendor_id);
         params.put("company_id", "1");
-        params.put("products", prjsonArray.toString());
+        params.put("products", prjsonArray);
         params.put("picking_type_id",ware_house_id);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("Pur_create_order", String.valueOf(params));
@@ -844,7 +899,6 @@ public class CreatePurchaseOrderFragment extends Fragment {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "active=" + "true";
-
         // String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
         //   Utility.showDialoge("Please wait while a moment...", getActivity());
@@ -876,8 +930,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
                                 String vat = data.optString("vat");
                                 String state_name = data.optString("state_name");
                                 stateModel.setId(id);
-
-                                stateModel.setName(name+"/"+vat+"/"+state_name);
+                                stateModel.setName(name);
+                                stateModel.setGST_NO(vat);
+                                stateModel.setState(state_name);
                                 vendorNames.add(stateModel);
                             }
                         }
