@@ -80,7 +80,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="  Add Extra Price "
+        android:text="   Add Extra Price "
         android:textSize="13sp" />
     <TextView
         android:layout_marginTop="10dp"

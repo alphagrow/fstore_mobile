@@ -73,6 +73,21 @@
         android:text="     Operation Type "
         android:textSize="13sp" />
 
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/shop_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_account_circle_24"
+        android:fontFamily="@font/roboto_regular"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:drawableLeft="@drawable/icon_user"
+        android:text="    Add Shop "
+        android:textSize="13sp" />
 
 
 </LinearLayout>

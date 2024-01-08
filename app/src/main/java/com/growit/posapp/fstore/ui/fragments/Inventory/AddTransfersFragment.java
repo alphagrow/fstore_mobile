@@ -38,7 +38,6 @@ import com.growit.posapp.fstore.adapters.AttributeSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.CropAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.ProductListAdapter;
-import com.growit.posapp.fstore.adapters.PurchaseItemListAdapter;
 import com.growit.posapp.fstore.adapters.PurchaseProductListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddTranferBinding;
 import com.growit.posapp.fstore.db.AppDatabase;
@@ -52,7 +51,7 @@ import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.tables.PurchaseOrder;
-import com.growit.posapp.fstore.ui.fragments.ConfirmOrderFragment;
+import com.growit.posapp.fstore.ui.fragments.Setting.ConfirmOrderFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -125,6 +124,7 @@ public class AddTransfersFragment extends Fragment {
     List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
     TransferItemListAdapter purchaseItemListAdapter;
     Spinner cstSpinner;
+    String str_internal_transfer;
     int str_variant_id;
 
     public AddTransfersFragment() {
@@ -195,12 +195,17 @@ public class AddTransfersFragment extends Fragment {
                         Toast.makeText(getContext(), "Select Destination Location", Toast.LENGTH_SHORT).show();
                         return;
                     }
-//                    if (customer_id.length() == 0) {
-//                        Toast.makeText(getContext(), "Select Customer ", Toast.LENGTH_SHORT).show();
-//
-//                    } else {
-                        TransfersOrder(customer_id,operation_type_id,location_id,dis_location_id);
-                   // }
+                    if (customer_id.length() == 0) {
+                        Toast.makeText(getContext(), "Select Customer ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(prjsonArray !=null){
+                        TransfersOrder(prjsonArray.toString(),customer_id,operation_type_id,location_id,dis_location_id);
+                    }else {
+                        Toast.makeText(getContext(), "Select Items ", Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
             });
             binding.croplistView.addOnItemTouchListener(
@@ -719,13 +724,16 @@ public class AddTransfersFragment extends Fragment {
 //            binding.payAmount.setText("₹" + String.valueOf(sumTotalAmount+paid_amount));
         }
 
-        private void callOrderConfirmFragment() {
+        private void callOrderConfirmFragment(String internal_transfer) {
+            Bundle bundle = new Bundle();
+            bundle.putString("purchase_order", internal_transfer);
             Fragment fragment = ConfirmOrderFragment.newInstance();
+            fragment.setArguments(bundle);
             FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
 
-        private void TransfersOrder(String str_customer_id,String dis_location_id,String source_location_id,String destination_location_id) {
+        private void TransfersOrder(String prjsonArray,String str_customer_id,String dis_location_id,String source_location_id,String destination_location_id) {
             SessionManagement sm = new SessionManagement(getActivity());
             Map<String, String> params = new HashMap<>();
             params.put("user_id", sm.getUserID()+ "");
@@ -734,7 +742,7 @@ public class AddTransfersFragment extends Fragment {
             params.put("operation_type_id", dis_location_id);
             params.put("source_location_id", source_location_id);
             params.put("destination_location_id", destination_location_id);
-            params.put("products", prjsonArray.toString());
+            params.put("products", prjsonArray);
             Utility.showDialoge("Please wait while a moment...", getActivity());
 
             Log.v("transfer_order", String.valueOf(params));
@@ -745,6 +753,7 @@ public class AddTransfersFragment extends Fragment {
                     JSONObject obj = new JSONObject(result.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+                     str_internal_transfer = obj.optString("internal_transfer");
                     String message = obj.optString("message");
                     String error_message = obj.optString("error_message");
 
@@ -754,7 +763,7 @@ public class AddTransfersFragment extends Fragment {
                                     .purchaseDao()
                                     .delete();
                         });
-                        callOrderConfirmFragment();
+                        callOrderConfirmFragment(str_internal_transfer);
 
                         Utility.dismissDialoge();
                         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
@@ -850,7 +859,7 @@ public class AddTransfersFragment extends Fragment {
                         JSONArray jsonArray = obj.getJSONArray("operation_types");
                         StateModel stateModel = new StateModel();
                         stateModel.setId(-1);
-                        stateModel.setName("Select warehouse");
+                        stateModel.setName("Select Operation Types");
                         ware_houseNames.add(stateModel);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             stateModel = new StateModel();

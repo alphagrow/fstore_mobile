@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -181,7 +182,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         if (getArguments() != null) {
             list = (List<PurchaseProductModel>) getArguments().getSerializable("product_list");
             int position = getArguments().getInt("position");
-            str_crop_id = getArguments().getString("crop_id");
+            str_crop_id = String.valueOf(getArguments().getInt("crop_id"));
             str_crop_name = getArguments().getString("crop_name");
             int value_id=0;
             List<Attribute> attributeValue_list= list.get(position).getAttributes();
@@ -196,31 +197,21 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             product_id= String.valueOf(list.get(position).getProductId());
             binding.etProductName.setText(list.get(position).getProductName());
             binding.etProductPrice.setText(String.valueOf(list.get(position).getListPrice()));
-            binding.techNamePest.setText(list.get(position).getTechnicalPest());
-            binding.brandName.setText(list.get(position).getBrandName());
-//          binding.companyName.setText(list.get(position).getCo);
             binding.packingStd.setText(list.get(position).getProductPackage());
-            binding.mktBy.setText(list.get(position).getMkdBy());
-            binding.batchNumber.setText(list.get(position).getBatchNumber());
-            binding.cirNumber.setText(list.get(position).getCirNo());
-            binding.whichCrop.setText(str_crop_name);
+//            binding.whichCrop.setText(str_crop_name);
             binding.whichPest.setText(list.get(position).getWhichPest());
-            binding.mfdDate.setText(list.get(position).getMfdDate());
             binding.expDate.setText(list.get(position).getExpDate());
             binding.description.setText(list.get(position).getDescription());
              attributes = list.get(position).getAttributes();
 
             if (Utility.isNetworkAvailable(getContext())) {
-//                getCropRequest();
+               getCropRequest();
                 getAttributeList();
             } else {
                 Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
             }
 
         }
-
-
-
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         progressBar = new ProgressBar(getActivity());
@@ -241,20 +232,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             }
         });
 
-        binding.mfdDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(contexts, date_mfd, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
-            }
-        });
-        binding.expDateAlarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(contexts, date_exp_alarm, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-
-            }
-        });
         binding.expDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -262,16 +240,6 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
             }
         });
-        date_mfd = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-        };
         date_exp = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -280,16 +248,6 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 ExpireLabel();
-            }
-        };
-        date_exp_alarm  = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                AlarmLabel();
             }
         };
         final ArrayAdapter<CharSequence> user_typespinner = ArrayAdapter.createFromResource(getActivity(), R.array.uom_list, android.R.layout.simple_spinner_dropdown_item);
@@ -358,13 +316,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         });
 
     }
-    private void updateLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String   str_mfd_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-        String date_e = sd.format(myCalendar.getTime());
-        binding.mfdDate.setText(date_e);
-    }
+
 
     private void ExpireLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -373,13 +325,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         String date_e = sd.format(myCalendar.getTime());
         binding.expDate.setText(date_e);
     }
-    private void AlarmLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String   str_exp_date = sdf.format(myCalendar.getTime());
-        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-        String date_e = sd.format(myCalendar.getTime());
-        binding.expDateAlarm.setText(date_e);
-    }
+
     /**
      * Called when a view has been clicked.
      *
@@ -390,15 +336,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         if (view.getId() == R.id.update_btn) {
             str_product_name = binding.etProductName.getText().toString();
             str_product_price = binding.etProductPrice.getText().toString();
-            String str_techNamePest = binding.techNamePest.getText().toString();
-            String str_brand_name = binding.brandName.getText().toString();
-            String str_mkt_by = binding.mktBy.getText().toString();
-            String str_batchNumber = binding.batchNumber.getText().toString();
-            String str_cirNumber = binding.cirNumber.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
             String str_description = binding.description.getText().toString();
             String str_exp_date = binding.expDate.getText().toString();
-            String str_mfd_date = binding.mfdDate.getText().toString();
+
             //   String str_uomProduct = binding.etUomProduct.getText().toString();
 
 //            if (str_product_name.length() == 0 || str_product_price.length() == 0 || str_uom.length() == 0) {
@@ -433,11 +374,20 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
-            updateProductRequest(str_product_name, str_product_price,str_techNamePest,str_brand_name,str_mkt_by,str_batchNumber,str_cirNumber,str_whichPest,str_description,str_exp_date,str_mfd_date,attribute_json_array);
+
+            if (attribute_json_array != null) {
+                if (str_crop_id.length() != 0) {
+                    updateProductRequest(str_crop_id,str_product_name, str_product_price,str_whichPest,str_description,str_exp_date,attribute_json_array);
+                } else {
+                    Toast.makeText(getActivity(), "Select Crop", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getActivity(), "Select Attribute", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    private void updateProductRequest(String str_product_name,String str_product_price,String str_techNamePest,String str_brand_name,String str_mkt_by,String str_batchNumber,String str_cirNumber,String str_whichPest,String str_description,String str_exp_date,String str_mfd_date,JSONArray attribute_json_array) {
+    private void updateProductRequest(String crop_id_list,String str_product_name,String str_product_price,String str_whichPest,String str_description,String str_exp_date,JSONArray attribute_json_array) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
@@ -445,21 +395,18 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         params.put("name", str_product_name);
         params.put("description", str_description);
         params.put("list_price", str_product_price);
-        params.put("technical_pest", str_techNamePest);
-        params.put("brand_name", str_brand_name);
-        params.put("mkd_by", str_mkt_by);
-        params.put("batch_number", str_batchNumber);
-        params.put("cir_no", str_cirNumber);
         params.put("which_pest", str_whichPest);
         params.put("non_gov_product", str_non_gov_product);
-        params.put("mfd_date", str_mfd_date);
         params.put("exp_date", str_exp_date);
-//        params.put("uom_id", str_uom);
-//        params.put("uom_po_id", str_uom);
         params.put("detailed_type", str_detailed_type);
-        params.put("pos_categ_id", str_crop_id);
         params.put("attribute_lines", attribute_json_array.toString());
         params.put("product_id", product_id);
+        params.put("uom_id", str_uom);
+        params.put("uom_po_id", str_uom);
+        params.put("pos_categ_id", crop_id_list+"");
+
+
+
         Log.d("update_product",params.toString());
 
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_PRODUCT, new VolleyCallback() {
@@ -475,6 +422,12 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 String error_message = obj.optString("error_message");
                 if (status.equalsIgnoreCase("success")) {
                     Toast.makeText(getActivity(), "Update Product", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("product_list", "All_product");
+                    Fragment fragment = AddProductListFragment.newInstance();
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 }else {
                     Toast.makeText(contexts, error_message, Toast.LENGTH_SHORT).show();
                     Log.v("error_message", error_message.toString());
@@ -790,30 +743,30 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             List<String> item_value_list = null;
             StringBuilder stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < model.get(j).getValues().size(); i++) {
-                if(attributes.get(j).getValues() !=null&&attributes.get(j).getValues().size()==0) {
-                    if (model.get(j).getValues().get(i).getId().equals(attributes.get(j).getValues().get(i).getValueId())) {
-                        item_value_list = selected_value_map.get(String.valueOf(att_id));
-                        attribute_value_id = attributes.get(j).getValues().get(i).getValueId();
-                        stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
-                        Log.d("stringBuilder",stringBuilder.toString());
-                        if (item_value_list != null) {
-                            item_value_list.add(String.valueOf(attribute_value_id));
-                            selected_value_map.put(String.valueOf(att_id), item_value_list);
-                        } else {
-                            item_value_list = new ArrayList<>();
-                            item_value_list.add(String.valueOf(attribute_value_id));
-                            selected_value_map.put(String.valueOf(att_id), item_value_list);
-
-                        }
-                        if (i != attributes.get(j).getValues().size() - 1) {
-                            stringBuilder.append(", ");
-                        }
-                        attribute_id_list.add(attribute_value_id);
-                        text.setHint(stringBuilder);
-                    }
-                }
-            }
+//            for (int i = 0; i < model.get(j).getValues().size(); i++) {
+//                if(attributes.get(j).getValues() !=null&&attributes.get(j).getValues().size()==0) {
+//                    if (model.get(j).getValues().get(i).getId().equals(attributes.get(j).getValues().get(i).getValueId())) {
+//                        item_value_list = selected_value_map.get(String.valueOf(att_id));
+//                        attribute_value_id = attributes.get(j).getValues().get(i).getValueId();
+//                        stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
+//                        Log.d("stringBuilder",stringBuilder.toString());
+//                        if (item_value_list != null) {
+//                            item_value_list.add(String.valueOf(attribute_value_id));
+//                            selected_value_map.put(String.valueOf(att_id), item_value_list);
+//                        } else {
+//                            item_value_list = new ArrayList<>();
+//                            item_value_list.add(String.valueOf(attribute_value_id));
+//                            selected_value_map.put(String.valueOf(att_id), item_value_list);
+//
+//                        }
+//                        if (i != attributes.get(j).getValues().size() - 1) {
+//                            stringBuilder.append(", ");
+//                        }
+//                        attribute_id_list.add(attribute_value_id);
+//                        text.setHint(stringBuilder);
+//                    }
+//                }
+//            }
 
             Log.d("set_attribute_json_array", String.valueOf(stringBuilder));
 
@@ -921,125 +874,124 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             }
         });
     }
-//    private void getCropRequest() {
-//        SessionManagement sm = new SessionManagement(contexts);
-//        RequestQueue queue = Volley.newRequestQueue(contexts);
-//        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-//        Utility.showDialoge("Please wait while a moment...", contexts);
-//
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                Log.v("Response", response.toString());
-//                JSONObject obj = null;
-//                try {
-//                    obj = new JSONObject(response.toString());
-//                    int statusCode = obj.optInt("statuscode");
-//                    String status = obj.optString("status");
-//
-//                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-//                        Utility.dismissDialoge();
-//                        JSONArray jsonArray = obj.getJSONArray("data");
-//
-//                        if (jsonArray.length() > 0) {
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                Value cropPattern = new Value();
-//                                JSONObject data = jsonArray.getJSONObject(i);
-//                                Integer cropID = data.optInt("category_id");
-//                                String name = data.optString("name");
-//                                cropPattern.setValueId(Integer.valueOf(cropID + ""));
-//                                cropPattern.setValueName(name);
-//
-//                                cropList.add(cropPattern);
-//                            }
-//                            Log.d("url_string", String.valueOf(cropList.size()));
-//                            setWhichCrop(cropList);
-//
-//                        }
-//                    }
-//                } catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-//        queue.add(jsonObjectRequest);
-//    }
-//    private void setWhichCrop(List<Value> cropList) {
-//        ArrayList<String> crop_name = new ArrayList<>();
-//        ArrayList<String> crop_id = new ArrayList<>();
-//        ArrayList<Integer> langList = new ArrayList<>();
-//        for (int i = 0; i < cropList.size(); i++) {
-//            crop_name.add(cropList.get(i).getValueName());
-//            crop_id.add(String.valueOf(cropList.get(i).getValueId()));
-//        }
-//        final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
-//        boolean[] selected_crop = new boolean[crop_name.size()];
-//binding.textView.setText(str_crop_name);
-//
-//        binding.textView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle("Select Crop Name");
-//                builder.setCancelable(false);
-//
-//                builder.setMultiChoiceItems(items, selected_crop, new DialogInterface.OnMultiChoiceClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-//                        if (b) {
-//
-//                            langList.add(i);
-//                            Collections.sort(langList);
-//                        } else {
-//
-//                            langList.remove(Integer.valueOf(i));
-//                        }
-//                    }
-//                });
-//
-//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        StringBuilder stringBuilder = new StringBuilder();
-//                        StringBuilder builder_crop_id = new StringBuilder();
-//                        for (int j = 0; j < langList.size(); j++) {
-//                            stringBuilder.append(items[langList.get(j)]);
-//                            builder_crop_id.append(crop_id.get(langList.get(j)));
-//// selected_crop_id = String.valueOf(cropList.get(j).getValueId());
-//                            if (j != langList.size() - 1) {
-//                                stringBuilder.append(", ");
-//                                builder_crop_id.append(",");
-//                            }
-//                        }
-//
-//                        str_crop_id=builder_crop_id.toString();
-//                        Log.d("str_crop_id",str_crop_id);
-//                        binding.textView.setText(stringBuilder.toString());
-//                    }
-//                });
-//
-//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//// dismiss dialog
-//                        dialogInterface.dismiss();
-//                    }
-//                });
-//                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//// use for loop
-//                        for (int j = 0; j < selected_crop.length; j++) {
-//                            selected_crop[j] = false;
-//                            langList.clear();
-//                            binding.textView.setText("");
-//                        }
-//                    }
-//                });
-//
-//                builder.show();
-//            }
-//        });
-//    }
+    private void getCropRequest() {
+        SessionManagement sm = new SessionManagement(contexts);
+        RequestQueue queue = Volley.newRequestQueue(contexts);
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Utility.showDialoge("Please wait while a moment...", contexts);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("data");
+
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                Value cropPattern = new Value();
+                                JSONObject data = jsonArray.getJSONObject(i);
+                                Integer cropID = data.optInt("category_id");
+                                String name = data.optString("name");
+                                cropPattern.setValueId(Integer.valueOf(cropID + ""));
+                                cropPattern.setValueName(name);
+
+                                cropList.add(cropPattern);
+                            }
+                            Log.d("url_string", String.valueOf(cropList.size()));
+                            setWhichCrop(cropList);
+
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+    private void setWhichCrop(List<Value> cropList) {
+        ArrayList<String> crop_name = new ArrayList<>();
+        ArrayList<String> crop_id = new ArrayList<>();
+        ArrayList<Integer> langList = new ArrayList<>();
+        for (int i = 0; i < cropList.size(); i++) {
+            crop_name.add(cropList.get(i).getValueName());
+            crop_id.add(String.valueOf(cropList.get(i).getValueId()));
+        }
+        final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
+        boolean[] selected_crop = new boolean[crop_name.size()];
+          binding.textView.setText(str_crop_name);
+
+        binding.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Select Crop Name");
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(items, selected_crop, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+
+                            langList.add(i);
+                            Collections.sort(langList);
+                        } else {
+
+                            langList.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        StringBuilder builder_crop_id = new StringBuilder();
+                        for (int j = 0; j < langList.size(); j++) {
+                            stringBuilder.append(items[langList.get(j)]);
+                            builder_crop_id.append(crop_id.get(langList.get(j)));
+                            if (j != langList.size() - 1) {
+                                stringBuilder.append(", ");
+                                builder_crop_id.append(",");
+                            }
+                        }
+
+                        str_crop_id = builder_crop_id.toString();
+                        Log.d("str_crop_id", str_crop_id);
+                        binding.textView.setText(stringBuilder.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+// dismiss dialog
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+// use for loop
+                        for (int j = 0; j < selected_crop.length; j++) {
+                            selected_crop[j] = false;
+                            langList.clear();
+                            binding.textView.setText("");
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+    }
 
 }

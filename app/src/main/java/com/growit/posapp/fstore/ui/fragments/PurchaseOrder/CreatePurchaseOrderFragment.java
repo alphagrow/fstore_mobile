@@ -54,7 +54,7 @@ import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.tables.PurchaseOrder;
-import com.growit.posapp.fstore.ui.fragments.ConfirmOrderFragment;
+import com.growit.posapp.fstore.ui.fragments.Setting.ConfirmOrderFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -128,6 +128,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     int str_variant_id;
     DatePickerDialog.OnDateSetListener date_mfd;
     final Calendar myCalendar = Calendar.getInstance();
+    String purchase_order;
     public CreatePurchaseOrderFragment() {
         // Required empty public constructor
     }
@@ -794,8 +795,11 @@ public class CreatePurchaseOrderFragment extends Fragment {
         binding.payAmount.setText("₹" + String.valueOf(sumTotalAmount+paid_amount));
     }
 
-    private void callOrderConfirmFragment() {
+    private void callOrderConfirmFragment(String  purchase_order) {
+        Bundle bundle = new Bundle();
+        bundle.putString("purchase_order", purchase_order);
         Fragment fragment = ConfirmOrderFragment.newInstance();
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
@@ -821,6 +825,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
                 String message = obj.optString("message");
+                 purchase_order = obj.optString("purchase_order");
                 String error_message = obj.optString("error_message");
 
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
@@ -829,7 +834,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                                 .purchaseDao()
                                 .delete();
                     });
-                    callOrderConfirmFragment();
+                    callOrderConfirmFragment( purchase_order);
 
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();

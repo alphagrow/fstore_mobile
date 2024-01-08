@@ -67,7 +67,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text=" Purchase Order "
+        android:text="  Purchase Order "
         android:textSize="13sp" />
     <!--    <TextView-->
     <!--        -->
@@ -99,7 +99,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text=" Purchase Order List"
+        android:text="  Purchase Order List"
         android:textSize="13sp" />
 
 

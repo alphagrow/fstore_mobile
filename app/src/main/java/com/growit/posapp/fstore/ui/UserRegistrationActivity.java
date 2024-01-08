@@ -139,10 +139,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
                     UserRegistration();
-
                 }
-
-
             }
         });
         binding.updateBtn.setOnClickListener(new View.OnClickListener() {
@@ -238,7 +235,6 @@ public class UserRegistrationActivity extends AppCompatActivity {
         if (binding.etUsername.length() == 0) {
             binding.etUsername.setError("This field is required");
             Toast.makeText(UserRegistrationActivity.this, R.string.CUSTOMER_NAME, Toast.LENGTH_SHORT).show();
-
             return false;
         }
         if (binding.edUserId.length() == 0) {
@@ -269,11 +265,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
             Toast.makeText(UserRegistrationActivity.this, "Enter the City", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (binding.etWebsite.length() == 0) {
-            binding.etWebsite.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, "Enter the Website", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (binding.etWebsite.length() == 0) {
+//            binding.etWebsite.setError("This field is required");
+//            Toast.makeText(UserRegistrationActivity.this, "Enter the Website", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
 
         if (binding.etMobile.length() != 10) {
             binding.etMobile.setError("Enter a 10-digit mobile number");
@@ -365,7 +361,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private void UpdateUserRegistration() {
         SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
-        // params.put("user_id", sm.getUserID() + "");
+       //  params.put("user_id", sm.getUserID() + "");
         params.put("name", nameStr);
         params.put("login", login_id);
         //  params.put("company_logo", "");

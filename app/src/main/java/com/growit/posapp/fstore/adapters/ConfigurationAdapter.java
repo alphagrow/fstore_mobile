@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.ConfigurationModel;
+import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.AddPOSCategoryFragment;
@@ -39,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdapter.ViewHolder> {
@@ -52,7 +54,10 @@ public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdap
         mContext = context;
     }
 
-
+    public void updateList(ArrayList<ConfigurationModel> modellist) {
+        this.list=modellist;
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
         ImageView productThumb,deleteBtn,update;

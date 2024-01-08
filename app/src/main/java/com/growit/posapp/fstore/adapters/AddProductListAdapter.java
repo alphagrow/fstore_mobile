@@ -113,7 +113,7 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("product_list", (Serializable) list);
-                bundle.putString("crop_id",crop_id);
+                bundle.putInt("crop_id",Integer.valueOf(crop_id));
                 bundle.putString("crop_name",crop_name);
                 bundle.putInt("position", position);
                 Fragment fragment = UpdateAddProductFragment.newInstance();

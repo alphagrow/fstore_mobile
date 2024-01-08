@@ -437,7 +437,7 @@
                                 android:background="#E6E4E4E4" />
 
                             <LinearLayout
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="5dp"

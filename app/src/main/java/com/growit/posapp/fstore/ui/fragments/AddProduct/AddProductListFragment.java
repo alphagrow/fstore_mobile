@@ -100,10 +100,7 @@ public class AddProductListFragment extends Fragment {
         binding.recycler.setLayoutManager(layoutManager);
         if (getArguments() != null) {
             product_data = getArguments().getString("product_list");
-
             int position = getArguments().getInt("position");
-
-
             if (Utility.isNetworkAvailable(getContext())) {
                 if(product_data.equals("crop_product")) {
                     crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
@@ -162,6 +159,7 @@ public class AddProductListFragment extends Fragment {
         //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + pos_category_id + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -172,6 +170,7 @@ public class AddProductListFragment extends Fragment {
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<PurchaseModel>() {
                         }.getType();
@@ -181,7 +180,7 @@ public class AddProductListFragment extends Fragment {
                             crop_name = model.getData().get(i).getCategoryName();
                             purchaseProductModel = model.getData().get(i).getProducts();
                         }
-                        //                       JSONArray jsonArray = obj.getJSONArray("data");
+                        //JSONArray jsonArray = obj.getJSONArray("data");
 //                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
                         //                       productList = new ArrayList<>();
                         //   if (productArray.length() > 0) {
@@ -234,6 +233,7 @@ public class AddProductListFragment extends Fragment {
         //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -244,6 +244,7 @@ public class AddProductListFragment extends Fragment {
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<PurchaseModel>() {
                         }.getType();

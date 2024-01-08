@@ -31,6 +31,7 @@ import com.growit.posapp.fstore.tables.PosOrder;
 import com.growit.posapp.fstore.ui.LoginActivity;
 import com.growit.posapp.fstore.ui.MyProfileActivity;
 import com.growit.posapp.fstore.ui.fragments.AboutFragment;
+import com.growit.posapp.fstore.ui.fragments.AddCustomerDiscountFragment;
 import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 
 import org.json.JSONException;
@@ -55,6 +56,7 @@ import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFr
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListAndWareHouseListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
+import com.growit.posapp.fstore.ui.fragments.Setting.AddShopAndShopListFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
     LinearLayout  sale_menu_lay,setting_menu_lay,product_menu_lay,customer_menu_lay;
     LinearLayout inventory_menu;
-    TextView add_customer,view_cus,add_product_text,product_list_text,add_extra_price,add_attribute,add_pos_cat,vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type,transfer_order_list;
+    TextView add_customer,view_cus,add_discount,add_product_text,product_list_text,add_extra_price,add_attribute,add_pos_cat,vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type,transfer_order_list,shop_text;
     boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -467,11 +469,13 @@ public class MainActivity extends AppCompatActivity {
         customer_menu_lay = view_customer.findViewById(R.id.customer_menu_lay);
         add_customer = view_customer.findViewById(R.id.add_customer);
         view_cus = view_customer.findViewById(R.id.view_customer);
+        add_discount = view_customer.findViewById(R.id.add_discount);
 
         View view_setting = nvDrawer.inflateHeaderView(R.layout.setting_button);
         setting_menu_lay = view_setting.findViewById(R.id.setting_menu_lay);
         location = view_setting.findViewById(R.id.location);
         operation_type = view_setting.findViewById(R.id.operation_type);
+        shop_text = view_setting.findViewById(R.id.shop_text);
 
 
 
@@ -485,15 +489,25 @@ public class MainActivity extends AppCompatActivity {
             if (!isClicked) {
                 add_customer.setVisibility(View.VISIBLE);
                 view_cus.setVisibility(View.VISIBLE);
-
+                add_discount.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
                 add_customer.setVisibility(View.GONE);
                 view_cus.setVisibility(View.GONE);
-
+                add_discount.setVisibility(View.GONE);
                 isClicked = false;
             }
 
+        });
+        add_discount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = AddCustomerDiscountFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
         });
 
         add_customer.setOnClickListener(new View.OnClickListener() {
@@ -733,17 +747,28 @@ public class MainActivity extends AppCompatActivity {
         });
         setting_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                shop_text.setVisibility(View.VISIBLE);
                 location.setVisibility(View.VISIBLE);
                 operation_type.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                shop_text.setVisibility(View.GONE);
                 location.setVisibility(View.GONE);
                 operation_type.setVisibility(View.GONE);
                 isClicked = false;
             }
 
         });
-
+        shop_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = AddShopAndShopListFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
     }
 
     private void logoutAlert() {

@@ -51,6 +51,7 @@ import com.growit.posapp.fstore.model.GiftCardModel;
 import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.tables.Customer;
 import com.growit.posapp.fstore.tables.PosOrder;
+import com.growit.posapp.fstore.ui.fragments.Setting.ConfirmOrderFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;

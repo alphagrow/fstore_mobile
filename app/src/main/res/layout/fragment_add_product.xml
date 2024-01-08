@@ -264,18 +264,6 @@
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
-                    android:layout_marginEnd="@dimen/end_marg_text"
-                    android:layout_marginStart="@dimen/start_marg_text"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
-                    android:text="Company Name"
-                    android:textColor="@color/edt_top_text_color"
-                    />
 
                 <EditText
                     android:id="@+id/mkt_by"
@@ -333,6 +321,18 @@
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Category"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
                 <TextView
                     android:id="@+id/textView"

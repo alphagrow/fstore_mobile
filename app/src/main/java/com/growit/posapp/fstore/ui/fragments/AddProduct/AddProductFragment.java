@@ -387,10 +387,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             Log.d("attribute_json_array", attribute_json_array.toString());
             if (attribute_json_array != null) {
-                if (str_crop_id.length() != 0) {
+                if (str_crop_id != null) {
                     addProductRequest(str_hsn_code, str_hsn_code_dec, str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
                 } else {
-                    Toast.makeText(getActivity(), "Select Crop", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Select Category", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(getActivity(), "Select Attribute", Toast.LENGTH_SHORT).show();
@@ -909,23 +909,17 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-// Initialize string builder
                         StringBuilder stringBuilder = new StringBuilder();
                         StringBuilder builder_crop_id = new StringBuilder();
-// use for loop
-// int ValueId = 0;
                         for (int j = 0; j < langList.size(); j++) {
                             stringBuilder.append(items[langList.get(j)]);
                             builder_crop_id.append(crop_id.get(langList.get(j)));
-// selected_crop_id = String.valueOf(cropList.get(j).getValueId());
                             if (j != langList.size() - 1) {
                                 stringBuilder.append(", ");
                                 builder_crop_id.append(",");
                             }
                         }
-// crop_id_list.add(ValueId);
 
-// set text on textView
                         str_crop_id = builder_crop_id.toString();
                         Log.d("str_crop_id", str_crop_id);
                         binding.textView.setText(stringBuilder.toString());
