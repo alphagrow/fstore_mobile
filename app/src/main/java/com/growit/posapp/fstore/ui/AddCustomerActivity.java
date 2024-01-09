@@ -9,9 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.growit.posapp.fstore.R;
-import com.growit.posapp.fstore.databinding.CustomerRecyclerviewBinding;
-import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
-import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
+import com.growit.posapp.fstore.ui.fragments.CustomerManagement.AddCustomerFragment;
+import com.growit.posapp.fstore.ui.fragments.CustomerManagement.CustomerRecyclerViewFragment;
 
 public class AddCustomerActivity extends AppCompatActivity {
 // Testing

@@ -869,7 +869,7 @@ public class AddTransfersFragment extends Fragment {
                                 int id = data.optInt("id");
                                 String warehouse_id = data.optString("warehouse_id");
                                 stateModel.setId(id);
-                                stateModel.setName(warehouse_id);
+                                stateModel.setName(warehouse_id+" / "+name);
                                 ware_houseNames.add(stateModel);
                             }
                         }

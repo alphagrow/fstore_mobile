@@ -30,22 +30,19 @@ import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.tables.PosOrder;
 import com.growit.posapp.fstore.ui.LoginActivity;
 import com.growit.posapp.fstore.ui.MyProfileActivity;
-import com.growit.posapp.fstore.ui.fragments.AboutFragment;
-import com.growit.posapp.fstore.ui.fragments.AddCustomerDiscountFragment;
-import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
+import com.growit.posapp.fstore.ui.fragments.CustomerManagement.AddCustomerDiscountFragment;
+import com.growit.posapp.fstore.ui.fragments.CustomerManagement.AddCustomerFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
-import com.growit.posapp.fstore.ui.fragments.AddProduct.CreateAttributeFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.ProductExtraPriceListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.AddTransfersFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AttributeListFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
 import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
-import com.growit.posapp.fstore.ui.fragments.CustomerRecyclerViewFragment;
-import com.growit.posapp.fstore.ui.fragments.AddProduct.ExtraPriceFragment;
+import com.growit.posapp.fstore.ui.fragments.CustomerManagement.CustomerRecyclerViewFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.ConfigurationFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.TransfersOrderListFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
@@ -614,7 +611,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 toolbar.setVisibility(View.GONE);
-                Fragment fragment = CreateAttributeFragment.newInstance();
+                Fragment fragment = AttributeListFragment.newInstance();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 drawer_layout.close();

@@ -62,12 +62,13 @@ public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdap
         public TextView nameTextView;
         ImageView productThumb,deleteBtn,update;
         LinearLayout card;
-        TextView id,name,ware_text;
+        TextView id,name,ware_text,per_text;
         public ViewHolder(View itemView) {
             super(itemView);
             id = itemView.findViewById(R.id.id);
             name = itemView.findViewById(R.id.location_text);
             ware_text = itemView.findViewById(R.id.ware_text);
+            per_text = itemView.findViewById(R.id.per_text);
 
         }
     }
@@ -88,6 +89,7 @@ public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdap
         holder.id.setText(String.valueOf(model.getId()));
         holder.name.setText(model.getName());
         holder.ware_text.setText(model.getParentId());
+        holder.per_text.setText(model.getPercentage());
 
 
 

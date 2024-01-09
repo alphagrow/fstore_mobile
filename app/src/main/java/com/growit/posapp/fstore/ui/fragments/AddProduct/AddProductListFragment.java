@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,25 +29,19 @@ import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
-import com.growit.posapp.fstore.adapters.ProductListAdapter;
-import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
+import com.growit.posapp.fstore.adapters.AllAddProductListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
-import com.growit.posapp.fstore.model.StockInventoryModel;
 import com.growit.posapp.fstore.model.Value;
-import com.growit.posapp.fstore.model.VendorModel;
-import com.growit.posapp.fstore.ui.fragments.AddCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +51,7 @@ public class AddProductListFragment extends Fragment {
     FragmentAddProductListBinding binding;
 
     AddProductListAdapter adapter;
+    AllAddProductListAdapter all_adapter;
     protected List<Product> productList = new ArrayList<>();
     Activity contexts;
     List<Value> crop_mode = null;
@@ -66,7 +60,7 @@ public class AddProductListFragment extends Fragment {
     PurchaseModel model;
     String product_data;
     List<PurchaseProductModel> purchaseProductModel;
-
+    int position;
     public AddProductListFragment() {
         // Required empty public constructor
     }
@@ -100,7 +94,7 @@ public class AddProductListFragment extends Fragment {
         binding.recycler.setLayoutManager(layoutManager);
         if (getArguments() != null) {
             product_data = getArguments().getString("product_list");
-            int position = getArguments().getInt("position");
+             position = getArguments().getInt("position");
             if (Utility.isNetworkAvailable(getContext())) {
                 if(product_data.equals("crop_product")) {
                     crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
@@ -120,7 +114,14 @@ public class AddProductListFragment extends Fragment {
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
-                    getProductList(crop_id);
+                    if(product_data.equals("crop_product")) {
+                        crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
+                        crop_id = String.valueOf(crop_mode.get(position).getValueId());
+                        getProductList(crop_id);
+                    }else {
+                        getAllProductList();
+                    }
+
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -180,30 +181,6 @@ public class AddProductListFragment extends Fragment {
                             crop_name = model.getData().get(i).getCategoryName();
                             purchaseProductModel = model.getData().get(i).getProducts();
                         }
-                        //JSONArray jsonArray = obj.getJSONArray("data");
-//                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
-                        //                       productList = new ArrayList<>();
-                        //   if (productArray.length() > 0) {
-//                            for (int i = 0; i < productArray.length(); i++) {
-//                                Product product = new Product();
-//                                JSONObject data = productArray.getJSONObject(i);
-//                                int ID = data.optInt("product_id");
-//                                String name = data.optString("product_name");
-//                                double price = data.optDouble("list_price");
-//                                product.setProductID(ID + "");
-//                                product.setProductName(name);
-//                                product.setPrice(price);
-//                                String image = "";
-//                                if (data.opt("image_url").equals(false)) {
-//                                    image = "";
-//                                } else {
-//                                    image = data.optString("image_url");
-//                                }
-//                                product.setProductImage(image);
-//                                productList.add(product);
-//                            }
-
-
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
                             binding.noDataFound.setVisibility(View.GONE);
                         } else {
@@ -254,38 +231,14 @@ public class AddProductListFragment extends Fragment {
                             crop_name = model.getData().get(i).getCategoryName();
                             purchaseProductModel = model.getData().get(i).getProducts();
                         }
-                        //                       JSONArray jsonArray = obj.getJSONArray("data");
-//                        JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("products");
-                        //                       productList = new ArrayList<>();
-                        //   if (productArray.length() > 0) {
-//                            for (int i = 0; i < productArray.length(); i++) {
-//                                Product product = new Product();
-//                                JSONObject data = productArray.getJSONObject(i);
-//                                int ID = data.optInt("product_id");
-//                                String name = data.optString("product_name");
-//                                double price = data.optDouble("list_price");
-//                                product.setProductID(ID + "");
-//                                product.setProductName(name);
-//                                product.setPrice(price);
-//                                String image = "";
-//                                if (data.opt("image_url").equals(false)) {
-//                                    image = "";
-//                                } else {
-//                                    image = data.optString("image_url");
-//                                }
-//                                product.setProductImage(image);
-//                                productList.add(product);
-//                            }
-
-
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
                             binding.noDataFound.setVisibility(View.GONE);
                         } else {
                             binding.noDataFound.setVisibility(View.GONE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            adapter = new AddProductListAdapter(getActivity(), purchaseProductModel,crop_id,crop_name);
-                            binding.recycler.setAdapter(adapter);
+                            all_adapter = new AllAddProductListAdapter(getActivity(), purchaseProductModel);
+                            binding.recycler.setAdapter(all_adapter);
                             binding.recycler.setLayoutManager(layoutManager);
 
                         }

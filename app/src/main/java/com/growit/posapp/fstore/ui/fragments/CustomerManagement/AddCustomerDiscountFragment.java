@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments.Setting;
+package com.growit.posapp.fstore.ui.fragments.CustomerManagement;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -30,7 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
-import com.growit.posapp.fstore.databinding.FragmentAddShopAndShopListBinding;
+import com.growit.posapp.fstore.databinding.FragmentAddCustomerDiscountBinding;
 import com.growit.posapp.fstore.model.ConfigurationModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
@@ -49,19 +49,22 @@ import java.util.List;
 import java.util.Map;
 
 
-public class AddShopAndShopListFragment extends Fragment {
-    FragmentAddShopAndShopListBinding binding;
+public class AddCustomerDiscountFragment extends Fragment {
+
+
+
+    FragmentAddCustomerDiscountBinding binding;
     List<ConfigurationModel> list;
     Activity contexts;
     ConfigurationAdapter adapter;
-    EditText shop_name_ed;
+EditText name_text,per_ed_text;
     boolean isAllFieldsChecked = false;
-    public AddShopAndShopListFragment() {
+    public AddCustomerDiscountFragment() {
         // Required empty public constructor
     }
 
-    public static AddShopAndShopListFragment newInstance() {
-        return new AddShopAndShopListFragment();
+    public static AddCustomerDiscountFragment newInstance() {
+        return new AddCustomerDiscountFragment();
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,7 @@ public class AddShopAndShopListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //   return inflater.inflate(R.layout.fragment_add_shop_and_shop_list, container, false);
-        binding = FragmentAddShopAndShopListBinding.inflate(inflater, container, false);
+        binding = FragmentAddCustomerDiscountBinding.inflate(inflater, container, false);
         init();
         return binding.getRoot();
     }
@@ -87,7 +90,7 @@ public class AddShopAndShopListFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerVendor.setLayoutManager(layoutManager);
         if (Utility.isNetworkAvailable(getContext())) {
-            getShopList();
+            getCustomerDiscountList();
 
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -100,7 +103,7 @@ public class AddShopAndShopListFragment extends Fragment {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
 
-                    getShopList();
+                    getCustomerDiscountList();
 
 
                 } else {
@@ -137,7 +140,7 @@ public class AddShopAndShopListFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterList(s.toString());
+               filterList(s.toString());
             }
 
             @Override
@@ -151,8 +154,9 @@ public class AddShopAndShopListFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         String  cust_name = list.get(position).getName();
+                        String  str_percentage = list.get(position).getPercentage();
                         int  _id = list.get(position).getId();
-                        showDialogeUpdateReceiveProduct(cust_name,_id);
+                        showDialogeUpdateReceiveProduct(cust_name,str_percentage,_id);
                     }
 
 
@@ -174,12 +178,12 @@ public class AddShopAndShopListFragment extends Fragment {
     private  void showDialogeReceiveProduct() {
 
         Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.add_shop_dialoge);
+        dialog.setContentView(R.layout.add_customer_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        shop_name_ed = dialog.findViewById(R.id.shop_name_ed);
-
+        name_text = dialog.findViewById(R.id.name_ed_text);
+        per_ed_text = dialog.findViewById(R.id.per_ed_text);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
 
@@ -187,8 +191,8 @@ public class AddShopAndShopListFragment extends Fragment {
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str_shop_name = shop_name_ed.getText().toString();
-
+                String str_name = name_text.getText().toString();
+                String str_per = per_ed_text.getText().toString();
                 isAllFieldsChecked= CheckAllFields();
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -196,7 +200,7 @@ public class AddShopAndShopListFragment extends Fragment {
                 }
 
                 if (isAllFieldsChecked) {
-                    addDiscount(str_shop_name);
+                    addDiscount(str_name, Integer.parseInt(str_per));
                 }
                 dialog.dismiss();
 
@@ -213,25 +217,25 @@ public class AddShopAndShopListFragment extends Fragment {
         dialog.show();
     }
 
-    private  void showDialogeUpdateReceiveProduct(String name,int id) {
+    private  void showDialogeUpdateReceiveProduct(String name,String discount,int id) {
 
         Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.add_shop_dialoge);
+        dialog.setContentView(R.layout.add_customer_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        shop_name_ed = dialog.findViewById(R.id.shop_name_ed);
-
+        name_text = dialog.findViewById(R.id.name_ed_text);
+        per_ed_text = dialog.findViewById(R.id.per_ed_text);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-        shop_name_ed.setText(name);
-
+        name_text.setText(name);
+        per_ed_text.setText(discount);
 
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str_name = shop_name_ed.getText().toString();
-
+                String str_name = name_text.getText().toString();
+                String str_per = per_ed_text.getText().toString();
                 isAllFieldsChecked= CheckAllFields();
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -239,7 +243,7 @@ public class AddShopAndShopListFragment extends Fragment {
                 }
 
                 if (isAllFieldsChecked) {
-                    DiscountUpdate(str_name,id);
+                    DiscountUpdate(str_name, str_per,id);
                 }
                 dialog.dismiss();
 
@@ -257,26 +261,30 @@ public class AddShopAndShopListFragment extends Fragment {
     }
 
     private boolean CheckAllFields() {
-        if (shop_name_ed.length()== 0) {
-            shop_name_ed.setError("This field is required");
+        if (name_text.length()== 0) {
+            name_text.setError("This field is required");
             Toast.makeText(getActivity(), "Enter the Customer Type Name", Toast.LENGTH_SHORT).show();
 
             return false;
         }
-
+        if (per_ed_text.length() == 0) {
+            per_ed_text.setError("This field is required");
+            Toast.makeText(getActivity(), "Enter the Percentage", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return true;
     }
 
-    private void addDiscount(String str_name){
+    private void addDiscount(String str_name,int str_per){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID()+"");
         params.put("token", sm.getJWTToken());
         params.put("name", str_name);
-
+        params.put("percentage", str_per+"");
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_SHOPS, new VolleyCallback() {
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_DISCOUNT, new VolleyCallback() {
             private String message = " failed!!";
 
             @Override
@@ -290,9 +298,9 @@ public class AddShopAndShopListFragment extends Fragment {
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                    shop_name_ed.setText("");
-
-                    getShopList();
+                    name_text.setText("");
+                    per_ed_text.setText("");
+                    getCustomerDiscountList();
                 }else {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
@@ -309,18 +317,18 @@ public class AddShopAndShopListFragment extends Fragment {
 
     }
 
-    private void DiscountUpdate(String name,int id) {
+    private void DiscountUpdate(String name,String discount,int id) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
         params.put("token", sm.getJWTToken());
         params.put("name", name);
-        params.put("shop_id", id+"");
+        params.put("discount_id", id+"");
+        params.put("percentage", discount+"");
 
 
 
-
-        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_SHOPS, new VolleyCallback() {
+        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_DISCOUNT_UPDATE, new VolleyCallback() {
             private String message = "Update failed!!";
 
             @Override
@@ -335,7 +343,7 @@ public class AddShopAndShopListFragment extends Fragment {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
-                    getShopList();
+                   getCustomerDiscountList();
                 }else {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
@@ -349,13 +357,12 @@ public class AddShopAndShopListFragment extends Fragment {
             }
         });
     }
-
-    private void getShopList() {
+    private void getCustomerDiscountList() {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         //  String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST;
 
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_LIST_SHOPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         //    Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -370,7 +377,7 @@ public class AddShopAndShopListFragment extends Fragment {
 
                     if (status.equalsIgnoreCase("success")) {
                         // Utility.dismissDialoge();
-                        JSONArray jsonArray = obj.getJSONArray("shops");
+                        JSONArray jsonArray = obj.getJSONArray("customer_discounts");
                         list.clear();
                         if (jsonArray.length() > 0) {
                             for (int i = 0; i < jsonArray.length(); i++) {
@@ -378,14 +385,20 @@ public class AddShopAndShopListFragment extends Fragment {
                                 JSONObject data = jsonArray.getJSONObject(i);
                                 Integer id = data.optInt("id");
                                 String name = data.optString("name");
+                                String percentage = data.optString("percentage");
+
                                 model.setId(id);
                                 model.setName(name);
+                                model.setPercentage(percentage);
+
+
                                 list.add(model);
+
                             }
                             if (list == null || list.size() == 0) {
                                 binding.noDataFound.setVisibility(View.VISIBLE);
                             } else {
-                                binding.totalCustomerText.setText("Total : "+list.size()+" Shops ");
+                                binding.totalCustomerText.setText("Total : "+list.size()+" Customer Types ");
                                 binding.noDataFound.setVisibility(View.GONE);
                                 adapter = new ConfigurationAdapter(getActivity(), list);
                                 binding.recyclerVendor.setAdapter(adapter);
@@ -401,19 +414,19 @@ public class AddShopAndShopListFragment extends Fragment {
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
     }
+
     private void filterList (String text){
 
-        ArrayList<ConfigurationModel> model = new ArrayList<>();
-        for (ConfigurationModel detail : list) {
-            if (detail.getName().toLowerCase().contains(text.toLowerCase())) {
-                model.add(detail);
+            ArrayList<ConfigurationModel> model = new ArrayList<>();
+            for (ConfigurationModel detail : list) {
+                if (detail.getName().toLowerCase().contains(text.toLowerCase())) {
+                    model.add(detail);
+                }
             }
+
+            adapter.updateList(model);
         }
 
-        adapter.updateList(model);
-    }
-
 }
-
 
 

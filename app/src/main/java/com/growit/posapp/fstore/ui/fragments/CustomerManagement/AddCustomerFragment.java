@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.CustomerManagement;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,11 +20,18 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.interfaces.ApiResponseListener;
+import com.growit.posapp.fstore.model.ConfigurationModel;
 import com.growit.posapp.fstore.tables.Customer;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -54,13 +61,14 @@ public class AddCustomerFragment extends Fragment implements
 
     Spinner stateSpinner, citySpinner, talukaSpinner, cstTypeSpinner;
     List<StateModel> stateNames = new ArrayList<>();
+    List<StateModel> customer_type = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
 
-    private String str_land_size = "", str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
+    private String str_land_size = "", str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "",cusTomerType ="", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     int customerID = 0;
     String customerLineDiscount="";
-    String cusTomerType = "1";
+
     private String[] cstTpeArray = {"Farmer", "Franchisee", "Dealer"};
     private String[] cstTpeIDArray = {"1", "2", "3"};
     boolean isMobileExist = false;
@@ -78,6 +86,7 @@ public class AddCustomerFragment extends Fragment implements
         initViews(view);
         /* Render State DropDown List  */
         if (Utility.isNetworkAvailable(getContext())) {
+            getCustomerTypesList();
             getStateData();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -112,8 +121,9 @@ public class AddCustomerFragment extends Fragment implements
         land_size = view.findViewById(R.id.land_size);
         gst_no_edit = view.findViewById(R.id.gst_edit);
 
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cstTpeArray);
-        cstTypeSpinner.setAdapter(spinnerArrayAdapter);
+//        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cstTpeArray);
+//        cstTypeSpinner.setAdapter(spinnerArrayAdapter);
+
         stateSpinner = view.findViewById(R.id.stateSpinner);
         citySpinner = view.findViewById(R.id.citySpinner);
         backBtn = view.findViewById(R.id.backBtn);
@@ -146,14 +156,10 @@ public class AddCustomerFragment extends Fragment implements
         cstTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
+                if (position != 0) {
+                    cusTomerType = customer_type.get(position).getId() + "";
 
-                    cusTomerType = cstTpeIDArray[position];
-                    if (cusTomerType.equals("1")) {
-                        gst_no_edit.setText("");
-                        gst_no_edit.setVisibility(View.GONE);
-                    } else if (cusTomerType.equals("2") || cusTomerType.equals("3"))
-                        gst_no_edit.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -353,6 +359,54 @@ public class AddCustomerFragment extends Fragment implements
             }
         });
     }
+
+    private void getCustomerTypesList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST;
+
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        //    Utility.showDialoge("Please wait while a moment...", getActivity());
+        Log.d("ALL_CROPS_url",url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("customer_discounts");
+                        StateModel stateModel = new StateModel();
+                        stateModel.setId(-1);
+                        stateModel.setName("--Select Customer Types--");
+                        customer_type.add(stateModel);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            stateModel = new StateModel();
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            int id = data.optInt("id");
+                            String name = data.optString("name");
+                            stateModel.setId(id);
+                            stateModel.setName(name);
+                            customer_type.add(stateModel);
+                        }
+                        if(getContext()!=null) {
+                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), customer_type);
+                            cstTypeSpinner.setAdapter(adapter);
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+
 
     private void getDistrictData() {
         showDialoge("Please wait while a configuring District...");

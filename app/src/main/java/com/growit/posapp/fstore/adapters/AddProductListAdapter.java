@@ -1,7 +1,6 @@
 package com.growit.posapp.fstore.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -24,30 +22,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.R;
-import com.growit.posapp.fstore.model.Product;
-import com.growit.posapp.fstore.model.Purchase.PurchaseCategoryModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
-import com.growit.posapp.fstore.model.StockInventoryModel;
-import com.growit.posapp.fstore.model.StockInventoryModelList;
-import com.growit.posapp.fstore.model.Value;
-import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductFragment;
-import com.growit.posapp.fstore.ui.fragments.AddProduct.CreateAttributeFragment;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
-import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
-import com.skyhope.showmoretextview.ShowMoreTextView;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAdapter.ViewHolder> {
@@ -66,7 +51,7 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView qty, order_no, dateTxt, amountTxt, case_id;
         ImageView images, deleteBtn, update;
-        ShowMoreTextView product_name;
+        TextView product_name;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -95,12 +80,12 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
         PurchaseProductModel model = list.get(position);
         //   holder.qty.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
         holder.product_name.setText(model.getProductName());
-        holder.product_name.setShowingChar(100);
-        holder.product_name.setShowingLine(2);
-        holder.product_name.addShowMoreText("");
-        holder.product_name.addShowLessText("Less");
-        holder.product_name.setShowMoreColor(Color.BLACK); // or other color
-        holder.product_name.setShowLessTextColor(Color.RED); // or other color
+//        holder.product_name.setShowingChar(100);
+//        holder.product_name.setShowingLine(2);
+//        holder.product_name.addShowMoreText("");
+//        holder.product_name.addShowLessText("Less");
+//        holder.product_name.setShowMoreColor(Color.BLACK); // or other color
+//        holder.product_name.setShowLessTextColor(Color.RED); // or other color
 
 
 //        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getProductImage())

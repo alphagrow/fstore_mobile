@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.CustomerManagement;
 
 import android.content.Intent;
 import android.os.AsyncTask;

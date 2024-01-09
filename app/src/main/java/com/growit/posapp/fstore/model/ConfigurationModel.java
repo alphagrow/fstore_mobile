@@ -16,6 +16,17 @@ public class ConfigurationModel {
     @SerializedName("parent_id")
     @Expose
     private String parentId;
+    @SerializedName("percentage")
+    @Expose
+    private String percentage;
+
+    public String getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(String percentage) {
+        this.percentage = percentage;
+    }
 
     public Integer getId() {
         return id;

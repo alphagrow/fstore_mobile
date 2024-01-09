@@ -80,22 +80,33 @@
                 android:padding="8dp"
                 android:requiresFadingEdge="vertical" />
 
-            <EditText
-                android:id="@+id/customer_type"
+<!--            <EditText-->
+<!--                android:id="@+id/customer_type"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/twenty_five"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                android:background="@drawable/custom_edit_text_cut"-->
+<!--                android:drawablePadding="@dimen/ten"-->
+<!--                android:fontFamily="@font/sf_compact_regular"-->
+<!--                android:hint="Customer Type"-->
+<!--                android:inputType="text"-->
+<!--                android:padding="8dp"-->
+<!--                android:paddingStart="@dimen/ten"-->
+<!--                android:paddingEnd="@dimen/ten"-->
+<!--                android:visibility="gone" />-->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="@dimen/twenty_five"
-                android:background="@drawable/custom_edit_text_cut"
-                android:drawablePadding="@dimen/ten"
-                android:fontFamily="@font/sf_compact_regular"
-                android:hint="Customer Type"
-                android:inputType="text"
-                android:padding="8dp"
-                android:paddingStart="@dimen/ten"
-                android:paddingEnd="@dimen/ten"
-                android:visibility="gone" />
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Customer Type"
+                android:textColor="@color/edt_top_text_color" />
 
             <LinearLayout
                 android:id="@+id/lay_custom_type"
@@ -113,20 +124,31 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"/>
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="GST No."
+                android:textColor="@color/edt_top_text_color"
+                />
             <EditText
-                android:visibility="gone"
                 android:id="@+id/gst_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/gst_no"
                 android:drawablePadding="@dimen/ten"
                 android:maxLength="16"
                 android:fontFamily="@font/sf_compact_regular"
-                android:hint="GST No."
+                android:hint=" "
                 android:inputType="text"
                 android:padding="8dp" />
             <TextView

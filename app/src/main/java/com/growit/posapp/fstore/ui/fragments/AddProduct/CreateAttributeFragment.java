@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -184,6 +185,10 @@ public class CreateAttributeFragment extends Fragment {
                 String error_message = obj.optString("error_message");
                 if (status.equalsIgnoreCase("success")) {
                     Toast.makeText(getActivity(), "Update Attribute", Toast.LENGTH_SHORT).show();
+                    Fragment fragment = AttributeListFragment.newInstance();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
                 }else {
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
 

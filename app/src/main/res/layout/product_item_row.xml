@@ -45,7 +45,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.skyhope.showmoretextview.ShowMoreTextView
+    <TextView
         android:padding="3dp"
         android:id="@+id/product_name_text"
         android:layout_width="0dp"
@@ -55,6 +55,17 @@
         android:textColor="#D9171717"
         android:textSize="15sp"
         android:textStyle="normal"/>
+
+    <!--    <com.skyhope.showmoretextview.ShowMoreTextView-->
+<!--        android:padding="3dp"-->
+<!--        android:id="@+id/product_name_text"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_weight="2.3"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="@font/helvetica_neue_medium"-->
+<!--        android:textColor="#D9171717"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textStyle="normal"/>-->
     <ImageView
         android:id="@+id/deleteBtn"
         android:layout_width="0dp"

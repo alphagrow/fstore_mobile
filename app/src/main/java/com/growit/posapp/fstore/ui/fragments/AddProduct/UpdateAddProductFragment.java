@@ -15,12 +15,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -69,10 +67,8 @@ import com.growit.posapp.fstore.model.Attribute;
 import com.growit.posapp.fstore.model.AttributeModel;
 import com.growit.posapp.fstore.model.AttributeValue;
 import com.growit.posapp.fstore.model.ListAttributesModel;
-import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.Value;
-import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -376,10 +372,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             }
 
             if (attribute_json_array != null) {
-                if (str_crop_id.length() != 0) {
+                if (str_crop_id != null) {
                     updateProductRequest(str_crop_id,str_product_name, str_product_price,str_whichPest,str_description,str_exp_date,attribute_json_array);
                 } else {
-                    Toast.makeText(getActivity(), "Select Crop", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Select Category", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(getActivity(), "Select Attribute", Toast.LENGTH_SHORT).show();

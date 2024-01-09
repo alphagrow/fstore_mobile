@@ -76,7 +76,15 @@ public class ApiConstants {
    public final static String POST_TRANSFER_ORDER = "/api/stock_transfer?";
   public final static String GET_DELIVERY_DOWNLOAD = "/api/transfer/download_delivery_slip?";
   public final static String GET_CUSTOMER_DISCOUNT_LIST = "/api/customer/discount/list?";
+  public final static String POST_CREATE_DISCOUNT = "/api/customer/discount?";
+  public final static String PUT_DISCOUNT_UPDATE = "/api/customer/discount/update?";
+  public final static String GET_LIST_SHOPS = "/api/list/shops?";
+  public final static String POST_CREATE_SHOPS = "/api/create/shop?";
+  public final static String PUT_UPDATE_SHOPS = "/api/update/shop?";
 
+  public final static String PUT_UPDATE_UOM = "/api/update/uom?";
+  public final static String POST_CREATE_UOM = "/api/create/uom?";
+  public final static String GET_UOM_LIST = "/api/list/uoms?";
 }
 
 

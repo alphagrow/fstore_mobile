@@ -1,4 +1,4 @@
-package com.growit.posapp.fstore.ui.fragments;
+package com.growit.posapp.fstore.ui.fragments.CustomerManagement;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -78,20 +78,20 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
             getStateData();
             getDistrictData(customer.get(position).getState());
             getTalukaData(customer.get(position).getDistrict());
-            customer_type.setEnabled(false);
-            gst_no_edit.setEnabled(false);
-            if(cstType!=null&&cstType.equalsIgnoreCase("1")) {
-                customer_type.setText("Farmer");
-                gst_no_edit.setVisibility(View.GONE);
-            }else  if(cstType!=null&&cstType.equalsIgnoreCase("2")) {
-                gst_no_edit.setVisibility(View.VISIBLE);
-                gst_no_edit.setText(customer.get(position).getGst_no());
-                customer_type.setText("Franchise");
-            }else  if(cstType!=null&&cstType.equalsIgnoreCase("3"))  {
-                customer_type.setText("Dealer");
-                gst_no_edit.setVisibility(View.VISIBLE);
-                gst_no_edit.setText(customer.get(position).getGst_no());
-            }
+//            customer_type.setEnabled(false);
+//            gst_no_edit.setEnabled(false);
+//            if(cstType!=null&&cstType.equalsIgnoreCase("1")) {
+//                customer_type.setText("Farmer");
+//                gst_no_edit.setVisibility(View.GONE);
+//            }else  if(cstType!=null&&cstType.equalsIgnoreCase("2")) {
+//                gst_no_edit.setVisibility(View.VISIBLE);
+//                gst_no_edit.setText(customer.get(position).getGst_no());
+//                customer_type.setText("Franchise");
+//            }else  if(cstType!=null&&cstType.equalsIgnoreCase("3"))  {
+//                customer_type.setText("Dealer");
+//                gst_no_edit.setVisibility(View.VISIBLE);
+//                gst_no_edit.setText(customer.get(position).getGst_no());
+//            }
         }
 
 
@@ -114,7 +114,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
         customer_type =view.findViewById(R.id.customer_type);
 //        customer_type_text = view.findViewById(R.id.customer_type_text);
 //        customer_type_text.setVisibility(View.GONE);
-        customer_type.setVisibility(View.VISIBLE);
+//        customer_type.setVisibility(View.VISIBLE);
         lay_custom_type = view.findViewById(R.id.lay_custom_type);
         lay_custom_type.setVisibility(View.GONE);
         land_size.setVisibility(View.GONE);

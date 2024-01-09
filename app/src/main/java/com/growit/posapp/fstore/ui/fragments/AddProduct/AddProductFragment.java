@@ -889,7 +889,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Select Crop Name");
+                builder.setTitle("Select Category Name");
                 builder.setCancelable(false);
 
                 builder.setMultiChoiceItems(items, selected_crop, new DialogInterface.OnMultiChoiceClickListener() {

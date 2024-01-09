@@ -17,12 +17,9 @@ import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddVendorBinding;
-import com.growit.posapp.fstore.databinding.FragmentUpdateVendorBinding;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.VendorModelList;
 import com.growit.posapp.fstore.model.WarehouseModel;
-import com.growit.posapp.fstore.tables.Customer;
-import com.growit.posapp.fstore.ui.fragments.UpdateCustomerFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -78,6 +75,7 @@ public class UpdateVendorFragment extends Fragment {
             type_of_vendor_warehouse = getArguments().getString("type_of_vendor_warehouse");
             if(type_of_vendor_warehouse.equals("vendor")) {
                 binding.titleTxt.setText("Update Vendor");
+                binding.textName.setHint("Vendor Name");
                 binding.cityText.setVisibility(View.GONE);
                 binding.etCity.setVisibility(View.GONE);
                 binding.textCode.setVisibility(View.GONE);
@@ -478,6 +476,7 @@ public class UpdateVendorFragment extends Fragment {
         params.put("vat", str_gst_no);
         params.put("vendor_id", vendor_model.get(position).getVendorId()+"");
         params.put("license_number", str_lic_no);
+
         Log.d("vendoe_update",ApiConstants.UPDATE_Vendor+params.toString());
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.UPDATE_Vendor , new VolleyCallback() {
             private String message = "Update failed!!";
