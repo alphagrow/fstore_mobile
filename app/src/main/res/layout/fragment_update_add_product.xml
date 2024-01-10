@@ -225,6 +225,7 @@
 <!--                    android:requiresFadingEdge="vertical"-->
 <!--                    android:textSize="14dp" />-->
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
@@ -238,6 +239,7 @@
                     />
 
                 <EditText
+                    android:visibility="gone"
                     android:id="@+id/company_name"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"

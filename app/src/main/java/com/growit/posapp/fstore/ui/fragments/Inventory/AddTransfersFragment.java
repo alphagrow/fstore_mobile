@@ -838,8 +838,8 @@ public class AddTransfersFragment extends Fragment {
     private void getOperationTypes() {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        //    String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST;
+            String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        //String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST;
 
         Log.v("url", url);
         //   Utility.showDialoge("Please wait while a moment...", getActivity());
@@ -898,7 +898,7 @@ public class AddTransfersFragment extends Fragment {
     private void getLocation() {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST;
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST+ "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 
         //  String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
     //    Utility.showDialoge("Please wait while a moment...", getActivity());

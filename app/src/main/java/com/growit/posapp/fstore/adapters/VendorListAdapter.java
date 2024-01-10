@@ -157,7 +157,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
         SessionManagement sm = new SessionManagement(mContext);
         RequestQueue queue = Volley.newRequestQueue(mContext);//162.246.254.203:8069
        // String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ARCHIVE_VENDOR + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "vendor_id=" + id;
-        String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ARCHIVE_VENDOR + "vendor_id=" + id + "&" + "active=" + active;
+        String url = ApiConstants.BASE_URL + ApiConstants.DELETE_ARCHIVE_VENDOR + "vendor_id=" + id + "&" + "active=" + "&"+ "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 
         Log.v("delete_Vendor_url", url);
         Utility.showDialoge("Please wait while a moment...", mContext);

@@ -1,5 +1,6 @@
 package com.growit.posapp.fstore.ui.fragments.AddProduct;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ExtraPriceAdapter;
 import com.growit.posapp.fstore.adapters.ProductExtraPriceAdapter;
@@ -56,6 +59,7 @@ public class ProductExtraPriceListFragment extends Fragment {
     EditText seacrEditTxt;
     private  String mResponse="";
     ExtraPriceData extraPriceData;
+    ImageView backBtn;
     ProductExtraPriceAdapter customAdapter;
     public ProductExtraPriceListFragment() {
         // Required empty public constructor
@@ -77,6 +81,7 @@ public class ProductExtraPriceListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product_extra_price_list, container, false);
+        backBtn = view.findViewById(R.id.backBtn);
         recyclerView = view.findViewById(R.id.orderRecyclerView);
         noDataFound = view.findViewById(R.id.noDataFound);
         total_order_text = view.findViewById(R.id.total_order_text);
@@ -124,13 +129,22 @@ public class ProductExtraPriceListFragment extends Fragment {
 
             }
         });
-
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+            }
+        });
         return view;
     }
 
     private void getProductExtraPrice() {
+        SessionManagement sm = new SessionManagement(getActivity());
+
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_EXTRA_PRICE;
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_EXTRA_PRICE + "user_id=" + sm.getUserID()+ "&" + "token=" + sm.getJWTToken();
+
         Utility.showDialoge("Please wait while a moment...", getActivity());
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

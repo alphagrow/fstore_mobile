@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,6 +62,7 @@ import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
+import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
 import com.growit.posapp.fstore.adapters.POSAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
@@ -68,6 +70,7 @@ import com.growit.posapp.fstore.model.AttributeModel;
 import com.growit.posapp.fstore.model.AttributeValue;
 import com.growit.posapp.fstore.model.ListAttributesModel;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -123,8 +126,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     FragmentAddProductBinding binding;
 
     String str_mfd_date, str_exp_date;
-    private String[] detailed_type = {"product"};
-//    private String[] uom_list = {"Days"};
+    private String[] detailed_type = {"product","service"};
+    private String[] uom_list = {"Days"};
     String str_detailed_type;
     String str_non_gov_product = "Non-Gov";
 //    String crop_id;
@@ -136,7 +139,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     ArrayList<Integer> crop_id_list = new ArrayList<>();
     ArrayList<Integer> attribute_id_list = new ArrayList<>();
     String selected_crop_id;
-
+ //   List<StateModel> uom_list = new ArrayList<>();
     public AddProductFragment() {
     }
 
@@ -277,10 +280,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             public void onCheckedChanged(RadioGroup group, int checkedId) {
              // checkedId is the RadioButton selected
              // RadioButton rb = view.findViewById(checkedId);
-                if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Gov")) {
-                    str_non_gov_product = "Non-Gov";
-                } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov Authorized")) {
-                    str_non_gov_product = "Gov Authorized";
+                if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Authorized")) {
+                    str_non_gov_product = "Non Gov-Authorized";
+                } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov-Authorized")) {
+                    str_non_gov_product = "Gov-Authorized";
                 }
             }
         });
@@ -441,8 +444,14 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                     progressBar.setVisibility(visibility);
                     progressDialog.cancel();
                     Toast.makeText(getActivity(), message_success, Toast.LENGTH_SHORT).show();
-
                     resetFields();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("product_list", "All_product");
+                    Fragment fragment = AddProductListFragment.newInstance();
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 }
             }
 
@@ -949,5 +958,58 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             }
         });
     }
+//    private void getOperationTypes() {
+//        SessionManagement sm = new SessionManagement(getActivity());
+//        RequestQueue queue = Volley.newRequestQueue(getActivity());
+//        //    String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+//        String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_LIST;
+//
+//        Log.v("url", url);
+//        //   Utility.showDialoge("Please wait while a moment...", getActivity());
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.v("Response", response.toString());
+//                uom_list = new ArrayList<>();
+//                JSONObject obj = null;
+//                try {
+//                    obj = new JSONObject(response.toString());
+//                    int statusCode = obj.optInt("statuscode");
+//                    String status = obj.optString("status");
+//
+//                    if (status.equalsIgnoreCase("success")) {
+////                        Utility.dismissDialoge();
+//                        JSONArray jsonArray = obj.getJSONArray("operation_types");
+//                        StateModel stateModel = new StateModel();
+//                        stateModel.setId(-1);
+//                        stateModel.setName("Select UOM");
+//                        uom_list.add(stateModel);
+//                        for (int i = 0; i < jsonArray.length(); i++) {
+//                            stateModel = new StateModel();
+//                            JSONObject data = jsonArray.getJSONObject(i);
+//                            String name = data.optString("name");
+//                            if (name.equalsIgnoreCase("Internal Transfers")) {
+//                                int id = data.optInt("id");
+//                                String warehouse_id = data.optString("warehouse_id");
+//                                stateModel.setId(id);
+//                                stateModel.setName(warehouse_id+" / "+name);
+//                                uom_list.add(stateModel);
+//                            }
+//                        }
+//                        if (getContext() != null) {
+//                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), ware_houseNames);
+//                            binding.warehousesSpinner.setAdapter(adapter);
+//                        }
+//
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//
+//            }
+//        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+//        queue.add(jsonObjectRequest);
+//    }
 
 }

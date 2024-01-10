@@ -100,7 +100,7 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="Email Id"
+                    android:text="User Id"
                     android:textColor="@color/edt_top_text_color"
                     />
 

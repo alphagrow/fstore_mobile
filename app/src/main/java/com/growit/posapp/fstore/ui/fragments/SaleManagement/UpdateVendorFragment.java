@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
@@ -41,12 +47,13 @@ public class UpdateVendorFragment extends Fragment {
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String str_lic_no ="",str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "",str_code="",str_city ="", zipStr = "", stateStr = "", talukaStr = "";
+    private String company_id="",str_lic_no ="",str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "",str_code="",str_city ="", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     List<VendorModelList> vendor_model=null;
     List<WarehouseModel> warehouse_model=null;
     private int position = 0;
     String type_of_vendor_warehouse;
+    List<StateModel> company_list = new ArrayList<>();
     public UpdateVendorFragment() {
         // Required empty public constructor
     }
@@ -80,6 +87,7 @@ public class UpdateVendorFragment extends Fragment {
                 binding.etCity.setVisibility(View.GONE);
                 binding.textCode.setVisibility(View.GONE);
                 binding.etCode.setVisibility(View.GONE);
+                binding.companyLay.setVisibility(View.GONE);
                 binding.textVendMobNo.setVisibility(View.VISIBLE);
                 binding.textLic.setVisibility(View.VISIBLE);
                 binding.etLicenseNumber.setVisibility(View.VISIBLE);
@@ -115,6 +123,7 @@ public class UpdateVendorFragment extends Fragment {
                 binding.textName.setHint("Ware House Name");
                 binding.etCity.setVisibility(View.VISIBLE);
                 binding.textCode.setVisibility(View.VISIBLE);
+                binding.companyLay.setVisibility(View.GONE);
                 binding.checkBoxGst.setVisibility(View.GONE);
                 binding.etGstNo.setVisibility(View.GONE);
                 binding.textVendMobNo.setVisibility(View.GONE);
@@ -147,8 +156,21 @@ public class UpdateVendorFragment extends Fragment {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+                if(type_of_vendor_warehouse.equals("vendor")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type_of_vendor_warehouse", "vendor");
+                    Fragment fragment = VendorListAndWareHouseListFragment.newInstance();
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type_of_vendor_warehouse", "warehouse");
+                    Fragment fragment = VendorListAndWareHouseListFragment.newInstance();
+                    fragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                }
             }
         });
         binding.checkBoxGst.setOnClickListener(new View.OnClickListener() {
@@ -172,6 +194,20 @@ public class UpdateVendorFragment extends Fragment {
                     if (districtStr != null) {
                         getTalukaData(districtStr);
                     }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        binding.compSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    company_id = company_list.get(position).getId() + "";
+
                 }
             }
 
@@ -419,7 +455,7 @@ public class UpdateVendorFragment extends Fragment {
             @Override
             public void onError(String result) {
                 Log.v("Response", result.toString());
-                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -464,7 +500,6 @@ public class UpdateVendorFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
         params.put("token", sm.getJWTToken());
         params.put("user_id", sm.getUserID() + "");
-        params.put("name", nameStr);
         params.put("mobile", mobileStr);
         params.put("email", emailStr);
         params.put("state_id", stateStr);
@@ -490,7 +525,12 @@ public class UpdateVendorFragment extends Fragment {
                 String  str_message = obj.optString("message");
                 if (status.equalsIgnoreCase("success")) {
                     Toast.makeText(getActivity(), "Vendor  Update successfully ", Toast.LENGTH_SHORT).show();
-
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("type_of_vendor_warehouse", "vendor");
+//                    Fragment fragment = VendorListAndWareHouseListFragment.newInstance();
+//                    fragment.setArguments(bundle);
+//                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                     // resetFields();
                 }else {
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
@@ -508,6 +548,8 @@ public class UpdateVendorFragment extends Fragment {
     private void updateWareHouse() {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
+        params.put("user_id", sm.getUserID()+"");
+        params.put("token", sm.getJWTToken());
         params.put("name", nameStr);
         params.put("code", str_code);
         params.put("street", streetStr);
@@ -517,7 +559,7 @@ public class UpdateVendorFragment extends Fragment {
         params.put("zip", zipStr);
         params.put("district_id", districtStr);
         params.put("taluka_id", talukaStr);
-        params.put("warehouse_id", warehouse_model.get(position).getPartnerId()+"");
+        params.put("warehouse_id", warehouse_model.get(position).getId()+"");
 
         Utility.showDialoge("", getActivity());
         Log.v("create_ware_house", String.valueOf(params));
@@ -534,12 +576,16 @@ public class UpdateVendorFragment extends Fragment {
                 String  str_message = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
-
                     Toast.makeText(getActivity(), "Ware House  Update successfully ", Toast.LENGTH_SHORT).show();
-
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("type_of_vendor_warehouse", "warehouse");
+//                    Fragment fragment = VendorListAndWareHouseListFragment.newInstance();
+//                    fragment.setArguments(bundle);
+//                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 }else {
                     Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -552,5 +598,55 @@ public class UpdateVendorFragment extends Fragment {
         });
     }
 
+    private void getCompanyList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST;
+
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_COMPANIES + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        //    Utility.showDialoge("Please wait while a moment...", getActivity());
+        Log.d("ALL_CROPS_url",url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+                    int spinnerPosition = 0;
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        // dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("companies");
+                        StateModel stateModel = new StateModel();
+                        stateModel.setId(-1);
+                        stateModel.setName("--Select Company--");
+                        company_list.add(stateModel);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            stateModel = new StateModel();
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            int id = data.optInt("id");
+                            String name = data.optString("name");
+                            if (String.valueOf(id).equals(String.valueOf(warehouse_model.get(position).getAddress().getStateId()))) {
+                                spinnerPosition = i + 1;
+                            }
+                            stateModel.setId(id);
+                            stateModel.setName(name);
+                            company_list.add(stateModel);
+                        }
+                        if(getContext()!=null) {
+                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), company_list);
+                            binding.compSpinner.setAdapter(adapter);
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
 
 }

@@ -61,7 +61,7 @@ public class ApiConstants {
     public final static String POST_CANCEL_PURCHASE_ORDER = "/api/cancel_purchase_order?";
     public final static String GET_PURCHASE_ORDER_DOWNLOAD = "/api/purchase_order/download?";
     public final static String CREATE_WAREHOUSE = "/api/create_warehouse?";
-    public final static String GET_COMPANIES = "/api/get_companies";
+    public final static String GET_COMPANIES = "/api/get_companies?";
     public final static String ADD_COMPANY = "/api/user/company?";
     public final static String GET_WareHouses = "/api/get_warehouses?";
     public final static String UPDATE_WAREHOUSE = "/api/update_warehouse?";
@@ -69,10 +69,10 @@ public class ApiConstants {
     public final static String GET_STOCK_Detail = "/api/stock_quant/details?";
     public final static String UPDATE_COMPANY = "/api/user/company/update?";
     public final static String GET_STOCK_QUANT = "/api/products/list?";
-    public final static String GET_OPERATION_LIST = "/api/operation_types";
+    public final static String GET_OPERATION_LIST = "/api/operation_types?";
     public final static String GET_LOCATION_LIST = "/api/location/list?";
-    public final static String GET_TRANSFER_LIST = "/api/transfer/list";
-    public final static String GET_OPERATION_TYPE_LIST = "/api/operation_types";
+    public final static String GET_TRANSFER_LIST = "/api/transfer/list?";
+    public final static String GET_OPERATION_TYPE_LIST = "/api/operation_types?";
    public final static String POST_TRANSFER_ORDER = "/api/stock_transfer?";
   public final static String GET_DELIVERY_DOWNLOAD = "/api/transfer/download_delivery_slip?";
   public final static String GET_CUSTOMER_DISCOUNT_LIST = "/api/customer/discount/list?";

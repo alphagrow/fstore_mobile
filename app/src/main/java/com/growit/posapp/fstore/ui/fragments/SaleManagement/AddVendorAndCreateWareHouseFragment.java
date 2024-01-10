@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
@@ -41,13 +46,14 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String codeStr = "", cityStr ="",str_gst_no = "", nameStr = "",str_lic_no="", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
+    private String codeStr = "", cityStr ="",str_gst_no = "", company_id="",nameStr = "",str_lic_no="", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     List<VendorModelList> vendor_model=null;
 
    private String type_of_vendor_warehouse;
     int position;
     Boolean checkbox = false;
+    List<StateModel> company_list = new ArrayList<>();
     public AddVendorAndCreateWareHouseFragment() {
         // Required empty public constructor
     }
@@ -82,6 +88,8 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
             binding.titleTxt.setText("Create Warehouse");
             binding.etCity.setVisibility(View.VISIBLE);
             binding.textCode.setVisibility(View.VISIBLE);
+            binding.companyLay.setVisibility(View.VISIBLE);
+
             binding.checkBoxGst.setVisibility(View.GONE);
             binding.etGstNo.setVisibility(View.GONE);
             binding.textVendMobNo.setVisibility(View.GONE);
@@ -90,6 +98,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
             binding.vendorEmailText.setVisibility(View.GONE);
             binding.textLic.setVisibility(View.GONE);
             binding.etLicenseNumber.setVisibility(View.GONE);
+
         }else {
             binding.titleTxt.setText("Create Vendor");
             binding.textName.setHint("Vendor Name");
@@ -103,9 +112,11 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
             binding.etUseremail.setVisibility(View.VISIBLE);
             binding.checkBoxGst.setVisibility(View.VISIBLE);
             binding.etUsermobile.setVisibility(View.VISIBLE);
+            binding.companyLay.setVisibility(View.GONE);
 
         }
         if (Utility.isNetworkAvailable(getContext())) {
+            getCompanyList();
             getStateData();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -143,6 +154,20 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), MainActivity.class));
                 getActivity().finish();
+            }
+        });
+        binding.compSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    company_id = company_list.get(position).getId() + "";
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -431,6 +456,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
+        params.put("token", sm.getJWTToken());
         params.put("name", nameStr);
         params.put("mobile", mobileStr);
         params.put("email", emailStr);
@@ -479,6 +505,8 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
     private void WareHouseRequest() {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
+        params.put("user_id", sm.getUserID()+"");
+        params.put("token", sm.getJWTToken());
         params.put("name", nameStr);
         params.put("code", codeStr);
         params.put("street", streetStr);
@@ -491,6 +519,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         params.put("l10n_in_purchase_journal_id", "2");
         params.put("l10n_in_purchase_journal_id", "1");
         params.put("company_id", "1");
+        params.put("company_id", company_id);
 
         Utility.showDialoge("", getActivity());
         Log.v("create_ware_house", String.valueOf(params));
@@ -525,6 +554,52 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         });
     }
 
+    private void getCompanyList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST;
+
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_COMPANIES + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        //    Utility.showDialoge("Please wait while a moment...", getActivity());
+        Log.d("ALL_CROPS_url",url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                       // dismissDialoge();
+                        JSONArray jsonArray = obj.getJSONArray("companies");
+                        StateModel stateModel = new StateModel();
+                        stateModel.setId(-1);
+                        stateModel.setName("--Select Company--");
+                        company_list.add(stateModel);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            stateModel = new StateModel();
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            int id = data.optInt("id");
+                            String name = data.optString("name");
+                            stateModel.setId(id);
+                            stateModel.setName(name);
+                            company_list.add(stateModel);
+                        }
+                        if(getContext()!=null) {
+                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), company_list);
+                            binding.compSpinner.setAdapter(adapter);
+                        }
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
 
     private void resetFields() {
         binding.etUsername.setText("");

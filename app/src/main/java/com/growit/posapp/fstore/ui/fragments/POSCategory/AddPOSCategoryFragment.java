@@ -87,9 +87,9 @@ public class AddPOSCategoryFragment extends Fragment {
         return  binding.getRoot();
     }
     private void init(){
-        binding.titleTxt.setText("Add crop");
+        binding.titleTxt.setText("Add Category");
         if (getArguments() != null) {
-            binding.titleTxt.setText("Update crop");
+            binding.titleTxt.setText("Update Category");
             crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
             position = getArguments().getInt("position");
             binding.cropName.setText(crop_mode.get(position).getValueName());
@@ -284,7 +284,7 @@ public class AddPOSCategoryFragment extends Fragment {
     private boolean CheckAllFields() {
         if (binding.cropName.length()== 0) {
             binding.cropName.setError("This field is required");
-            Toast.makeText(getActivity(), "Enter the Crop Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Enter the Category Name", Toast.LENGTH_SHORT).show();
 
             return false;
         }
@@ -345,7 +345,7 @@ public class AddPOSCategoryFragment extends Fragment {
                 message = obj.optString("message");
                 String error_message = obj.optString("error_message");
                 if (status.equalsIgnoreCase("success")) {
-                    Toast.makeText(getActivity(), "Update crop", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Update Category", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
 

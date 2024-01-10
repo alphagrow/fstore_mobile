@@ -195,7 +195,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                             binding.recyclerVendor.setLayoutManager(layoutManager);
 
                         }
-                        adapter.notifyDataSetChanged();
+                 //       adapter.notifyDataSetChanged();
                     }
                 }catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -235,9 +235,9 @@ public class VendorListAndWareHouseListFragment extends Fragment {
     private void getWareHouseList(){
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-    //    String url = ApiConstants.BASE_URL + ApiConstants.GET_WareHouses + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_WareHouses + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 
-         String url = ApiConstants.BASE_URL + ApiConstants.GET_WareHouses;
+      //   String url = ApiConstants.BASE_URL + ApiConstants.GET_WareHouses;
         Log.v("url", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

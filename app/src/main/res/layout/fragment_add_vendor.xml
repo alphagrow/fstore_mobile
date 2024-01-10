@@ -185,6 +185,41 @@
                 android:inputType="text"
                 android:textSize="14dp"
                 android:padding="8dp" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/company_lay"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginEnd="@dimen/end_marg_text"
+                android:layout_marginStart="@dimen/start_marg_text"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_text"
+                android:text="Select Company"
+                android:textColor="@color/edt_top_text_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_five"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/twenty_five"
+                android:background="@drawable/custom_edit_text_cut">
+
+                <Spinner
+                    android:id="@+id/comp_Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+            </LinearLayout>
             <TextView
                 android:id="@+id/vendor_email_text"
                 android:layout_width="match_parent"
@@ -196,9 +231,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size_text"
                 android:text="Vendor email"
-                android:textColor="@color/edt_top_text_color"
-                />
-
+                android:textColor="@color/edt_top_text_color" />
             <EditText
                 android:importantForAutofill="no"
                 android:id="@+id/et_useremail"

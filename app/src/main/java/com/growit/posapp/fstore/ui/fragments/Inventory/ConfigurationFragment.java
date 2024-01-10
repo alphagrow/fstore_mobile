@@ -135,7 +135,7 @@ public class ConfigurationFragment extends Fragment {
     private void getLocation() {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST;
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST+ "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 
         //  String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Utility.showDialoge("Please wait while a moment...", getActivity());
@@ -197,9 +197,9 @@ public class ConfigurationFragment extends Fragment {
     private void getOperationTypeList() {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_TYPE_LIST;
+       // String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_TYPE_LIST;
 
-        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_LOCATION_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+          String url = ApiConstants.BASE_URL + ApiConstants.GET_OPERATION_TYPE_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

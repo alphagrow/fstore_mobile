@@ -78,6 +78,7 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
         PurchaseProductModel model = list.get(position);
         //   holder.qty.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
         holder.product_name.setText(model.getProductName());
+        holder.update.setVisibility(View.GONE);
 //        holder.product_name.setShowingChar(100);
 //        holder.product_name.setShowingLine(2);
 //        holder.product_name.addShowMoreText("");

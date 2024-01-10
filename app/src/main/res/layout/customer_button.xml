@@ -85,7 +85,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         android:drawableLeft="@drawable/icon_user"
-        android:text="    Crete Customer Type"
+        android:text="    Create Customer Type"
         android:textSize="13sp" />
 
 

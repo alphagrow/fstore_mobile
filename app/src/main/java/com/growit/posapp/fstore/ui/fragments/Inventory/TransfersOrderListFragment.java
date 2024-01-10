@@ -143,8 +143,8 @@ public class TransfersOrderListFragment extends Fragment {
     private void getPurchaseList(){
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST;
-        //   String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+       // String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST;
+          String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSFER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

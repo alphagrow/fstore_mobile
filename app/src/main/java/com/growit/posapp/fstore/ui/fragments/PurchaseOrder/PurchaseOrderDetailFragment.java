@@ -128,9 +128,10 @@ public class PurchaseOrderDetailFragment extends Fragment {
     }
     public void showPDF(int _id) {
        // String url= ApiConstants.BASE_URL +ApiConstants.GET_PURCHASE_ORDER_DOWNLOAD+_id+"&user_id="+sm.getUserID()+"&token="+sm.getJWTToken();
+        SessionManagement sm = new SessionManagement(getActivity());
 
         try {
-            String url= ApiConstants.BASE_URL +ApiConstants.GET_PURCHASE_ORDER_DOWNLOAD+"&purchase_order_id="+_id;
+            String url= ApiConstants.BASE_URL +ApiConstants.GET_PURCHASE_ORDER_DOWNLOAD+"&purchase_order_id="+_id+"&user_id="+sm.getUserID()+"&token="+sm.getJWTToken();
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.parse(url), "application/pdf");
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

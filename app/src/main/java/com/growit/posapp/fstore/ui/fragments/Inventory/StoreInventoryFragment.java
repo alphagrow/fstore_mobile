@@ -56,6 +56,7 @@ public class StoreInventoryFragment extends Fragment {
     StoreInventoryAdapters orderHistoryAdapter;
     TextView noDataFound,total_order_text,add_text;
      EditText seacrEditTxt;
+     ImageView backBtn;
     public StoreInventoryFragment() {
         // Required empty public constructor
     }
@@ -81,6 +82,7 @@ public class StoreInventoryFragment extends Fragment {
         total_order_text = view.findViewById(R.id.total_order_text);
         add_text = view.findViewById(R.id.add_text);
         seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
+        backBtn = view.findViewById(R.id.backBtn);
         if (Utility.isNetworkAvailable(getActivity())) {
             getStoreInventory();
         }else {
@@ -106,6 +108,13 @@ public class StoreInventoryFragment extends Fragment {
                     }
                 })
         );
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(getActivity(),MainActivity.class));
+               getActivity().finish();
+            }
+        });
         seacrEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

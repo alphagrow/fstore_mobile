@@ -34,7 +34,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_height="45dp"
                 android:drawableEnd="@drawable/baseline_search_24"
-                android:hint="Search by variants name"
+                android:hint="Search by product name"
                 android:textSize="16sp"
                 android:textStyle="normal"
                 android:textColor="#fff"

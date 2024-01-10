@@ -338,11 +338,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     resetFields();
-                    Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
                     Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
                     startActivity(intentLogin);
                     finish();
-                    //  Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+                      Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
 
                 } else {
                     Utility.dismissDialoge();
@@ -361,7 +361,8 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private void UpdateUserRegistration() {
         SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
-       //  params.put("user_id", sm.getUserID() + "");
+         params.put("user_id", sm.getUserID() + "");
+        params.put("token", sm.getJWTToken());
         params.put("name", nameStr);
         params.put("login", login_id);
         //  params.put("company_logo", "");
@@ -402,7 +403,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
                 } else {
                     Utility.dismissDialoge();
-                    Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
                 }
             }
 

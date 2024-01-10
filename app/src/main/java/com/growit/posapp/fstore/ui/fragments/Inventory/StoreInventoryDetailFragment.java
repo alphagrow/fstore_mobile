@@ -116,7 +116,9 @@ public class StoreInventoryDetailFragment extends Fragment {
     private void getStoreInventory(String productID) {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_Detail + "user_id=" + sm.getUserID() + "&" +  "shop_id=" + sm.getShopID() + "&"+"product_id=" + productID+"&"+ "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_Detail + "user_id=" + sm.getUserID() + "&"+"product_id=" + productID+"&"+ "token=" + sm.getJWTToken();
+
+        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_Detail + "user_id=" + sm.getUserID() + "&" +  "shop_id=" + sm.getShopID() + "&"+"product_id=" + productID+"&"+ "token=" + sm.getJWTToken();
         Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

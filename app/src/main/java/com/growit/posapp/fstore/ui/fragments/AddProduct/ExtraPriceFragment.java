@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +32,7 @@ import com.growit.posapp.fstore.model.ExtraPriceData;
 import com.growit.posapp.fstore.model.TransfersModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
+import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
@@ -119,7 +121,9 @@ public class ExtraPriceFragment extends Fragment {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                Fragment fragment = ProductExtraPriceListFragment.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
             }
         });
@@ -186,9 +190,12 @@ public class ExtraPriceFragment extends Fragment {
 
 
     private void createExtraPrice(JSONArray jsonArray) throws JSONException {
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+        SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
+        params.put("user_id", sm.getUserID()+"");
+        params.put("token", sm.getJWTToken());
         params.put("pricelist_data", jsonArray.toString());
+        Utility.showDialoge("Please wait while a moment...", getActivity());
 
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_EXTRAPRICE, new VolleyCallback() {
             private String message = "Order failed!!";
@@ -203,6 +210,9 @@ public class ExtraPriceFragment extends Fragment {
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
+                    Fragment fragment = ProductExtraPriceListFragment.newInstance();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 }
             }
 

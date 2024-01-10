@@ -158,8 +158,8 @@ private void setBillPanel(int size){
     private void CreatePurchaseOrder(){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-        // params.put("user_id", sm.getUserID()+ "");
-        //   params.put("token", sm.getJWTToken());
+         params.put("user_id", sm.getUserID()+ "");
+           params.put("token", sm.getJWTToken());
        params.put("vendor_id", vendor_id);
         params.put("products", prjsonArray.toString());
         params.put("picking_type_id", 8+"");
