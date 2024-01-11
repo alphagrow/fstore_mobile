@@ -504,6 +504,7 @@ public class AddCustomerFragment extends Fragment implements
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
+        params.put("token", sm.getJWTToken());
         params.put("name", nameStr);
         params.put("mobile", mobileStr);
         params.put("email", emailStr);

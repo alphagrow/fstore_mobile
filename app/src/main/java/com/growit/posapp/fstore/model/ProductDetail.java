@@ -16,6 +16,17 @@ public class ProductDetail {
     @SerializedName("data")
     @Expose
     private List<Datum> data;
+    @SerializedName("uom_categories")
+    @Expose
+    private List<UomCategoryModel> uomCategories;
+
+    public List<UomCategoryModel> getUomCategories() {
+        return uomCategories;
+    }
+
+    public void setUomCategories(List<UomCategoryModel> uomCategories) {
+        this.uomCategories = uomCategories;
+    }
 
     public String getStatus() {
         return status;

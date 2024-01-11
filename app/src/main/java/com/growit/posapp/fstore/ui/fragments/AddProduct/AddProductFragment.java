@@ -447,7 +447,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                     resetFields();
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("product_list", "All_product");
+                    bundle.putString("product_list", "crop_product");
                     Fragment fragment = AddProductListFragment.newInstance();
                     fragment.setArguments(bundle);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

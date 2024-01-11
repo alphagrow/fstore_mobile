@@ -90,9 +90,6 @@ public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdap
         holder.name.setText(model.getName());
         holder.ware_text.setText(model.getParentId());
         holder.per_text.setText(model.getPercentage());
-
-
-
     }
 
 

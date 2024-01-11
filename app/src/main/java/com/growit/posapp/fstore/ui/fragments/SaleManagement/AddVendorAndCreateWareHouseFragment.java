@@ -519,7 +519,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         params.put("l10n_in_purchase_journal_id", "2");
         params.put("l10n_in_purchase_journal_id", "1");
         params.put("company_id", "1");
-        params.put("company_id", company_id);
+//        params.put("company_id", company_id);
 
         Utility.showDialoge("", getActivity());
         Log.v("create_ware_house", String.valueOf(params));

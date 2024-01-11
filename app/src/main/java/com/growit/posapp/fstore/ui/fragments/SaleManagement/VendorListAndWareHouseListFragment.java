@@ -174,6 +174,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+                    String error_message = obj.optString("error_message");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
@@ -196,6 +197,9 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
                         }
                  //       adapter.notifyDataSetChanged();
+                    }else {
+                        Toast.makeText(getContext(), error_message, Toast.LENGTH_SHORT).show();
+
                     }
                 }catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -250,6 +254,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+                    String error_message = obj.optString("error_message");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
@@ -272,6 +277,9 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
                         }
                         wareHouseAdapter.notifyDataSetChanged();
+                    }else {
+                        Toast.makeText(getContext(), error_message, Toast.LENGTH_SHORT).show();
+
                     }
                 }catch (JSONException e) {
                     throw new RuntimeException(e);

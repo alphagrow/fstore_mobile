@@ -30,6 +30,7 @@ import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.tables.PosOrder;
 import com.growit.posapp.fstore.ui.LoginActivity;
 import com.growit.posapp.fstore.ui.MyProfileActivity;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.UOMFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerManagement.AddCustomerDiscountFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerManagement.AddCustomerFragment;
 
@@ -53,7 +54,9 @@ import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFr
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListAndWareHouseListFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
+import com.growit.posapp.fstore.ui.fragments.Setting.AddDistrictFragment;
 import com.growit.posapp.fstore.ui.fragments.Setting.AddShopAndShopListFragment;
+import com.growit.posapp.fstore.ui.fragments.Setting.AddTalukaFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
     LinearLayout  sale_menu_lay,setting_menu_lay,product_menu_lay,customer_menu_lay;
     LinearLayout inventory_menu;
-    TextView add_customer,view_cus,add_discount,add_product_text,product_list_text,add_extra_price,add_attribute,add_pos_cat,vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type,transfer_order_list,shop_text;
+    TextView add_customer,view_cus,add_discount,add_product_text,product_list_text,add_extra_price,add_attribute,add_uom,add_pos_cat,vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type,transfer_order_list,shop_text,add_district,add_taluka;
     boolean isClicked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -461,6 +464,7 @@ public class MainActivity extends AppCompatActivity {
         add_extra_price = view_product.findViewById(R.id.add_extra_price);
         add_pos_cat = view_product.findViewById(R.id.add_pos_cat);
         add_attribute = view_product.findViewById(R.id.add_attribute);
+        add_uom = view_product.findViewById(R.id.add_uom);
 
         View view_customer = nvDrawer.inflateHeaderView(R.layout.customer_button);
         customer_menu_lay = view_customer.findViewById(R.id.customer_menu_lay);
@@ -473,6 +477,8 @@ public class MainActivity extends AppCompatActivity {
         location = view_setting.findViewById(R.id.location);
         operation_type = view_setting.findViewById(R.id.operation_type);
         shop_text = view_setting.findViewById(R.id.shop_text);
+        add_district = view_setting.findViewById(R.id.add_district);
+        add_taluka = view_setting.findViewById(R.id.add_taluka);
 
 
 
@@ -545,8 +551,9 @@ public class MainActivity extends AppCompatActivity {
         });
         product_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                add_uom.setVisibility(View.VISIBLE);
                 add_product_text.setVisibility(View.VISIBLE);
-                product_list_text.setVisibility(View.VISIBLE);
+                product_list_text.setVisibility(View.GONE);
                 add_extra_price.setVisibility(View.VISIBLE);
                 add_pos_cat.setVisibility(View.VISIBLE);
                 add_attribute.setVisibility(View.VISIBLE);
@@ -557,6 +564,7 @@ public class MainActivity extends AppCompatActivity {
                 add_extra_price.setVisibility(View.GONE);
                 add_pos_cat.setVisibility(View.GONE);
                 add_attribute.setVisibility(View.GONE);
+                add_uom.setVisibility(View.GONE);
                 isClicked = false;
             }
 
@@ -567,6 +575,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 toolbar.setVisibility(View.GONE);
                 Fragment fragment = AddProductFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        add_uom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = UOMFragment.newInstance();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                 drawer_layout.close();
@@ -744,17 +762,41 @@ public class MainActivity extends AppCompatActivity {
         });
         setting_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                add_taluka.setVisibility(View.VISIBLE);
+                add_district.setVisibility(View.VISIBLE);
                 shop_text.setVisibility(View.VISIBLE);
                 location.setVisibility(View.VISIBLE);
                 operation_type.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                add_district.setVisibility(View.GONE);
+                add_taluka.setVisibility(View.GONE);
                 shop_text.setVisibility(View.GONE);
                 location.setVisibility(View.GONE);
                 operation_type.setVisibility(View.GONE);
                 isClicked = false;
             }
 
+        });
+        add_district.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = AddDistrictFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+        add_taluka.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = AddTalukaFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
         });
         shop_text.setOnClickListener(new View.OnClickListener() {
             @Override

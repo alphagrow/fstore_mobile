@@ -244,7 +244,7 @@ public class AddProductListFragment extends Fragment {
                         }
 
 
-                        //                               }
+                        //                            }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

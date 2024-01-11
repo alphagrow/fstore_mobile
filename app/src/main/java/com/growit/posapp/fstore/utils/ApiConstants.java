@@ -85,6 +85,8 @@ public class ApiConstants {
   public final static String PUT_UPDATE_UOM = "/api/update/uom?";
   public final static String POST_CREATE_UOM = "/api/create/uom?";
   public final static String GET_UOM_LIST = "/api/list/uoms?";
+  public final static String POST_CREATE_DISTRICT= "/api/create_district?";
+  public final static String POST_CREATE_TALUKA= "/api/create_taluka?";
 }
 
 
