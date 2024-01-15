@@ -142,9 +142,11 @@ public class StoreInventoryDetailFragment extends Fragment {
                                 JSONObject data = productArray.getJSONObject(i);
                                 int ID = data.optInt("variant_id");
                                 String name = data.optString("variant_display_name");
+                                String location_name = data.optString("location_name");
                                 double qty = data.optDouble("quantity");
                                 product.setProductID(ID + "");
                                 product.setProductName(name);
+                                product.setLocation_name(location_name);
                                 product.setQuantity(qty);
 //                                String image = "";
 //                                if (data.opt("image_url").equals(false)) {
@@ -184,7 +186,6 @@ public class StoreInventoryDetailFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
     private void filterList(String text){
-
         ArrayList<Product> model = new ArrayList<>();
         for (Product detail : productList){
             if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){

@@ -80,6 +80,28 @@
 
 
             </LinearLayout>
+            <LinearLayout
+                android:padding="3dp"
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/location_text"
+                    android:layout_width="0dp"
+                    android:layout_weight="1.2"
+                    android:gravity="start"
+                    android:layout_gravity="start|center"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:textStyle="normal"
+                    android:textSize="15sp"
+                    android:text=""
+                    />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 

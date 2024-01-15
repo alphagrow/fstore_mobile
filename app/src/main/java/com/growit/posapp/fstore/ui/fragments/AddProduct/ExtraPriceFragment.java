@@ -83,6 +83,8 @@ public class ExtraPriceFragment extends Fragment {
             extraPriceData = gson.fromJson(orderDetail, listType);
 
         }
+        total_customer_text.setText("Total: " + extraPriceData.getData().get(position).getVariants().size() + " " + "Variants List");
+
         customAdapter = new ExtraPriceAdapter(getActivity(), extraPriceData.getData().get(position).getVariants());
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);

@@ -808,7 +808,7 @@ public class AddTransfersFragment extends Fragment {
                             JSONArray jsonArray = obj.getJSONArray("data");
                             StateModel stateModel = new StateModel();
                             stateModel.setId(-1);
-                            stateModel.setName("Select Customer");
+                            stateModel.setName("Select Contact");
                             CustomerNames.add(stateModel);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 stateModel = new StateModel();

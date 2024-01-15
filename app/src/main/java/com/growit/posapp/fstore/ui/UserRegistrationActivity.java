@@ -94,7 +94,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
                         }
-//                        getDistrictData();
+                       // getDistrictData();
                     }
                 }
             }

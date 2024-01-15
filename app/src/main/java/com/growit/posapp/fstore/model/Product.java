@@ -28,9 +28,19 @@ public class Product {
     @SerializedName("product_id")
     @Expose
     private String product_id;
-
+    @SerializedName("location_name")
+    @Expose
+    private String location_name;
     public String getProductImage() {
         return productImage;
+    }
+
+    public String getLocation_name() {
+        return location_name;
+    }
+
+    public void setLocation_name(String location_name) {
+        this.location_name = location_name;
     }
 
     public void setProductImage(String productImage) {

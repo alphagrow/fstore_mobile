@@ -33,13 +33,14 @@ public class StoreInventoryDetailAdapter extends RecyclerView.Adapter<StoreInven
         notifyDataSetChanged();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView product_name ,qty;
+        public TextView product_name ,qty,location_text;
         ImageView images;
         public ViewHolder(View itemView) {
             super(itemView);
             product_name = itemView.findViewById(R.id.product_name_text);
             qty = itemView.findViewById(R.id.Qty_avl_text);
             images = itemView.findViewById(R.id.images);
+            location_text = itemView.findViewById(R.id.location_text);
         }
     }
 
@@ -59,6 +60,7 @@ public class StoreInventoryDetailAdapter extends RecyclerView.Adapter<StoreInven
         Product orders = list.get(position);
         holder.qty.setText("Qty Avl. : "+orders.getQuantity());
         holder.product_name.setText(orders.getProductName());
+        holder.location_text.setText(orders.getLocation_name());
         Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getProductImage())
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.no_image)

@@ -97,7 +97,7 @@ FragmentTransfersDetailsBinding binding;
     }
     public void showPDF(int _id) {
         // String url= ApiConstants.BASE_URL +ApiConstants.GET_PURCHASE_ORDER_DOWNLOAD+_id+"&user_id="+sm.getUserID()+"&token="+sm.getJWTToken();
-SessionManagement sm=new SessionManagement(getActivity());
+        SessionManagement sm=new SessionManagement(getActivity());
         try {
             String url= ApiConstants.BASE_URL +ApiConstants.GET_DELIVERY_DOWNLOAD+"&transfer_id="+_id+"&user_id="+sm.getUserID()+"&token="+sm.getJWTToken();
             Intent intent = new Intent(Intent.ACTION_VIEW);

@@ -63,9 +63,11 @@ public class UOMFragment extends Fragment {
     List<ConfigurationModel> list;
     Activity contexts;
     UOMAdapter adapter;
-    EditText uom_name_ed;
+    EditText uom_cat_ed,ed_name,ed_code;
     boolean isAllFieldsChecked = false;
     ProductDetail productDetail;
+    Dialog dialog;
+    JSONArray  prjsonArray;
     public UOMFragment() {
         // Required empty public constructor
     }
@@ -108,10 +110,7 @@ public class UOMFragment extends Fragment {
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
-
                     getUOMList();
-
-
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -155,22 +154,22 @@ public class UOMFragment extends Fragment {
             }
         });
 
-        binding.recyclerVendor.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        String  cust_name = list.get(position).getName();
-                        int  _id = list.get(position).getId();
-                        showDialogeUpdateReceiveProduct(cust_name,_id);
-                    }
-
-
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
+//        binding.recyclerVendor.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        String  cust_name = list.get(position).getName();
+//                        int  _id = list.get(position).getId();
+//                      //  showDialogeUpdateReceiveProduct(cust_name,_id);
+//                    }
+//
+//
+//                    @Override
+//                    public void onLongItemClick(View view, int position) {
+//                        // do whatever
+//                    }
+//                })
+//        );
 
     }
     @Override
@@ -182,13 +181,14 @@ public class UOMFragment extends Fragment {
 
     private  void showDialogeReceiveProduct() {
 
-        Dialog dialog = new Dialog(getActivity());
+         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.uom_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        uom_name_ed = dialog.findViewById(R.id.shop_name_ed);
-
+        uom_cat_ed = dialog.findViewById(R.id.uom_cat_ed);
+        ed_name = dialog.findViewById(R.id.ed_name);
+        ed_code = dialog.findViewById(R.id.ed_code);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
 
@@ -196,18 +196,29 @@ public class UOMFragment extends Fragment {
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str_shop_name = uom_name_ed.getText().toString();
+                String str_cat_name = uom_cat_ed.getText().toString();
+                String str_name = ed_name.getText().toString();
+                String str_code = ed_code.getText().toString();
 
                 isAllFieldsChecked= CheckAllFields();
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 if (isAllFieldsChecked) {
-                    addDiscount(str_shop_name);
+                      prjsonArray = new JSONArray();
+
+                    try {
+                        JSONObject productOBJ = new JSONObject();
+                        productOBJ.putOpt("name", str_name);
+                        productOBJ.putOpt("l10n_in_code",str_code);
+                        prjsonArray.put(productOBJ);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    addDiscount(str_cat_name,prjsonArray.toString());
                 }
-                dialog.dismiss();
+             //   dialog.dismiss();
 
             }
         });
@@ -229,17 +240,23 @@ public class UOMFragment extends Fragment {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        uom_name_ed = dialog.findViewById(R.id.uom_name_ed);
+        EditText  uom_cat_ed = dialog.findViewById(R.id.uom_cat_ed);
+        EditText  uom_ed_name = dialog.findViewById(R.id.ed_name);
+        EditText  uom_ed_code = dialog.findViewById(R.id.ed_code);
 
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-        uom_name_ed.setText(name);
+        uom_cat_ed.setText(name);
+        uom_ed_name.setText(name);
+        uom_ed_code.setText(name);
 
 
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str_name = uom_name_ed.getText().toString();
+                String str_cate = uom_cat_ed.getText().toString();
+                String str_name = uom_ed_name.getText().toString();
+                String str_code = uom_ed_code.getText().toString();
 
                 isAllFieldsChecked= CheckAllFields();
                 if (!Utility.isNetworkAvailable(getActivity())) {
@@ -266,26 +283,37 @@ public class UOMFragment extends Fragment {
     }
 
     private boolean CheckAllFields() {
-        if (uom_name_ed.length()== 0) {
-            uom_name_ed.setError("This field is required");
-            Toast.makeText(getActivity(), "Enter the Customer Type Name", Toast.LENGTH_SHORT).show();
+        if (uom_cat_ed.length()== 0) {
+            uom_cat_ed.setError("This field is required");
+            Toast.makeText(getActivity(), "Enter the Category Name", Toast.LENGTH_SHORT).show();
 
             return false;
         }
+        if (ed_name.length()== 0) {
+            ed_name.setError("This field is required");
+            Toast.makeText(getActivity(), "Enter the Name", Toast.LENGTH_SHORT).show();
 
+            return false;
+        }
+        if (ed_code.length()== 0) {
+            ed_code.setError("This field is required");
+            Toast.makeText(getActivity(), "Enter the Name", Toast.LENGTH_SHORT).show();
+
+            return false;
+        }
         return true;
     }
 
-    private void addDiscount(String str_name){
+    private void addDiscount(String str_name,String uom_lines) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID()+"");
         params.put("token", sm.getJWTToken());
         params.put("name", str_name);
-
+        params.put("uom_lines", uom_lines);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
-        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_SHOPS, new VolleyCallback() {
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_UOM, new VolleyCallback() {
             private String message = " failed!!";
 
             @Override
@@ -299,12 +327,15 @@ public class UOMFragment extends Fragment {
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                    uom_name_ed.setText("");
-
+                    ed_name.setText("");
+                    uom_cat_ed.setText("");
+                    ed_code.setText("");
+                    dialog.dismiss();
                     getUOMList();
                 }else {
+                    dialog.dismiss();
                     Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -362,7 +393,6 @@ public class UOMFragment extends Fragment {
     private void getUOMList() {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
-
         String url = ApiConstants.BASE_URL + ApiConstants.GET_UOM_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         //    Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);

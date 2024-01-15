@@ -316,10 +316,6 @@ public class AddShopAndShopListFragment extends Fragment {
         params.put("token", sm.getJWTToken());
         params.put("name", name);
         params.put("shop_id", id+"");
-
-
-
-
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_SHOPS, new VolleyCallback() {
             private String message = "Update failed!!";
 

@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.UOMAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddDistrictBinding;
@@ -59,7 +60,7 @@ public class AddTalukaFragment extends Fragment {
     FragmentAddTalukaBinding binding;
     List<ConfigurationModel> list;
     Activity contexts;
-    UOMAdapter adapter;
+    ConfigurationAdapter adapter;
     EditText shop_name_ed;
     boolean isAllFieldsChecked = false;
     ProductDetail productDetail;
@@ -67,6 +68,8 @@ public class AddTalukaFragment extends Fragment {
     List<StateModel> districtNames = new ArrayList<>();
     EditText tal_name_ed,tal_code_ed;
    String stateStr = "",districtStr="";
+    Dialog dialog;
+    List<StateModel> talukaNames = new ArrayList<>();
     public AddTalukaFragment() {
         // Required empty public constructor
     }
@@ -97,8 +100,7 @@ public class AddTalukaFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerVendor.setLayoutManager(layoutManager);
         if (Utility.isNetworkAvailable(getContext())) {
-            //  getDistrictList();
-
+              getTalukaData();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -109,10 +111,7 @@ public class AddTalukaFragment extends Fragment {
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
-
-                    //    getDistrictList();
-
-
+                    getTalukaData();
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -166,7 +165,7 @@ public class AddTalukaFragment extends Fragment {
     }
 
     private  void showDialogeReceiveProduct() {
-        Dialog dialog = new Dialog(getActivity());
+         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.taluka_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
@@ -237,7 +236,7 @@ public class AddTalukaFragment extends Fragment {
 
                     addTaluka(str_tal_name,str_tal_code);
                 }
-                dialog.dismiss();
+//                dialog.dismiss();
 
             }
         });
@@ -253,7 +252,7 @@ public class AddTalukaFragment extends Fragment {
 
     private  void showDialogeUpdateReceiveProduct(String name,int id) {
 
-        Dialog dialog = new Dialog(getActivity());
+         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.taluka_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
@@ -337,7 +336,7 @@ public class AddTalukaFragment extends Fragment {
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
+                    dialog.dismiss();
 
                     //                 getDistrictList();
                 }else {
@@ -486,50 +485,57 @@ public class AddTalukaFragment extends Fragment {
             }
         });
     }
-//    private void getDistrictData() {
-//
-//        Map<String, String> params = new HashMap<>();
-//        params.put("states_id", stateStr);
-//        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
-//            private String message = "Registration failed!!";
-//
-//            @Override
-//            public void onSuccess(Object result) throws JSONException {
-//                Log.v("Response", result.toString());
-//                districtNames = new ArrayList<>();
-//                JSONObject obj = new JSONObject(result.toString());
-//                int statusCode = obj.optInt("statuscode");
-//                String status = obj.optString("status");
-//                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-//
-//                    JSONArray jsonArray = obj.getJSONArray("data");
-//                    StateModel stateModel = new StateModel();
-//                    stateModel.setId(-1);
-//                    stateModel.setName("--Select District--");
-//                    districtNames.add(stateModel);
-//                    for (int i = 0; i < jsonArray.length(); i++) {
-//                        stateModel = new StateModel();
-//                        JSONObject data = jsonArray.getJSONObject(i);
-//                        int id = data.optInt("id");
-//                        String name = data.optString("name");
-//                        stateModel.setId(id);
-//                        stateModel.setName(name);
-//                        districtNames.add(stateModel);
-//                    }
-//                    if(getContext()!=null) {
-//                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), districtNames);
-//                        citySpinner.setAdapter(adapter);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onError(String result) {
-//                Log.v("Response", result.toString());
-//
-//                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void getTalukaData() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("district_id", districtStr);
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_TALUKA, new VolleyCallback() {
+            private String message = " failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                talukaNames = new ArrayList<>();
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                String status = obj.optString("status");
+                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                    JSONArray jsonArray = obj.getJSONArray("data");
+
+                    list.clear();
+                    if (jsonArray.length() > 0) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            ConfigurationModel model = new ConfigurationModel();
+                            JSONObject data = jsonArray.getJSONObject(i);
+                            Integer id = data.optInt("id");
+                            String name = data.optString("name");
+                            model.setId(id);
+                            model.setName(name);
+                            list.add(model);
+                        }
+                        if (list == null || list.size() == 0) {
+                            binding.noDataFound.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.totalCustomerText.setText("Total : "+list.size()+" Talukas ");
+                            binding.noDataFound.setVisibility(View.GONE);
+                            adapter = new ConfigurationAdapter(getActivity(), list);
+                            binding.recyclerVendor.setAdapter(adapter);
+
+                        }
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+
+                Log.v("Response", result.toString());
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }

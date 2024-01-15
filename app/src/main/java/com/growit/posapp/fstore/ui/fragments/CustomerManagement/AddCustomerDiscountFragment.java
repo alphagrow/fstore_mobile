@@ -59,6 +59,7 @@ public class AddCustomerDiscountFragment extends Fragment {
     ConfigurationAdapter adapter;
 EditText name_text,per_ed_text;
     boolean isAllFieldsChecked = false;
+    Dialog dialog;
     public AddCustomerDiscountFragment() {
         // Required empty public constructor
     }
@@ -177,7 +178,7 @@ EditText name_text,per_ed_text;
 
     private  void showDialogeReceiveProduct() {
 
-        Dialog dialog = new Dialog(getActivity());
+         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.add_customer_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
@@ -202,7 +203,7 @@ EditText name_text,per_ed_text;
                 if (isAllFieldsChecked) {
                     addDiscount(str_name, Integer.parseInt(str_per));
                 }
-                dialog.dismiss();
+
 
             }
         });
@@ -219,7 +220,7 @@ EditText name_text,per_ed_text;
 
     private  void showDialogeUpdateReceiveProduct(String name,String discount,int id) {
 
-        Dialog dialog = new Dialog(getActivity());
+         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.add_customer_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
@@ -245,7 +246,7 @@ EditText name_text,per_ed_text;
                 if (isAllFieldsChecked) {
                     DiscountUpdate(str_name, str_per,id);
                 }
-                dialog.dismiss();
+
 
             }
         });
@@ -300,6 +301,7 @@ EditText name_text,per_ed_text;
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     name_text.setText("");
                     per_ed_text.setText("");
+                    dialog.dismiss();
                     getCustomerDiscountList();
                 }else {
                     Utility.dismissDialoge();
@@ -325,9 +327,6 @@ EditText name_text,per_ed_text;
         params.put("name", name);
         params.put("discount_id", id+"");
         params.put("percentage", discount+"");
-
-
-
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_DISCOUNT_UPDATE, new VolleyCallback() {
             private String message = "Update failed!!";
 
@@ -342,7 +341,7 @@ EditText name_text,per_ed_text;
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
+                    dialog.dismiss();
                    getCustomerDiscountList();
                 }else {
                     Utility.dismissDialoge();

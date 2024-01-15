@@ -47,7 +47,7 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView qty, order_no, dateTxt, amountTxt, case_id;
+        public TextView qty, dateTxt, amountTxt, case_id;
         ImageView images, deleteBtn, update;
         TextView product_name;
 
@@ -67,7 +67,7 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
     public AllAddProductListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.product_item_row, parent, false);
+        View contactView = inflater.inflate(R.layout.all_product_item_row, parent, false);
         AllAddProductListAdapter.ViewHolder viewHolder = new AllAddProductListAdapter.ViewHolder(contactView);
         return viewHolder;
     }
@@ -78,7 +78,7 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
         PurchaseProductModel model = list.get(position);
         //   holder.qty.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
         holder.product_name.setText(model.getProductName());
-        holder.update.setVisibility(View.GONE);
+
 //        holder.product_name.setShowingChar(100);
 //        holder.product_name.setShowingLine(2);
 //        holder.product_name.addShowMoreText("");
@@ -92,20 +92,7 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
 //                .error(R.drawable.no_image)
 //                .into(holder.images);
 
-//        holder.update.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("product_list", (Serializable) list);
-//                bundle.putInt("position", position);
-//                Fragment fragment = UpdateAddProductFragment.newInstance();
-//                fragment.setArguments(bundle);
-//                FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-//
-//
-//            }
-//        });
+
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

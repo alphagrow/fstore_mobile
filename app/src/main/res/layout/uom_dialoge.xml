@@ -33,11 +33,11 @@
             android:layout_marginTop="@dimen/ten"
             android:fontFamily="@font/sf_compact_regular"
             android:gravity="start"
-            android:text="Name"
+            android:text="Category UOM"
             android:textSize="@dimen/fifteen" />
 
         <EditText
-            android:id="@+id/uom_name_ed"
+            android:id="@+id/uom_cat_ed"
             android:hint=" "
             android:importantForAutofill="no"
             android:layout_width="match_parent"
@@ -65,12 +65,41 @@
             android:textSize="@dimen/fifteen" />
 
         <EditText
+            android:id="@+id/ed_name"
             android:hint=" "
             android:importantForAutofill="no"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginStart="@dimen/twenty_five"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="@dimen/twenty_five"
+            android:requiresFadingEdge="vertical"
+            android:background="@drawable/custom_edit_text_cut"
+            android:drawablePadding="@dimen/ten"
+            android:textSize="14dp"
+            android:fontFamily="@font/sf_compact_medium"
+            android:inputType="text"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_marginStart="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="@dimen/ten"
+            android:fontFamily="@font/sf_compact_regular"
+            android:gravity="start"
+            android:text="Code"
+            android:textSize="@dimen/fifteen" />
+
+        <EditText
+            android:id="@+id/ed_code"
+            android:hint=" "
+            android:importantForAutofill="no"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="@dimen/twenty_five"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="@dimen/twenty_five"
             android:requiresFadingEdge="vertical"
             android:background="@drawable/custom_edit_text_cut"

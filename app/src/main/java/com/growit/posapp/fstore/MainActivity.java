@@ -553,7 +553,7 @@ public class MainActivity extends AppCompatActivity {
             if (!isClicked) {
                 add_uom.setVisibility(View.VISIBLE);
                 add_product_text.setVisibility(View.VISIBLE);
-                product_list_text.setVisibility(View.GONE);
+                product_list_text.setVisibility(View.VISIBLE);
                 add_extra_price.setVisibility(View.VISIBLE);
                 add_pos_cat.setVisibility(View.VISIBLE);
                 add_attribute.setVisibility(View.VISIBLE);

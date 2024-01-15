@@ -62,9 +62,6 @@ import java.util.Map;
 
 
 public class AddDistrictFragment extends Fragment {
-
-
-
     FragmentAddDistrictBinding binding;
     List<ConfigurationModel> list;
     Activity contexts;
@@ -74,8 +71,8 @@ public class AddDistrictFragment extends Fragment {
     ProductDetail productDetail;
     List<StateModel> stateNames = new ArrayList<>();
     EditText dist_name_ed,dist_code_ed;
-  String  stateStr = "";
-
+    String  stateStr = "";
+    Dialog  dialog;
     public AddDistrictFragment() {
         // Required empty public constructor
     }
@@ -149,22 +146,21 @@ public class AddDistrictFragment extends Fragment {
             }
         });
 
-//        binding.recyclerVendor.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        String  cust_name = list.get(position).getName();
-//                        int  _id = list.get(position).getId();
-//                        showDialogeUpdateReceiveProduct(cust_name,_id);
-//                    }
-//
-//
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//                        // do whatever
-//                    }
-//                })
-//        );
+        binding.recyclerVendor.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        showDialogeUpdateReceiveProduct(position);
+                    }
+
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
 
     }
     @Override
@@ -175,7 +171,7 @@ public class AddDistrictFragment extends Fragment {
     }
 
     private  void showDialogeReceiveProduct() {
-        Dialog  dialog = new Dialog(getActivity());
+          dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.district_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
@@ -225,7 +221,7 @@ public class AddDistrictFragment extends Fragment {
 
                     addDistrict(str_dist_name,str_code);
                 }
-                dialog.dismiss();
+
 
             }
         });
@@ -240,19 +236,21 @@ public class AddDistrictFragment extends Fragment {
         dialog.show();
     }
 
-    private  void showDialogeUpdateReceiveProduct(String name,int id) {
+    private  void showDialogeUpdateReceiveProduct(int position) {
 
         Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.add_shop_dialoge);
+        dialog.setContentView(R.layout.district_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        shop_name_ed = dialog.findViewById(R.id.shop_name_ed);
+        dist_name_ed = dialog.findViewById(R.id.dist_name_ed);
+        dist_code_ed = dialog.findViewById(R.id.dist_code_ed);
+        Spinner stateSpinner = dialog.findViewById(R.id.stateSpinner);
 
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-        shop_name_ed.setText(name);
-
+        dist_name_ed.setText(list.get(position).getName());
+        dist_code_ed.setText(list.get(position).getPercentage());
 
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -322,6 +320,7 @@ public class AddDistrictFragment extends Fragment {
                 String message = obj.optString("message");
                 String error_message = obj.optString("error_message");
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
+                    dialog.dismiss();
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     getDistrictList();
