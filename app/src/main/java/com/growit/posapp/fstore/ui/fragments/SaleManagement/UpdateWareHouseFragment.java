@@ -36,7 +36,7 @@ public class UpdateWareHouseFragment extends Fragment {
     private int position = 0;
     String type_of_vendor_warehouse;
    FragmentUpdateWareHouseBinding binding;
-   String str_company_name="",str_code="";
+   String str_company_name="",str_code="",str_address="";
     public UpdateWareHouseFragment() {
         // Required empty public constructor
     }
@@ -67,6 +67,7 @@ public class UpdateWareHouseFragment extends Fragment {
             warehouse_model = (List<WarehouseModel>) getArguments().getSerializable("warehouse_list");
             binding.etCompanyName.setText(warehouse_model.get(position).getName());
             binding.etCode.setText(warehouse_model.get(position).getCode());
+            binding.addressName.setText(warehouse_model.get(position).getAddress().getCity());
         }
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +83,7 @@ public class UpdateWareHouseFragment extends Fragment {
 
                 str_company_name = binding.etCompanyName.getText().toString();
                 str_code = binding.etCode.getText().toString();
-
+                str_address = binding.addressName.getText().toString();
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
@@ -102,8 +103,8 @@ public class UpdateWareHouseFragment extends Fragment {
         params.put("token", sm.getJWTToken());
         params.put("name", str_company_name);
         params.put("code", str_code);
-//        params.put("street", streetStr);
-//        params.put("city", str_city);
+        params.put("street", str_address);
+        //        params.put("city", str_city);
 //        params.put("state_id", stateStr);
 //        params.put("country_id", ApiConstants.COUNTRY_ID);
 //        params.put("zip", zipStr);

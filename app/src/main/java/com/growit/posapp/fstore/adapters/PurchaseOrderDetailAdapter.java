@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
         ImageView product_Image;
         ShowMoreTextView textView;
         public  ShowMoreTextView product_name;
+        EditText edi_qut_text;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -44,6 +46,7 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
             product_Image = itemView.findViewById(R.id.product_Image);
             pac_text = itemView.findViewById(R.id.pac_text);
             crop_text = itemView.findViewById(R.id.crop_text);
+            edi_qut_text = itemView.findViewById(R.id.edi_qut_text);
         }
     }
 
@@ -52,7 +55,7 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View contactView = inflater.inflate(R.layout.order_detail_card_layout, parent, false);
+        View contactView = inflater.inflate(R.layout.pur_order_detail_layout, parent, false);
         PurchaseOrderDetailAdapter.ViewHolder viewHolder = new PurchaseOrderDetailAdapter.ViewHolder(contactView);
         return viewHolder;
     }
@@ -62,6 +65,7 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
     public void onBindViewHolder(@NonNull PurchaseOrderDetailAdapter.ViewHolder holder, int position) {
         PurchaseOrderLine orders = customerDataList.get(position);
         holder.product_name.setText(orders.getProductName());
+
 //        holder.pac_text.setText(orders.getProduct_package());
 //        if (!orders.getCrop_name().equalsIgnoreCase("false")) {
 //            holder.crop_text.setText(orders.getCrop_name());

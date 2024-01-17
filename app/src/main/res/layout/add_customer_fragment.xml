@@ -96,34 +96,34 @@
 <!--                android:paddingStart="@dimen/ten"-->
 <!--                android:paddingEnd="@dimen/ten"-->
 <!--                android:visibility="gone" />-->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
-                android:layout_marginEnd="@dimen/end_marg_text"
-                android:layout_marginStart="@dimen/start_marg_text"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
-                android:text="Customer Type"
-                android:textColor="@color/edt_top_text_color" />
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/roboto_regular"-->
+<!--                android:layout_marginTop="@dimen/top_marg_text"-->
+<!--                android:layout_marginEnd="@dimen/end_marg_text"-->
+<!--                android:layout_marginStart="@dimen/start_marg_text"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textSize="@dimen/text_size_text"-->
+<!--                android:text="Customer Type"-->
+<!--                android:textColor="@color/edt_top_text_color" />-->
 
-            <LinearLayout
-                android:id="@+id/lay_custom_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="@dimen/twenty_five"
-                android:background="@drawable/custom_edit_text_cut">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/lay_custom_type"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/twenty_five"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                android:background="@drawable/custom_edit_text_cut">-->
 
-                <Spinner
-                    android:id="@+id/cstTypeSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"/>
-            </LinearLayout>
+<!--                <Spinner-->
+<!--                    android:id="@+id/cstTypeSpinner"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:layout_marginTop="10dp"/>-->
+<!--            </LinearLayout>-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,6 +152,7 @@
                 android:inputType="text"
                 android:padding="8dp" />
             <TextView
+                android:id="@+id/land_size_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"

@@ -60,6 +60,8 @@ public class PurchaseOrderDetailFragment extends Fragment {
     SessionManagement sm;
     int orderID;
     int purchase_order_id;
+    LinearLayoutManager layoutManager;
+
     public PurchaseOrderDetailFragment() {
         // Required empty public constructor
     }
@@ -116,16 +118,50 @@ public class PurchaseOrderDetailFragment extends Fragment {
         binding.receive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Utility.isNetworkAvailable(getContext())) {
-                    showDialogeReceiveProduct();
-                } else {
-                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                double total_qut=0.0;
+                double total_receive_qut=0.0;
+                JSONArray jsonArray = new JSONArray();
+                for (int i = 0; i < productDetail.getOrders().get(position).getOrderLines().size(); i++) {
+                    View view = layoutManager.getChildAt(i);
+                    if(view !=null) {
 
+                        EditText qutEditText = view.findViewById(R.id.edi_qut_text);
+                        double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
+
+                        JSONObject obj = new JSONObject();
+                        try {
+                           total_qut +=  productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
+                            total_receive_qut += qut_str;
+                            // obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
+                            obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
+                            obj.putOpt("quantity", qut_str);
+                            jsonArray.put(obj);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
+                try {
+                    if (Utility.isNetworkAvailable(getContext())) {
+                        showDialogeReceiveProduct(jsonArray,total_qut,total_receive_qut);
+                    } else {
+                        Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+
 
             }
         });
     }
+
+
+
     public void showPDF(int _id) {
        // String url= ApiConstants.BASE_URL +ApiConstants.GET_PURCHASE_ORDER_DOWNLOAD+_id+"&user_id="+sm.getUserID()+"&token="+sm.getJWTToken();
         SessionManagement sm = new SessionManagement(getActivity());
@@ -175,7 +211,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
             double paidAmount= Utility.decimalFormat(Double.parseDouble(productDetail.getOrders().get(position).getAmountTotal()));
             binding.totalValue.setText(paidAmount+"");
 //            binding.paidBy.setText(productDetail.getOrders().get(position).getPayment_type());
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+             layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             orderHistoryAdapter = new PurchaseOrderDetailAdapter(getActivity(), productDetail.getOrders().get(position).getOrderLines());
             binding.orderRecyclerView.setAdapter(orderHistoryAdapter);
@@ -225,29 +261,26 @@ public class PurchaseOrderDetailFragment extends Fragment {
 
 
     }
-    private  void showDialogeReceiveProduct() {
-
+    private  void showDialogeReceiveProduct(JSONArray jsonArray,double total_qut,double total_receive_qut) throws JSONException {
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.purchase_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        EditText  qut_text = dialog.findViewById(R.id.qut_text);
+        TextView  tex_total_qut = dialog.findViewById(R.id.total_qut);
+        TextView  total_qut_rec = dialog.findViewById(R.id.total_qut_rec);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-
+        tex_total_qut.setText("Total quantity  : "+String.valueOf(total_qut));
+        total_qut_rec.setText("Total received quantity : "+String.valueOf(total_receive_qut));
 
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String str_qut= qut_text.getText().toString();
-                if(!str_qut.isEmpty()) {
-                    getReceiveProducts(str_qut,productDetail.getOrders().get(position).getId());
-                }else {
-                    Toast.makeText(getActivity(), "Enter the quantity", Toast.LENGTH_SHORT).show();
 
-                }
+                    getReceiveProducts(jsonArray,productDetail.getOrders().get(position).getId());
+
                 dialog.dismiss();
 
             }
@@ -263,13 +296,13 @@ public class PurchaseOrderDetailFragment extends Fragment {
         dialog.show();
     }
 
-    private void getReceiveProducts(String qut,int purchase_order_id){
-
+    private void getReceiveProducts(JSONArray qut,int purchase_order_id){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
             params.put("user_id", sm.getUserID()+"");
             params.put("token", sm.getJWTToken());
         params.put("quantity", qut+"");
+
         params.put("purchase_order_id", purchase_order_id+"");
 
         Utility.showDialoge("Please wait while a moment...", getActivity());

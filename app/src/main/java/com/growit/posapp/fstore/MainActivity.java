@@ -46,6 +46,7 @@ import com.growit.posapp.fstore.ui.fragments.ContactUsFragment;
 import com.growit.posapp.fstore.ui.fragments.CustomerManagement.CustomerRecyclerViewFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.ConfigurationFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.TransfersOrderListFragment;
+import com.growit.posapp.fstore.ui.fragments.ItemCart2FragmentFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
@@ -222,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
             ///toolbar vistble
             toolbar.setVisibility(View.VISIBLE);
             titleTxt.setText(R.string.Item_Cart);
-            Fragment fragment = ItemCartFragment.newInstance();
+            Fragment fragment = ItemCart2FragmentFragment.newInstance();
+//            Fragment fragment = ItemCartFragment.newInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         });
@@ -313,7 +315,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (test.equalsIgnoreCase("4")) {
                 Bundle bundle = new Bundle();
                 bundle.putString("payment", "success");
-                Fragment fragment = ItemCartFragment.newInstance();
+//                Fragment fragment = ItemCartFragment.newInstance();
+                Fragment fragment = ItemCart2FragmentFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();

@@ -45,16 +45,16 @@
                     android:textColor="#E6171717"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/customer_text"
-                    android:gravity="center"
-                    android:layout_marginEnd="2dp"
-                    android:text=""
-                    android:fontFamily="@font/helvetica_neue_medium"
-                    android:background="@drawable/customer_back_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/customer_text"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginEnd="2dp"-->
+<!--                    android:text=""-->
+<!--                    android:fontFamily="@font/helvetica_neue_medium"-->
+<!--                    android:background="@drawable/customer_back_color"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="12sp" />-->
             </LinearLayout>
 
             <LinearLayout

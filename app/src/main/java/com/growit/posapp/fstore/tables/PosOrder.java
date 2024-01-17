@@ -37,6 +37,16 @@ public class PosOrder implements Serializable{
 
     @ColumnInfo(name = "unitPrice")
     private double unitPrice;
+    @ColumnInfo(name = "discount_per")
+    private double discount_per;
+
+    public double getDiscount_per() {
+        return discount_per;
+    }
+
+    public void setDiscount_per(double discount_per) {
+        this.discount_per = discount_per;
+    }
 
     public int getTotalQuantity() {
         return totalQuantity;

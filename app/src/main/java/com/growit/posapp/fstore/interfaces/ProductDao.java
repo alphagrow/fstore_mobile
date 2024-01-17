@@ -36,4 +36,6 @@ public interface ProductDao {
     @Query("SELECT COUNT(*) FROM PosOrder where productID= :id AND productVariants=:variants")
 
     int getProductDetailById(int id,String variants);
+    @Query("UPDATE PosOrder SET discount_per = :discount WHERE productID = :id AND productVariants=:variants AND quantity=:qty")
+    int updateProductCardDiscount(double discount,int id,String variants,int qty);
 }

@@ -86,7 +86,7 @@ public class AddCustomerFragment extends Fragment implements
         initViews(view);
         /* Render State DropDown List  */
         if (Utility.isNetworkAvailable(getContext())) {
-            getCustomerTypesList();
+//            getCustomerTypesList();
             getStateData();
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -117,12 +117,9 @@ public class AddCustomerFragment extends Fragment implements
         addressEditText = view.findViewById(R.id.et_useraddress);
         et_pincode = view.findViewById(R.id.et_pincode);
         talukaSpinner = view.findViewById(R.id.talukaSpinner);
-        cstTypeSpinner = view.findViewById(R.id.cstTypeSpinner);
+//        cstTypeSpinner = view.findViewById(R.id.cstTypeSpinner);
         land_size = view.findViewById(R.id.land_size);
         gst_no_edit = view.findViewById(R.id.gst_edit);
-
-//        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, cstTpeArray);
-//        cstTypeSpinner.setAdapter(spinnerArrayAdapter);
 
         stateSpinner = view.findViewById(R.id.stateSpinner);
         citySpinner = view.findViewById(R.id.citySpinner);
@@ -153,20 +150,20 @@ public class AddCustomerFragment extends Fragment implements
                 getActivity().finish();
             }
         });
-        cstTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    cusTomerType = customer_type.get(position).getId() + "";
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        cstTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                if (position != 0) {
+//                    cusTomerType = customer_type.get(position).getId() + "";
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
         citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -360,52 +357,52 @@ public class AddCustomerFragment extends Fragment implements
         });
     }
 
-    private void getCustomerTypesList() {
-        SessionManagement sm = new SessionManagement(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST;
-
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        //    Utility.showDialoge("Please wait while a moment...", getActivity());
-        Log.d("ALL_CROPS_url",url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.v("Response", response.toString());
-                JSONObject obj = null;
-                try {
-                    obj = new JSONObject(response.toString());
-                    int statusCode = obj.optInt("statuscode");
-                    String status = obj.optString("status");
-
-                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        dismissDialoge();
-                        JSONArray jsonArray = obj.getJSONArray("customer_discounts");
-                        StateModel stateModel = new StateModel();
-                        stateModel.setId(-1);
-                        stateModel.setName("--Select Customer Types--");
-                        customer_type.add(stateModel);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            stateModel = new StateModel();
-                            JSONObject data = jsonArray.getJSONObject(i);
-                            int id = data.optInt("id");
-                            String name = data.optString("name");
-                            stateModel.setId(id);
-                            stateModel.setName(name);
-                            customer_type.add(stateModel);
-                        }
-                        if(getContext()!=null) {
-                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), customer_type);
-                            cstTypeSpinner.setAdapter(adapter);
-                        }
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-        queue.add(jsonObjectRequest);
-    }
+//    private void getCustomerTypesList() {
+//        SessionManagement sm = new SessionManagement(getActivity());
+//        RequestQueue queue = Volley.newRequestQueue(getActivity());
+//        //  String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST;
+//
+//        String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+//        //    Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Log.d("ALL_CROPS_url",url);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.v("Response", response.toString());
+//                JSONObject obj = null;
+//                try {
+//                    obj = new JSONObject(response.toString());
+//                    int statusCode = obj.optInt("statuscode");
+//                    String status = obj.optString("status");
+//
+//                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+//                        dismissDialoge();
+//                        JSONArray jsonArray = obj.getJSONArray("customer_discounts");
+//                        StateModel stateModel = new StateModel();
+//                        stateModel.setId(-1);
+//                        stateModel.setName("--Select Customer Types--");
+//                        customer_type.add(stateModel);
+//                        for (int i = 0; i < jsonArray.length(); i++) {
+//                            stateModel = new StateModel();
+//                            JSONObject data = jsonArray.getJSONObject(i);
+//                            int id = data.optInt("id");
+//                            String name = data.optString("name");
+//                            stateModel.setId(id);
+//                            stateModel.setName(name);
+//                            customer_type.add(stateModel);
+//                        }
+//                        if(getContext()!=null) {
+//                            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), customer_type);
+//                            cstTypeSpinner.setAdapter(adapter);
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+//        queue.add(jsonObjectRequest);
+//    }
 
 
     private void getDistrictData() {
@@ -514,7 +511,7 @@ public class AddCustomerFragment extends Fragment implements
         params.put("street", streetStr);
         params.put("country_id", ApiConstants.COUNTRY_ID);
         params.put("zip", zipStr);
-        params.put("customer_type", cusTomerType);
+//        params.put("customer_type", cusTomerType);
 //        if(!cusTomerType.equals("1")) {
 //            params.put("vat", str_gst_no);
 //        }
@@ -582,7 +579,7 @@ public class AddCustomerFragment extends Fragment implements
                 customer.setStreet(streetStr);
                 customer.setGst_no(str_gst_no);
                 customer.setLand_size(str_land_size);
-                customer.setCustomer_type(cusTomerType);
+//                customer.setCustomer_type(cusTomerType);
                 customer.setDiscounts(customerLineDiscount);
                 DatabaseClient.getInstance(getActivity()).getAppDatabase()
                         .customerDao()

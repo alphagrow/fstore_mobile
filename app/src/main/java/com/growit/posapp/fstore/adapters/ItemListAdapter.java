@@ -3,9 +3,13 @@ package com.growit.posapp.fstore.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +52,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView itemName, itemPriceTxt, itemVariants;
+        EditText discount_per;
         public ImageView itemImage, deleteBtn;
         public NumberPicker number_picker;
         public ViewHolder(View itemView) {
@@ -58,6 +63,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
             itemVariants = itemView.findViewById(R.id.itemVariants);
             itemImage = itemView.findViewById(R.id.itemImage);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            discount_per = itemView.findViewById(R.id.discount_per);
         //    number_picker.setMax(100);
             number_picker.setMin(1);
             number_picker.setUnit(1);
@@ -78,10 +84,36 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ItemListAdapter.ViewHolder holder, int position) {
         PosOrder product = customerDataList.get(position);
+      //  holder.discount_per.setText(String.valueOf(product.getDiscount_per()));
+        holder.discount_per.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(!s.toString().isEmpty()) {
+                    product.setDiscount_per(Double.parseDouble(s.toString()));
+
+                    Log.d("discount_f", s.toString());
+                    AsyncTask.execute(() -> {
+                    DatabaseClient.getInstance(mContext).getAppDatabase().productDao().updateProductCardDiscount(product.getDiscount_per(),product.getProductID(),product.getProductVariants(),(int)product.getQuantity());
+                        SaveCardListToSomeActivity();
+                    });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         TextView textView = holder.itemName;
         textView.setText(product.getProductName());
         holder.number_picker.setMax(product.getTotalQuantity());
-
         Glide.with(mContext)
                 .load(ApiConstants.BASE_URL + product.getProductImage())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

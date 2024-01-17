@@ -109,22 +109,22 @@
                 android:textSize="14dp"
                 android:padding="8dp" />
 
-            <EditText
-                android:id="@+id/customer_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="@dimen/twenty_five"
-                android:background="@drawable/custom_edit_text_cut"
-                android:drawablePadding="@dimen/ten"
-                android:fontFamily="@font/sf_compact_regular"
-                android:hint="Customer Type"
-                android:inputType="text"
-                android:padding="8dp"
-                android:paddingStart="@dimen/ten"
-                android:paddingEnd="@dimen/ten"
-                android:visibility="gone" />
+<!--            <EditText-->
+<!--                android:id="@+id/customer_type"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/twenty_five"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:layout_marginEnd="@dimen/twenty_five"-->
+<!--                android:background="@drawable/custom_edit_text_cut"-->
+<!--                android:drawablePadding="@dimen/ten"-->
+<!--                android:fontFamily="@font/sf_compact_regular"-->
+<!--                android:hint="Customer Type"-->
+<!--                android:inputType="text"-->
+<!--                android:padding="8dp"-->
+<!--                android:paddingStart="@dimen/ten"-->
+<!--                android:paddingEnd="@dimen/ten"-->
+<!--                android:visibility="gone" />-->
             <TextView
                 android:id="@+id/text_name"
                 android:layout_width="match_parent"

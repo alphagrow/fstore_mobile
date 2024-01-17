@@ -74,7 +74,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
             et_pincode.setText(customer.get(position).getZipcode());
             emailEditText.setText(customer.get(position).getEmail());
             land_size.setText(customer.get(position).getLand_size());
-            cstType=customer.get(position).getCustomer_type();
+//            cstType=customer.get(position).getCustomer_type();
             getStateData();
             getDistrictData(customer.get(position).getState());
             getTalukaData(customer.get(position).getDistrict());
@@ -108,15 +108,17 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
         et_pincode = view.findViewById(R.id.et_pincode);
         gst_no_edit = view.findViewById(R.id.gst_edit);
         land_size= view.findViewById(R.id.land_size);
+      TextView  land_size_text = view.findViewById(R.id.land_size_text);
         talukaSpinner = view.findViewById(R.id.talukaSpinner);
         stateSpinner = view.findViewById(R.id.stateSpinner);
         citySpinner = view.findViewById(R.id.citySpinner);
-        customer_type =view.findViewById(R.id.customer_type);
+//        customer_type =view.findViewById(R.id.customer_type);
 //        customer_type_text = view.findViewById(R.id.customer_type_text);
 //        customer_type_text.setVisibility(View.GONE);
 //        customer_type.setVisibility(View.VISIBLE);
-        lay_custom_type = view.findViewById(R.id.lay_custom_type);
-        lay_custom_type.setVisibility(View.GONE);
+//        lay_custom_type = view.findViewById(R.id.lay_custom_type);
+//        lay_custom_type.setVisibility(View.GONE);
+        land_size_text.setVisibility(View.GONE);
         land_size.setVisibility(View.GONE);
         progressBar = new ProgressBar(getActivity());
         progressBar.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -431,7 +433,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
                 cstOBJ.setDistrict(districtStr);
                 cstOBJ.setTaluka(talukaStr);
                 cstOBJ.setStreet(streetStr);
-                cstOBJ.setCustomer_type(cstType);
+//                cstOBJ.setCustomer_type(cstType);
                 cstOBJ.setGst_no(gst_no_edit.getText().toString());
                 cstOBJ.setLand_size(land_size.getText().toString());
                 DatabaseClient.getInstance(getActivity()).getAppDatabase()

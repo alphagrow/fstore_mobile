@@ -241,6 +241,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         SessionManagement sm = new SessionManagement(this);
 
         String apiURL = ApiConstants.BASE_URL + "" + ApiConstants.UPLOAD_PHOTO + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+       Log.d("apiURL",apiURL);
         VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, apiURL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {

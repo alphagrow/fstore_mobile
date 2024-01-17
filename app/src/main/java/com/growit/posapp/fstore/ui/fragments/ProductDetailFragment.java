@@ -211,11 +211,13 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                 }
                 PosOrder order = new PosOrder();
                 order.setProductID(Integer.parseInt(productID));
+
                 order.setVariantID(Integer.parseInt(variantID));
                 order.setProductName(nameTxt.getText().toString());
                 order.setCropID(Integer.parseInt(cropID));
                 order.setCrop_name(cropName);
                 order.setQuantity(quantity);
+                order.setDiscount_per(0.0);
                 order.setTotalQuantity(totaQquantity);
                 order.setTaxID(productDetail.getData().get(0).getTaxesId());
                 order.setUnitPrice(productDetail.getData().get(0).getListPrice());

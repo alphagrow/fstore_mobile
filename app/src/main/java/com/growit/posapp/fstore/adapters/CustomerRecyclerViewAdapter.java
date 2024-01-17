@@ -73,20 +73,20 @@ public class CustomerRecyclerViewAdapter extends RecyclerView.Adapter<CustomerRe
         textView.setText(customers.getName());
         TextView mobileNoText = holder.mobileNoText;
         mobileNoText.setText(customers.getMobile());
-        if(customers.getCustomer_type()!=null&&customers.getCustomer_type().equals("1")) {
-            holder.customer_text.setText("FARMER");
-            holder.customer_text.setTextColor(mContext.getResources().getColor(R.color.customer_back_color_text));
-            holder.customer_text.setBackgroundColor(mContext.getResources().getColor(R.color.customer_back_color));
-        }else  if(customers.getCustomer_type()!=null&&customers.getCustomer_type().equals("2")) {
-            holder.customer_text.setText("FRANCHISE");
-            holder.customer_text.setTextColor(mContext.getResources().getColor(R.color.cust_fre_back_color_text));
-            holder.customer_text.setBackgroundColor(mContext.getResources().getColor(R.color.cust_fre_back_color));
-        }else  if(customers.getCustomer_type()!=null&&customers.getCustomer_type().equals("3")) {
-            holder.customer_text.setTextColor(mContext.getResources().getColor(R.color.customer_del_color_text));
-            holder.customer_text.setText("DEALER");
-            holder.customer_text.setBackgroundColor(mContext.getResources().getColor(R.color.customer_del_color));
-
-        }
+//        if(customers.getCustomer_type()!=null&&customers.getCustomer_type().equals("1")) {
+//            holder.customer_text.setText("FARMER");
+//            holder.customer_text.setTextColor(mContext.getResources().getColor(R.color.customer_back_color_text));
+//            holder.customer_text.setBackgroundColor(mContext.getResources().getColor(R.color.customer_back_color));
+//        }else  if(customers.getCustomer_type()!=null&&customers.getCustomer_type().equals("2")) {
+//            holder.customer_text.setText("FRANCHISE");
+//            holder.customer_text.setTextColor(mContext.getResources().getColor(R.color.cust_fre_back_color_text));
+//            holder.customer_text.setBackgroundColor(mContext.getResources().getColor(R.color.cust_fre_back_color));
+//        }else  if(customers.getCustomer_type()!=null&&customers.getCustomer_type().equals("3")) {
+//            holder.customer_text.setTextColor(mContext.getResources().getColor(R.color.customer_del_color_text));
+//            holder.customer_text.setText("DEALER");
+//            holder.customer_text.setBackgroundColor(mContext.getResources().getColor(R.color.customer_del_color));
+//
+//        }
 
     }
 

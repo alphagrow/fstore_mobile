@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -146,6 +147,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     ArrayList<Integer> crop_id_list = new ArrayList<>();
     ArrayList<Integer> attribute_id_list = new ArrayList<>();
     String selected_crop_id;
+    Bitmap imageBitmap = null;
+    String str_image_crop;
  //   List<StateModel> uom_list = new ArrayList<>();
     public AddProductFragment() {
     }
@@ -304,6 +307,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 takePhoto();
+
             }
         });
         binding.video.setOnClickListener(new View.OnClickListener() {
@@ -460,6 +464,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("hsn_code", hsn_code);
         params.put("hsn_code_description", str_hsn_code_dec);
         params.put("detailed_type", str_detailed_type);
+        params.put("image_data", str_image_crop);
         params.put("pos_categ_id", str_crop_id);
         params.put("attribute_lines", attribute_json_array.toString());
         progressDialog = new ProgressDialog(getActivity());
@@ -523,7 +528,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                     askForPermission("android.permission.CAMERA", 2);
                 } else if (options[item].equals("Select multiple photos from Gallery")) {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-// Do something for lollipop and above versions
+                        // Do something for lollipop and above versions
                         askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
                     } else {
                         askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1);
@@ -535,6 +540,29 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             }
         });
         builder.show();
+
+//        final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle("Add Photo!");
+//        builder.setItems(options, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int item) {
+//                if (options[item].equals("Take Photo")) {
+//                    askForPermission("android.permission.CAMERA", 2);
+//                } else if (options[item].equals("Select multiple photos from Gallery")) {
+//                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//// Do something for lollipop and above versions
+//                        askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
+//                    } else {
+//                        askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+//                    }
+//
+//                } else if (options[item].equals("Cancel")) {
+//                    dialog.dismiss();
+//                }
+//            }
+//        });
+//        builder.show();
     }
 
     private void getAttributeList() {
@@ -617,20 +645,33 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 fromGallery();
             } else if (requestCode == 2) {
                 openCamera();
-            } else if (requestCode == 3) {
-                openVideo();
             }
         }
+//        if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
+//        } else {
+//            if (requestCode == 1) {
+//                fromGallery();
+//            } else if (requestCode == 2) {
+//                openCamera();
+//            } else if (requestCode == 3) {
+//                openVideo();
+//            }
+//        }
     }
 
     private void fromGallery() {
-        binding.imageSet.setVisibility(View.GONE);
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_FROM_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_FROM_FILE);
+//        binding.imageSet.setVisibility(View.GONE);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intent, PICK_FROM_FILE);
     }
 
     /**
@@ -646,14 +687,27 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             } catch (IOException ex) {
             }
             if (photo != null) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
-// Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName(), photo);
-// picture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-// startActivityForResult(picture, PICK_FROM_CAMERA);
+                Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName(), photo);
+                picture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(picture, PICK_FROM_CAMERA);
             }
 
         }
+//        Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (picture.resolveActivity(getActivity().getPackageManager()) != null) {
+//            File photo = null;
+//            try {
+//                photo = createImageFile();
+//
+//            } catch (IOException ex) {
+//            }
+//            if (photo != null) {
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+//
+//            }
+//
+//        }
     }
 
     /**
@@ -666,78 +720,117 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         startActivityForResult(Intent.createChooser(intent, "Select a Video "), PICK_FROM_VIDEO);
 
     }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bmp;
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_FROM_FILE) {
+                Uri selectedImageUri = data.getData();
 
-        if (requestCode == PICK_FROM_CAMERA && resultCode == RESULT_OK && null != data) {
-            Bundle extras1 = data.getExtras();
-            Bitmap thumbnail_1 = (Bitmap) extras1.get("data");
-            if (thumbnail_1 != null) {
-// imagesUriArrayList.add(new imagesUriArrayList.add(thumbnail_1));
-                imagesUriArrayList.add(thumbnail_1);
-
-            } else {
-                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
-            }
-        }
-        if (requestCode == PICK_FROM_FILE && resultCode == RESULT_OK && null != data) {
-            if (data.getClipData() == null) {
-                Toast.makeText(getActivity(), "Please select minimum 2 images", Toast.LENGTH_SHORT).show();
-
-            } else {
-                if (data.getClipData().getItemCount() <= 4) {
-
-                    for (int i = 0; i < data.getClipData().getItemCount(); i++) {
-
-                        try {
-
-                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getClipData().getItemAt(i).getUri());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-// String str_image_aa = getEncoded64ImageStringFromBitmap(bitmap);
-// api_array_list.add("data:image/jpeg;base64,"+str_image_aa);
-                        imagesUriArrayList.add(bitmap);
-                    }
-
-                    Log.e("SIZE_img", imagesUriArrayList.size() + "");
-                } else {
-                    Toast.makeText(getActivity(), "Please select maximum 4 images", Toast.LENGTH_SHORT).show();
-
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            }
-        }
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new ImageAdapter(getActivity(), imagesUriArrayList);
-        binding.recyImage.setAdapter(adapter);
-        binding.recyImage.setLayoutManager(layoutManager);
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
+                binding.image.setImageBitmap(imageBitmap);
+            } else if (requestCode == PICK_FROM_CAMERA) {
 
-        if (requestCode == PICK_FROM_VIDEO) {
-            binding.simpleVideoView.setVisibility(View.VISIBLE);
-            Uri selectedImageUri = data.getData();
-// String selectedPath = getPath(selectedImageUri);
-            if (mediaControls == null) {
-// create an object of media controller class
-                mediaControls = new MediaController(getActivity());
-                mediaControls.setAnchorView(videoView);
-                video_text.setText(selectedImageUri.toString());
-            }
-// set the media controller for video view
-            binding.simpleVideoView.setMediaController(mediaControls);
-// set the uri for the video view
-            binding.simpleVideoView.setVideoURI(selectedImageUri);
-// start a video
-            binding.simpleVideoView.start();
+                try {
+                    //our imageFilePath that contains the absolute path to the created file
+                    File file = new File(imageFilePath);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
 
-        } else if (resultCode == getActivity().RESULT_CANCELED) {
-            Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
+                    if (!Utility.isNetworkAvailable(getActivity())) {
+                        Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
+                    binding.image.setImageBitmap(imageBitmap);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
         }
     }
+
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Bitmap bmp;
+//
+//        if (requestCode == PICK_FROM_CAMERA && resultCode == RESULT_OK && null != data) {
+//            Bundle extras1 = data.getExtras();
+//            Bitmap thumbnail_1 = (Bitmap) extras1.get("data");
+//            if (thumbnail_1 != null) {
+//// imagesUriArrayList.add(new imagesUriArrayList.add(thumbnail_1));
+//                imagesUriArrayList.add(thumbnail_1);
+//
+//            } else {
+//                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        if (requestCode == PICK_FROM_FILE && resultCode == RESULT_OK && null != data) {
+//            if (data.getClipData() == null) {
+//                Toast.makeText(getActivity(), "Please select minimum 2 images", Toast.LENGTH_SHORT).show();
+//
+//            } else {
+//                if (data.getClipData().getItemCount() <= 4) {
+//
+//                    for (int i = 0; i < data.getClipData().getItemCount(); i++) {
+//
+//                        try {
+//
+//                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getClipData().getItemAt(i).getUri());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//// String str_image_aa = getEncoded64ImageStringFromBitmap(bitmap);
+//// api_array_list.add("data:image/jpeg;base64,"+str_image_aa);
+//                        imagesUriArrayList.add(bitmap);
+//                    }
+//
+//                    Log.e("SIZE_img", imagesUriArrayList.size() + "");
+//                } else {
+//                    Toast.makeText(getActivity(), "Please select maximum 4 images", Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }
+//        }
+//        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4);
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        adapter = new ImageAdapter(getActivity(), imagesUriArrayList);
+//        binding.recyImage.setAdapter(adapter);
+//        binding.recyImage.setLayoutManager(layoutManager);
+//
+//        if (requestCode == PICK_FROM_VIDEO) {
+//            binding.simpleVideoView.setVisibility(View.VISIBLE);
+//            Uri selectedImageUri = data.getData();
+//// String selectedPath = getPath(selectedImageUri);
+//            if (mediaControls == null) {
+//// create an object of media controller class
+//                mediaControls = new MediaController(getActivity());
+//                mediaControls.setAnchorView(videoView);
+//                video_text.setText(selectedImageUri.toString());
+//            }
+//// set the media controller for video view
+//            binding.simpleVideoView.setMediaController(mediaControls);
+//// set the uri for the video view
+//            binding.simpleVideoView.setVideoURI(selectedImageUri);
+//// start a video
+//            binding.simpleVideoView.start();
+//
+//        } else if (resultCode == getActivity().RESULT_CANCELED) {
+//            Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
