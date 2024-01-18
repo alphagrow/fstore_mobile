@@ -336,6 +336,7 @@ public class ItemCart2FragmentFragment extends Fragment {
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
+              String  pos_order = obj.optString("pos_order");
                 String session_id = obj.optString("session_id");
                 sm.saveSessionID(session_id);
                 ifFreeProduct = false;
@@ -346,7 +347,7 @@ public class ItemCart2FragmentFragment extends Fragment {
                                 .delete();
                     });
                     Utility.dismissDialoge();
-                    callOrderConfirmFragment();
+                    callOrderConfirmFragment(pos_order);
                 }
             }
 
@@ -358,8 +359,11 @@ public class ItemCart2FragmentFragment extends Fragment {
             }
         });
     }
-    private void callOrderConfirmFragment() {
+    private void callOrderConfirmFragment(String  purchase_order) {
+        Bundle bundle = new Bundle();
+        bundle.putString("purchase_order", purchase_order);
         Fragment fragment = ConfirmOrderFragment.newInstance();
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
     }
@@ -416,7 +420,6 @@ public class ItemCart2FragmentFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
     void showDialogeCustomer() {
-
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.customer_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

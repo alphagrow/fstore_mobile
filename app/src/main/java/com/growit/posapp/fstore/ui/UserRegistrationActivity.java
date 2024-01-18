@@ -1,5 +1,7 @@
 package com.growit.posapp.fstore.ui;
 
+import static java.security.AccessController.getContext;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -65,9 +67,21 @@ public class UserRegistrationActivity extends AppCompatActivity {
         } else {
             Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
         }
-        StateModel st = new StateModel();
+        StateModel st=new StateModel();
         st.setName("--Select District--");
         districtNames.add(st);
+
+        StateModel st2=new StateModel();
+        st2.setName("--Select Taluka--");
+        talukaNames.add(st2);
+        if(getContext()!=null) {
+            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, districtNames);
+            binding.citySpinner.setAdapter(adapter);
+        }
+        if(getContext()!=null) {
+            CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, talukaNames);
+            binding.talukaSpinner.setAdapter(adapter);
+        }
 
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,17 +98,17 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
 
 
-        binding.stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    stateStr = stateNames.get(position).getId() + "";
-                    if (stateStr != null) {
+                    districtStr = districtNames.get(position).getId() + "";
+                    if (districtStr != null) {
                         if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
                             Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                       // getDistrictData();
+                        getTalukaData();
                     }
                 }
             }
@@ -105,6 +119,40 @@ public class UserRegistrationActivity extends AppCompatActivity {
             }
         });
 
+        binding.stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    stateStr = stateNames.get(position).getId() + "";
+                    if (stateStr != null) {
+                        if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
+                            Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        getDistrictData();
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        binding.talukaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    talukaStr = talukaNames.get(position).getId() + "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +177,14 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     Toast.makeText(UserRegistrationActivity.this, R.string.Select_state, Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (districtStr.length() == 0) {
+                    Toast.makeText(UserRegistrationActivity.this, "Select District", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (talukaStr.length() == 0) {
+                    Toast.makeText(UserRegistrationActivity.this, "Select Taluka", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
                     Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
@@ -214,7 +269,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                         stateModel.setName(name);
                         stateNames.add(stateModel);
                     }
-                    if (UserRegistrationActivity.this != null) {
+                    if (getContext() != null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, stateNames);
                         binding.stateSpinner.setAdapter(adapter);
                     }
@@ -230,6 +285,97 @@ public class UserRegistrationActivity extends AppCompatActivity {
         });
     }
 
+    private void getDistrictData() {
+        Utility.showDialoge("Please wait while a configuring District...", UserRegistrationActivity.this);
+        Map<String, String> params = new HashMap<>();
+        params.put("states_id", stateStr);
+        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
+            private String message = "Registration failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                districtNames = new ArrayList<>();
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                String status = obj.optString("status");
+                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    JSONArray jsonArray = obj.getJSONArray("data");
+                    StateModel stateModel = new StateModel();
+                    stateModel.setId(-1);
+                    stateModel.setName("--Select District--");
+                    districtNames.add(stateModel);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        stateModel = new StateModel();
+                        JSONObject data = jsonArray.getJSONObject(i);
+                        int id = data.optInt("id");
+                        String name = data.optString("name");
+                        stateModel.setId(id);
+                        stateModel.setName(name);
+                        districtNames.add(stateModel);
+                    }
+                    if (getContext() != null) {
+                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, districtNames);
+                        binding.citySpinner.setAdapter(adapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                Log.v("Response", result.toString());
+                Utility.dismissDialoge();
+                Toast.makeText(UserRegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getTalukaData() {
+        Utility.showDialoge("Please wait while a configuring Taluka...", UserRegistrationActivity.this);
+        Map<String, String> params = new HashMap<>();
+        params.put("district_id", districtStr);
+        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.GET_TALUKA, new VolleyCallback() {
+            private String message = "Registration failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                talukaNames = new ArrayList<>();
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                String status = obj.optString("status");
+                if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    JSONArray jsonArray = obj.getJSONArray("data");
+                    StateModel stateModel = new StateModel();
+                    stateModel.setId(-1);
+                    stateModel.setName("--Select Taluka--");
+                    talukaNames.add(stateModel);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        stateModel = new StateModel();
+                        JSONObject data = jsonArray.getJSONObject(i);
+                        int id = data.optInt("id");
+                        String name = data.optString("name");
+                        stateModel.setId(id);
+                        stateModel.setName(name);
+                        talukaNames.add(stateModel);
+                    }
+                    if (getContext() != null) {
+                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, talukaNames);
+                        binding.talukaSpinner.setAdapter(adapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String result) {
+                Utility.dismissDialoge();
+                Log.v("Response", result.toString());
+                Toast.makeText(UserRegistrationActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private boolean CheckAllFields() {
         if (binding.etUsername.length() == 0) {
@@ -311,6 +457,8 @@ public class UserRegistrationActivity extends AppCompatActivity {
         params.put("street", streetStr);
         params.put("country_id", ApiConstants.COUNTRY_ID);
         params.put("state_id", stateStr);
+        params.put("district_id", districtStr);
+        params.put("taluka_id", talukaStr);
         params.put("city", str_city);
         params.put("zip", zipStr);
         params.put("phone", str_phone);

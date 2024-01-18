@@ -140,6 +140,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 //    String crop_id;
     ListAttributesModel model_attribute;
     List<AttributeModel> model = new ArrayList<>();
+    List<UomLineModel> uomLines= new ArrayList<>();
     List<Value> cropList = new ArrayList<>();
     List<UomCategoryModel> uom_model = new ArrayList<>();
     List<UomCategoryModel> uom_model_type = new ArrayList<>();
@@ -149,6 +150,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     String selected_crop_id;
     Bitmap imageBitmap = null;
     String str_image_crop;
+
  //   List<StateModel> uom_list = new ArrayList<>();
     public AddProductFragment() {
     }
@@ -157,7 +159,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         return new AddProductFragment();
     }
 
-
+    UomLineModel uom_model_list;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,29 +205,30 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
      //           if (position != 0) {
-                    str_uom = model_uom_type.getUomCategories().get(position).getId() + "";
+                    str_uom = uomLines.get(position).getId() + "";
+                binding.etUomSpinnType.setText(uomLines.get(position).getName());
 //                    List<UomLineModel> str_uom = uom_model.get(position).getUomLines();
-                    if(model_uom_type.getUomCategories().get(position).getUomLines() != null) {
-                        uom_model_type.clear();
-                       UomCategoryModel stateModel = new UomCategoryModel();
-                        stateModel.setId(-1);
-                        stateModel.setName("--Select UOM--");
-                        uom_model_type.add(stateModel);
-                        for (int i = 0; i < model_uom_type.getUomCategories().get(position).getUomLines().size(); i++) {
-                            stateModel = new UomCategoryModel();
-                            stateModel.setId(model_uom_type.getUomCategories().get(position).getUomLines().get(i).getId());
-                            stateModel.setName(model_uom_type.getUomCategories().get(position).getUomLines().get(i).getName());
-                            uom_model_type.add(stateModel);
-                        }
-                        if (getContext() != null) {
-                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uom_model_type);
-                            binding.etUomSpinnType.setAdapter(adapter);
-
-                        }
-
-
-                 //   }
-                }
+//                    if(model_uom_type.getUomCategories().get(position).getUomLines() != null) {
+//                        uom_model_type.clear();
+//                       UomCategoryModel stateModel = new UomCategoryModel();
+//                        stateModel.setId(-1);
+//                        stateModel.setName("--Select UOM--");
+//                        uom_model_type.add(stateModel);
+//                        for (int i = 0; i < model_uom_type.getUomCategories().get(position).getUomLines().size(); i++) {
+//                            stateModel = new UomCategoryModel();
+//                            stateModel.setId(model_uom_type.getUomCategories().get(position).getUomLines().get(i).getId());
+//                            stateModel.setName(model_uom_type.getUomCategories().get(position).getUomLines().get(i).getName());
+//                            uom_model_type.add(stateModel);
+//                        }
+//                        if (getContext() != null) {
+//                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uom_model_type);
+//                            binding.etUomSpinnType.setAdapter(adapter);
+//
+//                        }
+//
+//
+//                 //   }
+//                }
             }
 
             @Override
@@ -233,20 +236,20 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             }
         });
-        binding.etUomSpinnType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    str_uom_cate  = uom_model_type.get(position).getId() + "";
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        binding.etUomSpinnType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                if (position != 0) {
+//                    str_uom_cate  = uom_model_type.get(position).getId() + "";
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         binding.mfdDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -377,7 +380,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             String str_batchNumber = binding.batchNumber.getText().toString();
             String str_cirNumber = binding.cirNumber.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
-            // String str_etUom = binding.etUom.getText().toString();
+              str_uom_cate = binding.etUomSpinnType.getText().toString();
             String str_description = binding.description.getText().toString();
             String str_hsn_code = binding.edHsnCode.getText().toString();
             String str_hsn_code_dec = binding.edHsnCodeDescription.getText().toString();
@@ -391,8 +394,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "Enter the Product price", Toast.LENGTH_SHORT).show();
                 return;
             }
-//            if (str_uom.length()==0) {
-//                Toast.makeText(getActivity(), "Select UOM Type", Toast.LENGTH_SHORT).show();
+//            if (str_image_crop.length()==0) {
+//                Toast.makeText(getActivity(), "Select Product Image", Toast.LENGTH_SHORT).show();
 //                return;
 //            }
 //            if (str_uom_cate.length()==0) {
@@ -434,9 +437,14 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
 
             Log.d("attribute_json_array", attribute_json_array.toString());
-            if (attribute_json_array != null) {
+            if (attribute_json_array.length()!=0) {
                 if (str_crop_id != null) {
-                    addProductRequest(str_hsn_code, str_hsn_code_dec, str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
+                    if(str_image_crop !=null) {
+                        addProductRequest(str_image_crop, str_hsn_code, str_hsn_code_dec, str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
+
+                    }else {
+                        Toast.makeText(getActivity(), "Select Product Image", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getActivity(), "Select Category", Toast.LENGTH_SHORT).show();
                 }
@@ -447,7 +455,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
 
-    private void addProductRequest(String hsn_code, String str_hsn_code_dec, String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id, JSONArray attribute_json_array) {
+    private void addProductRequest(String str_image_crop,String hsn_code, String str_hsn_code_dec, String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id, JSONArray attribute_json_array) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
@@ -460,7 +468,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("exp_date", str_exp_date);
         params.put("expire_alarm",binding.expDateAlarm.getText().toString());
         params.put("uom_id", str_uom);
-        params.put("uom_po_id", str_uom_cate);
+        params.put("uom_po_id", str_uom);
         params.put("hsn_code", hsn_code);
         params.put("hsn_code_description", str_hsn_code_dec);
         params.put("detailed_type", str_detailed_type);
@@ -1120,7 +1128,18 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                         if (model_uom_type.getUomCategories() == null || model_uom_type.getUomCategories().size() == 0) {
 
 }else {
-                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), model_uom_type.getUomCategories());
+                            for (int i=0;i<model_uom_type.getUomCategories().size();i++){
+                                for (int j=0;j<model_uom_type.getUomCategories().get(i).getUomLines().size();j++){
+                                    uom_model_list=new UomLineModel();
+                                    uom_model_list.setId(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId());
+                                    uom_model_list.setName(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getName());
+                                    uomLines.add(uom_model_list);
+                                }
+
+
+                            }
+
+                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uomLines);
                            binding.etUomSpinner.setAdapter(adapter);
                         }
 

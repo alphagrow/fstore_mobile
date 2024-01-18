@@ -76,7 +76,7 @@ public class PurchaseItemListAdapter extends RecyclerView.Adapter<PurchaseItemLi
     public PurchaseItemListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.itemlist_row, parent, false);
+        View contactView = inflater.inflate(R.layout.item_purch_list_row, parent, false);
         PurchaseItemListAdapter.ViewHolder viewHolder = new PurchaseItemListAdapter.ViewHolder(contactView);
         return viewHolder;
     }

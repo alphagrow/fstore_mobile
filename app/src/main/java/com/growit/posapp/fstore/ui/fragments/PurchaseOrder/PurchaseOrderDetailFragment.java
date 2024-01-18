@@ -133,7 +133,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
                            total_qut +=  productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
                             total_receive_qut += qut_str;
                             // obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
-                            obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
+                            obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getProductId());
                             obj.putOpt("quantity", qut_str);
                             jsonArray.put(obj);
                         } catch (JSONException e) {
@@ -301,7 +301,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
             params.put("user_id", sm.getUserID()+"");
             params.put("token", sm.getJWTToken());
-        params.put("quantity", qut+"");
+        params.put("product_quantities", qut+"");
 
         params.put("purchase_order_id", purchase_order_id+"");
 
@@ -327,7 +327,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     Utility.dismissDialoge();
                 }
             }

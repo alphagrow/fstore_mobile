@@ -39,6 +39,7 @@ public class SessionManagement {
     public static final String KEY_PUSH_TOKEN = "PUSH_TOKEN";
 
     public static final String KEY_JWT_TOKEN = "JWT_TOKEN";
+    public static final String KEY_COMPANY_ID = "COMPANY_ID";
     public static final String KEY_DEVICE_ID = "DEVICE_ID";
 
     // Constructor
@@ -67,7 +68,17 @@ public class SessionManagement {
         // commit changes
         editor.commit();
     }
+    public int getCompanyID() {
+        int id=pref.getInt(KEY_COMPANY_ID,-1);
+        // return user
+        return id;
+    }
 
+    public void saveCompanyId(int user_id) {
+        editor.putInt(KEY_COMPANY_ID, user_id);
+        // commit changes
+        editor.commit();
+    }
     public void saveCrop(String _cropName) {
         editor.putString("cropName", _cropName);
         // commit changes

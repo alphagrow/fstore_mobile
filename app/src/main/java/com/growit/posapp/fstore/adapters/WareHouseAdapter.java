@@ -19,6 +19,7 @@ import com.growit.posapp.fstore.model.VendorModelList;
 import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.UpdateVendorFragment;
 import com.growit.posapp.fstore.ui.fragments.SaleManagement.UpdateWareHouseFragment;
+import com.growit.posapp.fstore.ui.fragments.SaleManagement.VendorListAndWareHouseListFragment;
 import com.skyhope.showmoretextview.ShowMoreTextView;
 
 import java.io.Serializable;
@@ -77,8 +78,8 @@ public class WareHouseAdapter extends RecyclerView.Adapter<WareHouseAdapter.View
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("warehouse_list", (Serializable) list);
                 bundle.putInt("position", position);
-//                bundle.putString("type_of_vendor_warehouse","warehouse");
-                Fragment fragment = UpdateWareHouseFragment.newInstance();
+                bundle.putString("type_of_vendor_warehouse","warehouse");
+                Fragment fragment = UpdateVendorFragment.newInstance();
                 fragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity)mContext).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();

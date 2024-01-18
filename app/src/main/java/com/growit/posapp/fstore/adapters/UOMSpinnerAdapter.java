@@ -10,15 +10,16 @@ import android.widget.TextView;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.UomCategoryModel;
+import com.growit.posapp.fstore.model.UomLineModel;
 
 import java.util.List;
 
 public class UOMSpinnerAdapter extends BaseAdapter {
     Context context;
-    List<UomCategoryModel> stateModelList;
+    List<UomLineModel> stateModelList;
     LayoutInflater inflter;
 
-    public UOMSpinnerAdapter(Context applicationContext, List<UomCategoryModel> stateNames) {
+    public UOMSpinnerAdapter(Context applicationContext, List<UomLineModel> stateNames) {
         this.context = applicationContext;
         this.stateModelList = stateNames;
         inflter = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

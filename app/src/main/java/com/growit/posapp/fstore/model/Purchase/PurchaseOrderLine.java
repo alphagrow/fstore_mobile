@@ -25,10 +25,21 @@ public class PurchaseOrderLine {
     @SerializedName("subtotal")
     @Expose
     private Double subtotal;
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
     @SerializedName("taxes_id")
     @Expose
     private String taxesId;
-
+    @SerializedName("product_id")
+    @Expose
+    private Integer productId;
     public String getProductName() {
         return productName;
     }

@@ -163,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                 String status = obj.optString("status");
                 int statusCode = obj.optInt("statuscode");
                 String name = obj.optString("name");
+                int company_id = obj.optInt("default_company");
                 String token = obj.optString("token");
                 String str_message = obj.optString("message");
 
@@ -175,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                     sm.createLoginSession(true, name, storeID, password, token);
                     sm.saveUserId(id);
+                    sm.saveCompanyId(company_id);
                     Toast.makeText(LoginActivity.this, R.string.LOGIN_SUCCESS, Toast.LENGTH_SHORT).show();
                    // getVendorList();
                     getGSTRequest();

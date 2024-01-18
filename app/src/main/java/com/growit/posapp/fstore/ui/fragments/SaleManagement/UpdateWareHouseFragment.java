@@ -68,6 +68,7 @@ public class UpdateWareHouseFragment extends Fragment {
             binding.etCompanyName.setText(warehouse_model.get(position).getName());
             binding.etCode.setText(warehouse_model.get(position).getCode());
             binding.addressName.setText(warehouse_model.get(position).getAddress().getCity());
+
         }
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override

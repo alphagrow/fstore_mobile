@@ -518,7 +518,7 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
         params.put("taluka_id", talukaStr);
         params.put("l10n_in_purchase_journal_id", "2");
         params.put("l10n_in_purchase_journal_id", "1");
-        params.put("company_id", "1");
+        params.put("company_id", sm.getCompanyID()+"");
 //        params.put("company_id", company_id);
 
         Utility.showDialoge("", getActivity());
