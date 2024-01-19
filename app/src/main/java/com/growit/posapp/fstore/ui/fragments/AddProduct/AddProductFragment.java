@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -69,6 +70,7 @@ import com.growit.posapp.fstore.adapters.POSAdapter;
 import com.growit.posapp.fstore.adapters.UOMAdapter;
 import com.growit.posapp.fstore.adapters.UOMSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
+import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.model.AttributeModel;
 import com.growit.posapp.fstore.model.AttributeValue;
 import com.growit.posapp.fstore.model.ListAttributesModel;
@@ -79,6 +81,8 @@ import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.UomCategoryModel;
 import com.growit.posapp.fstore.model.UomLineModel;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.tables.GST;
+import com.growit.posapp.fstore.ui.LoginActivity;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -111,7 +115,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private ProgressBar progressBar;
     private ImageView imageView, video_image;
     private VideoView videoView;
-    String str_product_name, str_product_price, str_uom,str_uom_cate;
+    String str_product_name, str_product_price, str_uom, str_uom_cate, vendor_tax = "",customer_tax="";
     String imageFilePath;
     ProgressBar idPBLoading;
     private TextView video_text;
@@ -122,25 +126,25 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private String str_image_aa;
     ProgressDialog progressDialog;
     MediaController mediaControls;
-//    private RecyclerView recy_image;
+    //    private RecyclerView recy_image;
     Bitmap bitmap = null;
-//    RadioGroup sel_non_gov;
+    //    RadioGroup sel_non_gov;
     ImageAdapter adapter;
-//    TextView mfd_date, exp_date, exp_date_alarm;
+    //    TextView mfd_date, exp_date, exp_date_alarm;
     ProductDetail model_uom_type;
     DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
     FragmentAddProductBinding binding;
 
     String str_mfd_date, str_exp_date;
-    private String[] detailed_type = {"product","service"};
+    private String[] detailed_type = {"product", "service"};
     private String[] uom_list = {"Days"};
     String str_detailed_type;
     String str_non_gov_product = "Non Gov-Authorized";
-//    String crop_id;
+    //    String crop_id;
     ListAttributesModel model_attribute;
     List<AttributeModel> model = new ArrayList<>();
-    List<UomLineModel> uomLines= new ArrayList<>();
+    List<UomLineModel> uomLines = new ArrayList<>();
     List<Value> cropList = new ArrayList<>();
     List<UomCategoryModel> uom_model = new ArrayList<>();
     List<UomCategoryModel> uom_model_type = new ArrayList<>();
@@ -151,7 +155,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     Bitmap imageBitmap = null;
     String str_image_crop;
 
- //   List<StateModel> uom_list = new ArrayList<>();
+    //   List<StateModel> uom_list = new ArrayList<>();
     public AddProductFragment() {
     }
 
@@ -160,6 +164,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
     UomLineModel uom_model_list;
+    List<StateModel> tax_list = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,13 +205,21 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             }
         });
+        if (Utility.isNetworkAvailable(getContext())) {
+            getTaxList();
+            getUOMList();
+            getCropRequest();
+            getAttributeList();
+        } else {
+            Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
+        }
 
         binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-     //           if (position != 0) {
-                    str_uom = uomLines.get(position).getId() + "";
+                //           if (position != 0) {
+                str_uom = uomLines.get(position).getId() + "";
                 binding.etUomSpinnType.setText(uomLines.get(position).getName());
 //                    List<UomLineModel> str_uom = uom_model.get(position).getUomLines();
 //                    if(model_uom_type.getUomCategories().get(position).getUomLines() != null) {
@@ -258,9 +272,36 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             }
         });
-        getUOMList();
-        getCropRequest();
-        getAttributeList();
+
+
+        binding.spinVendorTax.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    vendor_tax = tax_list.get(position).getId() + "";
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        binding.spinCustomerTax.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    customer_tax = tax_list.get(position).getId() + "";
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         binding.expDateAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,8 +364,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         binding.selNonGov.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-             // checkedId is the RadioButton selected
-             // RadioButton rb = view.findViewById(checkedId);
+                // checkedId is the RadioButton selected
+                // RadioButton rb = view.findViewById(checkedId);
                 if (binding.govNonAuth.getText().toString().equalsIgnoreCase("Non-Authorized")) {
                     str_non_gov_product = "Non Gov-Authorized";
                 } else if (binding.govAuth.getText().toString().equalsIgnoreCase("Gov-Authorized")) {
@@ -380,7 +421,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             String str_batchNumber = binding.batchNumber.getText().toString();
             String str_cirNumber = binding.cirNumber.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
-              str_uom_cate = binding.etUomSpinnType.getText().toString();
+
+            str_uom_cate = binding.etUomSpinnType.getText().toString();
             String str_description = binding.description.getText().toString();
             String str_hsn_code = binding.edHsnCode.getText().toString();
             String str_hsn_code_dec = binding.edHsnCodeDescription.getText().toString();
@@ -394,8 +436,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "Enter the Product price", Toast.LENGTH_SHORT).show();
                 return;
             }
-//            if (str_image_crop.length()==0) {
-//                Toast.makeText(getActivity(), "Select Product Image", Toast.LENGTH_SHORT).show();
+//            if (customer_tax.length() == 0) {
+//                Toast.makeText(getActivity(), "Enter the Customer tax", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            if (vendor_tax.length() == 0) {
+//                Toast.makeText(getActivity(), "Enter the Vendor tax", Toast.LENGTH_SHORT).show();
 //                return;
 //            }
 //            if (str_uom_cate.length()==0) {
@@ -437,12 +483,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
 
             Log.d("attribute_json_array", attribute_json_array.toString());
-            if (attribute_json_array.length()!=0) {
+            if (attribute_json_array.length() != 0) {
                 if (str_crop_id != null) {
-                    if(str_image_crop !=null) {
-                        addProductRequest(str_image_crop, str_hsn_code, str_hsn_code_dec, str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
+                    if (str_image_crop != null) {
+                        addProductRequest(vendor_tax, str_image_crop, str_hsn_code, str_hsn_code_dec, str_product_name, str_product_price, str_techNamePest, str_brand_name, str_mkt_by, str_batchNumber, str_cirNumber, str_whichPest, str_description, selected_crop_id, attribute_json_array);
 
-                    }else {
+                    } else {
                         Toast.makeText(getActivity(), "Select Product Image", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -455,7 +501,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
 
-    private void addProductRequest(String str_image_crop,String hsn_code, String str_hsn_code_dec, String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id, JSONArray attribute_json_array) {
+    private void addProductRequest(String str_tax, String str_image_crop, String hsn_code, String str_hsn_code_dec, String product_name, String product_price, String str_techNamePest, String str_brand_name, String str_mkt_by, String str_batchNumber, String cir_no, String str_whichPest, String str_description, String selected_crop_id, JSONArray attribute_json_array) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
@@ -466,9 +512,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         params.put("which_pest", str_whichPest);
         params.put("non_gov_product", str_non_gov_product);
         params.put("exp_date", str_exp_date);
-        params.put("expire_alarm",binding.expDateAlarm.getText().toString());
+        params.put("expire_alarm", binding.expDateAlarm.getText().toString());
         params.put("uom_id", str_uom);
         params.put("uom_po_id", str_uom);
+        params.put("taxes_id", customer_tax);
+        params.put("supplier_taxes_id", vendor_tax);
         params.put("hsn_code", hsn_code);
         params.put("hsn_code_description", str_hsn_code_dec);
         params.put("detailed_type", str_detailed_type);
@@ -728,6 +776,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         startActivityForResult(Intent.createChooser(intent, "Select a Video "), PICK_FROM_VIDEO);
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1100,12 +1149,13 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             }
         });
     }
+
     private void getUOMList() {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_UOM_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         //    Utility.showDialoge("Please wait while a moment...", getActivity());
-        Log.d("ALL_CROPS_url",url);
+        Log.d("ALL_CROPS_url", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -1127,10 +1177,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 //                        uom_model_type.add(stateModel);
                         if (model_uom_type.getUomCategories() == null || model_uom_type.getUomCategories().size() == 0) {
 
-}else {
-                            for (int i=0;i<model_uom_type.getUomCategories().size();i++){
-                                for (int j=0;j<model_uom_type.getUomCategories().get(i).getUomLines().size();j++){
-                                    uom_model_list=new UomLineModel();
+                        } else {
+                            for (int i = 0; i < model_uom_type.getUomCategories().size(); i++) {
+                                for (int j = 0; j < model_uom_type.getUomCategories().get(i).getUomLines().size(); j++) {
+                                    uom_model_list = new UomLineModel();
                                     uom_model_list.setId(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId());
                                     uom_model_list.setName(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getName());
                                     uomLines.add(uom_model_list);
@@ -1140,7 +1190,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                             }
 
                             UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uomLines);
-                           binding.etUomSpinner.setAdapter(adapter);
+                            binding.etUomSpinner.setAdapter(adapter);
                         }
 
 
@@ -1165,7 +1215,49 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 ////                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uom_model);
 ////                            binding.etUomSpinner.setAdapter(adapter);
 ////                        }
-}
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+
+    private void getTaxList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = ApiConstants.BASE_URL + ApiConstants.GST_API + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Log.d("gst_d", url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                tax_list = new ArrayList<>();
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        JSONArray jsonArray = obj.getJSONArray("gst_tax_list");
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                StateModel stateModel = new StateModel();
+                                JSONObject data = jsonArray.getJSONObject(i);
+                                int id = data.optInt("id");
+                                String name = data.optString("name");
+                                stateModel.setId(id);
+                                stateModel.setName(name);
+                                tax_list.add(stateModel);
+                            }
+                            if (getContext() != null) {
+                                CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), tax_list);
+                                binding.spinCustomerTax.setAdapter(adapter);
+                                binding.spinVendorTax.setAdapter(adapter);
+                            }
+                        }
+                    }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

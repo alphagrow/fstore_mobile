@@ -25,26 +25,42 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.SimilarProductAdapter;
+import com.growit.posapp.fstore.adapters.UOMSpinnerAdapter;
+import com.growit.posapp.fstore.model.ConfigurationModel;
 import com.growit.posapp.fstore.model.DataPart;
+import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.ProductDetail;
+import com.growit.posapp.fstore.model.StateModel;
+import com.growit.posapp.fstore.model.UomLineModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyMultipartRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -102,7 +118,13 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 finish();
             }
         });
+        if (Utility.isNetworkAvailable(this)) {
+            getUserProfile();
 
+        } else {
+            Toast.makeText(this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+
+        }
     }
 
 
@@ -288,6 +310,85 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
+    }
+//    private void getUserProfile() {
+//        SessionManagement sm = new SessionManagement(this);
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        String url = ApiConstants.BASE_URL + ApiConstants.GET_USER_PROFILE + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+//        //    Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Log.d("ALL_CROPS_url",url);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.v("Response", response.toString());
+//                JSONObject obj = null;
+//                try {
+//                    obj = new JSONObject(response.toString());
+//                    int statusCode = obj.optInt("statuscode");
+//                    String status = obj.optString("status");
+//
+//                    if (statusCode==200&&status.equalsIgnoreCase("success")) {
+//                        JSONArray jsonArray = obj.getJSONArray("user_profile");
+//
+//                        if (jsonArray.length() > 0) {
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//
+//                                JSONObject data = jsonArray.getJSONObject(i);
+//                                String name = data.optString("name");
+//                                String email = data.optString("email");
+//                                String login = data.optString("login");
+////                                emailET.setText(email);
+////                                nameET.setText(name);
+////                                mobileET.setText(login);
+//                            }
+//
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }, error -> Toast.makeText(this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+//        queue.add(jsonObjectRequest);
+//    }
+    private void getUserProfile() {
+        SessionManagement sm = new SessionManagement(this);
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_USER_PROFILE + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response_product", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        JSONObject jsonArray = obj.getJSONObject("user_profile");
+
+                        if (jsonArray.length() > 0) {
+                           // for (int i = 0; i < jsonArray.length(); i++) {
+
+
+                                String name = jsonArray.optString("name");
+                                String email = jsonArray.optString("email");
+                                String login = jsonArray.optString("login");
+                                emailET.setText(email);
+                                nameET.setText(name);
+                                mobileET.setText(login);
+                          //  }
+
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
     }
 
 }

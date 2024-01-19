@@ -322,6 +322,7 @@ public class LoginActivity extends AppCompatActivity {
         SessionManagement sm = new SessionManagement(LoginActivity.this);
         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
         String url = ApiConstants.BASE_URL + ApiConstants.GST_API + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+      Log.d("gst_d",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

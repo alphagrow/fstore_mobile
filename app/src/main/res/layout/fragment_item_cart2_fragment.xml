@@ -259,7 +259,7 @@
                             android:layout_weight="1"
                             android:textColor="#E1626262"
                             android:textStyle="bold"
-                            android:text="GST 18%"
+                            android:text="GST Amount"
                             android:textSize="14sp" />
 
                         <TextView

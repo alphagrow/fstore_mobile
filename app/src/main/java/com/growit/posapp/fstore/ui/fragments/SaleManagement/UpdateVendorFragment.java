@@ -561,7 +561,7 @@ public class UpdateVendorFragment extends Fragment {
         params.put("district_id", districtStr);
         params.put("taluka_id", talukaStr);
         params.put("warehouse_id", warehouse_model.get(position).getId()+"");
-        params.put("company_id", sm.getCompanyID()+"");
+//        params.put("company_id", sm.getCompanyID()+"");
         Utility.showDialoge("", getActivity());
         Log.v("create_ware_house", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.UPDATE_WAREHOUSE, new VolleyCallback() {

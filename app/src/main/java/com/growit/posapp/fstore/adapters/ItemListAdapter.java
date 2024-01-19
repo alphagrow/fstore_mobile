@@ -51,7 +51,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView itemName, itemPriceTxt, itemVariants;
+        public TextView itemName, itemPriceTxt, itemVariants,item_Txt;
         EditText discount_per;
         public ImageView itemImage, deleteBtn;
         public NumberPicker number_picker;
@@ -64,6 +64,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
             itemImage = itemView.findViewById(R.id.itemImage);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             discount_per = itemView.findViewById(R.id.discount_per);
+            item_Txt = itemView.findViewById(R.id.item_Txt);
         //    number_picker.setMax(100);
             number_picker.setMin(1);
             number_picker.setUnit(1);
@@ -84,10 +85,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ItemListAdapter.ViewHolder holder, int position) {
         PosOrder product = customerDataList.get(position);
-      //  holder.discount_per.setText(String.valueOf(product.getDiscount_per()));
+        holder.item_Txt.setText("Tax : "+String.valueOf(product.getGst())+" %");
+        holder.discount_per.setText(String.valueOf(product.getDiscount_per()));
         holder.discount_per.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
 
             }
 
@@ -95,13 +98,24 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if(!s.toString().isEmpty()) {
+//                    holder.discount_per.setText(String.valueOf(product.getDiscount_per()));
                     product.setDiscount_per(Double.parseDouble(s.toString()));
 
                     Log.d("discount_f", s.toString());
                     AsyncTask.execute(() -> {
-                    DatabaseClient.getInstance(mContext).getAppDatabase().productDao().updateProductCardDiscount(product.getDiscount_per(),product.getProductID(),product.getProductVariants(),(int)product.getQuantity());
+                        DatabaseClient.getInstance(mContext).getAppDatabase().productDao().updateProductCardDiscount(product.getDiscount_per(),product.getProductID(),product.getProductVariants(),(int)product.getQuantity());
                         SaveCardListToSomeActivity();
                     });
+                    mCallback.onClick(holder.getAdapterPosition());
+
+                }else {
+
+                    product.setDiscount_per(0.0);
+                    AsyncTask.execute(() -> {
+                        DatabaseClient.getInstance(mContext).getAppDatabase().productDao().updateProductCardDiscount(product.getDiscount_per(),product.getProductID(),product.getProductVariants(),(int)product.getQuantity());
+                        SaveCardListToSomeActivity();
+                    });
+                    mCallback.onClick(holder.getAdapterPosition());
                 }
             }
 
@@ -110,7 +124,6 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ViewHo
 
             }
         });
-
         TextView textView = holder.itemName;
         textView.setText(product.getProductName());
         holder.number_picker.setMax(product.getTotalQuantity());

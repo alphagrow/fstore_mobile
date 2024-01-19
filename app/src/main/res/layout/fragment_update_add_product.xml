@@ -109,7 +109,36 @@
                     android:padding="8dp"
                     android:requiresFadingEdge="vertical"
                     android:textSize="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Product Tax"
+                    android:textColor="@color/edt_top_text_color"
+                    />
 
+                <EditText
+                    android:id="@+id/edi_tax"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/land_size"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:padding="8dp"
+                    android:requiresFadingEdge="vertical"
+                    android:textSize="14dp" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -206,25 +235,27 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="Unit of measure Category"
+                    android:text="Unit of Measure"
                     android:textColor="@color/edt_top_text_color"
                     />
-
-                <LinearLayout
+                <EditText
+                    android:id="@+id/et_uom_spinn_type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="55dp"
                     android:layout_marginStart="@dimen/twenty_five"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut">
-
-                    <Spinner
-                        android:id="@+id/et_uom_spinn_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp" />
-                </LinearLayout>
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/land_size"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:enabled="false"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="8dp"
+                    android:requiresFadingEdge="vertical"
+                    android:textSize="14dp" />
                 <LinearLayout
                     android:id="@+id/linearLayoutMain"
                     android:layout_width="match_parent"

@@ -113,7 +113,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     private ProgressBar progressBar;
     private ImageView imageView, video_image;
     private VideoView videoView;
-    String str_product_name, str_product_price, str_uom, str_uom_cate,str_size, str_color, str_whole_pattern;
+    String str_product_name, str_product_price, str_uom, str_uom_cate,str_tax, str_color, str_whole_pattern;
     String imageFilePath;
     ProgressBar idPBLoading;
     private TextView video_text;
@@ -206,7 +206,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             binding.whichPest.setText(list.get(position).getWhichPest());
             binding.expDate.setText(list.get(position).getExpDate());
             binding.description.setText(list.get(position).getDescription());
+//            binding.ediTax.setText(list.get(position).getTaxesId());
              attributes = list.get(position).getAttributes();
+             Log.d("uom_id_f",list.get(position).getUomId()+"FFFF  "+list.get(position).getUomPoId());
 
             if (Utility.isNetworkAvailable(getContext())) {
                 getUOMList();
@@ -259,43 +261,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //           if (position != 0) {
-                str_uom = model_uom_type.getUomCategories().get(position).getId() + "";
-//                    List<UomLineModel> str_uom = uom_model.get(position).getUomLines();
-//                if(model_uom_type.getUomCategories().get(position).getUomLines() != null) {
-//                    uom_model_type.clear();
-//                    UomCategoryModel stateModel = new UomCategoryModel();
-//                    stateModel.setId(-1);
-//                    stateModel.setName("--Select UOM--");
-//                    uom_model_type.add(stateModel);
-//                    for (int i = 0; i < model_uom_type.getUomCategories().get(position).getUomLines().size(); i++) {
-//                        stateModel = new UomCategoryModel();
-//                        stateModel.setId(model_uom_type.getUomCategories().get(position).getUomLines().get(i).getId());
-//                        stateModel.setName(model_uom_type.getUomCategories().get(position).getUomLines().get(i).getName());
-//                        uom_model_type.add(stateModel);
-//                    }
-//                    if (getContext() != null) {
-//                        UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uom_model_type);
-//                        binding.etUomSpinnType.setAdapter(adapter);
-//
-//                    }
-//
-//
-//                    //   }
-//                }
-            }
+                str_uom = uomLines.get(position).getId() + "";
+                binding.etUomSpinnType.setText(uomLines.get(position).getName());
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        binding.etUomSpinnType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    str_uom_cate  = uom_model_type.get(position).getId() + "";
-
-                }
             }
 
             @Override
@@ -372,6 +340,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         if (view.getId() == R.id.update_btn) {
             str_product_name = binding.etProductName.getText().toString();
             str_product_price = binding.etProductPrice.getText().toString();
+            str_tax = binding.ediTax.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
             String str_description = binding.description.getText().toString();
             String str_exp_date = binding.expDate.getText().toString();
@@ -383,7 +352,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                return;
 //            }
 
-
+            if (str_tax.length()==0) {
+                Toast.makeText(getActivity(), "Enter the Product tax", Toast.LENGTH_SHORT).show();
+                return;
+            }
             JSONArray attribute_json_array = new JSONArray();
             selected_value_map.forEach((key, value) -> {
                 if (value != null) {
@@ -437,6 +409,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         params.put("detailed_type", str_detailed_type);
         params.put("attribute_lines", attribute_json_array.toString());
         params.put("product_id", product_id);
+        //       params.put("taxes_id", str_tax);
+
         params.put("uom_id", str_uom);
         params.put("uom_po_id", str_uom);
         params.put("pos_categ_id", crop_id_list+"");
@@ -1064,14 +1038,18 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                                     uom_model_list=new UomLineModel();
                                     uom_model_list.setId(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId());
                                     uom_model_list.setName(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getName());
-
+                                    if (String.valueOf(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId()).equalsIgnoreCase(list.get(position).getUomId())) {
+                                        spinnerPosition = j;
+                                    }
+                                    uomLines.add(uom_model_list);
                                 }
-                                uomLines.add(uom_model_list);
+
 
                             }
 
                             UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uomLines);
                             binding.etUomSpinner.setAdapter(adapter);
+                            binding.etUomSpinner.setSelection(spinnerPosition);
                         }
 
 
