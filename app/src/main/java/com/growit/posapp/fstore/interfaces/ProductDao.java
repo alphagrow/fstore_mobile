@@ -27,7 +27,7 @@ public interface ProductDao {
     @Query("UPDATE PosOrder SET quantity = :qty WHERE productID = :id AND productVariants=:variants")
     int updateProductCardQuantity(int qty,int id,String variants);
 
-    @Query("UPDATE PosOrder SET quantity = quantity+:qty WHERE productID = :id AND productVariants=:variants")
+    @Query("UPDATE PosOrder SET quantity = :qty WHERE productID = :id AND productVariants=:variants")
     int updateProductQuantity(int qty,int id,String variants);
 
     @Query("SELECT SUM(quantity) FROM PosOrder")

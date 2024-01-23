@@ -8,52 +8,29 @@
         android:background="#ffff"
         android:orientation="vertical">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="65dp"
+                android:weightSum="3"
+                android:background="@drawable/back_images"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:weightSum="3"
-                    android:background="@drawable/back_images"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginStart="10dp"
-                        android:id="@+id/backBtn"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="start|center"
-                        android:background="@drawable/baseline_arrow_back_24">
-                    </ImageView>
-                    <TextView
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginStart="50dp"
-                        android:id="@+id/titleTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="start|center"
-                        android:fontFamily="@font/roboto_regular"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:text=""
-                        android:textColor="@color/white" />
-
-
-                </LinearLayout>
-
+                <ImageView
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/backBtn"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="start|center"
+                    android:background="@drawable/baseline_arrow_back_24">
+                </ImageView>
                 <TextView
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="50dp"
+                    android:id="@+id/titleTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -61,8 +38,66 @@
                     android:fontFamily="@font/roboto_regular"
                     android:textStyle="bold"
                     android:textSize="18sp"
+                    android:text=""
+                    android:textColor="@color/white" />
+            </LinearLayout>
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+            <LinearLayout
+                android:background="#ffff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:padding="2dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/helvetica_neue_medium"
+                    android:gravity="center"
+                    android:text="Register your business by using this form. Required fields are marked with an asterisk (*). "
+                    android:textColor="#393939"
+                    android:textStyle="normal"
+                    android:textSize="16sp"/>
+
+<!--                <TextView-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:gravity="start|center"-->
+<!--                    android:fontFamily="@font/roboto_regular"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:text=""-->
+<!--                    android:textColor="#A4000000" />-->
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#A3959191">
+
+                </View>
+                <TextView
+                    android:padding="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:fontFamily="@font/helvetica_neue_medium"
                     android:text="User Details"
-                    android:textColor="#A4000000" />
+                    android:textColor="#B3000000"
+                    android:textStyle="normal"
+                    android:textSize="18sp"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,7 +107,7 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="User Name"
+                    android:text="User Name *"
                     android:textColor="@color/edt_top_text_color"
                     />
 
@@ -82,7 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="@dimen/twenty_five"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -100,7 +135,7 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="User Id"
+                    android:text="User *"
                     android:textColor="@color/edt_top_text_color"
                     />
 
@@ -109,8 +144,8 @@
                     android:id="@+id/ed_user_id"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="@dimen/twenty_five"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -128,14 +163,14 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="Password"
+                    android:text="Password *"
                     android:textColor="@color/edt_top_text_color"
                     />
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="@dimen/twenty_five"
                     app:passwordToggleDrawable="@drawable/show_password_selector"
                     app:passwordToggleEnabled="true"
@@ -157,18 +192,20 @@
                         android:textColor="@color/black_overlay" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="20dp"
+                    android:padding="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="20dp"
                     android:layout_gravity="center"
-                    android:gravity="start|center"
-                    android:fontFamily="@font/roboto_regular"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/helvetica_neue_medium"
                     android:text="Company Details"
-                    android:textColor="#A4000000" />
+                    android:textColor="#B3000000"
+                    android:textStyle="normal"
+                    android:textSize="18sp"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -178,7 +215,7 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="Company Name"
+                    android:text="Company Name *"
                     android:textColor="@color/edt_top_text_color"
                     />
 
@@ -187,8 +224,8 @@
                     android:id="@+id/et_company_name"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -206,65 +243,7 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="Mobile"
-                    android:textColor="@color/edt_top_text_color"
-                    />
-
-                <EditText
-                    android:importantForAutofill="no"
-                    android:id="@+id/et_mobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="25dp"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:hint=""
-                    android:maxLength="10"
-                    android:inputType="number"
-                    android:textSize="14dp"
-                    android:padding="8dp" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
-                    android:layout_marginEnd="@dimen/end_marg_text"
-                    android:layout_marginStart="@dimen/start_marg_text"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
-                    android:text="Phone"
-                    android:textColor="@color/edt_top_text_color"
-                    />
-
-                <EditText
-                    android:importantForAutofill="no"
-                    android:id="@+id/et_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="25dp"
-                    android:background="@drawable/custom_edit_text_cut"
-                    android:drawablePadding="@dimen/ten"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:hint=""
-                    android:maxLength="10"
-                    android:inputType="number"
-                    android:textSize="14dp"
-                    android:padding="8dp" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
-                    android:layout_marginEnd="@dimen/end_marg_text"
-                    android:layout_marginStart="@dimen/start_marg_text"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
-                    android:text="Email"
+                    android:text="Email *"
                     android:textColor="@color/edt_top_text_color"
                     />
 
@@ -273,8 +252,8 @@
                     android:id="@+id/et_useremail"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -283,38 +262,125 @@
                     android:inputType="textEmailAddress"
                     android:textSize="14dp"
                     android:padding="8dp" />
-
-
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_marginEnd="5dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
                     android:layout_marginTop="@dimen/top_marg_text"
-                    android:layout_marginEnd="@dimen/end_marg_text"
-                    android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="State"
+                    android:text="Mobile *"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
+                <EditText
+                    android:importantForAutofill="no"
+                    android:id="@+id/et_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
+
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:maxLength="10"
+                    android:inputType="number"
+                    android:textSize="14dp"
+                    android:padding="8dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginStart="5dp"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Phone *"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
+                <EditText
+                    android:importantForAutofill="no"
+                    android:id="@+id/et_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:maxLength="10"
+                    android:inputType="number"
+                    android:textSize="14dp"
+                    android:padding="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_marginEnd="5dp"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="State *"
                     android:textColor="@color/edt_top_text_color"
                     />
 
                 <LinearLayout
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
                         android:id="@+id/stateSpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="55dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp"
                         android:padding="5dp" />
                 </LinearLayout>
-
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginStart="5dp"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -324,25 +390,25 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="District"
+                    android:text="District *"
                     android:textColor="@color/edt_top_text_color"
                     />
 
                 <LinearLayout
+                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
                         android:id="@+id/citySpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_centerHorizontal="true"
                         android:padding="5dp" />
                 </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -353,16 +419,16 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="Taluka"
+                    android:text="Taluka *"
                     android:textColor="@color/edt_top_text_color"
                     />
 
                 <LinearLayout
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
@@ -391,8 +457,8 @@
                     android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -419,8 +485,8 @@
                     android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -448,8 +514,8 @@
                     android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -479,8 +545,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
                     android:maxLength="15"
@@ -508,8 +574,8 @@
                     android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -536,8 +602,8 @@
                     android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -564,8 +630,8 @@
                     android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -592,8 +658,8 @@
                     android:importantForAutofill="no"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawablePadding="@dimen/ten"
@@ -642,6 +708,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp" />
             </LinearLayout>
-        </ScrollView>
+</ScrollView>
+
+        </LinearLayout>
     </LinearLayout>
 </layout>

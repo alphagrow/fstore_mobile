@@ -111,6 +111,7 @@ import java.util.Map;
 
 public class AddProductFragment extends Fragment implements View.OnClickListener {
 
+
     ArrayList<Bitmap> imagesUriArrayList;
     private ProgressBar progressBar;
     private ImageView imageView, video_image;
@@ -154,6 +155,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     String selected_crop_id;
     Bitmap imageBitmap = null;
     String str_image_crop;
+    StateModel stateModel;
+
 
     //   List<StateModel> uom_list = new ArrayList<>();
     public AddProductFragment() {
@@ -186,8 +189,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     private void init() {
 
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
-        binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
+
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         progressBar = new ProgressBar(getActivity());
@@ -436,14 +438,15 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "Enter the Product price", Toast.LENGTH_SHORT).show();
                 return;
             }
-//            if (customer_tax.length() == 0) {
-//                Toast.makeText(getActivity(), "Enter the Customer tax", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//            if (vendor_tax.length() == 0) {
-//                Toast.makeText(getActivity(), "Enter the Vendor tax", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
+            if(customer_tax.length() == 0){
+                Toast.makeText(getActivity(),"Select Customer", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(vendor_tax.length() == 0){
+                Toast.makeText(getActivity(), "Select Vendor", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
 //            if (str_uom_cate.length()==0) {
 //                Toast.makeText(getActivity(), "Select UOM Category", Toast.LENGTH_SHORT).show();
 //                return;
@@ -574,7 +577,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
     private void takePhoto() {
-        final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
+        final CharSequence[] options = {"Take Photo", "Select photo from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add Photo!");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -582,7 +585,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             public void onClick(DialogInterface dialog, int item) {
                 if (options[item].equals("Take Photo")) {
                     askForPermission("android.permission.CAMERA", 2);
-                } else if (options[item].equals("Select multiple photos from Gallery")) {
+                } else if (options[item].equals("Select  photo from Gallery")) {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         // Do something for lollipop and above versions
                         askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
@@ -908,7 +911,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byteFormat = stream.toByteArray();
-// Get the Base64 string
+        // Get the Base64 string
         String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
 
         return imgString;
@@ -1241,9 +1244,13 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         JSONArray jsonArray = obj.getJSONArray("gst_tax_list");
+                        StateModel stateModel = new StateModel();
+                        stateModel.setId(-1);
+                        stateModel.setName("--Select tax--");
+                        tax_list.add(stateModel);
                         if (jsonArray.length() > 0) {
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                StateModel stateModel = new StateModel();
+                                stateModel = new StateModel();
                                 JSONObject data = jsonArray.getJSONObject(i);
                                 int id = data.optInt("id");
                                 String name = data.optString("name");

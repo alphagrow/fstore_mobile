@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -59,6 +60,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.AttributeListSpinnerAdapter;
+import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
 
 
@@ -113,7 +116,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     private ProgressBar progressBar;
     private ImageView imageView, video_image;
     private VideoView videoView;
-    String str_product_name, str_product_price, str_uom, str_uom_cate,str_tax, str_color, str_whole_pattern;
+    String str_product_name, str_product_price, str_uom, str_uom_cate,str_tax, str_color, str_whole_pattern,str_product_type,vendor_tax;
     String imageFilePath;
     ProgressBar idPBLoading;
     private TextView video_text;
@@ -128,9 +131,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     RadioGroup sel_non_gov;
     ImageAdapter adapter;
     TextView mfd_date,exp_date,exp_date_alarm;
-    String str_detailed_type;
-    private String[] detailed_type = {"product"};
-
+    String str_image_crop;
     DatePickerDialog.OnDateSetListener date_mfd,date_exp,date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
     FragmentUpdateAddProductBinding binding;
@@ -148,12 +149,15 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     List<Attribute> attributes;
     //    private static final int SELECT_VIDEO = 3;
     ArrayList<String>crop_id_list = new ArrayList<>();
-   String str_crop_id;
+   String str_crop_id,customer_tax;
     ArrayList<Integer>sel_value_id = new ArrayList<>();
     ProductDetail model_uom_type;
     List<UomCategoryModel> uom_model_type = new ArrayList<>();
     UomLineModel uom_model_list;
     List<UomLineModel> uomLines= new ArrayList<>();
+
+    Bitmap imageBitmap = null;
+    List<StateModel> tax_list = new ArrayList<>();
     public UpdateAddProductFragment() {
         // Required empty public constructor
     }
@@ -206,13 +210,14 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             binding.whichPest.setText(list.get(position).getWhichPest());
             binding.expDate.setText(list.get(position).getExpDate());
             binding.description.setText(list.get(position).getDescription());
-//            binding.ediTax.setText(list.get(position).getTaxesId());
+            binding.ediProductType.setText(list.get(position).getDetailedType());
              attributes = list.get(position).getAttributes();
              Log.d("uom_id_f",list.get(position).getUomId()+"FFFF  "+list.get(position).getUomPoId());
 
             if (Utility.isNetworkAvailable(getContext())) {
+                getTaxList();
                 getUOMList();
-               getCropRequest();
+                getCropRequest();
                 getAttributeList();
             } else {
                 Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -224,20 +229,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         progressBar = new ProgressBar(getActivity());
         progressBar.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         binding.updateBtn.setOnClickListener(this);
-        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
-        binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
-        binding.detailTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(R.color.text_color);
-                str_detailed_type = detailed_type[position];
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
 
         binding.expDate.setOnClickListener(new View.OnClickListener() {
@@ -298,6 +290,34 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 }
             }
         });
+        binding.spinVendorTax.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    vendor_tax = tax_list.get(position).getId() + "";
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        binding.spinCustomerTax.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    customer_tax = tax_list.get(position).getId() + "";
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,7 +338,20 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 }
             }
         });
+        binding.typeVariantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                String    attributes_id = model.get(position).getId() + "";
 
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
 
@@ -340,7 +373,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         if (view.getId() == R.id.update_btn) {
             str_product_name = binding.etProductName.getText().toString();
             str_product_price = binding.etProductPrice.getText().toString();
-            str_tax = binding.ediTax.getText().toString();
+            str_product_type = binding.ediProductType.getText().toString();
             String str_whichPest = binding.whichPest.getText().toString();
             String str_description = binding.description.getText().toString();
             String str_exp_date = binding.expDate.getText().toString();
@@ -352,8 +385,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                return;
 //            }
 
-            if (str_tax.length()==0) {
-                Toast.makeText(getActivity(), "Enter the Product tax", Toast.LENGTH_SHORT).show();
+            if (str_product_type.length()==0) {
+                Toast.makeText(getActivity(), "Enter the Product type", Toast.LENGTH_SHORT).show();
                 return;
             }
             JSONArray attribute_json_array = new JSONArray();
@@ -406,11 +439,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         params.put("which_pest", str_whichPest);
         params.put("non_gov_product", str_non_gov_product);
         params.put("exp_date", str_exp_date);
-        params.put("detailed_type", str_detailed_type);
+        params.put("detailed_type", str_product_type);
         params.put("attribute_lines", attribute_json_array.toString());
         params.put("product_id", product_id);
-        //       params.put("taxes_id", str_tax);
-
+        //params.put("taxes_id", str_tax);
         params.put("uom_id", str_uom);
         params.put("uom_po_id", str_uom);
         params.put("pos_categ_id", crop_id_list+"");
@@ -458,7 +490,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         //  hideKeyboard(activity);
     }
     private void takePhoto() {
-        final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
+        final CharSequence[] options = {"Take Photo", "Select photo from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add Photo!");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -466,7 +498,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             public void onClick(DialogInterface dialog, int item) {
                 if (options[item].equals("Take Photo")) {
                     askForPermission("android.permission.CAMERA", 2);
-                } else if (options[item].equals("Select multiple photos from Gallery")) {
+                } else if (options[item].equals("Select  photo from Gallery")) {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         // Do something for lollipop and above versions
                         askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
@@ -480,6 +512,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             }
         });
         builder.show();
+
+
     }
 
 
@@ -502,37 +536,22 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     }
 
     private void fromGallery() {
-        binding.imageSet.setVisibility(View.GONE);
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_FROM_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_FROM_FILE);
+//        binding.imageSet.setVisibility(View.GONE);
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        startActivityForResult(intent, PICK_FROM_FILE);
     }
 
     /**
      * Open camera when user click on camera
      */
-    private void openCamera() {
-        Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (picture.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photo = null;
-            try {
-                photo = createImageFile();
-
-            } catch (IOException ex) {
-            }
-            if (photo != null) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
-//                Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName(), photo);
-//                picture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                startActivityForResult(picture, PICK_FROM_CAMERA);
-            }
-
-        }
-    }
     /**
      * Open Video when user click on camera
      */
@@ -545,120 +564,54 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bmp;
 
-        if (requestCode == PICK_FROM_CAMERA && resultCode == RESULT_OK && null != data) {
-            Bundle extras1 = data.getExtras();
-            Bitmap thumbnail_1 = (Bitmap) extras1.get("data");
-            if (thumbnail_1 != null) {
-                //  imagesUriArrayList.add(new imagesUriArrayList.add(thumbnail_1));
-                imagesUriArrayList.add(thumbnail_1);
+    private void openCamera() {
+        Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (picture.resolveActivity(getActivity().getPackageManager()) != null) {
+            File photo = null;
+            try {
+                photo = createImageFile();
 
-            } else {
-                Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+            } catch (IOException ex) {
             }
-        }
-        if (requestCode == PICK_FROM_FILE && resultCode == RESULT_OK && null != data) {
-            if(data.getClipData()== null){
-                Toast.makeText(getActivity(), "Please select minimum 2 images", Toast.LENGTH_SHORT).show();
-
-            }else {
-                if (data.getClipData().getItemCount() <= 4) {
-
-                    for (int i = 0; i < data.getClipData().getItemCount(); i++) {
-
-                        try {
-
-                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),data.getClipData().getItemAt(i).getUri());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-//                    String str_image_aa = getEncoded64ImageStringFromBitmap(bitmap);
-//                    api_array_list.add("data:image/jpeg;base64,"+str_image_aa);
-                        imagesUriArrayList.add(bitmap);
-                    }
-
-                    Log.e("SIZE_img", imagesUriArrayList.size() + "");
-                } else {
-                    Toast.makeText(getActivity(), "Please select maximum 4 images", Toast.LENGTH_SHORT).show();
-
-                }
+            if (photo != null) {
+                Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName(), photo);
+                picture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(picture, PICK_FROM_CAMERA);
             }
+
         }
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 4);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new ImageAdapter(getActivity(), imagesUriArrayList);
-        binding.recyImage.setAdapter(adapter);
-        binding.recyImage.setLayoutManager(layoutManager);
-
-        if (requestCode == PICK_FROM_VIDEO) {
-            binding.simpleVideoView.setVisibility(View.VISIBLE);
-            Uri selectedImageUri = data.getData();
-            //  String    selectedPath = getPath(selectedImageUri);
-            if (mediaControls == null) {
-                // create an object of media controller class
-                mediaControls = new MediaController(getActivity());
-                mediaControls.setAnchorView(videoView);
-                video_text.setText(selectedImageUri.toString());
-            }
-            // set the media controller for video view
-            binding.simpleVideoView.setMediaController(mediaControls);
-            // set the uri for the video view
-            binding.simpleVideoView.setVideoURI(selectedImageUri);
-            // start a video
-            binding.simpleVideoView.start();
-
-        } else if (resultCode == getActivity().RESULT_CANCELED) {
-            Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
-        }
+//        Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (picture.resolveActivity(getActivity().getPackageManager()) != null) {
+//            File photo = null;
+//            try {
+//                photo = createImageFile();
+//
+//            } catch (IOException ex) {
+//            }
+//            if (photo != null) {
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+//
+//            }
+//
+//        }
     }
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-    public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-        byte[] byteFormat = stream.toByteArray();
-        // Get the Base64 string
-        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
-
-        return imgString;
-    }
-
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName, /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
         );
 
         imageFilePath = image.getAbsolutePath();
         return image;
     }
-    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }
+
 
     private void getAttributeList() {
         SessionManagement sm = new SessionManagement(getActivity());
@@ -670,6 +623,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
+                model = new ArrayList<>();
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
@@ -681,9 +635,18 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                         Gson gson = new Gson();
                         Type listType = new TypeToken<ListAttributesModel>() {
                         }.getType();
-
                         model_attribute = gson.fromJson(response.toString(), listType);
+                        AttributeModel model_v = new AttributeModel();
+                        model_v.setId(-1);
+                        model_v.setName("--Select Attribute--");
+                        model.add(model_v);
                         model.addAll(model_attribute.getAttributes());
+
+                        if(getContext()!=null) {
+                            AttributeListSpinnerAdapter adapter = new AttributeListSpinnerAdapter(getContext(), model);
+                            binding.typeVariantSpinner.setAdapter(adapter);
+//                            binding.typeVariantSpinner.setSelection(spinnerPosition);
+                        }
                         createTextDynamically(model_attribute.getAttributes());
 
                     }
@@ -727,7 +690,54 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //        }
 //
 //    }
+@Override
+public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == RESULT_OK) {
+        if (requestCode == PICK_FROM_FILE) {
+            Uri selectedImageUri = data.getData();
 
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (!Utility.isNetworkAvailable(getActivity())) {
+                Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
+            binding.image.setImageBitmap(imageBitmap);
+        } else if (requestCode == PICK_FROM_CAMERA) {
+
+            try {
+                //our imageFilePath that contains the absolute path to the created file
+                File file = new File(imageFilePath);
+                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+
+                if (!Utility.isNetworkAvailable(getActivity())) {
+                    Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
+                binding.image.setImageBitmap(imageBitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+}
+    public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        byte[] byteFormat = stream.toByteArray();
+       // Get the Base64 string
+        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+
+        return imgString;
+    }
 
     private void createTextDynamically(List<AttributeModel> model) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -737,7 +747,6 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         for (int j = 0; j < model.size(); j++) {
             TextView text = new TextView(getActivity());
             LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
-
             editTextParams.setMargins(20, 20, 20, 0);
             text.setLayoutParams(editTextParams);
             text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size));
@@ -1054,6 +1063,57 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
 
 
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        queue.add(jsonObjectRequest);
+    }
+    private void getTaxList() {
+        SessionManagement sm = new SessionManagement(getActivity());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = ApiConstants.BASE_URL + ApiConstants.GST_API + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Log.d("gst_d", url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response", response.toString());
+                tax_list = new ArrayList<>();
+                int spinnerPosition = 0;
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        JSONArray jsonArray = obj.getJSONArray("gst_tax_list");
+                        StateModel stateModel = new StateModel();
+                        stateModel.setId(-1);
+                        stateModel.setName("--Select tax--");
+                        tax_list.add(stateModel);
+                        if (jsonArray.length() > 0) {
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                stateModel = new StateModel();
+                                JSONObject data = jsonArray.getJSONObject(i);
+                                int id = data.optInt("id");
+                                String name = data.optString("name");
+                                stateModel.setId(id);
+                                stateModel.setName(name);
+                                if (String.valueOf(id).equalsIgnoreCase(String.valueOf(list.get(position).getTaxesId()))) {
+                                    spinnerPosition = i + 1;
+                                }
+                                tax_list.add(stateModel);
+                            }
+                            if (getContext() != null) {
+                                CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), tax_list);
+                                binding.spinCustomerTax.setAdapter(adapter);
+                                binding.spinCustomerTax.setSelection(spinnerPosition);
+                                binding.spinVendorTax.setAdapter(adapter);
+                              //  binding.spinVendorTax.setSelection(spinnerPosition);
+                            }
+                        }
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);

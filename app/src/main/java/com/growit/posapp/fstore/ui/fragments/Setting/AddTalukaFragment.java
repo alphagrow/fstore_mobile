@@ -41,6 +41,7 @@ import com.growit.posapp.fstore.model.ConfigurationModel;
 import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
+import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
@@ -139,22 +140,23 @@ public class AddTalukaFragment extends Fragment {
             }
         });
 
-//        binding.recyclerVendor.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        String  cust_name = list.get(position).getName();
-//                        int  _id = list.get(position).getId();
-//                        showDialogeUpdateReceiveProduct(cust_name,_id);
-//                    }
-//
-//
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//                        // do whatever
-//                    }
-//                })
-//        );
+        binding.recyclerVendor.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        String  cust_name = list.get(position).getName();
+                        int  _id = list.get(position).getId();
+
+                        showDialogeUpdateReceiveProduct(cust_name,_id);
+                    }
+
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
 
     }
     @Override
@@ -257,12 +259,14 @@ public class AddTalukaFragment extends Fragment {
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        shop_name_ed = dialog.findViewById(R.id.shop_name_ed);
-
+        tal_name_ed = dialog.findViewById(R.id.taluka_name_ed);
+        tal_code_ed = dialog.findViewById(R.id.taluka_code_ed);
+      TextView  text_name = dialog.findViewById(R.id.text_name);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-        shop_name_ed.setText(name);
-
+        text_name.setText("Update Taluka");
+        tal_name_ed.setText(name);
+        tal_code_ed.setText(name);
 
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -419,8 +423,10 @@ public class AddTalukaFragment extends Fragment {
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
                         String name = data.optString("name");
+                        String code = data.optString("code");
                         stateModel.setId(id);
                         stateModel.setName(name);
+                        stateModel.setGST_NO(code);
                         districtNames.add(stateModel);
                     }
                     if(getContext()!=null) {
