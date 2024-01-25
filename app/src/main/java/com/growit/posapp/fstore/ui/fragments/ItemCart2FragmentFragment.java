@@ -80,6 +80,7 @@ public class ItemCart2FragmentFragment extends Fragment {
     Button orderBtn;
     TextView customerTxt;
     String customer_id;
+    int interstateID;
     List<StateModel> CustomerNames = new ArrayList<>();
     public ItemCart2FragmentFragment() {
         // Required empty public constructor
@@ -324,7 +325,7 @@ public class ItemCart2FragmentFragment extends Fragment {
         params.put("partner_id", customer_id);
 
         params.put("note", et_remark.getText().toString());
-        params.put("fiscal_position_id", "4");
+        params.put("fiscal_position_id", interstateID+"");
 
 
         params.put("products", prjsonArray.toString());
@@ -402,8 +403,10 @@ public class ItemCart2FragmentFragment extends Fragment {
                             stateModel = new StateModel();
                             JSONObject data = jsonArray.getJSONObject(i);
                             int id = data.optInt("customer_id");
+                            int state = data.optInt("state");
                             String name = data.optString("name");
                             stateModel.setId(id);
+                            stateModel.setState(String.valueOf(state));
                             stateModel.setName(name);
                             CustomerNames.add(stateModel);
 
@@ -432,7 +435,7 @@ public class ItemCart2FragmentFragment extends Fragment {
         RadioGroup radioGroup = dialog.findViewById(R.id.radioGroup);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-       Spinner cstSpinner = dialog.findViewById(R.id.cstSpinner);
+        Spinner cstSpinner = dialog.findViewById(R.id.cstSpinner);
         getCustomerList(cstSpinner);
         cstSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -440,7 +443,12 @@ public class ItemCart2FragmentFragment extends Fragment {
                 if (position != 0) {
                     customer_id = CustomerNames.get(position).getId() + "";
                     customerTxt.setText(CustomerNames.get(position).getName());
-
+                    String state_id=CustomerNames.get(position).getState();
+                    if(state_id.equals(String.valueOf(sm.getWarehosueState()))) {
+                        interstateID=sm.getIntraStateId();
+                    }else{
+                        interstateID=sm.getInterStateId();
+                    }
 //                    getCartItems();
                 }
             }

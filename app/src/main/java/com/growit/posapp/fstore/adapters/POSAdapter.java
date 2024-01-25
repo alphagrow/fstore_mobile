@@ -24,6 +24,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Product;
@@ -91,9 +93,14 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
 //        holder.product_name_text.addShowLessText("Less");
 //        holder.product_name_text.setShowMoreColor(Color.BLACK); // or other color
 //        holder.product_name_text.setShowLessTextColor(Color.RED); // or other color
-        Picasso.with(mContext).load(model.getImage_url())
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.no_image)
+//        Picasso.with(mContext).load(model.getImage_url())
+//                .placeholder(R.drawable.loading)
+//                .error(R.drawable.no_image)
+//                .into(holder.productThumb);
+        Glide.with(mContext)
+                .load(model.getImage_url())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(holder.productThumb);
 
         holder.update.setOnClickListener(new View.OnClickListener() {

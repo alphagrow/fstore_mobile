@@ -129,6 +129,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
     DatePickerDialog.OnDateSetListener date_mfd;
     final Calendar myCalendar = Calendar.getInstance();
     String purchase_order;
+    SessionManagement sm;
+    int interstateID;
     public CreatePurchaseOrderFragment() {
         // Required empty public constructor
     }
@@ -163,6 +165,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
     }
 
     private void init() {
+        sm = new SessionManagement(getActivity());
         if (Utility.isNetworkAvailable(getActivity())) {
             getVendorList();
             getOperationTypes();
@@ -438,7 +441,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         });
                     }
 
-                    //                Toast.makeText(getActivity(), R.string.Add_card, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), R.string.Add_card, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), R.string.No_Variants, Toast.LENGTH_SHORT).show();
 
@@ -454,7 +457,12 @@ public class CreatePurchaseOrderFragment extends Fragment {
                     vendor_id = vendorNames.get(position).getId() + "";
                     binding.gstNo.setText(vendorNames.get(position).getGST_NO());
                     binding.stateText.setText(vendorNames.get(position).getState());
-
+                    String state_id=vendorNames.get(position).getState_id();
+                    if(state_id.equals(String.valueOf(sm.getWarehosueState()))) {
+                        interstateID=sm.getIntraStateId();
+                    }else{
+                        interstateID=sm.getInterStateId();
+                    }
                     //  binding.customerTxt.setText(vendorNames.get(position).getName());
 
                 }
@@ -779,7 +787,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 productOBJ.putOpt("mkd_by", purchaseOrderList.get(i).getMkd_by());
 //              productOBJ.putOpt("name", purchaseOrderList.get(i).getProductName() + purchaseOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("price_unit", purchaseOrderList.get(i).getUnitPrice());
-                //         productOBJ.putOpt("price_unit", lineAmount);
+                //productOBJ.putOpt("price_unit", lineAmount);
                 productOBJ.putOpt("product_qty", purchaseOrderList.get(i).getQuantity());
                 productOBJ.putOpt("taxes_id", purchaseOrderList.get(i).getTaxID());
                 prjsonArray.put(productOBJ);
@@ -810,8 +818,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
          params.put("user_id", sm.getUserID()+ "");
            params.put("token", sm.getJWTToken());
         params.put("vendor_id", str_vendor_id);
-        params.put("company_id", "1");
+        params.put("company_id", sm.getCompanyID()+"");
         params.put("products", prjsonArray);
+        params.put("fiscal_position_id", interstateID+"");
         params.put("picking_type_id",ware_house_id);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("Pur_create_order", String.valueOf(params));
@@ -934,10 +943,12 @@ public class CreatePurchaseOrderFragment extends Fragment {
                                 String name = data.optString("name");
                                 String vat = data.optString("vat");
                                 String state_name = data.optString("state_name");
+                                String state_id = data.optString("state_id");
                                 stateModel.setId(id);
                                 stateModel.setName(name);
                                 stateModel.setGST_NO(vat);
                                 stateModel.setState(state_name);
+                                stateModel.setState_id(state_id);
                                 vendorNames.add(stateModel);
                             }
                         }

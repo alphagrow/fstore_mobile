@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                 int company_id = obj.optInt("default_company");
                 String token = obj.optString("token");
                 String str_message = obj.optString("message");
-                int warehosue_state = obj.optInt("warehosue_state");
+
                 if(str_message.equals("Error: Access Denied")){
 
                 }else {
@@ -174,6 +174,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 int id = obj.optInt("user_id");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                    int warehosue_state = obj.optInt("warehosue_state");
+                    JSONArray fiscal_positions = obj.optJSONArray("fiscal_positions");
+                    sm.saveInterStateId(fiscal_positions.getJSONObject(0).getInt("id"));
+                    sm.saveIntraStateId(fiscal_positions.getJSONObject(4).getInt("id"));
                     sm.createLoginSession(true, name, storeID, password, token);
                     sm.saveUserId(id);
                     sm.saveCompanyId(company_id);

@@ -172,7 +172,26 @@ public class SessionManagement {
         // return user
         return id;
     }
-
+    public void saveInterStateId(int interState_id) {
+        editor.putInt("interState_id", interState_id);
+        // commit changes
+        editor.commit();
+    }
+    public int getInterStateId() {
+        int id=pref.getInt("interState_id",-1);
+        // return user
+        return id;
+    }
+    public void saveIntraStateId(int interAState_id) {
+        editor.putInt("interAState_id", interAState_id);
+        // commit changes
+        editor.commit();
+    }
+    public int getIntraStateId() {
+        int id=pref.getInt("interAState_id",-1);
+        // return user
+        return id;
+    }
     public void saveUserId(int user_id) {
         editor.putInt("user_id", user_id);
         // commit changes

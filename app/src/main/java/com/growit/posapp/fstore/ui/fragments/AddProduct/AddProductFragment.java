@@ -189,7 +189,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     private void init() {
 
-
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, detailed_type);
+        binding.detailTypeSpinner.setAdapter(spinnerArrayAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         progressBar = new ProgressBar(getActivity());

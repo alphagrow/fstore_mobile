@@ -536,6 +536,7 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+                    String message = obj.optString("message");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
@@ -574,12 +575,15 @@ public class ProductDetailFragment extends Fragment implements BaseSliderView.On
                         itemPriceTxt.setText("₹ " + basePrice);
                         productDetail.getData().get(0).setListPrice(basePrice);
 
+                    }else {
+                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             }
-        }, error -> Toast.makeText(getActivity(), "Fail to get data..", Toast.LENGTH_SHORT).show());
+        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        Utility.dismissDialoge();
         queue.add(jsonObjectRequest);
     }
 

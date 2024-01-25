@@ -28,6 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.databinding.FragmentPOSCategoryBinding;
@@ -94,9 +96,11 @@ public class AddPOSCategoryFragment extends Fragment {
             position = getArguments().getInt("position");
             binding.cropName.setText(crop_mode.get(position).getValueName());
             str_image_crop= Utility.convertUrlToBase64(crop_mode.get(position).getImage_url());
-            Picasso.with(getActivity()).load(crop_mode.get(position).getImage_url())
-                    .placeholder(R.drawable.loading)
-                    .error(R.drawable.no_image)
+
+            Glide.with(getActivity())
+                    .load(crop_mode.get(position).getImage_url())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(binding.profileImage);
 
             binding.update.setVisibility(View.VISIBLE);
