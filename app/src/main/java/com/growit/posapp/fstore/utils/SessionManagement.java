@@ -40,6 +40,7 @@ public class SessionManagement {
 
     public static final String KEY_JWT_TOKEN = "JWT_TOKEN";
     public static final String KEY_COMPANY_ID = "COMPANY_ID";
+    public static final String KEY_WAREHOUSE_STATE = "warehosue_state";
     public static final String KEY_DEVICE_ID = "DEVICE_ID";
 
     // Constructor
@@ -79,6 +80,19 @@ public class SessionManagement {
         // commit changes
         editor.commit();
     }
+
+    public int getWarehosueState() {
+        int id=pref.getInt(KEY_WAREHOUSE_STATE,-1);
+        // return user
+        return id;
+    }
+
+    public void saveWarehosueState(int warehosue_state) {
+        editor.putInt(KEY_WAREHOUSE_STATE, warehosue_state);
+        // commit changes
+        editor.commit();
+    }
+
     public void saveCrop(String _cropName) {
         editor.putString("cropName", _cropName);
         // commit changes

@@ -70,6 +70,7 @@ public class AddTalukaFragment extends Fragment {
     EditText tal_name_ed,tal_code_ed;
    String stateStr = "",districtStr="";
     Dialog dialog;
+    int position_id=0;
     List<StateModel> talukaNames = new ArrayList<>();
     public AddTalukaFragment() {
         // Required empty public constructor
@@ -132,7 +133,7 @@ public class AddTalukaFragment extends Fragment {
             public void onClick(View v) {
 
                 if (Utility.isNetworkAvailable(getContext())) {
-                    showDialogeReceiveProduct();
+                    showDialogeReceiveProduct("Add");
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -144,10 +145,8 @@ public class AddTalukaFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        String  cust_name = list.get(position).getName();
-                        int  _id = list.get(position).getId();
-
-                        showDialogeUpdateReceiveProduct(cust_name,_id);
+                        position_id=position;
+                        showDialogeReceiveProduct("Update");
                     }
 
 
@@ -166,7 +165,7 @@ public class AddTalukaFragment extends Fragment {
 
     }
 
-    private  void showDialogeReceiveProduct() {
+    private  void showDialogeReceiveProduct(String type) {
          dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.taluka_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -174,15 +173,21 @@ public class AddTalukaFragment extends Fragment {
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
         tal_name_ed = dialog.findViewById(R.id.taluka_name_ed);
         tal_code_ed = dialog.findViewById(R.id.taluka_code_ed);
+        TextView text_name= dialog.findViewById(R.id.text_name);
         Spinner stateSpinner = dialog.findViewById(R.id.stateSpinner);
         Spinner dis_Spinner = dialog.findViewById(R.id.dist_Spinner);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
+        if(type.equals("Update")) {
+            text_name.setText("Update Taluka");
+            tal_name_ed.setText(list.get(position_id).getName());
+            tal_code_ed.setText(list.get(position_id).getPercentage());
+        }
         if (!Utility.isNetworkAvailable(getActivity())) {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
             return;
         }
-        getStateData(stateSpinner);
+        getStateData(stateSpinner,type);
 
         dis_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -213,7 +218,7 @@ public class AddTalukaFragment extends Fragment {
                             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        getDistrictData(dis_Spinner);
+                        getDistrictData(dis_Spinner,type);
                     }
                 }
             }
@@ -235,8 +240,11 @@ public class AddTalukaFragment extends Fragment {
                     return;
                 }
                 if (isAllFieldsChecked) {
-
-                    addTaluka(str_tal_name,str_tal_code);
+                    if(type.equals("Update")) {
+                        TalukaUpdate(str_tal_name, str_tal_code,list.get(position_id).getId());
+                    }else {
+                        addTaluka(str_tal_name, str_tal_code);
+                    }
                 }
 //                dialog.dismiss();
 
@@ -252,50 +260,49 @@ public class AddTalukaFragment extends Fragment {
         dialog.show();
     }
 
-    private  void showDialogeUpdateReceiveProduct(String name,int id) {
-
-         dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.taluka_dialoge);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        tal_name_ed = dialog.findViewById(R.id.taluka_name_ed);
-        tal_code_ed = dialog.findViewById(R.id.taluka_code_ed);
-      TextView  text_name = dialog.findViewById(R.id.text_name);
-        TextView okay_text = dialog.findViewById(R.id.ok_text);
-        TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-        text_name.setText("Update Taluka");
-        tal_name_ed.setText(name);
-        tal_code_ed.setText(name);
-
-        okay_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str_name = shop_name_ed.getText().toString();
-
-                isAllFieldsChecked= CheckAllFields();
-                if (!Utility.isNetworkAvailable(getActivity())) {
-                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (isAllFieldsChecked) {
-                    //  DiscountUpdate(str_name,id);
-                }
-                dialog.dismiss();
-
-            }
-        });
-
-        cancel_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
+//    private  void showDialogeUpdateReceiveProduct(String name,int id) {
+//        dialog = new Dialog(getActivity());
+//        dialog.setContentView(R.layout.taluka_dialoge);
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog.setCancelable(false);
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+//        tal_name_ed = dialog.findViewById(R.id.taluka_name_ed);
+//        tal_code_ed = dialog.findViewById(R.id.taluka_code_ed);
+//        TextView  text_name = dialog.findViewById(R.id.text_name);
+//        TextView okay_text = dialog.findViewById(R.id.ok_text);
+//        TextView cancel_text = dialog.findViewById(R.id.cancel_text);
+//        text_name.setText("Update Taluka");
+//        tal_name_ed.setText(name);
+//        tal_code_ed.setText(name);
+//
+//        okay_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String str_name = shop_name_ed.getText().toString();
+//
+//                isAllFieldsChecked= CheckAllFields();
+//                if (!Utility.isNetworkAvailable(getActivity())) {
+//                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if (isAllFieldsChecked) {
+//                    //  DiscountUpdate(str_name,id);
+//                }
+//                dialog.dismiss();
+//
+//            }
+//        });
+//
+//        cancel_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
 
     private boolean CheckAllFields() {
         if (tal_name_ed.length()== 0) {
@@ -322,8 +329,7 @@ public class AddTalukaFragment extends Fragment {
         params.put("code", str_code);
         params.put("state_id", stateStr);
         params.put("district_id", districtStr);
-
-//        params.put("country_id", ApiConstants.COUNTRY_ID);
+        //params.put("country_id", ApiConstants.COUNTRY_ID);
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_TALUKA, new VolleyCallback() {
@@ -359,46 +365,49 @@ public class AddTalukaFragment extends Fragment {
 
     }
 
-//    private void DiscountUpdate(String name,int id) {
-//        SessionManagement sm = new SessionManagement(getActivity());
-//        Map<String, String> params = new HashMap<>();
-//        params.put("user_id", sm.getUserID() + "");
-//        params.put("token", sm.getJWTToken());
-//        params.put("name", name);
-//        params.put("shop_id", id+"");
-//
-//        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_SHOPS, new VolleyCallback() {
-//            private String message = "Update failed!!";
-//
-//            @Override
-//            public void onSuccess(Object result) throws JSONException {
-//                Log.v("Response", result.toString());
-//                JSONObject obj = new JSONObject(result.toString());
-//                int statusCode = obj.optInt("statuscode");
-//                String status = obj.optString("status");
-//                String message = obj.optString("message");
-//                String error_message = obj.optString("error_message");
-//                if (statusCode==200 && status.equalsIgnoreCase("success")) {
-//                    Utility.dismissDialoge();
-//                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-//
-//                    getDistrictList();
-//                }else {
-//                    Utility.dismissDialoge();
-//                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(String result) throws Exception {
-//                Log.v("Response", result.toString());
-//                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void TalukaUpdate(String name,String code,int taluka_id ) {
+        SessionManagement sm = new SessionManagement(getActivity());
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", sm.getUserID() + "");
+        params.put("token", sm.getJWTToken());
+        params.put("name", name);
+        params.put("code", code);
+        params.put("states_id", stateStr);
+        params.put("district_id", districtStr);
+        params.put("taluka_id", taluka_id+"");
+        params.put("country_id", ApiConstants.COUNTRY_ID);
+        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_TALUKA, new VolleyCallback() {
+            private String message = "Update failed!!";
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                String status = obj.optString("status");
+                String message = obj.optString("message");
+                String error_message = obj.optString("error_message");
+                if (status.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    dialog.dismiss();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 
-    private void getDistrictData(Spinner dis_Spinner) {
+                    getTalukaData();
+                }else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onError(String result) throws Exception {
+                Log.v("Response", result.toString());
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void getDistrictData(Spinner dis_Spinner,String type) {
         Map<String, String> params = new HashMap<>();
         params.put("states_id", stateStr);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
@@ -408,11 +417,11 @@ public class AddTalukaFragment extends Fragment {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 districtNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-
                     JSONArray jsonArray = obj.getJSONArray("data");
                     StateModel stateModel = new StateModel();
                     stateModel.setId(-1);
@@ -424,6 +433,12 @@ public class AddTalukaFragment extends Fragment {
                         int id = data.optInt("id");
                         String name = data.optString("name");
                         String code = data.optString("code");
+                        if(type.equals("Update")) {
+                            if (String.valueOf(id).equalsIgnoreCase(String.valueOf(list.get(position_id).getParentId()))) {
+                                spinnerPosition = i + 1;
+                            }
+                        }
+
                         stateModel.setId(id);
                         stateModel.setName(name);
                         stateModel.setGST_NO(code);
@@ -432,6 +447,7 @@ public class AddTalukaFragment extends Fragment {
                     if(getContext()!=null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), districtNames);
                         dis_Spinner.setAdapter(adapter);
+                        dis_Spinner.setSelection(spinnerPosition);
                     }
                 }
             }
@@ -444,7 +460,7 @@ public class AddTalukaFragment extends Fragment {
             }
         });
     }
-    private void getStateData(Spinner stateSpinner) {
+    private void getStateData(Spinner stateSpinner,String type) {
 
         Map<String, String> params = new HashMap<>();
         params.put("country_id", ApiConstants.COUNTRY_ID);
@@ -456,12 +472,12 @@ public class AddTalukaFragment extends Fragment {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 stateNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
-
                     JSONArray jsonArray = obj.getJSONArray("data");
                     StateModel stateModel = new StateModel();
                     stateModel.setId(-1);
@@ -474,11 +490,17 @@ public class AddTalukaFragment extends Fragment {
                         String name = data.optString("name");
                         stateModel.setId(id);
                         stateModel.setName(name);
+                        if(type.equals("Update")) {
+                            if (String.valueOf(id).equalsIgnoreCase(String.valueOf(list.get(position_id).getUsage()))) {
+                                spinnerPosition = i + 1;
+                            }
+                        }
                         stateNames.add(stateModel);
                     }
                     if(getContext()!=null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), stateNames);
                         stateSpinner.setAdapter(adapter);
+                        stateSpinner.setSelection(spinnerPosition);
                     }
                 }
             }
@@ -492,16 +514,15 @@ public class AddTalukaFragment extends Fragment {
         });
     }
     private void getTalukaData() {
-
         Map<String, String> params = new HashMap<>();
-        params.put("district_id", districtStr);
+     //   params.put("district_id", districtStr);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_TALUKA, new VolleyCallback() {
             private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
-                talukaNames = new ArrayList<>();
+//                talukaNames = new ArrayList<>();
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
@@ -515,8 +536,16 @@ public class AddTalukaFragment extends Fragment {
                             JSONObject data = jsonArray.getJSONObject(i);
                             Integer id = data.optInt("id");
                             String name = data.optString("name");
+                            String code = data.optString("code");
+                            String states_id = data.optString("states_id");
+                            String district_id = data.optString("district_id");
+
                             model.setId(id);
                             model.setName(name);
+                            model.setPercentage(code);
+                            model.setUsage(states_id);
+                            model.setParentId(district_id);
+
                             list.add(model);
                         }
                         if (list == null || list.size() == 0) {

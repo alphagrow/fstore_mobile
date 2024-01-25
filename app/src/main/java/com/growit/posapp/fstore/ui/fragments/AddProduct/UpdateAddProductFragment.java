@@ -103,8 +103,7 @@ import java.util.Map;
 
 
 public class UpdateAddProductFragment extends Fragment implements View.OnClickListener {
-    private EditText et_product_name, et_product_price, et_uom, et_size, et_color, et_whole_pattern,
-            tech_name_pest,brand_name,mkt_by,batch_number,cir_number,which_crop,which_pest,packing_std;
+    private EditText et_product_name, et_product_price, et_uom, et_size, et_color, et_whole_pattern, tech_name_pest,brand_name,mkt_by,batch_number,cir_number,which_crop,which_pest,packing_std;
     private ImageView product_image,image_set;
     private Button submit_btn;
 

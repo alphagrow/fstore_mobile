@@ -7,6 +7,24 @@ public class StateModel {
     private int id;
     private String GST_NO;
     private String state;
+    private String district_id;
+    private String taluka_id;
+
+    public String getDistrict_id() {
+        return district_id;
+    }
+
+    public void setDistrict_id(String district_id) {
+        this.district_id = district_id;
+    }
+
+    public String getTaluka_id() {
+        return taluka_id;
+    }
+
+    public void setTaluka_id(String taluka_id) {
+        this.taluka_id = taluka_id;
+    }
 
     public String getGST_NO() {
         return GST_NO;

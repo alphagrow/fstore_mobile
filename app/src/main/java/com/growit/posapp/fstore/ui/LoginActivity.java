@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                 int company_id = obj.optInt("default_company");
                 String token = obj.optString("token");
                 String str_message = obj.optString("message");
-
+                int warehosue_state = obj.optInt("warehosue_state");
                 if(str_message.equals("Error: Access Denied")){
 
                 }else {
@@ -177,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                     sm.createLoginSession(true, name, storeID, password, token);
                     sm.saveUserId(id);
                     sm.saveCompanyId(company_id);
+                    sm.saveWarehosueState(warehosue_state);
                     Toast.makeText(LoginActivity.this, R.string.LOGIN_SUCCESS, Toast.LENGTH_SHORT).show();
                    // getVendorList();
                     getGSTRequest();

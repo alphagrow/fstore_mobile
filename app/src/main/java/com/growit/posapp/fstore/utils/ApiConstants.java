@@ -91,6 +91,9 @@ public class ApiConstants {
   public final static String GET_UOM_LIST = "/api/list/uoms?";
   public final static String POST_CREATE_DISTRICT= "/api/create_district?";
   public final static String POST_CREATE_TALUKA= "/api/create_taluka?";
+    public final static String GET_COMPANY_DETAILS = "/api/company/details?";
+ public final static String PUT_UPDATE_DISTRICT = "/api/update_district?";
+ public final static String PUT_UPDATE_TALUKA = "/api/update_taluka?";
 }
 
 

@@ -14,10 +14,17 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.ActivityUserRegistrstionBinding;
+import com.growit.posapp.fstore.model.ConfigurationModel;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -61,9 +68,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
              binding.titleTxt.setText("Update Company Detail");
              binding.updateBtn.setVisibility(View.VISIBLE);
              binding.submitBtn.setVisibility(View.GONE);
+
+             getCompanyDetails();
          }
         if (Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
+
             getStateData();
+
         } else {
             Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
         }
@@ -513,7 +524,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         params.put("token", sm.getJWTToken());
         params.put("name", nameStr);
         params.put("login", login_id);
-        //  params.put("company_logo", "");
+        //params.put("company_logo", "");
         params.put("password", str_password);
         params.put("company_name", str_comp_name);
         params.put("street", streetStr);
@@ -529,12 +540,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
         params.put("fert_lic_no", str_fertLicNo);
         params.put("seed_lic_no", str_seedLicNo);
         params.put("vat", str_gst_no);
-//        params.put("company_id", " ");
+        params.put("company_id", sm.getCompanyID()+"");
 
         Utility.showDialoge("", UserRegistrationActivity.this);
         Log.v("add", String.valueOf(params));
         new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.UPDATE_COMPANY, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
@@ -563,6 +574,72 @@ public class UserRegistrationActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void getCompanyDetails() {
+        SessionManagement sm = new SessionManagement(this);
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_COMPANY_DETAILS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+        Utility.showDialoge("Please wait while a moment...", this);
+        Log.d("get_company_detail",url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.v("Response_", response.toString());
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(response.toString());
+                    int statusCode = obj.optInt("statuscode");
+                    String status = obj.optString("status");
+
+                    if (status.equalsIgnoreCase("success")) {
+
+                        Utility.dismissDialoge();
+                        JSONObject data_json = obj.getJSONObject("data");
+
+                      //  for (int i = 0; i < jsonArray.length(); i++) {
+
+                            int id = data_json.optInt("id");
+                            String name = data_json.optString("name");
+                            String street = data_json.optString("street");
+                            String city = data_json.optString("city");
+                            String partner = data_json.optString("partner");
+                            int mobile = data_json.optInt("mobile");
+                            int phone = data_json.optInt("phone");
+                            String email = data_json.optString("email");
+                            String website = data_json.optString("website");
+                            String insect_lic_no = data_json.optString("insect_lic_no");
+                            String fert_lic_no = data_json.optString("fert_lic_no");
+                            String gst = data_json.optString("vat");
+
+                            binding.etGstNo.setText(gst);
+                            binding.etUsername.setText(name);
+                            binding.etMobile.setText(String.valueOf(mobile));
+                            binding.etUseremail.setText(email);
+//                          binding.etPincode.setText();
+                            binding.etUseraddress.setText(street);
+                            binding.etCompanyName.setText(partner);
+                            binding.etCity.setText(city);
+                            binding.etPhone.setText(String.valueOf(phone));
+                            binding.etWebsite.setText(website);
+                            binding.etInsectLicNo.setText(insect_lic_no);
+                            binding.etFertLicNo.setText(fert_lic_no);
+//                        binding.etSeedLicNo.setText();
+
+
+                        }
+
+                   // }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, error -> Toast.makeText(this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        Utility.dismissDialoge();
+        queue.add(jsonObjectRequest);
+    }
+
 
     private void resetFields() {
         binding.etUsername.setText("");

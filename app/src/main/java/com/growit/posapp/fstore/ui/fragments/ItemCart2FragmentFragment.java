@@ -76,7 +76,7 @@ public class ItemCart2FragmentFragment extends Fragment {
     double subTotal_50;
     String paymentMode = "-1";
     double paidAmount = 0.0;
-    TextView itemCountTxt,gstLabelTxt,totalAmount,gstTxt,paidTxt,subTotalTxt,lineDiscountTxt;
+    TextView itemCountTxt,gstLabelTxt,totalAmount,gstTxt,paidTxt,subTotalTxt,lineDiscountTxt,et_remark;
     Button orderBtn;
     TextView customerTxt;
     String customer_id;
@@ -114,6 +114,7 @@ public class ItemCart2FragmentFragment extends Fragment {
         paidTxt = view.findViewById(R.id.paidTxt);
         subTotalTxt = view.findViewById(R.id.subTotalTxt);
         lineDiscountTxt = view.findViewById(R.id.lineDiscountTxt);
+        et_remark = view.findViewById(R.id.et_remark);
         receiver = new MyBroadcastReceiver();
         getActivity().registerReceiver(receiver, new IntentFilter(ApiConstants.ACTION_PAYMENT));
         sm = new SessionManagement(getActivity());
@@ -321,8 +322,11 @@ public class ItemCart2FragmentFragment extends Fragment {
         params.put("user_id", sm.getUserID() + "");
         params.put("token", sm.getJWTToken());
         params.put("partner_id", customer_id);
-//        params.put("partner_id", customerID);
-//        params.put("coupon_code", coupanCode);
+
+        params.put("note", et_remark.getText().toString());
+        params.put("fiscal_position_id", "4");
+
+
         params.put("products", prjsonArray.toString());
         params.put("payment_line", paymentLineJsonArray.toString());
 

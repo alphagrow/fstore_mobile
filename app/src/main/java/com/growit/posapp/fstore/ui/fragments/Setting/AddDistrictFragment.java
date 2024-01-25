@@ -73,6 +73,7 @@ public class AddDistrictFragment extends Fragment {
     EditText dist_name_ed,dist_code_ed;
     String  stateStr = "";
     Dialog  dialog;
+    int position_id=0;
     public AddDistrictFragment() {
         // Required empty public constructor
     }
@@ -138,7 +139,7 @@ public class AddDistrictFragment extends Fragment {
             public void onClick(View v) {
 
                 if (Utility.isNetworkAvailable(getContext())) {
-                    showDialogeReceiveProduct();
+                    showDialogeReceiveProduct("Add");
                 } else {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
@@ -150,8 +151,9 @@ public class AddDistrictFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(),  binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        position_id=position;
+                        showDialogeReceiveProduct("Update");
 
-                        showDialogeUpdateReceiveProduct(position);
                     }
 
 
@@ -170,22 +172,29 @@ public class AddDistrictFragment extends Fragment {
 
     }
 
-    private  void showDialogeReceiveProduct() {
-          dialog = new Dialog(getActivity());
+    private  void showDialogeReceiveProduct(String type) {
+        dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.district_dialoge);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
         dist_name_ed = dialog.findViewById(R.id.dist_name_ed);
         dist_code_ed = dialog.findViewById(R.id.dist_code_ed);
+       TextView text_name = dialog.findViewById(R.id.text_name);
         Spinner stateSpinner = dialog.findViewById(R.id.stateSpinner);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
+        if(type.equals("Update")){
+            text_name.setText("Update District");
+            dist_name_ed.setText(list.get(position_id).getName());
+            dist_code_ed.setText(list.get(position_id).getPercentage());
+        }
+
         if (!Utility.isNetworkAvailable(getActivity())) {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
             return;
         }
-         getStateData(stateSpinner);
+         getStateData(stateSpinner,type);
         stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -218,8 +227,11 @@ public class AddDistrictFragment extends Fragment {
                     return;
                 }
                 if (isAllFieldsChecked) {
-
-                    addDistrict(str_dist_name,str_code);
+                    if(type.equals("Update")) {
+                        DistrictUpdate(str_dist_name, str_code,stateStr,list.get(position_id).getId());
+                    }else {
+                        addDistrict(str_dist_name, str_code);
+                    }
                 }
 
 
@@ -236,50 +248,48 @@ public class AddDistrictFragment extends Fragment {
         dialog.show();
     }
 
-    private  void showDialogeUpdateReceiveProduct(int position) {
-
-        Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.district_dialoge);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-        dist_name_ed = dialog.findViewById(R.id.dist_name_ed);
-        dist_code_ed = dialog.findViewById(R.id.dist_code_ed);
-        Spinner stateSpinner = dialog.findViewById(R.id.stateSpinner);
-
-        TextView okay_text = dialog.findViewById(R.id.ok_text);
-        TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-        dist_name_ed.setText(list.get(position).getName());
-        dist_code_ed.setText(list.get(position).getPercentage());
-
-        okay_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str_name = shop_name_ed.getText().toString();
-
-                isAllFieldsChecked= CheckAllFields();
-                if (!Utility.isNetworkAvailable(getActivity())) {
-                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (isAllFieldsChecked) {
-                  //  DiscountUpdate(str_name,id);
-                }
-                dialog.dismiss();
-
-            }
-        });
-
-        cancel_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
+//    private  void showDialogeUpdateReceiveProduct(int position) {
+//        Dialog dialog = new Dialog(getActivity());
+//        dialog.setContentView(R.layout.district_dialoge);
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog.setCancelable(false);
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+//        dist_name_ed = dialog.findViewById(R.id.dist_name_ed);
+//        dist_code_ed = dialog.findViewById(R.id.dist_code_ed);
+//     Spinner stateSpinner = dialog.findViewById(R.id.stateSpinner);
+//        TextView okay_text = dialog.findViewById(R.id.ok_text);
+//        TextView cancel_text = dialog.findViewById(R.id.cancel_text);
+//        dist_name_ed.setText(list.get(position).getName());
+//        dist_code_ed.setText(list.get(position).getPercentage());
+//        getDistrictList();
+//        okay_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String str_name = shop_name_ed.getText().toString();
+//
+//                isAllFieldsChecked= CheckAllFields();
+//                if (!Utility.isNetworkAvailable(getActivity())) {
+//                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if (isAllFieldsChecked) {
+//                    DistrictUpdate(str_name,id);
+//                }
+//                dialog.dismiss();
+//
+//            }
+//        });
+//
+//        cancel_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//    }
 
     private boolean CheckAllFields() {
         if (dist_name_ed.length()== 0) {
@@ -340,48 +350,53 @@ public class AddDistrictFragment extends Fragment {
 
     }
 
-//    private void DiscountUpdate(String name,int id) {
-//        SessionManagement sm = new SessionManagement(getActivity());
-//        Map<String, String> params = new HashMap<>();
-//        params.put("user_id", sm.getUserID() + "");
-//        params.put("token", sm.getJWTToken());
-//        params.put("name", name);
-//        params.put("shop_id", id+"");
-//
-//        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_SHOPS, new VolleyCallback() {
-//            private String message = "Update failed!!";
-//
-//            @Override
-//            public void onSuccess(Object result) throws JSONException {
-//                Log.v("Response", result.toString());
-//                JSONObject obj = new JSONObject(result.toString());
-//                int statusCode = obj.optInt("statuscode");
-//                String status = obj.optString("status");
-//                String message = obj.optString("message");
-//                String error_message = obj.optString("error_message");
-//                if (statusCode==200 && status.equalsIgnoreCase("success")) {
-//                    Utility.dismissDialoge();
-//                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-//
-//                    getDistrictList();
-//                }else {
-//                    Utility.dismissDialoge();
-//                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(String result) throws Exception {
-//                Log.v("Response", result.toString());
-//                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void DistrictUpdate(String name,String code,String stateStr,int district_id) {
+        SessionManagement sm = new SessionManagement(getActivity());
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", sm.getUserID() + "");
+        params.put("token", sm.getJWTToken());
+        params.put("name", name);
+        params.put("code", code);
+        params.put("states_id", stateStr);
+        params.put("district_id", district_id+"");
+
+
+        new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_DISTRICT, new VolleyCallback() {
+            private String message = "Update failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                String status = obj.optString("status");
+                String message = obj.optString("message");
+                String error_message = obj.optString("error_message");
+                if (status.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    dialog.dismiss();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
+                    getDistrictList();
+                }else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Log.v("Response", result.toString());
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void getDistrictList() {
 
         Map<String, String> params = new HashMap<>();
 //        params.put("states_id", stateStr);
+        Log.d("GET_DISTRICT",ApiConstants.GET_DISTRICT);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
             private String message = " failed!!";
 
@@ -402,8 +417,14 @@ public class AddDistrictFragment extends Fragment {
                             JSONObject data = jsonArray.getJSONObject(i);
                             Integer id = data.optInt("id");
                             String name = data.optString("name");
+                            String code = data.optString("code");
+                            String states_id = data.optString("states_id");
+
                             model.setId(id);
                             model.setName(name);
+                            model.setUsage(states_id);
+                            model.setPercentage(code);
+
                             list.add(model);
                         }
                         if (list == null || list.size() == 0) {
@@ -429,7 +450,7 @@ public class AddDistrictFragment extends Fragment {
             }
         });
     }
-    private void getStateData(Spinner stateSpinner) {
+    private void getStateData(Spinner stateSpinner,String type) {
 
         Map<String, String> params = new HashMap<>();
         params.put("country_id", ApiConstants.COUNTRY_ID);
@@ -441,6 +462,7 @@ public class AddDistrictFragment extends Fragment {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 stateNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
@@ -459,11 +481,18 @@ public class AddDistrictFragment extends Fragment {
                         String name = data.optString("name");
                         stateModel.setId(id);
                         stateModel.setName(name);
+                        if(type.equals("Update")) {
+                            if (String.valueOf(id).equalsIgnoreCase(String.valueOf(list.get(position_id).getUsage()))) {
+                                spinnerPosition = i + 1;
+                            }
+                        }
                         stateNames.add(stateModel);
                     }
                     if(getContext()!=null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), stateNames);
                         stateSpinner.setAdapter(adapter);
+                        stateSpinner.setSelection(spinnerPosition);
+
                     }
                 }
             }
