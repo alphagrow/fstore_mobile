@@ -130,5 +130,5 @@
     <string name="upload_Product_Video">उत्पाद वीडियो अपलोड करें</string>
 
     <!--Item Cart-->
-    <string name="place_order">आदेश देना</string>
+<!--    <string name="place_order">आदेश देना</string>-->
 </resources>

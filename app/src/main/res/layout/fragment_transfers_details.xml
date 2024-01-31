@@ -76,7 +76,7 @@
                             android:textColor="#BF393939"
                             android:textStyle="bold"
                             android:text="Order ID"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/order_id"
@@ -86,7 +86,7 @@
                             android:fontFamily="@font/helvetica_neue_medium"
                             android:textColor="#E9171717"
                             android:gravity="end"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="normal" />
 
                     </LinearLayout>
@@ -115,7 +115,7 @@
                             android:textColor="#BF393939"
                             android:textStyle="bold"
                             android:text="Ware House "
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/ware_house"
@@ -125,7 +125,7 @@
                             android:fontFamily="@font/helvetica_neue_medium"
                             android:textColor="#E9171717"
                             android:gravity="end"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="normal" />
 
                     </LinearLayout>
@@ -154,7 +154,7 @@
                             android:fontFamily="@font/helveticaneuelight"
                             android:text="Location to"
                             android:textStyle="bold"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/location_to"
@@ -164,7 +164,7 @@
                             android:textColor="#E9171717"
                             android:fontFamily="@font/helvetica_neue_medium"
                             android:gravity="end"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="normal" />
 
                     </LinearLayout>
@@ -192,7 +192,7 @@
                             android:fontFamily="@font/helveticaneuelight"
                             android:textStyle="bold"
                             android:text="Location from"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/location_from"
@@ -202,7 +202,7 @@
                             android:fontFamily="@font/helvetica_neue_medium"
                             android:gravity="end"
                             android:textColor="#E9171717"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="normal" />
                     </LinearLayout>
                     <View
@@ -228,7 +228,7 @@
                             android:fontFamily="@font/helveticaneuelight"
                             android:textStyle="bold"
                             android:text="State"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/state"
@@ -238,7 +238,7 @@
                             android:fontFamily="@font/helvetica_neue_medium"
                             android:gravity="end"
                             android:textColor="#E9171717"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="normal" />
                     </LinearLayout>
                     <View
@@ -254,30 +254,30 @@
 
 
 
-                <TextView
-                    android:id="@+id/noDataFound"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:text="No Data Found !\nRetry Again."
-                    android:visibility="gone" />
+<!--                <TextView-->
+<!--                    android:id="@+id/noDataFound"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="No Data Found !\nRetry Again."-->
+<!--                    android:visibility="gone" />-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:visibility="gone"
-                    android:id="@+id/orderRecyclerView"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/review_back"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="5dp"
-                    app:layoutManager="LinearLayoutManager" />
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:visibility="invisible"-->
+<!--                    android:id="@+id/orderRecyclerView"-->
+<!--                    android:layout_marginEnd="10dp"-->
+<!--                    android:layout_marginStart="10dp"-->
+<!--                    android:background="@drawable/review_back"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_alignParentTop="true"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:layout_marginBottom="5dp"-->
+<!--                    app:layoutManager="LinearLayoutManager" />-->
 
                 <LinearLayout
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginStart="10dp"
                     android:orientation="horizontal"

@@ -116,14 +116,14 @@
                     android:background="#E6E4E4E4" />
 
                 <androidx.cardview.widget.CardView
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/card_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="2dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
@@ -137,10 +137,11 @@
 
                         <ImageView
                             android:id="@+id/product_image"
-                            android:layout_width="150dp"
-                            android:layout_height="120dp"
+                            android:layout_width="120dp"
+                            android:scaleType="fitXY"
+                            android:layout_height="80dp"
                             android:layout_gravity="center"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:src="@drawable/no_image">
 
                         </ImageView>
@@ -148,7 +149,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="5dp"
                             android:orientation="horizontal">
 
                             <LinearLayout
@@ -167,7 +168,7 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/helvetica_neue_medium"
                                     android:textColor="#191919"
-                                    android:textSize="18sp" />
+                                    android:textSize="16sp" />
                             </LinearLayout>
 
 
@@ -190,7 +191,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/ten"
                             android:fontFamily="@font/helvetica_neue_medium"
-                            android:padding="5dp"
+                            android:padding="3dp"
                             android:textColor="#8A8A8A"
                             android:textSize="15sp" />
                         <LinearLayout
@@ -200,7 +201,7 @@
                             android:gravity="center"
                             android:layout_height="wrap_content">
                             <LinearLayout
-                                android:layout_marginStart="15dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginEnd="15dp"
                                 android:orientation="vertical"
                                 android:layout_width="0dp"
@@ -210,19 +211,23 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
-                                    android:textStyle="normal"
-                                    android:textSize="14sp"
                                     android:text="Batch Number"
-                                    android:textColor="#A8666666"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:textColor="@color/edt_top_text_color"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_text"
                                     />
                                 <EditText
                                     android:id="@+id/batch_number"
                                     android:layout_width="150dp"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="start"
+                                    android:layout_marginTop="@dimen/top_marg_edit"
+
+                                    android:layout_height="40dp"
                                     android:text=""
+                                    android:background="@drawable/custom_edit_text_cut"
+
                                     android:textColor="@color/black"
-                                    android:textSize="14sp"
+                                    android:textSize="@dimen/text_size_edit"
                                     android:textStyle="normal"
                                     android:visibility="visible"/>
                             </LinearLayout>
@@ -235,16 +240,19 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
-                                    android:textStyle="normal"
-                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:textColor="@color/edt_top_text_color"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_text"
                                     android:text="CIR Number"
-                                    android:textColor="#A8666666"
+
                                     />
                                 <EditText
                                     android:id="@+id/cir_no"
                                     android:layout_width="150dp"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="start"
+                                    android:layout_marginTop="@dimen/top_marg_edit"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/custom_edit_text_cut"
                                     android:hint=" "
                                     android:textColor="@color/black"
                                     android:textSize="14sp"
@@ -262,7 +270,7 @@
                             android:gravity="center"
                             android:layout_height="wrap_content">
                             <LinearLayout
-                                android:layout_marginStart="15dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginEnd="15dp"
                                 android:orientation="vertical"
                                 android:layout_width="0dp"
@@ -272,16 +280,18 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
-                                    android:textStyle="normal"
-                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:textColor="@color/edt_top_text_color"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_text"
                                     android:text="MFD Date"
-                                    android:textColor="#A8666666"
                                     />
                                 <EditText
                                     android:id="@+id/mfd_date"
                                     android:layout_width="150dp"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="start"
+                                    android:layout_marginTop="@dimen/top_marg_edit"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/custom_edit_text_cut"
                                     android:editable="false"
                                     android:text=""
                                     android:textColor="@color/black"
@@ -295,19 +305,24 @@
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content">
                                 <TextView
+                                    android:layout_marginTop="10dp"
+
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:textStyle="normal"
-                                    android:textSize="14sp"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:textColor="@color/edt_top_text_color"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_text"
                                     android:text="MKD By"
-                                    android:textColor="#A8666666"
+
                                     />
                                 <EditText
                                     android:id="@+id/mkd_by"
                                     android:layout_width="150dp"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="start"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/custom_edit_text_cut"
+                                    android:layout_marginTop="@dimen/top_marg_edit"
+
                                     android:hint=" "
                                     android:textColor="@color/black"
                                     android:textSize="14sp"
@@ -339,7 +354,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginStart="15dp"
+                            android:layout_marginStart="10dp"
                             android:layout_marginEnd="15dp"
                             android:layout_weight="1"
                             android:gravity="end"
@@ -348,15 +363,14 @@
                                 android:layout_marginTop="10dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:alpha="0.7"
-                                android:fontFamily="@font/helveticaneuelight"
-                                android:gravity="start"
-                                android:text="Unit Price"
-                                android:textSize="12sp"
-                                android:textStyle="bold"/>
+                                android:fontFamily="@font/roboto_regular"
+                                android:textColor="@color/edt_top_text_color"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_text"
+                                android:text="Unit Price" />
 
                             <LinearLayout
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="@dimen/top_marg_edit"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
@@ -365,19 +379,20 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
+                                    android:alpha="0.7"
+android:layout_gravity="center"
                                     android:text="₹"
                                     android:textSize="18sp" />
 
                                 <EditText
                                     android:id="@+id/itemPriceTxt"
-                                    android:layout_width="150dp"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.7"
-                                    android:gravity="start"
+                                    android:layout_width="140dp"
+                                    android:layout_marginEnd="5dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/custom_edit_text_cut"
                                     android:text=""
                                     android:textColor="@color/black"
-                                    android:textSize="18sp"
+                                    android:textSize="14sp"
                                     android:textStyle="normal"
                                     android:visibility="visible"/>
                             </LinearLayout>
@@ -395,21 +410,25 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:alpha="0.7"
-                                android:fontFamily="@font/helveticaneuelight"
+                                android:fontFamily="@font/roboto_regular"
+                                android:textColor="@color/edt_top_text_color"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/text_size_text"
                                 android:gravity="start"
                                 android:text="UOM : "
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
+                                />
                                 <TextView
                                     android:id="@+id/uom_text"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:alpha="0.7"
-                                    android:fontFamily="@font/helveticaneuelight"
+                                    android:fontFamily="@font/roboto_regular"
+                                    android:textColor="@color/edt_top_text_color"
+                                    android:textStyle="bold"
+                                    android:textSize="@dimen/text_size_text"
                                     android:gravity="start"
                                     android:text=" "
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
+
                                     />
 
                             </LinearLayout>
@@ -420,7 +439,6 @@
                             android:layout_height="40dp"
                             android:layout_gravity="start"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="15dp"
                             android:theme="@style/NumberPickerTheme"
                             numberpicker:focusable="false"
                             numberpicker:max="10"
@@ -433,9 +451,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="35dp"
-                            android:layout_marginTop="40dp"
+                            android:layout_marginTop="20dp"
                             android:layout_marginEnd="35dp"
-                            android:layout_marginBottom="50dp"
+                            android:layout_marginBottom="30dp"
                             android:background="@drawable/button"
                             android:fontFamily="@font/helvetica_neue_medium"
                             android:gravity="center"

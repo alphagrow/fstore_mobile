@@ -124,5 +124,5 @@
         <string name="upload_Product_Video">उत्पादन व्हिडिओ अपलोड करा</string>
 
     <!--Item Cart-->
-    <string name="place_order">मागणी नोंद करा</string>
+<!--    <string name="place_order">मागणी नोंद करा</string>-->
 </resources>

@@ -112,11 +112,11 @@ FragmentTransfersDetailsBinding binding;
     }
     private void getOrderDetail() {
         if (productDetail.getData() == null || productDetail.getData().size() == 0) {
-            binding.noDataFound.setVisibility(View.VISIBLE);
-            binding.orderRecyclerView.setVisibility(View.GONE);
+//            binding.noDataFound.setVisibility(View.VISIBLE);
+//            binding.orderRecyclerView.setVisibility(View.GONE);
         } else {
-            binding.noDataFound.setVisibility(View.GONE);
-            binding.orderRecyclerView.setVisibility(View.VISIBLE);
+//            binding.noDataFound.setVisibility(View.GONE);
+//            binding.orderRecyclerView.setVisibility(View.VISIBLE);
             binding.orderId.setText(productDetail.getData().get(position).getOrigin());
             binding.locationTo.setText(productDetail.getData().get(position).getSourceLocation());
             binding.locationFrom.setText(productDetail.getData().get(position).getDestinationLocation());

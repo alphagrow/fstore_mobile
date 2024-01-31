@@ -120,7 +120,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_account_circle_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -150,7 +150,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_co_present_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -174,27 +174,30 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
                     app:passwordToggleDrawable="@drawable/show_password_selector"
                     app:passwordToggleEnabled="true"
                     app:boxStrokeWidth="0dp"
                     app:passwordToggleTint="@color/black_overlay">
 
                     <EditText
-                        android:layout_height="60dp"
                         android:id="@+id/et_password"
-                        android:textColorHint="@color/dark_grey"
-                        android:hint=""
-                        android:drawablePadding="@dimen/ten"
                         android:layout_width="match_parent"
+                        android:textColorHint="@color/dark_grey"
+                        android:layout_height="@dimen/height_marg_edit"
+                        android:layout_marginStart="@dimen/start_marg_edit"
+                        android:layout_marginTop="@dimen/top_marg_edit"
+                        android:layout_marginEnd="@dimen/end_marg_edit"
                         android:background="@drawable/custom_edit_text_cut"
-                        android:fontFamily="@font/helvetica_neue_medium"
+                        android:drawableEnd="@drawable/baseline_local_mall_24"
+                        android:drawablePadding="@dimen/ten"
+                        android:fontFamily="@font/sf_compact_medium"
+                        android:hint=""
+                        android:padding="@dimen/padding_edit"
+                        android:importantForAutofill="no"
                         android:inputType="textPassword"
                         android:textSize="14sp"
                         android:maxLines="1"
-                        android:textColor="@color/black_overlay" />
+                       />
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
                     android:padding="2dp"
@@ -233,7 +236,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_business_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -263,7 +266,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_mail_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -271,19 +274,19 @@
                     android:inputType="textEmailAddress"
                     android:textSize="14dp"
                     />
-    <LinearLayout
-        android:weightSum="2"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_marginEnd="5dp"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+<!--    <LinearLayout-->
+<!--        android:weightSum="2"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginEnd="25dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+<!--        <LinearLayout-->
+<!--            android:layout_marginEnd="5dp"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="wrap_content">-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -306,7 +309,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_phone_enabled_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -315,13 +318,13 @@
                     android:inputType="number"
                     android:textSize="14dp"
                      />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginStart="5dp"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+<!--        </LinearLayout>-->
+<!--        <LinearLayout-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="wrap_content">-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -343,7 +346,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_install_mobile_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -353,22 +356,22 @@
                     android:inputType="number"
                     android:textSize="14dp"
                      />
-        </LinearLayout>
-    </LinearLayout>
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
 
-    <LinearLayout
-        android:weightSum="2"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_marginEnd="5dp"
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content">
+<!--    <LinearLayout-->
+<!--        android:weightSum="2"-->
+<!--        android:layout_marginStart="25dp"-->
+<!--        android:layout_marginEnd="25dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+<!--    <LinearLayout-->
+<!--        android:layout_marginEnd="5dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_height="wrap_content">-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -383,26 +386,27 @@
                     />
 
                 <LinearLayout
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
                         android:id="@+id/stateSpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
+                        android:layout_height="52dp"
                         android:layout_centerHorizontal="true"
                         android:padding="5dp" />
                 </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginStart="5dp"
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content">
+<!--    </LinearLayout>-->
+<!--    <LinearLayout-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_height="wrap_content">-->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -417,20 +421,22 @@
                     />
 
                 <LinearLayout
-                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
                         android:id="@+id/citySpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
+                        android:layout_height="52dp"
                         android:layout_centerHorizontal="true"
                         android:padding="5dp" />
                 </LinearLayout>
-    </LinearLayout>
-    </LinearLayout>
+<!--    </LinearLayout>-->
+<!--    </LinearLayout>-->
 
                 <TextView
                     android:layout_width="match_parent"
@@ -482,7 +488,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_home_work_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -511,7 +517,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_add_road_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -542,7 +548,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_person_pin_circle_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -574,7 +580,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/gst_no"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -605,7 +611,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_web_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -635,7 +641,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_confirmation_number_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -665,7 +671,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_door_sliding_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
@@ -695,7 +701,7 @@
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/baseline_local_mall_24"
+                    android:drawableEnd="@drawable/baseline_featured_play_list_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""

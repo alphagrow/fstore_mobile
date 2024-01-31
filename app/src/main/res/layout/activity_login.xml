@@ -5,9 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <ImageView
-        android:src="@drawable/logo"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/logo_icon"
         android:layout_gravity="center"
-        android:layout_width="210dp"
+        android:layout_width="190dp"
         android:layout_height="120dp">
 
     </ImageView>
@@ -42,7 +43,7 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="30dp"
                     android:fontFamily="@font/helveticaneuelight"
                     android:gravity="center"
                     android:text="@string/login"
@@ -71,7 +72,7 @@
                     <EditText
                         android:id="@+id/et_storeIDView"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="@dimen/height_marg_edit"
                         android:background="@drawable/custom_edit_text_cut"
                         android:fontFamily="@font/helvetica_neue_medium"
                         android:hint="Login ID"
@@ -98,7 +99,7 @@
                     app:passwordToggleTint="@color/black_overlay">
 
                     <EditText
-                        android:layout_height="60dp"
+                        android:layout_height="@dimen/height_marg_edit"
                         android:id="@+id/et_password"
                         android:textColorHint="@color/dark_grey"
                         android:hint="@string/user_password"
