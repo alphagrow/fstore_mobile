@@ -52,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -64,25 +64,26 @@
                 <EditText
                     android:id="@+id/et_product_name"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                  />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -94,25 +95,26 @@
                 <EditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_description_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                   />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -124,24 +126,54 @@
                 <EditText
                     android:id="@+id/edi_product_type"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:editable="false"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_list_alt_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
-                    android:padding="8dp"
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Customer Tax Type"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:background="@drawable/custom_edit_text_cut">
+
+                    <Spinner
+                        android:id="@+id/spin_customer_tax"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -149,6 +181,7 @@
                     android:text="Vendor Tax Type"
                     android:textColor="@color/edt_top_text_color"
                     />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -170,36 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
-                    android:layout_marginEnd="@dimen/end_marg_text"
-                    android:layout_marginStart="@dimen/start_marg_text"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
-                    android:text="Customer Tax Type"
-                    android:textColor="@color/edt_top_text_color"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut">
-
-                    <Spinner
-                        android:id="@+id/spin_customer_tax"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -211,25 +215,26 @@
                 <EditText
                     android:id="@+id/et_product_price"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_currency_rupee_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -238,27 +243,30 @@
                     android:textColor="@color/edt_top_text_color"
                     />
 
-                <LinearLayout
-                    android:id="@+id/lay_et_uom_type"
+                <EditText
+                    android:id="@+id/et_uom_type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut">
-
-                    <Spinner
-                        android:id="@+id/et_uom_Spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp" />
-                </LinearLayout>
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_feed_24"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="14dp"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:requiresFadingEdge="vertical"
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -267,29 +275,30 @@
                     android:textColor="@color/edt_top_text_color"
                     />
                 <EditText
-                    android:id="@+id/et_uom_spinn_type"
+                    android:id="@+id/et_uom_measure"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_emoji_food_beverage_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
-                    android:enabled="false"
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="14dp"
+                    android:enabled="false"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -298,6 +307,7 @@
                     android:textColor="@color/edt_top_text_color" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/twenty_five"
@@ -508,7 +518,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -553,7 +563,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -565,20 +575,21 @@
                 <EditText
                     android:id="@+id/which_pest"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/gst_no"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                    />
                 <TextView
                     android:visibility="gone"
                     android:layout_width="match_parent"
@@ -646,7 +657,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -658,20 +669,23 @@
                 <TextView
                     android:id="@+id/exp_date"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:drawableEnd="@drawable/baseline_calendar_month_24"
                     android:gravity="center|start"
-                    android:hint=""
                     android:inputType="date"
                     android:maxLines="1"
-                    android:padding="8dp"
                     android:singleLine="true"
-                    android:textSize="15sp" />
+                    />
 <!--                <TextView-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->

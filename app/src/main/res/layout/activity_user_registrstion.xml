@@ -115,17 +115,19 @@
                     android:importantForAutofill="no"
                     android:id="@+id/et_username"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint=" "
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -140,20 +142,23 @@
                     />
 
                 <EditText
-                    android:importantForAutofill="no"
+
                     android:id="@+id/ed_user_id"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -223,17 +228,19 @@
                     android:importantForAutofill="no"
                     android:id="@+id/et_company_name"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:inputType="textEmailAddress"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -251,17 +258,19 @@
                     android:importantForAutofill="no"
                     android:id="@+id/et_useremail"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint=" "
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:inputType="textEmailAddress"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                    />
     <LinearLayout
         android:weightSum="2"
         android:layout_marginStart="25dp"
@@ -280,6 +289,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
                     android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
                     android:text="Mobile *"
@@ -290,17 +301,20 @@
                     android:importantForAutofill="no"
                     android:id="@+id/et_mobile"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:maxLength="10"
                     android:inputType="number"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                     />
         </LinearLayout>
         <LinearLayout
             android:layout_marginStart="5dp"
@@ -313,6 +327,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
                     android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
                     android:text="Phone *"
@@ -320,19 +336,23 @@
                     />
 
                 <EditText
-                    android:importantForAutofill="no"
                     android:id="@+id/et_phone"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:maxLength="10"
                     android:inputType="number"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                     />
         </LinearLayout>
     </LinearLayout>
 
@@ -354,6 +374,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
                     android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
                     android:text="State *"
@@ -454,19 +476,20 @@
 
                 <EditText
                     android:id="@+id/et_useraddress"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
-                    android:textSize="14dp"
-                    android:padding="8dp" />
+                   />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -482,19 +505,21 @@
 
                 <EditText
                     android:id="@+id/et_city"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -511,20 +536,22 @@
 
                 <EditText
                     android:id="@+id/et_pincode"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="number"
                     android:textSize="14dp"
                     android:maxLength="6"
-                    android:padding="8dp" />
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -541,20 +568,21 @@
 
                 <EditText
                     android:id="@+id/et_gst_no"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
-                    android:maxLength="15"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint=" "
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -571,19 +599,21 @@
 
                 <EditText
                     android:id="@+id/et_website"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint=" "
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                   />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -599,19 +629,21 @@
 
                 <EditText
                     android:id="@+id/et_insect_lic_no"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint=" "
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                   />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -627,19 +659,21 @@
 
                 <EditText
                     android:id="@+id/et_fert_lic_no"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
-                    android:hint=" "
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -655,19 +689,21 @@
 
                 <EditText
                     android:id="@+id/et_seed_lic_no"
-                    android:importantForAutofill="no"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
                     android:inputType="text"
                     android:textSize="14dp"
-                    android:padding="8dp" />
+                    />
 
 
                 <TextView

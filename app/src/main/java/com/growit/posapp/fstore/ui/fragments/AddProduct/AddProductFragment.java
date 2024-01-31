@@ -167,8 +167,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
     UomLineModel uom_model_list;
-    List<StateModel> tax_list = new ArrayList<>();
-
+    List<StateModel> purchase_tax_list = new ArrayList<>();
+    List<StateModel> sale_tax_list = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -281,7 +281,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    vendor_tax = tax_list.get(position).getId() + "";
+                    vendor_tax = purchase_tax_list.get(position).getId() + "";
 
                 }
             }
@@ -295,7 +295,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    customer_tax = tax_list.get(position).getId() + "";
+                    customer_tax = sale_tax_list.get(position).getId() + "";
 
                 }
             }
@@ -1237,7 +1237,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-                tax_list = new ArrayList<>();
+                purchase_tax_list = new ArrayList<>();
+                sale_tax_list = new ArrayList<>();
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
@@ -1248,21 +1249,33 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                         StateModel stateModel = new StateModel();
                         stateModel.setId(-1);
                         stateModel.setName("--Select tax--");
-                        tax_list.add(stateModel);
+                        purchase_tax_list.add(stateModel);
+                        sale_tax_list.add(stateModel);
                         if (jsonArray.length() > 0) {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 stateModel = new StateModel();
                                 JSONObject data = jsonArray.getJSONObject(i);
                                 int id = data.optInt("id");
                                 String name = data.optString("name");
-                                stateModel.setId(id);
-                                stateModel.setName(name);
-                                tax_list.add(stateModel);
+                                String tax_type = data.optString("tax_type");
+                                if(tax_type.equals("purchase")){
+                                    stateModel.setId(id);
+                                    stateModel.setName(name);
+                                    purchase_tax_list.add(stateModel);
+                                }else if(tax_type.equals("sale")){
+                                    stateModel.setId(id);
+                                    stateModel.setName(name);
+                                    sale_tax_list.add(stateModel);
+                                }
+
                             }
                             if (getContext() != null) {
-                                CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), tax_list);
-                                binding.spinCustomerTax.setAdapter(adapter);
+                                CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), purchase_tax_list);
                                 binding.spinVendorTax.setAdapter(adapter);
+
+                                CustomSpinnerAdapter sale_adapter = new CustomSpinnerAdapter(getContext(), sale_tax_list);
+                                binding.spinCustomerTax.setAdapter(sale_adapter);
+
                             }
                         }
                     }

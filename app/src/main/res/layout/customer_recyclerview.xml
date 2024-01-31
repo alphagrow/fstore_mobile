@@ -54,6 +54,7 @@
                         android:textCursorDrawable="@drawable/color_cursor"
                         android:visibility="visible"/>
                 <Spinner
+                    android:visibility="invisible"
                     android:id="@+id/cstTypeSpinner"
                     android:layout_width="0dp"
                     android:layout_weight=".5"
@@ -61,14 +62,7 @@
                     android:layout_height="38dp"
                     android:background="@drawable/custom_search"/>
 
-<!--                <Spinner-->
-<!--                    android:id="@+id/cstTypeSpinner"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_weight=".5"-->
-<!--                    android:layout_marginEnd="5dp"-->
-<!--                    android:layout_marginLeft="15dp"-->
-<!--                    android:layout_height="38dp"-->
-<!--                    android:background="@drawable/custom_search"/>-->
+
 
             </LinearLayout>
 

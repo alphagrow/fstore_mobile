@@ -36,4 +36,17 @@
     <dimen name="end_marg_text">25dp</dimen>
     <dimen name="top_marg_text">10dp</dimen>
     <dimen name="text_size_text">12sp</dimen>
+    <!--EditText form-->
+    <dimen name="height_marg_edit">50dp</dimen>
+    <dimen name="start_marg_edit">25dp</dimen>
+    <dimen name="end_marg_edit">25dp</dimen>
+    <dimen name="top_marg_edit">5dp</dimen>
+    <dimen name="text_size_edit">14sp</dimen>
+    <dimen name="padding_edit">8dp</dimen>
+    <!--TextView form -->
+    <dimen name="start_marg_textview">25dp</dimen>
+    <dimen name="end_marg_textview">25dp</dimen>
+    <dimen name="top_marg_textview">10dp</dimen>
+    <dimen name="text_size_textview">12sp</dimen>
+
 </resources>

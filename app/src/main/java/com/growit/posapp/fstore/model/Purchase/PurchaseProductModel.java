@@ -76,6 +76,52 @@ public class PurchaseProductModel {
     @Expose
     private String taxes_name;
 
+
+    @SerializedName("supplier_taxes_id")
+    @Expose
+    private Integer supplier_taxes_id;
+
+    public Integer getSupplier_taxes_id() {
+        return supplier_taxes_id;
+    }
+
+    public void setSupplier_taxes_id(Integer supplier_taxes_id) {
+        this.supplier_taxes_id = supplier_taxes_id;
+    }
+
+    public String getSupplier_taxes_name() {
+        return supplier_taxes_name;
+    }
+
+    public void setSupplier_taxes_name(String supplier_taxes_name) {
+        this.supplier_taxes_name = supplier_taxes_name;
+    }
+
+    @SerializedName("supplier_taxes_name")
+    @Expose
+    private String supplier_taxes_name;
+    public String getUom_name() {
+        return uom_name;
+    }
+
+    public void setUom_name(String uom_name) {
+        this.uom_name = uom_name;
+    }
+
+    public String getUom_po_name() {
+        return uom_po_name;
+    }
+
+    public void setUom_po_name(String uom_po_name) {
+        this.uom_po_name = uom_po_name;
+    }
+
+    @SerializedName("uom_name")
+    @Expose
+    private String uom_name;
+    @SerializedName("uom_po_name")
+    @Expose
+    private String uom_po_name;
     public String getTaxes_name() {
         return taxes_name;
     }

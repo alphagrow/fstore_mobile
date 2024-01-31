@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
@@ -66,29 +66,31 @@
                 <EditText
                     android:id="@+id/et_product_name"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_local_mall_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Description"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -96,20 +98,21 @@
                 <EditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_description_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="text"
-                    android:padding="8dp"
+                    android:textSize="@dimen/text_size_edit"
+                    android:padding="@dimen/padding_edit"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                    />
 
 
 
@@ -117,98 +120,97 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Product Type"
                     android:textColor="@color/edt_top_text_color"
                     />
 
                 <LinearLayout
-                    android:id="@+id/lay_detailed_type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
                         android:id="@+id/detailTypeSpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="52dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp" />
+                        />
                 </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Customer Tax Type"
                     android:textColor="@color/edt_top_text_color"
                     />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
-                    android:background="@drawable/custom_edit_text_cut">
-
-                    <Spinner
-                        android:id="@+id/spin_vendor_tax"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
-                    android:layout_marginEnd="@dimen/end_marg_text"
-                    android:layout_marginStart="@dimen/start_marg_text"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
-                    android:text="Vendor Tax Type"
-                    android:textColor="@color/edt_top_text_color"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
                         android:id="@+id/spin_customer_tax"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="52dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp" />
+                         />
                 </LinearLayout>
+
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
+                    android:text="Vendor Tax Type"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:background="@drawable/custom_edit_text_cut">
+
+                    <Spinner
+                        android:id="@+id/spin_vendor_tax"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_centerHorizontal="true"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_textview"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Product price"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -216,79 +218,80 @@
                 <EditText
                     android:id="@+id/et_product_price"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_currency_rupee_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
+                    android:textSize="@dimen/text_size_edit"
+                    android:padding="@dimen/padding_edit"
                     android:hint=""
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                   />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Purchase UOM"
                     android:textColor="@color/edt_top_text_color"
                     />
 
                 <LinearLayout
-                    android:id="@+id/lay_et_uom_type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut">
 
                     <Spinner
                         android:id="@+id/et_uom_Spinner"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="52dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp" />
+                        />
                 </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Unit of Measure"
                     android:textColor="@color/edt_top_text_color"
                     />
                 <EditText
                     android:id="@+id/et_uom_spinn_type"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:editable="false"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_feed_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
-                    android:enabled="false"
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                   />
 
 <!--                <LinearLayout-->
 <!--                    android:layout_width="match_parent"-->
@@ -465,11 +468,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Category"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -477,26 +480,26 @@
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
                     android:drawableRight="@android:drawable/arrow_down_float"
-                    android:drawablePadding="16dp"
                     android:hint=" "
-                    android:padding="12dp" />
+                    android:padding="@dimen/padding_edit" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Which Pest"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -504,29 +507,30 @@
                 <EditText
                     android:id="@+id/which_pest"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/gst_no"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                   />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Packing Std"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -534,29 +538,30 @@
                 <EditText
                     android:id="@+id/packing_std"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_spoke_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Hsn Code"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -564,29 +569,30 @@
                 <EditText
                     android:id="@+id/ed_hsn_code"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/gst_no"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
                     android:inputType="none"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Hsn Code Description"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -594,48 +600,52 @@
                 <EditText
                     android:id="@+id/ed_hsn_code_description"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
-                    android:drawableEnd="@drawable/land_size"
+                    android:drawableEnd="@drawable/baseline_settings_overscan_24"
                     android:drawablePadding="@dimen/ten"
                     android:fontFamily="@font/sf_compact_medium"
                     android:hint=""
+                    android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
                     android:inputType="text"
-                    android:padding="8dp"
                     android:requiresFadingEdge="vertical"
-                    android:textSize="14dp" />
+                    />
 
                 <TextView
                     android:id="@+id/mfd_date"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="14dp"
                     android:drawableEnd="@drawable/baseline_event_24"
                     android:gravity="center|start"
                     android:hint="Mfd. Date"
                     android:visibility="gone"
                     android:inputType="date"
                     android:maxLines="1"
-                    android:padding="8dp"
                     android:singleLine="true"
-                    android:textSize="15sp" />
+                     />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Exp. Date"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -643,29 +653,32 @@
                 <TextView
                     android:id="@+id/exp_date"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
                     android:background="@drawable/custom_edit_text_cut"
                     android:drawableEnd="@drawable/baseline_calendar_month_24"
                     android:gravity="center|start"
-                    android:hint=""
                     android:inputType="date"
                     android:maxLines="1"
-                    android:padding="8dp"
                     android:singleLine="true"
-                    android:textSize="15sp" />
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
-                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginTop="@dimen/top_marg_textview"
                     android:layout_marginEnd="@dimen/end_marg_text"
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
-                    android:textSize="@dimen/text_size_text"
+                    android:textSize="@dimen/text_size_textview"
                     android:text="Expire Date Alarm"
                     android:textColor="@color/edt_top_text_color"
                     />
@@ -673,20 +686,23 @@
                 <EditText
                     android:id="@+id/exp_date_alarm"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/twenty_five"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
                     android:background="@drawable/custom_edit_text_cut"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
                     android:drawableEnd="@drawable/baseline_alarm_on_24"
                     android:gravity="center|start"
-                    android:hint=""
                     android:inputType="number"
                     android:maxLines="1"
-                    android:padding="8dp"
                     android:singleLine="true"
-                    android:textSize="15sp" />
+                   />
 
 
                 <RadioGroup
@@ -730,11 +746,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:maxLines="1"
-                        android:singleLine="true"
+                        android:fontFamily="@font/roboto_regular"
+                        android:layout_marginTop="@dimen/top_marg_textview"
+                        android:layout_marginEnd="@dimen/end_marg_text"
+                        android:layout_marginStart="@dimen/start_marg_text"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_size_textview"
                         android:text="@string/upload_images"
-                        android:textSize="15sp" />
+                       />
 
 
                     <ImageView

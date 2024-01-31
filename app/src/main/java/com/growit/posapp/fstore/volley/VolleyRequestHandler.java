@@ -134,6 +134,10 @@ public class VolleyRequestHandler {
 
         // Request added to the RequestQueue
 //        String cookies = CookieManager.getInstance().getCookie(view.getUrl());
+        //add line for time
+        //*
+        rq.setRetryPolicy(new DefaultRetryPolicy( 10 * 60 * 1000, 5, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//*
         VolleyController.getInstance(mContext).addToRequestQueue(rq);
     }
 }

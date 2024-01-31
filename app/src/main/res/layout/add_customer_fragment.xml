@@ -56,7 +56,7 @@
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="Mobile Number"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -64,66 +64,67 @@
             <EditText
                 android:id="@+id/et_usermobile"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/baseline_phone_enabled_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint=""
+
                 android:importantForAutofill="no"
-                android:textSize="14dp"
                 android:inputType="number"
                 android:maxLength="10"
-                android:padding="8dp"
+                android:textSize="@dimen/text_size_edit"
+                android:padding="@dimen/padding_edit"
                 android:requiresFadingEdge="vertical" />
 
-<!--            <EditText-->
-<!--                android:id="@+id/customer_type"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/twenty_five"-->
-<!--                android:layout_marginTop="25dp"-->
-<!--                android:layout_marginEnd="@dimen/twenty_five"-->
-<!--                android:background="@drawable/custom_edit_text_cut"-->
-<!--                android:drawablePadding="@dimen/ten"-->
-<!--                android:fontFamily="@font/sf_compact_regular"-->
-<!--                android:hint="Customer Type"-->
-<!--                android:inputType="text"-->
-<!--                android:padding="8dp"-->
-<!--                android:paddingStart="@dimen/ten"-->
-<!--                android:paddingEnd="@dimen/ten"-->
-<!--                android:visibility="gone" />-->
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:fontFamily="@font/roboto_regular"-->
-<!--                android:layout_marginTop="@dimen/top_marg_text"-->
-<!--                android:layout_marginEnd="@dimen/end_marg_text"-->
-<!--                android:layout_marginStart="@dimen/start_marg_text"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textSize="@dimen/text_size_text"-->
-<!--                android:text="Customer Type"-->
-<!--                android:textColor="@color/edt_top_text_color" />-->
+            <!--            <EditText-->
+            <!--                android:id="@+id/customer_type"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/twenty_five"-->
+            <!--                android:layout_marginTop="25dp"-->
+            <!--                android:layout_marginEnd="@dimen/twenty_five"-->
+            <!--                android:background="@drawable/custom_edit_text_cut"-->
+            <!--                android:drawablePadding="@dimen/ten"-->
+            <!--                android:fontFamily="@font/sf_compact_regular"-->
+            <!--                android:hint="Customer Type"-->
+            <!--                android:inputType="text"-->
+            <!--                android:padding="8dp"-->
+            <!--                android:paddingStart="@dimen/ten"-->
+            <!--                android:paddingEnd="@dimen/ten"-->
+            <!--                android:visibility="gone" />-->
+            <!--            <TextView-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:fontFamily="@font/roboto_regular"-->
+            <!--                android:layout_marginTop="@dimen/top_marg_text"-->
+            <!--                android:layout_marginEnd="@dimen/end_marg_text"-->
+            <!--                android:layout_marginStart="@dimen/start_marg_text"-->
+            <!--                android:textStyle="bold"-->
+            <!--                android:textSize="@dimen/text_size_text"-->
+            <!--                android:text="Customer Type"-->
+            <!--                android:textColor="@color/edt_top_text_color" />-->
 
-<!--            <LinearLayout-->
-<!--                android:id="@+id/lay_custom_type"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="@dimen/twenty_five"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginEnd="@dimen/twenty_five"-->
-<!--                android:background="@drawable/custom_edit_text_cut">-->
+            <!--            <LinearLayout-->
+            <!--                android:id="@+id/lay_custom_type"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginStart="@dimen/twenty_five"-->
+            <!--                android:layout_marginTop="10dp"-->
+            <!--                android:layout_marginEnd="@dimen/twenty_five"-->
+            <!--                android:background="@drawable/custom_edit_text_cut">-->
 
-<!--                <Spinner-->
-<!--                    android:id="@+id/cstTypeSpinner"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:layout_centerHorizontal="true"-->
-<!--                    android:layout_marginTop="10dp"/>-->
-<!--            </LinearLayout>-->
+            <!--                <Spinner-->
+            <!--                    android:id="@+id/cstTypeSpinner"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="40dp"-->
+            <!--                    android:layout_centerHorizontal="true"-->
+            <!--                    android:layout_marginTop="10dp"/>-->
+            <!--            </LinearLayout>-->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,16 +133,16 @@
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="GST No."
                 android:textColor="@color/edt_top_text_color"
                 />
             <EditText
                 android:id="@+id/gst_edit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/gst_no"
@@ -150,7 +151,8 @@
                 android:fontFamily="@font/sf_compact_regular"
                 android:hint=" "
                 android:inputType="text"
-                android:padding="8dp" />
+                android:textSize="@dimen/text_size_edit"
+                android:padding="@dimen/padding_edit"/>
             <TextView
                 android:id="@+id/land_size_text"
                 android:layout_width="match_parent"
@@ -160,7 +162,7 @@
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="Land Size in(acre)"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -170,29 +172,31 @@
                 android:hint=""
                 android:importantForAutofill="no"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:requiresFadingEdge="vertical"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/land_size"
                 android:drawablePadding="@dimen/ten"
-                android:textSize="14dp"
+                android:textSize="@dimen/text_size_edit"
+                android:padding="@dimen/padding_edit"
                 android:fontFamily="@font/sf_compact_medium"
                 android:inputType="text"
-                android:padding="8dp" />
+
+                />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginTop="@dimen/top_marg_textview"
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="@string/customer_name"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -201,9 +205,9 @@
                 android:importantForAutofill="no"
                 android:id="@+id/et_username"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/baseline_account_circle_24"
@@ -211,19 +215,18 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint=""
                 android:inputType="text"
-                android:textSize="14dp"
-
-                android:padding="8dp" />
+                android:textSize="@dimen/text_size_edit"
+                android:padding="@dimen/padding_edit" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginTop="@dimen/top_marg_textview"
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="State"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -231,9 +234,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut">
 
@@ -249,11 +252,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginTop="@dimen/top_marg_textview"
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="District"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -261,9 +264,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut">
 
@@ -280,20 +283,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginTop="@dimen/top_marg_textview"
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="Taluka"
                 android:textColor="@color/edt_top_text_color"
                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut">
 
@@ -309,11 +312,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginTop="@dimen/top_marg_textview"
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="@string/address"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -322,9 +325,9 @@
                 android:id="@+id/et_useraddress"
                 android:importantForAutofill="no"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/baseline_home_work_24"
@@ -332,19 +335,18 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint=""
                 android:inputType="text"
-                android:textSize="14dp"
-
-                android:padding="8dp" />
+                android:textSize="@dimen/text_size_edit"
+                android:padding="@dimen/padding_edit" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginTop="@dimen/top_marg_textview"
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="@string/pincode"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -353,9 +355,9 @@
                 android:id="@+id/et_pincode"
                 android:importantForAutofill="no"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/baseline_person_pin_circle_24"
@@ -363,20 +365,20 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint=""
                 android:inputType="number"
-                android:textSize="14dp"
-
+                android:textSize="@dimen/text_size_edit"
+                android:padding="@dimen/padding_edit"
                 android:maxLength="6"
-                android:padding="8dp" />
+                />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
-                android:layout_marginTop="@dimen/top_marg_text"
+                android:layout_marginTop="@dimen/top_marg_textview"
                 android:layout_marginEnd="@dimen/end_marg_text"
                 android:layout_marginStart="@dimen/start_marg_text"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_text"
+                android:textSize="@dimen/text_size_textview"
                 android:text="@string/email"
                 android:textColor="@color/edt_top_text_color"
                 />
@@ -385,9 +387,9 @@
                 android:importantForAutofill="no"
                 android:id="@+id/et_useremail"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="25dp"
                 android:background="@drawable/custom_edit_text_cut"
                 android:drawableEnd="@drawable/baseline_mail_24"
@@ -395,8 +397,8 @@
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint=""
                 android:inputType="textEmailAddress"
-                android:textSize="14dp"
-                android:padding="8dp" />
+                android:textSize="@dimen/text_size_edit"
+                android:padding="@dimen/padding_edit"/>
 
             <TextView
                 android:id="@+id/register_btn"

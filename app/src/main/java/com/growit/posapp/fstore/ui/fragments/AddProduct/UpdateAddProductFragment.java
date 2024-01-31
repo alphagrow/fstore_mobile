@@ -56,6 +56,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -82,6 +84,7 @@ import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
 import com.growit.posapp.fstore.volley.VolleyCallback;
 import com.growit.posapp.fstore.volley.VolleyRequestHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,8 +106,8 @@ import java.util.Map;
 
 
 public class UpdateAddProductFragment extends Fragment implements View.OnClickListener {
-    private EditText et_product_name, et_product_price, et_uom, et_size, et_color, et_whole_pattern, tech_name_pest,brand_name,mkt_by,batch_number,cir_number,which_crop,which_pest,packing_std;
-    private ImageView product_image,image_set;
+    private EditText et_product_name, et_product_price, et_uom, et_size, et_color, et_whole_pattern, tech_name_pest, brand_name, mkt_by, batch_number, cir_number, which_crop, which_pest, packing_std;
+    private ImageView product_image, image_set;
     private Button submit_btn;
 
     ArrayList<String> api_array_list;
@@ -115,48 +118,50 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     private ProgressBar progressBar;
     private ImageView imageView, video_image;
     private VideoView videoView;
-    String str_product_name, str_product_price, str_uom, str_uom_cate,str_tax, str_color, str_whole_pattern,str_product_type,vendor_tax;
+    String str_product_name, str_product_price, str_uom, supplier_taxes_id, customer_tax, str_uom_cate, str_tax, str_color, str_whole_pattern, str_product_type;
     String imageFilePath;
     ProgressBar idPBLoading;
     private TextView video_text;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 3;
     private static final int PICK_FROM_VIDEO = 4;
-    private  String str_image_aa;
+    private String str_image_aa;
     ProgressDialog progressDialog;
     MediaController mediaControls;
     private RecyclerView recy_image;
     Bitmap bitmap = null;
     RadioGroup sel_non_gov;
     ImageAdapter adapter;
-    TextView mfd_date,exp_date,exp_date_alarm;
+    TextView mfd_date, exp_date, exp_date_alarm;
     String str_image_crop;
-    DatePickerDialog.OnDateSetListener date_mfd,date_exp,date_exp_alarm;
+    DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
     final Calendar myCalendar = Calendar.getInstance();
     FragmentUpdateAddProductBinding binding;
     Map<String, List<String>> selected_value_map = new HashMap<>();
-    List<PurchaseProductModel> list=null;
-    int  position;
+    List<PurchaseProductModel> list = null;
+    int position;
     String product_id;
-    String crop_id,str_crop_name;
+    String crop_id, str_crop_name;
     Activity contexts;
     List<AttributeModel> model = new ArrayList<>();
-    ArrayList<Integer> attribute_id_list = new ArrayList<>();
+    ArrayList<String> attribute_id_list = new ArrayList<>();
     ListAttributesModel model_attribute;
-    String str_non_gov_product="Non-Gov";
+    String str_non_gov_product = "Non-Gov";
     List<Value> cropList = new ArrayList<>();
     List<Attribute> attributes;
     //    private static final int SELECT_VIDEO = 3;
-    ArrayList<String>crop_id_list = new ArrayList<>();
-   String str_crop_id,customer_tax;
-    ArrayList<Integer>sel_value_id = new ArrayList<>();
+    ArrayList<String> crop_id_list = new ArrayList<>();
+    String str_crop_id;
+    ArrayList<Integer> sel_value_id = new ArrayList<>();
     ProductDetail model_uom_type;
     List<UomCategoryModel> uom_model_type = new ArrayList<>();
     UomLineModel uom_model_list;
-    List<UomLineModel> uomLines= new ArrayList<>();
+    List<UomLineModel> uomLines = new ArrayList<>();
 
     Bitmap imageBitmap = null;
-    List<StateModel> tax_list = new ArrayList<>();
+    List<StateModel> purchase_tax_list = new ArrayList<>();
+    List<StateModel> sale_tax_list = new ArrayList<>();
+
     public UpdateAddProductFragment() {
         // Required empty public constructor
     }
@@ -169,7 +174,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null) {
+        if (getArguments() != null) {
 
         }
     }
@@ -178,30 +183,29 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // R.layout.fragment_update_add_product
-        binding= FragmentUpdateAddProductBinding.inflate(inflater, container, false);
+        binding = FragmentUpdateAddProductBinding.inflate(inflater, container, false);
         imagesUriArrayList = new ArrayList();
         init();
         return binding.getRoot();
     }
 
     private void init() {
-
         if (getArguments() != null) {
             list = (List<PurchaseProductModel>) getArguments().getSerializable("product_list");
             int position = getArguments().getInt("position");
             str_crop_id = String.valueOf(getArguments().getInt("crop_id"));
             str_crop_name = getArguments().getString("crop_name");
-            int value_id=0;
-            List<Attribute> attributeValue_list= list.get(position).getAttributes();
-            for (int i=0;i<attributeValue_list.size();i++){
-                for (int j=0;j<attributeValue_list.get(i).getValues().size();j++) {
-                 value_id = attributeValue_list.get(i).getValues().get(j).getValueId();
+            int value_id = 0;
+            List<Attribute> attributeValue_list = list.get(position).getAttributes();
+            for (int i = 0; i < attributeValue_list.size(); i++) {
+                for (int j = 0; j < attributeValue_list.get(i).getValues().size(); j++) {
+                    value_id = attributeValue_list.get(i).getValues().get(j).getValueId();
                 }
                 sel_value_id.add(value_id);
             }
 
-            Log.d("sel_value",sel_value_id.toString());
-            product_id= String.valueOf(list.get(position).getProductId());
+            Log.d("sel_value", sel_value_id.toString());
+            product_id = String.valueOf(list.get(position).getProductId());
             binding.etProductName.setText(list.get(position).getProductName());
             binding.etProductPrice.setText(String.valueOf(list.get(position).getListPrice()));
             binding.packingStd.setText(list.get(position).getProductPackage());
@@ -210,12 +214,20 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             binding.expDate.setText(list.get(position).getExpDate());
             binding.description.setText(list.get(position).getDescription());
             binding.ediProductType.setText(list.get(position).getDetailedType());
-             attributes = list.get(position).getAttributes();
-             Log.d("uom_id_f",list.get(position).getUomId()+"FFFF  "+list.get(position).getUomPoId());
-
+            attributes = list.get(position).getAttributes();
+            str_uom = list.get(position).getUomId();
+            binding.etUomMeasure.setText(list.get(position).getUom_po_name());
+            binding.etUomType.setText(list.get(position).getUom_name());
+            customer_tax = String.valueOf(list.get(position).getTaxesId());
+            supplier_taxes_id = String.valueOf(list.get(position).getSupplier_taxes_id());
+            //   Log.d("image_pro",ApiConstants.BASE_URL+list.get(position).getImageUrl());
+            Picasso.with(getActivity()).load(ApiConstants.BASE_URL + list.get(position).getImageUrl())
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.no_image)
+                    .into(binding.image);
             if (Utility.isNetworkAvailable(getContext())) {
                 getTaxList();
-                getUOMList();
+                //  getUOMList();
                 getCropRequest();
                 getAttributeList();
             } else {
@@ -228,9 +240,6 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         progressBar = new ProgressBar(getActivity());
         progressBar.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         binding.updateBtn.setOnClickListener(this);
-
-
-
         binding.expDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -248,20 +257,20 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 ExpireLabel();
             }
         };
-        binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //           if (position != 0) {
-                str_uom = uomLines.get(position).getId() + "";
-                binding.etUomSpinnType.setText(uomLines.get(position).getName());
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                           if (position != 0) {
+//                               str_uom = uomLines.get(position).getId() + "";
+//                               binding.etUomSpinnType.setText(uomLines.get(position).getName());
+//                           }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
 
         binding.image.setOnClickListener(new View.OnClickListener() {
@@ -293,7 +302,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    vendor_tax = tax_list.get(position).getId() + "";
+                    supplier_taxes_id = purchase_tax_list.get(position).getId() + "";
 
                 }
             }
@@ -307,7 +316,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                    customer_tax = tax_list.get(position).getId() + "";
+                    customer_tax = sale_tax_list.get(position).getId() + "";
 
                 }
             }
@@ -319,6 +328,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         });
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
+
+
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), MainActivity.class));
                 getActivity().finish();
@@ -341,7 +352,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
-                String    attributes_id = model.get(position).getId() + "";
+                    String attributes_id = model.get(position).getId() + "";
 
                 }
             }
@@ -356,7 +367,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
     private void ExpireLabel() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String   str_exp_date = sdf.format(myCalendar.getTime());
+        String str_exp_date = sdf.format(myCalendar.getTime());
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         String date_e = sd.format(myCalendar.getTime());
         binding.expDate.setText(date_e);
@@ -384,7 +395,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                return;
 //            }
 
-            if (str_product_type.length()==0) {
+            if (str_product_type.length() == 0) {
                 Toast.makeText(getActivity(), "Enter the Product type", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -406,7 +417,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                     }
                 }
             });
-            Log.d("crop_id_list",crop_id_list.toString());
+            Log.d("crop_id_list", crop_id_list.toString());
             Log.d("attribute_json_array", attribute_json_array.toString());
 
 
@@ -414,10 +425,18 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 Toast.makeText(contexts, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (customer_tax.length() == 0) {
+                Toast.makeText(getActivity(), "Select Customer", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (supplier_taxes_id.length() == 0) {
+                Toast.makeText(getActivity(), "Select Vendor", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (attribute_json_array != null) {
                 if (str_crop_id != null) {
-                    updateProductRequest(str_crop_id,str_product_name, str_product_price,str_whichPest,str_description,str_exp_date,attribute_json_array);
+                    updateProductRequest(str_crop_id, str_product_name, str_product_price, str_whichPest, str_description, str_exp_date, attribute_json_array);
                 } else {
                     Toast.makeText(getActivity(), "Select Category", Toast.LENGTH_SHORT).show();
                 }
@@ -427,7 +446,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    private void updateProductRequest(String crop_id_list,String str_product_name,String str_product_price,String str_whichPest,String str_description,String str_exp_date,JSONArray attribute_json_array) {
+    private void updateProductRequest(String crop_id_list, String str_product_name, String str_product_price, String str_whichPest, String str_description, String str_exp_date, JSONArray attribute_json_array) {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID() + "");
@@ -441,14 +460,12 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         params.put("detailed_type", str_product_type);
         params.put("attribute_lines", attribute_json_array.toString());
         params.put("product_id", product_id);
-        //params.put("taxes_id", str_tax);
-        params.put("uom_id", str_uom);
-        params.put("uom_po_id", str_uom);
-        params.put("pos_categ_id", crop_id_list+"");
-
-
-
-        Log.d("update_product",params.toString());
+        params.put("taxes_id", customer_tax);
+        params.put("supplier_taxes_id", supplier_taxes_id);
+        params.put("uom_id", binding.etUomType.getText().toString());
+        params.put("uom_po_id", binding.etUomMeasure.getText().toString());
+        params.put("pos_categ_id", crop_id_list + "");
+        Log.d("update_product", params.toString());
 
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_PRODUCT, new VolleyCallback() {
             private String message = "Update failed!!";
@@ -456,8 +473,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onSuccess(Object result) throws JSONException {
                 JSONObject obj = new JSONObject(result.toString());
-
-                Log.d("result",result.toString());
+                Log.d("result", result.toString());
                 String status = obj.optString("status");
                 message = obj.optString("message");
                 String error_message = obj.optString("error_message");
@@ -469,7 +485,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                     fragment.setArguments(bundle);
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                }else {
+                } else {
                     Toast.makeText(contexts, error_message, Toast.LENGTH_SHORT).show();
                     Log.v("error_message", error_message.toString());
                 }
@@ -478,7 +494,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             @Override
             public void onError(String result) throws Exception {
                 Log.v("Response", result.toString());
-                Toast.makeText(contexts, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -488,6 +504,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         contexts = getActivity();
         //  hideKeyboard(activity);
     }
+
     private void takePhoto() {
         final CharSequence[] options = {"Take Photo", "Select photo from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -512,26 +529,57 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         });
         builder.show();
 
-
+//        final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle("Add Photo!");
+//        builder.setItems(options, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int item) {
+//                if (options[item].equals("Take Photo")) {
+//                    askForPermission("android.permission.CAMERA", 2);
+//                } else if (options[item].equals("Select multiple photos from Gallery")) {
+//                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//// Do something for lollipop and above versions
+//                        askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
+//                    } else {
+//                        askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+//                    }
+//
+//                } else if (options[item].equals("Cancel")) {
+//                    dialog.dismiss();
+//                }
+//            }
+//        });
+//        builder.show();
     }
 
 
-    private void getVideo(){
+    private void getVideo() {
         askForPermission("android.permission.READ_MEDIA_VIDEO", 3);
 
     }
+
     private void askForPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(contexts, permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(contexts, new String[]{permission}, requestCode);
+        if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
         } else {
             if (requestCode == 1) {
                 fromGallery();
             } else if (requestCode == 2) {
                 openCamera();
-            }else if (requestCode == 3) {
-                openVideo();
             }
         }
+//        if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
+//        } else {
+//            if (requestCode == 1) {
+//                fromGallery();
+//            } else if (requestCode == 2) {
+//                openCamera();
+//            } else if (requestCode == 3) {
+//                openVideo();
+//            }
+//        }
     }
 
     private void fromGallery() {
@@ -558,10 +606,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         Intent intent = new Intent();
         intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,"Select a Video "), PICK_FROM_VIDEO);
+        startActivityForResult(Intent.createChooser(intent, "Select a Video "), PICK_FROM_VIDEO);
 
     }
-
 
 
     private void openCamera() {
@@ -597,20 +644,6 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //        }
     }
 
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName, /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
-        );
-
-        imageFilePath = image.getAbsolutePath();
-        return image;
-    }
-
 
     private void getAttributeList() {
         SessionManagement sm = new SessionManagement(getActivity());
@@ -641,7 +674,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                         model.add(model_v);
                         model.addAll(model_attribute.getAttributes());
 
-                        if(getContext()!=null) {
+                        if (getContext() != null) {
                             AttributeListSpinnerAdapter adapter = new AttributeListSpinnerAdapter(getContext(), model);
                             binding.typeVariantSpinner.setAdapter(adapter);
 //                            binding.typeVariantSpinner.setSelection(spinnerPosition);
@@ -657,7 +690,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         queue.add(jsonObjectRequest);
 
     }
-//    private void createTextDynamically(int n) {
+
+    //    private void createTextDynamically(int n) {
 //        Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 //        int width = display.getWidth();
 //        LinearLayout l = new LinearLayout(getActivity());
@@ -689,50 +723,51 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //        }
 //
 //    }
-@Override
-public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (resultCode == RESULT_OK) {
-        if (requestCode == PICK_FROM_FILE) {
-            Uri selectedImageUri = data.getData();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_FROM_FILE) {
+                Uri selectedImageUri = data.getData();
 
-            try {
-                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (!Utility.isNetworkAvailable(getActivity())) {
-                Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
-            binding.image.setImageBitmap(imageBitmap);
-        } else if (requestCode == PICK_FROM_CAMERA) {
-
-            try {
-                //our imageFilePath that contains the absolute path to the created file
-                File file = new File(imageFilePath);
-                imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
-
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
                 binding.image.setImageBitmap(imageBitmap);
+            } else if (requestCode == PICK_FROM_CAMERA) {
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    //our imageFilePath that contains the absolute path to the created file
+                    File file = new File(imageFilePath);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+
+                    if (!Utility.isNetworkAvailable(getActivity())) {
+                        Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    str_image_crop = getEncoded64ImageStringFromBitmap(imageBitmap);
+                    binding.image.setImageBitmap(imageBitmap);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-
         }
     }
-}
+
     public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byteFormat = stream.toByteArray();
-       // Get the Base64 string
+        // Get the Base64 string
         String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
 
         return imgString;
@@ -757,40 +792,50 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
             text.setHint("Select the " + model.get(j).getName());
 
             ////set data in textview
-            int attribute_value_id=0;
+            int attribute_value_id = 0;
             List<String> item_value_list = null;
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = null;
+            ArrayList<String> attribute_id_list2 = null;
+            for (int i = 0; i < attributes.size(); i++) {
+                if (attributes.get(i).getAttributeName().equalsIgnoreCase(model.get(j).getName())) {
+                    attribute_id_list2 = new ArrayList<>();
+                    stringBuilder = new StringBuilder();
+                    if (attributes.get(i).getValues() != null) {
+                        List<Value> selectedValue = attributes.get(i).getValues();
+                        for (int k = 0; k < selectedValue.size(); k++) {
+                            // if (model.get(j).getValues().get(i).getId().equals(attributes.get(j).getValues().get(i).getValueId())) {
+/*                        item_value_list = selected_value_map.get(String.valueOf(att_id));
+                        attribute_value_id = attributes.get(i).getValues().get(i).getValueId();
+                        stringBuilder.append(attributes.get(i).getValues().get(i).getValueName());
+                        Log.d("stringBuilder", stringBuilder.toString());
+                        if (item_value_list != null) {
+                            item_value_list.add(String.valueOf(attribute_value_id));
+                            selected_value_map.put(String.valueOf(att_id), item_value_list);
+                        } else {
+                            item_value_list = new ArrayList<>();
+                            item_value_list.add(String.valueOf(attribute_value_id));
+                            selected_value_map.put(String.valueOf(att_id), c);
 
-//            for (int i = 0; i < model.get(j).getValues().size(); i++) {
-//                if(attributes.get(j).getValues() !=null&&attributes.get(j).getValues().size()==0) {
-//                    if (model.get(j).getValues().get(i).getId().equals(attributes.get(j).getValues().get(i).getValueId())) {
-//                        item_value_list = selected_value_map.get(String.valueOf(att_id));
-//                        attribute_value_id = attributes.get(j).getValues().get(i).getValueId();
-//                        stringBuilder.append(attributes.get(j).getValues().get(i).getValueName());
-//                        Log.d("stringBuilder",stringBuilder.toString());
-//                        if (item_value_list != null) {
-//                            item_value_list.add(String.valueOf(attribute_value_id));
-//                            selected_value_map.put(String.valueOf(att_id), item_value_list);
-//                        } else {
-//                            item_value_list = new ArrayList<>();
-//                            item_value_list.add(String.valueOf(attribute_value_id));
-//                            selected_value_map.put(String.valueOf(att_id), item_value_list);
-//
-//                        }
-//                        if (i != attributes.get(j).getValues().size() - 1) {
-//                            stringBuilder.append(", ");
-//                        }
-//                        attribute_id_list.add(attribute_value_id);
-//                        text.setHint(stringBuilder);
-//                    }
-//                }
-//            }
+                        }*/
+                            attribute_id_list2.add(String.valueOf(selectedValue.get(k).getValueId()));
+                            if (k != 0) {
+                                stringBuilder.append(", ");
+                            }
+                            stringBuilder.append(selectedValue.get(k).getValueName());
+
+                            // attribute_id_list.add(attribute_value_id);
+
+                            // }
+                        }
+                        text.setHint(stringBuilder);
+                    }
+                    // Map<String, List<String>> selected_value_map = new HashMap<>();
+                    selected_value_map.put(String.valueOf(att_id), attribute_id_list2);
+                }
+            }
 
             Log.d("set_attribute_json_array", String.valueOf(stringBuilder));
-
-
             text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-
             text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
             //  et.setEnabled(false);
             binding.linearLayoutMain.addView(text, editTextParams);
@@ -800,6 +845,21 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
         }
 
     }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
+
     private void SetDataTextDataDynamically(TextView text_view, int text_id, List<AttributeValue> attribute_value, int att_id) {
         ArrayList<String> attribute_name = new ArrayList<>();
         ArrayList<String> attribute_id = new ArrayList<>();
@@ -859,7 +919,7 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
                                 stringBuilder.append(", ");
                             }
                         }
-                        attribute_id_list.add(attribute_value_id);
+                        attribute_id_list.add(String.valueOf(attribute_value_id));
 
 // set text on textView
                         text_view.setText(stringBuilder.toString());
@@ -892,6 +952,7 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
             }
         });
     }
+
     private void getCropRequest() {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
@@ -935,6 +996,7 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
     }
+
     private void setWhichCrop(List<Value> cropList) {
         ArrayList<String> crop_name = new ArrayList<>();
         ArrayList<String> crop_id = new ArrayList<>();
@@ -945,7 +1007,7 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
         }
         final CharSequence[] items = crop_name.toArray(new CharSequence[crop_name.size()]);
         boolean[] selected_crop = new boolean[crop_name.size()];
-          binding.textView.setText(str_crop_name);
+        binding.textView.setText(str_crop_name);
 
         binding.textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1011,65 +1073,85 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
             }
         });
     }
-    private void getUOMList() {
-        SessionManagement sm = new SessionManagement(getActivity());
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_UOM_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        //    Utility.showDialoge("Please wait while a moment...", getActivity());
-        Log.d("ALL_CROPS_url",url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.v("Response", response.toString());
-                JSONObject obj = null;
-                int spinnerPosition = 0;
-                try {
-                    obj = new JSONObject(response.toString());
-                    int statusCode = obj.optInt("statuscode");
-                    String status = obj.optString("status");
 
-                    if (status.equalsIgnoreCase("success")) {
-                        Gson gson = new Gson();
-                        Type listType = new TypeToken<ProductDetail>() {
-                        }.getType();
-                        model_uom_type = gson.fromJson(response.toString(), listType);
-//                        UomCategoryModel stateModel = new UomCategoryModel();
-//                        stateModel.setId(-1);
-//                        stateModel.setName("--Select UOM--");
-//                        uom_model_type.add(stateModel);
-
-                        if (model_uom_type.getUomCategories() == null || model_uom_type.getUomCategories().size() == 0) {
-
-                        }else {
-                            for (int i=0;i<model_uom_type.getUomCategories().size();i++){
-                                for (int j=0;j<model_uom_type.getUomCategories().get(i).getUomLines().size();j++){
-                                    uom_model_list=new UomLineModel();
-                                    uom_model_list.setId(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId());
-                                    uom_model_list.setName(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getName());
-                                    if (String.valueOf(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId()).equalsIgnoreCase(list.get(position).getUomId())) {
-                                        spinnerPosition = j;
-                                    }
-                                    uomLines.add(uom_model_list);
-                                }
-
-
-                            }
-
-                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uomLines);
-                            binding.etUomSpinner.setAdapter(adapter);
-                            binding.etUomSpinner.setSelection(spinnerPosition);
-                        }
-
-
-
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-        queue.add(jsonObjectRequest);
-    }
+    //    private void getUOMList() {
+//        SessionManagement sm = new SessionManagement(getActivity());
+//        RequestQueue queue = Volley.newRequestQueue(getActivity());
+//        String url = ApiConstants.BASE_URL + ApiConstants.GET_UOM_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+//        //    Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Log.d("ALL_CROPS_url",url);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.v("Response", response.toString());
+//                JSONObject obj = null;
+//                int spinnerPosition = 0;
+//                try {
+//                    obj = new JSONObject(response.toString());
+//                    int statusCode = obj.optInt("statuscode");
+//                    String status = obj.optString("status");
+//
+//                    if (status.equalsIgnoreCase("success")) {
+//                        Gson gson = new Gson();
+//                        Type listType = new TypeToken<ProductDetail>() {
+//                        }.getType();
+//                        model_uom_type = gson.fromJson(response.toString(), listType);
+////                        UomCategoryModel stateModel = new UomCategoryModel();
+////                        stateModel.setId(-1);
+////                        stateModel.setName("--Select UOM--");
+////                        uom_model_type.add(stateModel);
+//
+//                        if (model_uom_type.getUomCategories() == null || model_uom_type.getUomCategories().size() == 0) {
+//
+//                        }else {
+////                            for (int i=0;i<model_uom_type.getUomCategories().size();i++){
+////                                for (int j=0;j<model_uom_type.getUomCategories().get(i).getUomLines().size();j++){
+////                                    uom_model_list=new UomLineModel();
+////                                    uom_model_list.setId(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId());
+////                                    uom_model_list.setName(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getName());
+////                                    if (String.valueOf(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId()).equalsIgnoreCase(list.get(position).getUomId())) {
+////                                        spinnerPosition = j;
+////                                    }
+////                                    uomLines.add(uom_model_list);
+////                                }
+////
+////
+////                            }
+////
+////                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uomLines);
+////                            binding.etUomSpinner.setAdapter(adapter);
+////                            binding.etUomSpinner.setSelection(spinnerPosition);
+//
+//                            for (int i = 0; i < model_uom_type.getUomCategories().size(); i++) {
+//                                for (int j = 0; j < model_uom_type.getUomCategories().get(i).getUomLines().size(); j++) {
+//                                    uom_model_list = new UomLineModel();
+//                                    uom_model_list.setId(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId());
+//
+//                                    if (String.valueOf(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getId()).equalsIgnoreCase(list.get(position).getUomId())) {
+//                                        spinnerPosition = j+1;
+//                                    }
+//                                    uom_model_list.setName(model_uom_type.getUomCategories().get(i).getUomLines().get(j).getName());
+//                                    uomLines.add(uom_model_list);
+//                                }
+//
+//
+//                            }
+//
+//                            UOMSpinnerAdapter adapter = new UOMSpinnerAdapter(getContext(), uomLines);
+//                            binding.etUomSpinner.setAdapter(adapter);
+//                            binding.etUomSpinner.setSelection(spinnerPosition);
+//                        }
+//
+//
+//
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+//        queue.add(jsonObjectRequest);
+//    }
     private void getTaxList() {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
@@ -1079,8 +1161,10 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-                tax_list = new ArrayList<>();
+                purchase_tax_list = new ArrayList<>();
+                sale_tax_list = new ArrayList<>();
                 int spinnerPosition = 0;
+                int sup_spinnerPosition = 0;
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
@@ -1091,26 +1175,47 @@ public void onActivityResult(int requestCode, int resultCode, @Nullable Intent d
                         StateModel stateModel = new StateModel();
                         stateModel.setId(-1);
                         stateModel.setName("--Select tax--");
-                        tax_list.add(stateModel);
+                        sale_tax_list.add(stateModel);
+                        purchase_tax_list.add(stateModel);
                         if (jsonArray.length() > 0) {
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 stateModel = new StateModel();
                                 JSONObject data = jsonArray.getJSONObject(i);
                                 int id = data.optInt("id");
                                 String name = data.optString("name");
+//                                stateModel.setId(id);
+                                String tax_type = data.optString("tax_type");
+
+                                //  if(tax_type.equals("purchase")){
+                                StateModel stateM = new StateModel();
                                 stateModel.setId(id);
+
+                                if (String.valueOf(id).equals(supplier_taxes_id)) {
+                                    sup_spinnerPosition = i + 1;
+                                }
                                 stateModel.setName(name);
-                                if (String.valueOf(id).equalsIgnoreCase(String.valueOf(list.get(position).getTaxesId()))) {
+                                purchase_tax_list.add(stateModel);
+                                //  }else if(tax_type.equals("sale")){
+
+                                stateModel.setId(id);
+
+                                if (String.valueOf(id).equals(customer_tax)) {
                                     spinnerPosition = i + 1;
                                 }
-                                tax_list.add(stateModel);
+                                stateModel.setName(name);
+                                sale_tax_list.add(stateModel);
+                                //  }
+
+
                             }
                             if (getContext() != null) {
-                                CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), tax_list);
-                                binding.spinCustomerTax.setAdapter(adapter);
-                                binding.spinCustomerTax.setSelection(spinnerPosition);
+                                CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), purchase_tax_list);
                                 binding.spinVendorTax.setAdapter(adapter);
-                              //  binding.spinVendorTax.setSelection(spinnerPosition);
+                                binding.spinVendorTax.setSelection(sup_spinnerPosition);
+
+                                CustomSpinnerAdapter sale_adapter = new CustomSpinnerAdapter(getContext(), sale_tax_list);
+                                binding.spinCustomerTax.setAdapter(sale_adapter);
+                                binding.spinCustomerTax.setSelection(spinnerPosition);
                             }
                         }
                     }

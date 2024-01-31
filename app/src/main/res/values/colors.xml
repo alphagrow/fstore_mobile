@@ -46,5 +46,7 @@
     <color name="green_color">#2b6731</color>
     <color name="text_color">#393939</color>
 <!--Edit text-->
+    <color name="edit_text_color_sigh">#D9000000</color>
     <color name="edt_top_text_color">#A4000000</color>
+    <color name="line_color">#F2666666</color>
 </resources>

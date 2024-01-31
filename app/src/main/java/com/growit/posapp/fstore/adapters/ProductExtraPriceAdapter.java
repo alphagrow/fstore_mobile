@@ -62,13 +62,8 @@ public class ProductExtraPriceAdapter extends RecyclerView.Adapter<ProductExtraP
     @Override
     public void onBindViewHolder(@NonNull ProductExtraPriceAdapter.ViewHolder holder, int position) {
         ExtraVariantData orders = order.get(position);
-
         holder.product_name.setText(orders.getProductName());
-
-
-
-
-//        DecimalFormat form = new DecimalFormat("0.00");
+        //        DecimalFormat form = new DecimalFormat("0.00");
         Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getImageUrl())
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.no_image)

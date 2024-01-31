@@ -161,6 +161,7 @@
 
             </View>
             <androidx.cardview.widget.CardView
+                android:visibility="gone"
                 android:id="@+id/company_profile"
                 android:layout_margin="10dp"
                 app:cardCornerRadius="2dp"

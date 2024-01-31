@@ -213,6 +213,25 @@
                             layout="@layout/product_detail_update_ui_layout"
                             />
 
+<!--                        <HorizontalScrollView-->
+<!--                            android:visibility="visible"-->
+<!--                            android:layout_weight="2"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content">-->
+
+
+                            <LinearLayout
+
+                                android:id="@+id/idLLContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                            </LinearLayout>
+<!--                        </HorizontalScrollView>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -221,23 +240,24 @@
                             android:layout_weight="1.2"
                             android:orientation="vertical">
 
-                            <HorizontalScrollView
-                                android:visibility="visible"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+<!--                            <HorizontalScrollView-->
+<!--                                android:visibility="visible"-->
+<!--                                android:layout_weight="2"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content">-->
 
 
-                                <LinearLayout
-                                    android:id="@+id/idLLContainer"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerInParent="true"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
+<!--                                <LinearLayout-->
+<!--                                    android:id="@+id/idLLContainer"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_centerInParent="true"-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:orientation="vertical">-->
 
-                                </LinearLayout>
-                            </HorizontalScrollView>
+<!--                                </LinearLayout>-->
+<!--                            </HorizontalScrollView>-->
 
 
                             <TextView
