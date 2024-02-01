@@ -1,92 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="7dp"
-        android:background="#81959191">
 
-    </View>
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:padding="5dp"
         android:id="@+id/customer_menu_lay"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:layout_marginStart="17dp"
+            android:background="@drawable/customer"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
+
+        </ImageView>
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:layout_gravity="center"
-            android:textStyle="bold"
-            android:layout_marginLeft="40dp"
-            android:fontFamily="serif"
-            android:text=" Customer Management "
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="15sp"
+            android:text=" Customer "/>
         <ImageView
-            android:src="@drawable/right_arrow"
+            android:id="@+id/cust_menu_image_end"
+            android:src="@drawable/baseline_expand_more_24"
             android:layout_gravity="start|center"
-            android:layout_marginLeft="2dp"
+            android:layout_marginEnd="15dp"
             android:layout_width="16dp"
             android:layout_height="16dp">
 
         </ImageView>
     </LinearLayout>
 
-
-
-    <TextView
-        android:layout_marginTop="10dp"
+    <LinearLayout
         android:id="@+id/add_customer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/add_customer_icon"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="     Add Customer "
-        android:textSize="13sp" />
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/location_icon"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
 
-    <TextView
-        android:layout_marginTop="10dp"
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text=" Add Customer "
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
+
+    <LinearLayout
         android:id="@+id/view_customer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/view_customer_icon"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="     View Customer "
-        android:textSize="13sp" />
-    <TextView
-        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/baseline_account_circle_24"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
+
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text=" View Customer "
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/add_discount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/createcustomer_type_icon"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="    Create Customer Type"
-        android:textSize="13sp" />
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/createcustomer_type_icon"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
+
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text=" Create Customer Type"
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
 
 
 

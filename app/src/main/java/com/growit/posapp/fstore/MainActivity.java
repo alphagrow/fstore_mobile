@@ -82,8 +82,10 @@ public class MainActivity extends AppCompatActivity {
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
     LinearLayout  sale_menu_lay,setting_menu_lay,product_menu_lay,customer_menu_lay;
     LinearLayout inventory_menu;
-    TextView add_customer,view_cus,add_discount,add_product_text,product_list_text,add_extra_price,add_attribute,add_uom,add_pos_cat,vendor,purchase,inventory_text,warehouses,purchase_order_list,transfer,location,operation_type,transfer_order_list,shop_text,add_district,add_taluka;
+    TextView inventory_text,add_product_text,product_list_text,add_extra_price,add_attribute,add_uom,add_pos_cat,vendor,purchase,warehouses,purchase_order_list,transfer,transfer_order_list;
     boolean isClicked;
+    LinearLayout location,shop_text,add_district,add_taluka,operation_type,add_customer,view_cus,add_discount;
+    ImageView sett_menu_image_end,cust_menu_image_end,prod_menu_image_end,inv_menu_image_end,purch_menu_image_end;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -449,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
         warehouses = view_inventory.findViewById(R.id.warehouses);
         transfer = view_inventory.findViewById(R.id.transfer);
         transfer_order_list = view_inventory.findViewById(R.id.transfer_order_list);
-
+        inv_menu_image_end = view_inventory.findViewById(R.id.inv_menu_image_end);
 
         View view_sale = nvDrawer.inflateHeaderView(R.layout.menu_button);
         sale_menu_lay = view_sale.findViewById(R.id.sale_menu_lay);
@@ -457,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
         purchase = view_sale.findViewById(R.id.purchase);
      //   purchase_item = view_sale.findViewById(R.id.purchase_item);
        purchase_order_list = view_sale.findViewById(R.id.purchase_order_list);
-
+        purch_menu_image_end = view_sale.findViewById(R.id.purch_menu_image_end);
 
 
         View view_product = nvDrawer.inflateHeaderView(R.layout.product_button);
@@ -468,12 +470,14 @@ public class MainActivity extends AppCompatActivity {
         add_pos_cat = view_product.findViewById(R.id.add_pos_cat);
         add_attribute = view_product.findViewById(R.id.add_attribute);
         add_uom = view_product.findViewById(R.id.add_uom);
+        prod_menu_image_end  = view_product.findViewById(R.id.prod_menu_image_end);
 
         View view_customer = nvDrawer.inflateHeaderView(R.layout.customer_button);
         customer_menu_lay = view_customer.findViewById(R.id.customer_menu_lay);
         add_customer = view_customer.findViewById(R.id.add_customer);
         view_cus = view_customer.findViewById(R.id.view_customer);
         add_discount = view_customer.findViewById(R.id.add_discount);
+        cust_menu_image_end = view_customer.findViewById(R.id.cust_menu_image_end);
 
         View view_setting = nvDrawer.inflateHeaderView(R.layout.setting_button);
         setting_menu_lay = view_setting.findViewById(R.id.setting_menu_lay);
@@ -482,6 +486,7 @@ public class MainActivity extends AppCompatActivity {
         shop_text = view_setting.findViewById(R.id.shop_text);
         add_district = view_setting.findViewById(R.id.add_district);
         add_taluka = view_setting.findViewById(R.id.add_taluka);
+        sett_menu_image_end = view_setting.findViewById(R.id.sett_menu_image_end);
 
 
 
@@ -493,11 +498,15 @@ public class MainActivity extends AppCompatActivity {
         });
         customer_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                cust_menu_image_end.setImageResource(0);
+                cust_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_less_24));
                 add_customer.setVisibility(View.VISIBLE);
                 view_cus.setVisibility(View.VISIBLE);
                 add_discount.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                cust_menu_image_end.setImageResource(0);
+                cust_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_more_24));
                 add_customer.setVisibility(View.GONE);
                 view_cus.setVisibility(View.GONE);
                 add_discount.setVisibility(View.GONE);
@@ -538,12 +547,16 @@ public class MainActivity extends AppCompatActivity {
         });
         inventory_menu.setOnClickListener(view -> {
             if (!isClicked) {
+                inv_menu_image_end.setImageResource(0);
+                inv_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_less_24));
                 inventory_text.setVisibility(View.VISIBLE);
                 transfer_order_list.setVisibility(View.VISIBLE);
                 transfer.setVisibility(View.VISIBLE);
                 warehouses.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                inv_menu_image_end.setImageResource(0);
+                inv_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_more_24));
                 inventory_text.setVisibility(View.GONE);
                 warehouses.setVisibility(View.GONE);
                 transfer.setVisibility(View.GONE);
@@ -554,6 +567,8 @@ public class MainActivity extends AppCompatActivity {
         });
         product_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                prod_menu_image_end.setImageResource(0);
+                prod_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_less_24));
                 add_uom.setVisibility(View.VISIBLE);
                 add_product_text.setVisibility(View.VISIBLE);
                 product_list_text.setVisibility(View.VISIBLE);
@@ -562,6 +577,8 @@ public class MainActivity extends AppCompatActivity {
                 add_attribute.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                prod_menu_image_end.setImageResource(0);
+                prod_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_more_24));
                 add_product_text.setVisibility(View.GONE);
                 product_list_text.setVisibility(View.GONE);
                 add_extra_price.setVisibility(View.GONE);
@@ -669,11 +686,15 @@ public class MainActivity extends AppCompatActivity {
         sale_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
            //     purchase_item.setVisibility(View.VISIBLE);
+                purch_menu_image_end.setImageResource(0);
+                purch_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_less_24));
                purchase_order_list.setVisibility(View.VISIBLE);
                 purchase.setVisibility(View.VISIBLE);
                 vendor.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                purch_menu_image_end.setImageResource(0);
+                purch_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_more_24));
             //    purchase_item.setVisibility(View.GONE);
                 purchase_order_list.setVisibility(View.GONE);
                 purchase.setVisibility(View.GONE);
@@ -765,6 +786,8 @@ public class MainActivity extends AppCompatActivity {
         });
         setting_menu_lay.setOnClickListener(view -> {
             if (!isClicked) {
+                sett_menu_image_end.setImageResource(0);
+                sett_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_less_24));
                 add_taluka.setVisibility(View.VISIBLE);
                 add_district.setVisibility(View.VISIBLE);
                 shop_text.setVisibility(View.VISIBLE);
@@ -772,6 +795,8 @@ public class MainActivity extends AppCompatActivity {
                 operation_type.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
+                sett_menu_image_end.setImageResource(0);
+                sett_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_more_24));
                 add_district.setVisibility(View.GONE);
                 add_taluka.setVisibility(View.GONE);
                 shop_text.setVisibility(View.GONE);

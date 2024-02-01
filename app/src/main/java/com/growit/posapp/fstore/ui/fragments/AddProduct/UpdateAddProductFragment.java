@@ -514,7 +514,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             public void onClick(DialogInterface dialog, int item) {
                 if (options[item].equals("Take Photo")) {
                     askForPermission("android.permission.CAMERA", 2);
-                } else if (options[item].equals("Select  photo from Gallery")) {
+                } else if (options[item].equals("Select photo from Gallery")) {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         // Do something for lollipop and above versions
                         askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);

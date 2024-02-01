@@ -155,8 +155,6 @@ public class AddDistrictFragment extends Fragment {
                         showDialogeReceiveProduct("Update");
 
                     }
-
-
                     @Override
                     public void onLongItemClick(View view, int position) {
                         // do whatever

@@ -48,5 +48,11 @@
     <dimen name="end_marg_textview">25dp</dimen>
     <dimen name="top_marg_textview">10dp</dimen>
     <dimen name="text_size_textview">12sp</dimen>
+    <!--menu size-->
+    <dimen name="height_icon">24dp</dimen>
+    <dimen name="width_icon">24dp</dimen>
+    <dimen name="menu_linerlayout_top">12dp</dimen>
+    <dimen name="menu_start_marg_text">15sp</dimen>
+
 
 </resources>

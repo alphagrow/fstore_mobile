@@ -1,123 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="7dp"
-        android:background="#81959191">
 
-    </View>
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:padding="5dp"
         android:id="@+id/setting_menu_lay"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <ImageView
+            android:layout_marginStart="17dp"
+            android:background="@drawable/setting"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
+
+        </ImageView>
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:layout_gravity="center"
-            android:textStyle="bold"
-            android:layout_marginLeft="40dp"
-            android:fontFamily="serif"
-            android:text=" Setting "
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="15sp"
+            android:text=" Setting "/>
         <ImageView
-            android:src="@drawable/right_arrow"
+            android:id="@+id/sett_menu_image_end"
+            android:src="@drawable/baseline_expand_more_24"
             android:layout_gravity="start|center"
-            android:layout_marginLeft="2dp"
+            android:layout_marginEnd="15dp"
             android:layout_width="16dp"
             android:layout_height="16dp">
 
         </ImageView>
     </LinearLayout>
 
-
-
-    <TextView
-        android:layout_marginTop="10dp"
+    <LinearLayout
         android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/location_icon"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="     Location "
-        android:textSize="13sp" />
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/location_icon"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
 
-    <TextView
-        android:layout_marginTop="10dp"
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text="Location "
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
+
+    <LinearLayout
         android:id="@+id/operation_type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/operation_type_icon"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="     Operation Type "
-        android:textSize="13sp" />
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/add_district"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/files"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="    Create District "
-        android:textSize="13sp" />
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/add_taluka"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/create_taluka_icon"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="    Create Taluka "
-        android:textSize="13sp" />
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/operation_type_icon"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
 
-    <TextView
-        android:layout_marginTop="10dp"
-        android:id="@+id/shop_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/add_shop_icon"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text="Operation Type "
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/add_district"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
         android:visibility="gone"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:drawableLeft="@drawable/icon_user"
-        android:text="    Add Shop "
-        android:textSize="13sp" />
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/dist"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
+
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text="Create District "
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
+        android:id="@+id/add_taluka"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/create_taluka_icon"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
+
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text="Create Taluka "
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/menu_linerlayout_top"
+        android:id="@+id/shop_text"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:visibility="invisible"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/shop"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon">
+
+        </ImageView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:fontFamily="@font/sf_compact_medium"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:text="Add Shop "
+            android:textSize="@dimen/menu_start_marg_text"  />
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

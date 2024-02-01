@@ -162,7 +162,7 @@ public class AddPOSCategoryFragment extends Fragment {
     }
 
     private void takePhoto() {
-        final CharSequence[] options = {"Take Photo", "Select multiple photos from Gallery", "Cancel"};
+        final CharSequence[] options = {"Take Photo", "Select photos from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Add Photo!");
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -170,7 +170,7 @@ public class AddPOSCategoryFragment extends Fragment {
             public void onClick(DialogInterface dialog, int item) {
                 if (options[item].equals("Take Photo")) {
                     askForPermission("android.permission.CAMERA", 2);
-                } else if (options[item].equals("Select multiple photos from Gallery")) {
+                } else if (options[item].equals("Select photos from Gallery")) {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         // Do something for lollipop and above versions
                         askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);

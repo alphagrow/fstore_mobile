@@ -1,6 +1,7 @@
 package com.growit.posapp.fstore.ui;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,9 +18,11 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -77,7 +80,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     private String nameStr, emailStr, mobileStr;
     ProgressBar idPBLoading;
     CardView company_profile;
-
+    Bitmap imageBitmap = null;
+    private TextView loginBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +99,9 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         nameET = findViewById(R.id.et_username);
         emailET = findViewById(R.id.et_useremail);
         idPBLoading = findViewById(R.id.idPBLoading);
+        loginBtn = findViewById(R.id.loginBtn);
         backBtn = findViewById(R.id.backBtn);
         company_profile = findViewById(R.id.company_profile);
-
         nameET.setFocusable(false);
         emailET.setFocusable(false);
         mobileET = findViewById(R.id.et_usermobile);
@@ -105,7 +109,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         profile_image = findViewById(R.id.profile_image);
         picImageFL = findViewById(R.id.fl_pic_image);
         backBtn.setOnClickListener(this);
-        profile_image.setOnClickListener(this);
+
         findViewById(R.id.tv_gallery).setOnClickListener(this);
         findViewById(R.id.tv_camera).setOnClickListener(this);
         findViewById(R.id.tv_cross).setOnClickListener(this);
@@ -125,6 +129,33 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
         }
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final CharSequence[] options = {"Take Photo", "Select  photos from Gallery", "Cancel"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyProfileActivity.this);
+                builder.setTitle("Add Photo!");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            askForPermission(Manifest.permission.CAMERA, 2);
+                        } else if (options[item].equals("Select  photos from Gallery")) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                // Do something for lollipop and above versions
+                                askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
+                            } else {
+                                askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+                            }
+
+                        } else if (options[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
     }
 
 
@@ -140,35 +171,30 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_FROM_FILE) {
                 Uri selectedImageUri = data.getData();
-                Bitmap imageBitmap = null;
                 try {
                     imageBitmap = MediaStore.Images.Media
                             .getBitmap(getContentResolver(), selectedImageUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                idPBLoading.setVisibility(View.VISIBLE);
-
                 if (!Utility.isNetworkAvailable(getApplication())) {
-                    Toast.makeText(getApplication(), "Network not available.Please try later!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                 uploadImage(imageBitmap);
+                uploadImage(imageBitmap);
 
             } else if (requestCode == PICK_FROM_CAMERA) {
                 Log.v("camera", imageFilePath);
                 try {
                     //our imageFilePath that contains the absolute path to the created file
                     File file = new File(imageFilePath);
-                    Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
-                    idPBLoading.setVisibility(View.VISIBLE);
+                    imageBitmap = MediaStore.Images.Media
+                            .getBitmap(getContentResolver(), Uri.fromFile(file));
                     if (!Utility.isNetworkAvailable(getApplication())) {
-                        Toast.makeText(getApplication(), "Network not available.Please try later!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplication(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                         return;
                     }
-
                     uploadImage(imageBitmap);
-                    //do whatever else after
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -183,15 +209,15 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         if (viewID == R.id.backBtn) {
 //            startActivity(new Intent(MyProfileActivity.this, MainActivity.class));
             finish();
-        } else if (viewID == R.id.profile_image) {
+        } else if (viewID == R.id.loginBtn) {
             picImageFL.setVisibility(View.VISIBLE);
         } else if (viewID == R.id.tv_cross) {
             picImageFL.setVisibility(View.GONE);
         } else if (viewID == R.id.tv_gallery) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 // Do something for lollipop and above versions
                 askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
-            } else{
+            } else {
                 askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1);
             }
 
@@ -205,8 +231,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,
-                "Select Picture"), PICK_FROM_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_FROM_FILE);
     }
 
     /**
@@ -249,7 +274,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
 
     private void askForPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(MyProfileActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MyProfileActivity.this, new String[]{permission,Manifest.permission.MANAGE_EXTERNAL_STORAGE}, requestCode);
+            ActivityCompat.requestPermissions(MyProfileActivity.this, new String[]{permission, Manifest.permission.MANAGE_EXTERNAL_STORAGE}, requestCode);
         } else {
             if (requestCode == 1) {
                 fromGallery();
@@ -257,6 +282,12 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 openCamera();
             }
         }
+
+
+
+
+
+
     }
 
     void uploadImage(Bitmap bitmap) {

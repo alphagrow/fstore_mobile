@@ -41,18 +41,18 @@
                     </ImageView>
 
                     <TextView
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginStart="50dp"
-                        android:layout_gravity="center"
-                        android:textSize="18sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginLeft="17dp"
+                        android:layout_marginEnd="50dp"
+                        android:baselineAligned="false"
                         android:fontFamily="@font/roboto_regular"
-                        android:textStyle="bold"                        android:gravity="left|center_vertical"
-                        android:text="Customer Details"
+                        android:gravity="center"
+                        android:text="Profile"
                         android:textColor="@color/white"
-                        />
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
 
@@ -87,6 +87,21 @@
                     android:indeterminateTintMode="src_atop"
                     android:visibility="gone" />
             </FrameLayout>
+            <TextView
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="70dp"
+                android:background="@drawable/button"
+                android:fontFamily="@font/sf_compact_regular"
+                android:gravity="center"
+                android:nextFocusUp="@+id/tv_register"
+                android:padding="@dimen/ten"
+                android:text="Upload Photo"
+                android:textColor="#ffff"
+                android:textSize="14sp" />
 
 
             <EditText
@@ -153,13 +168,13 @@
                 android:textColor="#E8393939"
                 android:textSize="14sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="7dp"
-                android:background="#81959191">
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_marginTop="7dp"-->
+<!--                android:background="#81959191">-->
 
-            </View>
+<!--            </View>-->
             <androidx.cardview.widget.CardView
                 android:visibility="gone"
                 android:id="@+id/company_profile"
@@ -199,21 +214,6 @@
             </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/loginBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/button"
-                android:fontFamily="@font/sf_compact_regular"
-                android:gravity="center"
-                android:nextFocusUp="@+id/tv_register"
-                android:padding="@dimen/ten"
-                android:text="Submit"
-                android:textColor="#ffff"
-                android:textSize="@dimen/twenty" />
 
 
         </LinearLayout>

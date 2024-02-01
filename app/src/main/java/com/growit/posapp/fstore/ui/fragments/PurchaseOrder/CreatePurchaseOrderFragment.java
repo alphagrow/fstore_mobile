@@ -528,9 +528,11 @@ public class CreatePurchaseOrderFragment extends Fragment {
             txtLayoutParam.gravity = Gravity.START;
             LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             spinnerLayoutParam.gravity = Gravity.CENTER;
+
             TextView headingTV = new TextView(getActivity());
-            headingTV.setTextColor(R.color.text_color);
-            headingTV.setText(attributes.get(j).getAttributeName());
+//            headingTV.setTextColor(R.color.text_color);
+            headingTV.setPadding(50, 20, 50, 20);
+            headingTV.setText("Select "+attributes.get(j).getAttributeName());
 
             value = new ArrayList<>();
             String value_name = null;
@@ -542,14 +544,17 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 value.add(value1);
             }
             headingTV.setTextSize(14f);
-            headingTV.setTextColor(getResources().getColor(R.color.black));
-            headingTV.setTypeface(Typeface.DEFAULT_BOLD);
-            headingTV.setPadding(20, 20, 20, 20);
+            headingTV.setTextColor(getResources().getColor(R.color.text_color));
+//            headingTV.setTypeface(Typeface.DEFAULT_BOLD);
+//            headingTV.setFontFeatureSettings();
+            headingTV.setPadding(50, 20, 50, 20);
             headingTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             headingTV.setLayoutParams(txtLayoutParam);
             spinner = new Spinner(getActivity());
-            spinner.setPadding(20, 20, 20, 20);
-//            spinner.setBackgroundColor(R.drawable.spinner_bg);
+            spinner.setPadding(50, 20, 50, 20);
+//            spinner.setBackground(getResources().getDrawable(R.drawable.spinner_size));
+ //           spinner.setBackgroundTintList(getActivity().getResources().getColorStateList(R.color.red));
+//           spinner.setBackgroundColor(R.drawable.spinner_bg);
             spinner.setLayoutParams(spinnerLayoutParam);
             spinner.setId(j);
             binding.idLLContainer.addView(headingTV);
