@@ -22,12 +22,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,16 +52,19 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView qty, dateTxt, amountTxt, case_id;
         ImageView images, deleteBtn, update;
-        TextView product_name;
+        TextView product_name,price,gst,detailed_type,which_pest;
 
         public ViewHolder(View itemView) {
             super(itemView);
             product_name = itemView.findViewById(R.id.product_name_text);
-            qty = itemView.findViewById(R.id.Qty_avl_text);
+
             images = itemView.findViewById(R.id.images);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
             update = itemView.findViewById(R.id.update);
-
+            detailed_type = itemView.findViewById(R.id.detailed_type);
+            price = itemView.findViewById(R.id.price);
+            gst = itemView.findViewById(R.id.gst_text);
+            which_pest = itemView.findViewById(R.id.which_pest);
 
         }
     }
@@ -76,9 +82,12 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
     @Override
     public void onBindViewHolder(@NonNull AllAddProductListAdapter.ViewHolder holder, int position) {
         PurchaseProductModel model = list.get(position);
-        //   holder.qty.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
+        holder.price.setText("₹ "+String.valueOf(model.getListPrice()));
+//        holder.price.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
         holder.product_name.setText(model.getProductName());
-
+        holder.gst.setText(String.valueOf(model.getTaxes_name()));
+        holder.detailed_type.setText(model.getDetailedType());
+        holder.which_pest.setText(model.getWhichPest());
 //        holder.product_name.setShowingChar(100);
 //        holder.product_name.setShowingLine(2);
 //        holder.product_name.addShowMoreText("");
@@ -87,10 +96,11 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
 //        holder.product_name.setShowLessTextColor(Color.RED); // or other color
 
 
-//        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getProductImage())
-//                .placeholder(R.drawable.loading)
-//                .error(R.drawable.no_image)
-//                .into(holder.images);
+        Glide.with(mContext)
+                .load(ApiConstants.BASE_URL + model.getImageUrl())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(holder.images);
 
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {

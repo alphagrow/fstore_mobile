@@ -38,7 +38,7 @@
                     android:fontFamily="@font/roboto_regular"
                     android:textStyle="bold"
                     android:textSize="18sp"
-                    android:text=""
+                    android:text="User And Registration"
                     android:textColor="@color/white" />
             </LinearLayout>
   <ScrollView

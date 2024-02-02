@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="7dp"
                     android:fontFamily="@font/helvetica_neue_medium"
                     android:text="Products List"
                     android:textColor="#424242"
@@ -176,6 +176,8 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:layout_marginStart="13dp"
+                            android:layout_marginEnd="15dp"
                             android:id="@+id/idLLContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -188,9 +190,10 @@
 
                         <TextView
                             android:id="@+id/setPatternsTxt"
+                            android:layout_marginTop="5dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/ten"
+                            android:layout_marginStart="5dp"
                             android:fontFamily="@font/helvetica_neue_medium"
                             android:padding="3dp"
                             android:textColor="#8A8A8A"
@@ -298,7 +301,7 @@
                             android:layout_width="130dp"
                             android:layout_height="40dp"
                             android:layout_gravity="start"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="15dp"
                             android:layout_marginTop="10dp"
                             android:theme="@style/NumberPickerTheme"
                             numberpicker:focusable="false"
@@ -337,7 +340,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         app:cardCornerRadius="8dp"
@@ -408,14 +411,15 @@
                                 android:weightSum="2">
 
                                 <TextView
+
+                                    android:text="Total Items"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/helveticaneuelight"
-                                    android:text="Total Items"
+                                    android:layout_weight=".8"
+                                    android:fontFamily="@font/sf_compact_medium"
                                     android:textColor="#E1626262"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="14sp"
+                                    android:textStyle="normal" />
 
                                 <TextView
                                     android:id="@+id/itemCountTxt"
@@ -448,14 +452,14 @@
                                 android:weightSum="2">
 
                                 <TextView
+                                    android:text="Contact : "
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".8"
-                                    android:fontFamily="@font/helveticaneuelight"
-                                    android:text="Contact : "
+                                    android:fontFamily="@font/sf_compact_medium"
                                     android:textColor="#E1626262"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="14sp"
+                                    android:textStyle="normal" />
 
                                 <Spinner
                                     android:id="@+id/customer_Spinner"
@@ -483,14 +487,15 @@
                                 android:weightSum="2">
 
                                 <TextView
+
+                                    android:text="Operation Type :"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".8"
-                                    android:fontFamily="@font/helveticaneuelight"
-                                    android:text="Operation Type :"
+                                    android:fontFamily="@font/sf_compact_medium"
                                     android:textColor="#E1626262"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="14sp"
+                                    android:textStyle="normal" />
 
                                 <Spinner
                                     android:id="@+id/warehouses_Spinner"
@@ -519,14 +524,15 @@
                                 android:weightSum="2">
 
                                 <TextView
+
+                                    android:text="Location To : "
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".8"
-                                    android:fontFamily="@font/helveticaneuelight"
-                                    android:text="Location To : "
+                                    android:fontFamily="@font/sf_compact_medium"
                                     android:textColor="#E1626262"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="14sp"
+                                    android:textStyle="normal" />
 
                                 <Spinner
                                     android:id="@+id/location_Spinner"
@@ -553,14 +559,15 @@
                                 android:weightSum="2">
 
                                 <TextView
+
+                                    android:text="Location From : "
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight=".8"
-                                    android:fontFamily="@font/helveticaneuelight"
-                                    android:text="Location From : "
+                                    android:fontFamily="@font/sf_compact_medium"
                                     android:textColor="#E1626262"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="14sp"
+                                    android:textStyle="normal" />
 
                                 <Spinner
                                     android:id="@+id/dis_Spinner"

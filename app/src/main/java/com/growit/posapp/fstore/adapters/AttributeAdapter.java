@@ -55,8 +55,8 @@ public class AttributeAdapter extends RecyclerView.Adapter<AttributeAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView attribute_name;
-        ImageView deleteBtn,update;
-        LinearLayout card;
+        ImageView deleteBtn;
+        LinearLayout update;
        TextView value;
         public ViewHolder(View itemView) {
             super(itemView);

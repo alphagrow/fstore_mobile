@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
@@ -49,9 +52,10 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView qty, order_no, dateTxt, amountTxt, case_id;
-        ImageView images, deleteBtn, update;
-        TextView product_name;
+        public TextView qty, price, dateTxt, amountTxt, case_id;
+        ImageView images, deleteBtn;
+        LinearLayout linear_click;
+        TextView product_name,gst,detailed_type,which_pest;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,8 +63,11 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
             qty = itemView.findViewById(R.id.Qty_avl_text);
             images = itemView.findViewById(R.id.images);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
-            update = itemView.findViewById(R.id.update);
-
+            linear_click = itemView.findViewById(R.id.linear_click);
+            detailed_type = itemView.findViewById(R.id.detailed_type);
+            price = itemView.findViewById(R.id.price);
+            gst = itemView.findViewById(R.id.gst_text);
+            which_pest = itemView.findViewById(R.id.which_pest);
 
         }
     }
@@ -78,8 +85,12 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
     @Override
     public void onBindViewHolder(@NonNull AddProductListAdapter.ViewHolder holder, int position) {
         PurchaseProductModel model = list.get(position);
-        //   holder.qty.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
+        holder.price.setText("₹ "+String.valueOf(model.getListPrice()));
+//        holder.price.setText("Qty Avl. : " + String.valueOf(model.getQuantity()));
         holder.product_name.setText(model.getProductName());
+        holder.gst.setText(String.valueOf(model.getTaxes_name()));
+        holder.detailed_type.setText(model.getDetailedType());
+        holder.which_pest.setText(model.getWhichPest());
 //        holder.product_name.setShowingChar(100);
 //        holder.product_name.setShowingLine(2);
 //        holder.product_name.addShowMoreText("");
@@ -88,12 +99,13 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
 //        holder.product_name.setShowLessTextColor(Color.RED); // or other color
 
 
-//        Picasso.with(mContext).load(ApiConstants.BASE_URL + model.getProductImage())
-//                .placeholder(R.drawable.loading)
-//                .error(R.drawable.no_image)
-//                .into(holder.images);
+        Glide.with(mContext)
+                .load(ApiConstants.BASE_URL + model.getImageUrl())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(holder.images);
 
-        holder.update.setOnClickListener(new View.OnClickListener() {
+        holder.linear_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();

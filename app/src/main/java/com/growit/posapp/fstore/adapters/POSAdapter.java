@@ -61,7 +61,7 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
         ImageView productThumb,deleteBtn,update;
-        LinearLayout card;
+        LinearLayout card,linear_click;
         TextView product_name_text;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -69,7 +69,8 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
             productThumb = itemView.findViewById(R.id.images);
             card = itemView.findViewById(R.id.card);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
-            update = itemView.findViewById(R.id.update);
+            update = itemView.findViewById(R.id.update_crop);
+            linear_click = itemView.findViewById(R.id.linear_click);
         }
     }
 
@@ -77,7 +78,7 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
     public POSAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View contactView = inflater.inflate(R.layout.product_item_row, parent, false);
+        View contactView = inflater.inflate(R.layout.crop_item_row, parent, false);
         POSAdapter.ViewHolder viewHolder = new POSAdapter.ViewHolder(contactView);
         return viewHolder;
     }
@@ -118,7 +119,7 @@ public class POSAdapter extends RecyclerView.Adapter<POSAdapter.ViewHolder> {
 
             }
         });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.linear_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();

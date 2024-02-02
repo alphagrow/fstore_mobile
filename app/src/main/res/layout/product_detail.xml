@@ -86,6 +86,7 @@
 
                         </LinearLayout>
                         <LinearLayout
+                            android:visibility="invisible"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:layout_width="0dp"
@@ -112,6 +113,7 @@
 
                         </LinearLayout>
                         <LinearLayout
+                            android:visibility="invisible"
                             android:id="@+id/review_lay"
                             android:layout_gravity="center"
                             android:gravity="center"
@@ -209,11 +211,14 @@
 
                         </LinearLayout>
                         <include
+                            android:visibility="gone"
                             android:id="@+id/product_detail_update_ui_layout"
                             layout="@layout/product_detail_update_ui_layout"
                             />
 
 <!--                        <HorizontalScrollView-->
+<!--                            android:layout_marginStart="12dp"-->
+<!--                            android:layout_marginEnd="10dp"-->
 <!--                            android:visibility="visible"-->
 <!--                            android:layout_weight="2"-->
 <!--                            android:layout_width="match_parent"-->
@@ -221,7 +226,8 @@
 
 
                             <LinearLayout
-
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginStart="10dp"
                                 android:id="@+id/idLLContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

@@ -162,6 +162,8 @@ public class POSCategoryListFragment extends Fragment {
                                 binding.noDataFound.setVisibility(View.VISIBLE);
                             } else {
                                 binding.noDataFound.setVisibility(View.GONE);
+                                binding.totalCustomerText.setText("Total: " + cropList.size() + " " + "Categories");
+
                                 adapter = new POSAdapter(getActivity(), cropList);
                                 binding.recyclerPos.setAdapter(adapter);
 

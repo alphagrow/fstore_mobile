@@ -454,12 +454,12 @@ public class AddTransfersFragment extends Fragment {
             for (int j = 0; j < n; j++) {
                 LinearLayout.LayoutParams txtLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 txtLayoutParam.gravity = Gravity.START;
-                LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                spinnerLayoutParam.gravity = Gravity.CENTER;
-                TextView headingTV = new TextView(getActivity());
-                headingTV.setTextColor(R.color.text_color);
-                headingTV.setText(attributes.get(j).getAttributeName());
+                LinearLayout.LayoutParams spinnerLayoutParam = new LinearLayout.LayoutParams(610,150);
+                spinnerLayoutParam.gravity = Gravity.START;
 
+                TextView headingTV = new TextView(getActivity());
+
+                headingTV.setText("Select "+attributes.get(j).getAttributeName());
                 value = new ArrayList<>();
                 String value_name = null;
                 for (int i = 0; i < attributes.get(j).getValues().size(); i++) {
@@ -469,15 +469,16 @@ public class AddTransfersFragment extends Fragment {
                     //  value_name= attributes.get(j).getValues().get(i).getValueName();
                     value.add(value1);
                 }
-                headingTV.setTextSize(14f);
-                headingTV.setTextColor(getResources().getColor(R.color.black));
-                headingTV.setTypeface(Typeface.DEFAULT_BOLD);
-                headingTV.setPadding(20, 20, 20, 20);
-                headingTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                headingTV.setTextSize(15f);
+                headingTV.setTextColor(getResources().getColor(R.color.spinner_color));
+
+                headingTV.setTypeface(getResources().getFont(R.font.helvetica_neue_medium));
+                headingTV.setPadding(0, 15, 12, 20);
+                headingTV.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
                 headingTV.setLayoutParams(txtLayoutParam);
                 spinner = new Spinner(getActivity());
-                spinner.setPadding(20, 20, 20, 20);
-//            spinner.setBackgroundColor(R.drawable.spinner_bg);
+                spinner.setPadding(0, 15, 12, 20);
+                spinner.setBackground(getResources().getDrawable(R.drawable.product_size));
                 spinner.setLayoutParams(spinnerLayoutParam);
                 spinner.setId(j);
                 binding.idLLContainer.addView(headingTV);

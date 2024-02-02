@@ -140,6 +140,7 @@ public class AttributeListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
                 String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST + "user_id=" + sm.getUserID() +"&" + "token=" + sm.getJWTToken();
        // String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("product_list",url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -152,6 +153,7 @@ public class AttributeListFragment extends Fragment {
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        Utility.dismissDialoge();
                         model.clear();
                         JSONArray jsonArray = obj.getJSONArray("attributes");
                         Gson gson = new Gson();
@@ -164,6 +166,7 @@ public class AttributeListFragment extends Fragment {
                         if (model_attribute.getAttributes() == null || model_attribute.getAttributes().size() == 0) {
                                 binding.noDataFound.setVisibility(View.GONE);
                             } else {
+                            binding.totalCustomerText.setText("Total: " + model_attribute.getAttributes().size() + " " + "Attributes");
                                 binding.noDataFound.setVisibility(View.GONE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -179,6 +182,7 @@ public class AttributeListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        Utility.dismissDialoge();
         queue.add(jsonObjectRequest);
 
     }

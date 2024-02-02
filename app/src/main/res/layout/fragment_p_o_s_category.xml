@@ -47,7 +47,7 @@
             android:src="@drawable/no_image"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="30dp" />
 
 
 
@@ -56,32 +56,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_regular"
-        android:layout_marginTop="@dimen/top_marg_text"
-        android:layout_marginEnd="@dimen/end_marg_text"
-        android:layout_marginStart="@dimen/start_marg_text"
+        android:textColor="@color/edt_top_text_color"
         android:textStyle="bold"
         android:textSize="@dimen/text_size_text"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/end_marg_text"
+        android:layout_marginStart="@dimen/start_marg_text"
         android:text="Category Name"
-        android:textColor="@color/edt_top_text_color"
+
         />
 
     <EditText
         android:id="@+id/crop_name"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginStart="@dimen/twenty_five"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="@dimen/twenty_five"
+        android:layout_height="@dimen/height_marg_edit"
+        android:layout_marginStart="@dimen/start_marg_edit"
+        android:layout_marginTop="@dimen/top_marg_edit"
+        android:layout_marginEnd="@dimen/end_marg_edit"
         android:background="@drawable/custom_edit_text_cut"
         android:drawableEnd="@drawable/land_size"
         android:drawablePadding="@dimen/ten"
         android:fontFamily="@font/sf_compact_medium"
         android:hint=""
+        android:padding="@dimen/padding_edit"
         android:importantForAutofill="no"
+        android:textSize="14dp"
         android:inputType="text"
-        android:padding="8dp"
-        android:requiresFadingEdge="vertical"
-        android:textSize="14dp" />
+        android:requiresFadingEdge="vertical"/>
     <Button
         android:id="@+id/update"
         android:layout_width="match_parent"

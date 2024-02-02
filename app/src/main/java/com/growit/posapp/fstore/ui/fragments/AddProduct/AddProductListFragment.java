@@ -185,6 +185,8 @@ public class AddProductListFragment extends Fragment {
                             binding.noDataFound.setVisibility(View.GONE);
                         } else {
                             binding.noDataFound.setVisibility(View.GONE);
+                            binding.totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "Products");
+
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             adapter = new AddProductListAdapter(getActivity(), purchaseProductModel,crop_id,crop_name);
@@ -235,6 +237,8 @@ public class AddProductListFragment extends Fragment {
                             binding.noDataFound.setVisibility(View.GONE);
                         } else {
                             binding.noDataFound.setVisibility(View.GONE);
+                            binding.totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "All Products");
+
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             all_adapter = new AllAddProductListAdapter(getActivity(), purchaseProductModel);

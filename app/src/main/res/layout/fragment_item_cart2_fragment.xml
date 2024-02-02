@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp">
@@ -318,14 +318,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_regular"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="@dimen/end_marg_text"
                         android:layout_marginStart="@dimen/start_marg_text"
                         android:textStyle="bold"
                         android:textSize="@dimen/text_size_text"
                         android:text="Remark"
-                        android:textColor="@color/edt_top_text_color"
-                        />
+                        android:textColor="#E1626262" />
 
                     <EditText
                         android:id="@+id/et_remark"
@@ -335,10 +334,8 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="@dimen/twenty_five"
                         android:background="@drawable/custom_edit_text_cut"
-                        android:drawablePadding="@dimen/ten"
                         android:fontFamily="@font/sf_compact_medium"
                         android:hint=""
-                        android:importantForAutofill="no"
                         android:textSize="14dp"
                         android:inputType="text"
                         android:padding="8dp"
@@ -355,7 +352,6 @@
                             android:id="@+id/radioGroup_pay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:orientation="vertical">
 
                             <RadioButton

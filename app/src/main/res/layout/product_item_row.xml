@@ -7,13 +7,20 @@
     android:layout_marginBottom="5dp"
     app:cardCornerRadius="5dp"
     app:cardElevation="5dp">
-
     <LinearLayout
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:weightSum="2"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+    <LinearLayout
+        android:id="@+id/linear_click"
+        android:layout_weight="1.7"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2">
@@ -33,28 +40,15 @@
             </ImageView>
         </androidx.cardview.widget.CardView>
         <LinearLayout
+            android:weightSum="3"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-<LinearLayout
-    android:layout_marginEnd="5dp"
-    android:weightSum="3"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-        android:padding="3dp"
-        android:id="@+id/product_name_text"
-        android:layout_width="0dp"
-        android:layout_weight="2.3"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/helvetica_neue_medium"
-        android:textColor="#D9171717"
-        android:textSize="15sp"
-        android:textStyle="normal"/>
+
+
 
     <!--    <com.skyhope.showmoretextview.ShowMoreTextView-->
 <!--        android:padding="3dp"-->
@@ -66,57 +60,108 @@
 <!--        android:textColor="#D9171717"-->
 <!--        android:textSize="15sp"-->
 <!--        android:textStyle="normal"/>-->
-    <ImageView
-        android:id="@+id/deleteBtn"
-        android:layout_width="0dp"
-        android:layout_weight=".3"
-        android:layout_gravity="end"
-        android:layout_height="28dp"
-        android:background="@drawable/trash" />
-    <ImageView
-        android:id="@+id/update"
-        android:layout_marginLeft="5dp"
-        android:layout_width="0dp"
-        android:layout_weight=".3"
-        android:layout_gravity="end"
-        android:layout_height="28dp"
-        android:background="@drawable/updated" />
-</LinearLayout>
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/product_name_text"
                 android:padding="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/helvetica_neue_medium"
+                android:maxLines="2"
+                android:text=""
+                android:textColor="#E4171717"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+            <LinearLayout
                 android:weightSum="2"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginTop="2dp"
+                    android:padding="2dp"
+                    android:id="@+id/price"
+                    android:layout_marginLeft="2dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_compact_regular"
+                    android:maxLines="1"
+                    android:textColor="#D5171717"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/Qty_avl_text"
+                    android:padding="2dp"
+                    android:id="@+id/gst_text"
                     android:layout_width="0dp"
-                    android:layout_weight="1.2"
-                    android:gravity="start"
-                    android:layout_gravity="start|center"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/sf_compact_medium"
-                    android:textStyle="normal"
-                    android:textSize="15sp"
-                    android:text="" />
-                <androidx.appcompat.widget.SwitchCompat
+                    android:fontFamily="@font/sf_compact_regular"
+                    android:gravity="start|center"
+                    android:textColor="#BF626262"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginTop="2dp"
+                    android:id="@+id/detailed_type"
+                    android:layout_marginLeft="2dp"
                     android:layout_width="0dp"
-                    android:layout_weight=".8"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:id="@+id/setting_channel_switch"
-                    app:track="@drawable/custom_track"
-                    android:thumb="@drawable/custom_thumb"
-                    android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:textSize="17sp"/>
+                    android:fontFamily="@font/sf_compact_regular"
+                    android:maxLines="1"
+                    android:textColor="#BF626262"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-
+                <TextView
+                    android:id="@+id/which_pest"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_compact_regular"
+                    android:gravity="start|center"
+                    android:textColor="#BF626262"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textSize="13sp"/>
             </LinearLayout>
 
         </LinearLayout>
 
+
+    </LinearLayout>
+        <LinearLayout
+            android:weightSum="2"
+            android:gravity="start"
+            android:layout_weight=".3"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/deleteBtn"
+                android:layout_width="24dp"
+                android:layout_gravity="center"
+                android:layout_height="24dp"
+                android:background="@drawable/trash" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
