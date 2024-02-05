@@ -65,9 +65,9 @@ public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdap
         TextView id,name,ware_text,per_text;
         public ViewHolder(View itemView) {
             super(itemView);
-            id = itemView.findViewById(R.id.id);
+//            id = itemView.findViewById(R.id.id);
             name = itemView.findViewById(R.id.location_text);
-            ware_text = itemView.findViewById(R.id.ware_text);
+            //        ware_text = itemView.findViewById(R.id.ware_text);
             per_text = itemView.findViewById(R.id.per_text);
 
         }
@@ -86,9 +86,9 @@ public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdap
     @Override
     public void onBindViewHolder(@NonNull ConfigurationAdapter.ViewHolder holder, int position) {
         ConfigurationModel model = list.get(position);
-        holder.id.setText(String.valueOf(model.getId()));
+//        holder.id.setText(String.valueOf(model.getId()));
         holder.name.setText(model.getName());
-        holder.ware_text.setText(model.getParentId());
+//        holder.ware_text.setText(model.getParentId());
         holder.per_text.setText(model.getPercentage());
     }
 

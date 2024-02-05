@@ -502,28 +502,28 @@ public class MainActivity extends AppCompatActivity {
                 cust_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_less_24));
                 add_customer.setVisibility(View.VISIBLE);
                 view_cus.setVisibility(View.VISIBLE);
-                add_discount.setVisibility(View.VISIBLE);
+//                add_discount.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
                 cust_menu_image_end.setImageResource(0);
                 cust_menu_image_end.setBackground(getResources().getDrawable(R.drawable.baseline_expand_more_24));
                 add_customer.setVisibility(View.GONE);
                 view_cus.setVisibility(View.GONE);
-                add_discount.setVisibility(View.GONE);
+//                add_discount.setVisibility(View.GONE);
                 isClicked = false;
             }
 
         });
-        add_discount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toolbar.setVisibility(View.GONE);
-                Fragment fragment = AddCustomerDiscountFragment.newInstance();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                drawer_layout.close();
-            }
-        });
+//        add_discount.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toolbar.setVisibility(View.GONE);
+//                Fragment fragment = AddCustomerDiscountFragment.newInstance();
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//                drawer_layout.close();
+//            }
+//        });
 
         add_customer.setOnClickListener(new View.OnClickListener() {
             @Override

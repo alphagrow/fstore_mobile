@@ -1,12 +1,28 @@
 package com.growit.posapp.fstore.ui;
 
+import static android.view.View.GONE;
 import static java.security.AccessController.getContext;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -36,9 +52,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class UserRegistrationActivity extends AppCompatActivity {
@@ -49,6 +71,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private String login_id = "", str_password = "", str_comp_name = "", str_city = "", str_phone = "", str_website = "", str_insectLicNo = "", str_seedLicNo = "", str_fertLicNo = "", str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     String update_companyProfile;
+    int  state,district,taluka;
+    private static final int PICK_FROM_CAMERA = 1;
+    private static final int PICK_FROM_FILE = 3;
+    String imageFilePath;
+    Bitmap imageBitmap = null;
+    String str_image_logo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,17 +95,27 @@ public class UserRegistrationActivity extends AppCompatActivity {
          if(update_companyProfile.equals("update_company_profile")){
              binding.titleTxt.setText("Update Company Detail");
              binding.updateBtn.setVisibility(View.VISIBLE);
-             binding.submitBtn.setVisibility(View.GONE);
+             binding.submitBtn.setVisibility(GONE);
+             binding.layoutUserDetail.setVisibility(GONE);
+             if (Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
 
-             getCompanyDetails();
+                 getCompanyDetails();
+
+             } else {
+                 Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+             }
+
+         }else {
+             if (Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
+
+                 getStateData("0");
+
+             } else {
+                 Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+             }
          }
-        if (Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
 
-            getStateData();
 
-        } else {
-            Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-        }
         StateModel st=new StateModel();
         st.setName("--Select District--");
         districtNames.add(st);
@@ -106,7 +144,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.imageLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takePhoto();
 
+            }
+        });
 
 
         binding.citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -119,7 +163,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        getTalukaData();
+                        getTalukaData(districtStr);
                     }
                 }
             }
@@ -140,7 +184,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        getDistrictData();
+                        getDistrictData(stateStr);
                     }
                 }
             }
@@ -196,6 +240,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     Toast.makeText(UserRegistrationActivity.this, "Select Taluka", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
                     Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
@@ -204,7 +249,14 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
-                    UserRegistration();
+
+                    if (str_image_logo !=null) {
+                        UserRegistration();
+                    }else {
+                        Toast.makeText(UserRegistrationActivity.this, "Select logo", Toast.LENGTH_SHORT).show();
+
+                    }
+
                 }
             }
         });
@@ -240,8 +292,12 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
-                    UpdateUserRegistration();
+                    if (str_image_logo !=null) {
+                        UpdateUserRegistration();
+                    }else {
+                        Toast.makeText(UserRegistrationActivity.this, "Select logo", Toast.LENGTH_SHORT).show();
 
+                    }
                 }
 
 
@@ -249,8 +305,31 @@ public class UserRegistrationActivity extends AppCompatActivity {
         });
 
     }
+private void takePhoto(){
+    final CharSequence[] options = {"Take Photo", "Select  photos from Gallery", "Cancel"};
+    AlertDialog.Builder builder = new AlertDialog.Builder(UserRegistrationActivity.this);
+    builder.setTitle("Add Photo!");
+    builder.setItems(options, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int item) {
+            if (options[item].equals("Take Photo")) {
+                askForPermission(Manifest.permission.CAMERA, 2);
+            } else if (options[item].equals("Select  photos from Gallery")) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    // Do something for lollipop and above versions
+                    askForPermission(Manifest.permission.READ_MEDIA_IMAGES, 1);
+                } else {
+                    askForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, 1);
+                }
 
-    private void getStateData() {
+            } else if (options[item].equals("Cancel")) {
+                dialog.dismiss();
+            }
+        }
+    });
+    builder.show();
+}
+    private void getStateData(String state) {
         Utility.showDialoge("Please wait while a configuring State...", UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
         params.put("country_id", ApiConstants.COUNTRY_ID);
@@ -261,6 +340,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 stateNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
@@ -276,6 +356,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
                         String name = data.optString("name");
+                        if(update_companyProfile.equals("update_company_profile")){
+                            if (String.valueOf(id).equalsIgnoreCase(state)) {
+                                spinnerPosition = i + 1;
+                            }
+                        }
                         stateModel.setId(id);
                         stateModel.setName(name);
                         stateNames.add(stateModel);
@@ -283,6 +368,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     if (getContext() != null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, stateNames);
                         binding.stateSpinner.setAdapter(adapter);
+                        binding.stateSpinner.setSelection(spinnerPosition);
                     }
                 }
             }
@@ -295,8 +381,63 @@ public class UserRegistrationActivity extends AppCompatActivity {
             }
         });
     }
+    private void askForPermission(String permission, int requestCode) {
+        if (ContextCompat.checkSelfPermission(UserRegistrationActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(UserRegistrationActivity.this, new String[]{permission, Manifest.permission.MANAGE_EXTERNAL_STORAGE}, requestCode);
+        } else {
+            if (requestCode == 1) {
+                fromGallery();
+            } else if (requestCode == 2) {
+                openCamera();
+            }
+        }
+    }
 
-    private void getDistrictData() {
+    private void fromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_FROM_FILE);
+    }
+
+    /**
+     * Open camera when user click on camera
+     */
+    private void openCamera() {
+        Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (picture.resolveActivity(getPackageManager()) != null) {
+            File photo = null;
+            try {
+                photo = createImageFile();
+
+            } catch (IOException ex) {
+            }
+            if (photo != null) {
+                Uri photoURI = FileProvider.getUriForFile(this, getPackageName(), photo);
+                picture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(picture, PICK_FROM_CAMERA);
+            }
+
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
+    private void getDistrictData(String stateStr) {
         Utility.showDialoge("Please wait while a configuring District...", UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
         params.put("states_id", stateStr);
@@ -307,6 +448,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 districtNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
@@ -322,6 +464,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
                         String name = data.optString("name");
+                        if(update_companyProfile.equals("update_company_profile")){
+                            if (String.valueOf(id).equalsIgnoreCase(String.valueOf(district))) {
+                                spinnerPosition = i + 1;
+                            }
+                        }
                         stateModel.setId(id);
                         stateModel.setName(name);
                         districtNames.add(stateModel);
@@ -329,6 +476,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     if (getContext() != null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, districtNames);
                         binding.citySpinner.setAdapter(adapter);
+                        binding.citySpinner.setSelection(spinnerPosition);
                     }
                 }
             }
@@ -342,7 +490,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void getTalukaData() {
+    private void getTalukaData(String districtStr) {
         Utility.showDialoge("Please wait while a configuring Taluka...", UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
         params.put("district_id", districtStr);
@@ -353,6 +501,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
             public void onSuccess(Object result) throws JSONException {
                 Log.v("Response", result.toString());
                 talukaNames = new ArrayList<>();
+                int spinnerPosition = 0;
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
@@ -368,6 +517,11 @@ public class UserRegistrationActivity extends AppCompatActivity {
                         JSONObject data = jsonArray.getJSONObject(i);
                         int id = data.optInt("id");
                         String name = data.optString("name");
+                        if(update_companyProfile.equals("update_company_profile")){
+                            if (String.valueOf(id).equalsIgnoreCase(String.valueOf(taluka))) {
+                                spinnerPosition = i + 1;
+                            }
+                        }
                         stateModel.setId(id);
                         stateModel.setName(name);
                         talukaNames.add(stateModel);
@@ -375,6 +529,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     if (getContext() != null) {
                         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UserRegistrationActivity.this, talukaNames);
                         binding.talukaSpinner.setAdapter(adapter);
+                        binding.talukaSpinner.setSelection(spinnerPosition);
                     }
                 }
             }
@@ -389,71 +544,176 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
     private boolean CheckAllFields() {
-        if (binding.etUsername.length() == 0) {
-            binding.etUsername.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, R.string.CUSTOMER_NAME, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (binding.edUserId.length() == 0) {
-            binding.edUserId.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, "Enter the User Id", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (binding.etPassword.length() == 0) {
-            binding.etPassword.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, "Enter the Password", Toast.LENGTH_SHORT).show();
 
-            return false;
-        }
-        if (binding.etCompanyName.length() == 0) {
-            binding.etCompanyName.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, "Enter the company Name", Toast.LENGTH_SHORT).show();
+        if(update_companyProfile.equals("update_company_profile")) {
 
-            return false;
-        }
-        if (binding.etPhone.length() == 0) {
-            binding.etPhone.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, "Enter the Phone Number", Toast.LENGTH_SHORT).show();
+            if (binding.etCompanyName.length() == 0) {
+                binding.etCompanyName.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the company Name", Toast.LENGTH_SHORT).show();
 
-            return false;
-        }
-        if (binding.etCity.length() == 0) {
-            binding.etCity.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, "Enter the City", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+                return false;
+            }
+            if (binding.etPhone.length() == 0) {
+                binding.etPhone.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the Phone Number", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+            if (binding.etCity.length() == 0) {
+                binding.etCity.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the City", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 //        if (binding.etWebsite.length() == 0) {
 //            binding.etWebsite.setError("This field is required");
 //            Toast.makeText(UserRegistrationActivity.this, "Enter the Website", Toast.LENGTH_SHORT).show();
 //            return false;
 //        }
 
-        if (binding.etMobile.length() != 10) {
-            binding.etMobile.setError("Enter a 10-digit mobile number");
-            Toast.makeText(UserRegistrationActivity.this, R.string.customer_mobile, Toast.LENGTH_SHORT).show();
-            return false;
-        }
+            if (binding.etMobile.length() != 10) {
+                binding.etMobile.setError("Enter a 10-digit mobile number");
+                Toast.makeText(UserRegistrationActivity.this, R.string.customer_mobile, Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
 
-        if (binding.etUseraddress.length() == 0) {
-            binding.etUseraddress.setError("Address is required");
-            Toast.makeText(UserRegistrationActivity.this, R.string.ADDRESS, Toast.LENGTH_SHORT).show();
-            return false;
+            if (binding.etUseraddress.length() == 0) {
+                binding.etUseraddress.setError("Address is required");
+                Toast.makeText(UserRegistrationActivity.this, R.string.ADDRESS, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (binding.etPincode.length() != 6) {
+                binding.etPincode.setError("Enter a 6-digit Pin code");
+                Toast.makeText(UserRegistrationActivity.this, R.string.PIN_CODE, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (binding.etGstNo.length() == 0) {
+                binding.etGstNo.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter valid GST No.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+
+
+
+        }else {
+
+            if (binding.etUsername.length() == 0) {
+                binding.etUsername.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, R.string.CUSTOMER_NAME, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (binding.edUserId.length() == 0) {
+                binding.edUserId.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the User Id", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (binding.etPassword.length() == 0) {
+                binding.etPassword.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the Password", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+            if (binding.etCompanyName.length() == 0) {
+                binding.etCompanyName.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the company Name", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+            if (binding.etPhone.length() == 0) {
+                binding.etPhone.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the Phone Number", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+            if (binding.etCity.length() == 0) {
+                binding.etCity.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter the City", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+//        if (binding.etWebsite.length() == 0) {
+//            binding.etWebsite.setError("This field is required");
+//            Toast.makeText(UserRegistrationActivity.this, "Enter the Website", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
+
+            if (binding.etMobile.length() != 10) {
+                binding.etMobile.setError("Enter a 10-digit mobile number");
+                Toast.makeText(UserRegistrationActivity.this, R.string.customer_mobile, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+
+            if (binding.etUseraddress.length() == 0) {
+                binding.etUseraddress.setError("Address is required");
+                Toast.makeText(UserRegistrationActivity.this, R.string.ADDRESS, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (binding.etPincode.length() != 6) {
+                binding.etPincode.setError("Enter a 6-digit Pin code");
+                Toast.makeText(UserRegistrationActivity.this, R.string.PIN_CODE, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if (binding.etGstNo.length() == 0) {
+                binding.etGstNo.setError("This field is required");
+                Toast.makeText(UserRegistrationActivity.this, "Enter valid GST No.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
-        if (binding.etPincode.length() != 6) {
-            binding.etPincode.setError("Enter a 6-digit Pin code");
-            Toast.makeText(UserRegistrationActivity.this, R.string.PIN_CODE, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (binding.etGstNo.length() == 0) {
-            binding.etGstNo.setError("This field is required");
-            Toast.makeText(UserRegistrationActivity.this, "Enter valid GST No.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+
 
 
         // after all validation return true.
         return true;
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_FROM_FILE) {
+                Uri selectedImageUri = data.getData();
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (!Utility.isNetworkAvailable(getApplication())) {
+                    Toast.makeText(getApplication(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                str_image_logo = getEncoded64ImageStringFromBitmap(imageBitmap);
+                binding.imageLogo.setImageBitmap(imageBitmap);
+
+
+            } else if (requestCode == PICK_FROM_CAMERA) {
+                Log.v("camera", imageFilePath);
+                try {
+                    //our imageFilePath that contains the absolute path to the created file
+                    File file = new File(imageFilePath);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(UserRegistrationActivity.this.getContentResolver(), Uri.fromFile(file));
+
+                    if (!Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
+                        Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    str_image_logo = getEncoded64ImageStringFromBitmap(imageBitmap);
+                    binding.imageLogo.setImageBitmap(imageBitmap);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+    public String getEncoded64ImageStringFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        byte[] byteFormat = stream.toByteArray();
+        // Get the Base64 string
+        String imgString = Base64.encodeToString(byteFormat, Base64.NO_WRAP);
+
+        return imgString;
     }
 
     private void UserRegistration() {
@@ -462,7 +722,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         // params.put("user_id", sm.getUserID() + "");
         params.put("name", nameStr);
         params.put("login", login_id);
-        //  params.put("company_logo", "");
+        params.put("company_logo",str_image_logo);
         params.put("password", str_password);
         params.put("company_name", str_comp_name);
         params.put("street", streetStr);
@@ -520,13 +780,6 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private void UpdateUserRegistration() {
         SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
-         params.put("user_id", sm.getUserID() + "");
-        params.put("token", sm.getJWTToken());
-        params.put("name", nameStr);
-        params.put("login", login_id);
-        //params.put("company_logo", "");
-        params.put("password", str_password);
-        params.put("company_name", str_comp_name);
         params.put("street", streetStr);
         params.put("country_id", ApiConstants.COUNTRY_ID);
         params.put("state_id", stateStr);
@@ -540,7 +793,14 @@ public class UserRegistrationActivity extends AppCompatActivity {
         params.put("fert_lic_no", str_fertLicNo);
         params.put("seed_lic_no", str_seedLicNo);
         params.put("vat", str_gst_no);
+        params.put("user_id", sm.getUserID()+ "");
         params.put("company_id", sm.getCompanyID()+"");
+        params.put("token", sm.getJWTToken());
+        params.put("company_name", str_comp_name);
+        params.put("taluka_id", talukaStr);
+        params.put("district_id", districtStr);
+
+        params.put("company_logo",str_image_logo);
 
         Utility.showDialoge("", UserRegistrationActivity.this);
         Log.v("add", String.valueOf(params));
@@ -557,8 +817,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 String str_message = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
-
-                      Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
 
                 } else {
                     Utility.dismissDialoge();
@@ -612,12 +871,24 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             String insect_lic_no = data_json.optString("insect_lic_no");
                             String fert_lic_no = data_json.optString("fert_lic_no");
                             String gst = data_json.optString("vat");
+                            String seed_lic_no = data_json.optString("seed_lic_no");
+                            String zip = data_json.optString("zip");
+                            String logo = data_json.optString("logo");
+                             state = data_json.optInt("state");
+                             district = data_json.optInt("district");
+                             taluka = data_json.optInt("taluka");
+
+
+                            byte[] bytes = Base64.decode(logo, Base64.DEFAULT);
+                            binding.imageLogo.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+
+
 
                             binding.etGstNo.setText(gst);
                             binding.etUsername.setText(name);
                             binding.etMobile.setText(String.valueOf(mobile));
                             binding.etUseremail.setText(email);
-//                          binding.etPincode.setText();
+                            binding.etPincode.setText(zip);
                             binding.etUseraddress.setText(street);
                             binding.etCompanyName.setText(partner);
                             binding.etCity.setText(city);
@@ -625,9 +896,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
                             binding.etWebsite.setText(website);
                             binding.etInsectLicNo.setText(insect_lic_no);
                             binding.etFertLicNo.setText(fert_lic_no);
-//                        binding.etSeedLicNo.setText();
+                        binding.etSeedLicNo.setText(seed_lic_no);
 
-
+                        getStateData(String.valueOf(state));
                         }
 
                    // }

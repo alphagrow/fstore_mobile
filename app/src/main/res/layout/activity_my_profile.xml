@@ -168,15 +168,15 @@
                 android:textColor="#E8393939"
                 android:textSize="14sp" />
 
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="1dp"-->
-<!--                android:layout_marginTop="7dp"-->
-<!--                android:background="#81959191">-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="7dp"
+                android:background="#81959191">
 
-<!--            </View>-->
+            </View>
             <androidx.cardview.widget.CardView
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/company_profile"
                 android:layout_margin="10dp"
                 app:cardCornerRadius="2dp"

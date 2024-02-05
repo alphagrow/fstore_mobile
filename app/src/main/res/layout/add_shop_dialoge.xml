@@ -15,50 +15,54 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_marginTop="@dimen/ten"
-            android:fontFamily="@font/sf_compact_regular"
+            android:fontFamily="@font/helvetica_neue_medium"
+            android:textStyle="normal"
             android:gravity="center"
             android:textColor="@color/black"
             android:text="Create Shop"
             android:textSize="20sp" />
         <TextView
-            android:layout_marginStart="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="@dimen/ten"
-            android:fontFamily="@font/sf_compact_regular"
-            android:gravity="start"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="@dimen/end_marg_text"
+            android:layout_marginStart="@dimen/start_marg_text"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_textview"
+            android:textColor="@color/edt_top_text_color"
             android:text="Shop Name"
-            android:textSize="@dimen/fifteen" />
+            />
 
         <EditText
             android:id="@+id/shop_name_ed"
-            android:hint=" "
-            android:importantForAutofill="no"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="@dimen/twenty_five"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="@dimen/twenty_five"
-            android:requiresFadingEdge="vertical"
+            android:layout_height="@dimen/height_marg_edit"
+            android:layout_marginStart="@dimen/start_marg_edit"
+            android:layout_marginTop="@dimen/top_marg_edit"
+            android:layout_marginEnd="@dimen/end_marg_edit"
             android:background="@drawable/custom_edit_text_cut"
+            android:drawableEnd="@drawable/baseline_co_present_24"
             android:drawablePadding="@dimen/ten"
-            android:textSize="14dp"
             android:fontFamily="@font/sf_compact_medium"
+            android:hint=""
+            android:padding="@dimen/padding_edit"
+            android:importantForAutofill="no"
+            android:textSize="@dimen/text_size_edit"
             android:inputType="text"
-            android:padding="8dp" />
+            android:requiresFadingEdge="vertical" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="@dimen/ten"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -66,7 +70,6 @@
                 android:id="@+id/cancel_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:text="Cancel"
                 android:textColor="@color/white"
                 android:textStyle="normal" />

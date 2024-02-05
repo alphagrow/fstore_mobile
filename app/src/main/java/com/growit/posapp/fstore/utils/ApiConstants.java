@@ -13,9 +13,11 @@ public class ApiConstants {
     public final static String RazorPayProductionKey="rzp_live_5JiuYm4kh7D4fT";
  //   public final static String BASE_URL = "http://162.246.254.203:9090";
   //  public final static String BASE_URL = "http://192.168.18.36:9090";
-     public final static String BASE_URL = "http://162.246.254.203:9090";
+
+  //   public final static String BASE_URL = "http://162.246.254.203:9090";
   //dev_fstore
- //  public final static String BASE_URL = "http://162.246.254.203:8000";
+
+     public final static String BASE_URL = "http://162.246.254.203:8000";
     public final static String BASE_URL_SMS = "http://msg.jmdinfotek.in/";
     public final static String SIGN_IN = "/api/login";
     public final static String INVOICE_DOWNLOAD = "/pdf/download?pos_order_id=";
@@ -70,7 +72,7 @@ public class ApiConstants {
     public final static String UPDATE_WAREHOUSE = "/api/update_warehouse?";
     public final static String GET_ALL_PRODUCT_LIST = "/api/products/list?";
     public final static String GET_STOCK_Detail = "/api/stock_quant/details?";
-    public final static String UPDATE_COMPANY = "/api/user/company/update?";
+    public final static String UPDATE_COMPANY = "/api/company/update?";
     public final static String GET_STOCK_QUANT = "/api/products/list?";
     public final static String GET_OPERATION_LIST = "/api/operation_types?";
     public final static String GET_LOCATION_LIST = "/api/location/list?";
@@ -94,6 +96,7 @@ public class ApiConstants {
     public final static String GET_COMPANY_DETAILS = "/api/company/details?";
  public final static String PUT_UPDATE_DISTRICT = "/api/update_district?";
  public final static String PUT_UPDATE_TALUKA = "/api/update_taluka?";
+    public final static String POST_RETURN_POST_ORDER = "/api/return_pos_order?";
 }
 
 

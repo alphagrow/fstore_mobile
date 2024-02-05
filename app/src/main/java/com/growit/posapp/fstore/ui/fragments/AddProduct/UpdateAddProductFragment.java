@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -781,7 +782,15 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         for (int j = 0; j < model.size(); j++) {
             TextView text = new TextView(getActivity());
             LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
-            editTextParams.setMargins(20, 20, 20, 0);
+            TextView headingTV = new TextView(getActivity());
+            headingTV.setTextSize(12f);
+            headingTV.setTextColor(getResources().getColor(R.color.edt_top_text_color));
+            headingTV.setTypeface(getResources().getFont(R.font.roboto_regular), Typeface.BOLD);
+            headingTV.setPadding(0, 50, 12, 0);
+            headingTV.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            headingTV.setLayoutParams(editTextParams);
+            headingTV.setText("Select "+ model.get(j).getName());
+            editTextParams.setMargins(20, -30, 20, 0);
             text.setLayoutParams(editTextParams);
             text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size));
             text.setTextSize(16);
@@ -838,6 +847,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
             text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
             //  et.setEnabled(false);
+            binding.linearLayoutMain.addView(headingTV);
+
             binding.linearLayoutMain.addView(text, editTextParams);
 
             SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);

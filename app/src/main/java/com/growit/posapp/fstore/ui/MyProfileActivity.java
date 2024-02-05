@@ -282,12 +282,6 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 openCamera();
             }
         }
-
-
-
-
-
-
     }
 
     void uploadImage(Bitmap bitmap) {

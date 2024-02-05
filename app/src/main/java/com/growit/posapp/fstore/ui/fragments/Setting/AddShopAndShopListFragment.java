@@ -412,4 +412,3 @@ public class AddShopAndShopListFragment extends Fragment {
 }
 
 
-

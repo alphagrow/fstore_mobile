@@ -8,9 +8,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,8 +25,15 @@ import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
+import com.growit.posapp.fstore.volley.VolleyCallback;
+import com.growit.posapp.fstore.volley.VolleyRequestHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class OrderDetailFragment extends Fragment {
@@ -38,6 +47,7 @@ public class OrderDetailFragment extends Fragment {
     int position=-1;
     SessionManagement sm;
     int orderID=0;
+    Button return_pos_order;
     TextView noDataFound,orderNo,total_product,date,total_value,paid_by;
 
     public OrderDetailFragment() {
@@ -68,6 +78,7 @@ public class OrderDetailFragment extends Fragment {
         total_value=view.findViewById(R.id.total_value);
         paid_by=view.findViewById(R.id.paid_by);
         noDataFound = view.findViewById(R.id.noDataFound);
+        return_pos_order = view.findViewById(R.id.return_pos_order);
 
         if (getArguments() != null) {
             position = getArguments().getInt("position");
@@ -79,6 +90,12 @@ public class OrderDetailFragment extends Fragment {
             getOrderDetail();
         }
         invoiceDownload.setOnClickListener(v -> showPDF(orderID+""));
+        return_pos_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getReturnPosOrder();
+            }
+        });
         return view;
     }
 
@@ -120,6 +137,39 @@ public class OrderDetailFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
 
         }
+    }
+    private void getReturnPosOrder(){
+        SessionManagement sm = new SessionManagement(getActivity());
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", sm.getUserID()+ "");
+        params.put("token", sm.getJWTToken());
+        params.put("payment_method_id", productDetail.getOrders().get(position).getPayment_type());
+        params.put("pos_order_id", productDetail.getOrders().get(position).getOrderNumber());
+        Utility.showDialoge("Please wait while a moment...", getActivity());
+        Log.v("add", String.valueOf(params));
+        new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_RETURN_POST_ORDER, new VolleyCallback() {
+            private String message = "Registration failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                message = obj.optString("status");
+
+                if (message.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 }

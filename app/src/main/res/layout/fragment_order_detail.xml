@@ -220,6 +220,13 @@
                     android:layout_marginTop="5dp"
                     android:background="#E6E4E4E4" />
 
+                <Button
+                    android:id="@+id/return_pos_order"
+                    android:text="Return order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Button>
                 <LinearLayout
                     android:id="@+id/invoiceDownload"
                     android:layout_width="match_parent"

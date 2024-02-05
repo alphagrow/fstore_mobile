@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -672,8 +673,18 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         for (int j = 0; j < n; j++) {
             TextView text = new TextView(getActivity());
             LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
+            TextView headingTV = new TextView(getActivity());
+            headingTV.setTextSize(12f);
+            headingTV.setTextColor(getResources().getColor(R.color.edt_top_text_color));
+            headingTV.setTypeface(getResources().getFont(R.font.roboto_regular), Typeface.BOLD);
 
-            editTextParams.setMargins(20, 20, 20, 0);
+            headingTV.setPadding(0, 50, 12, 0);
+            headingTV.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            headingTV.setLayoutParams(editTextParams);
+
+            headingTV.setText("Select "+ model.get(j).getName());
+
+            editTextParams.setMargins(20, -30, 20, 0);
             text.setLayoutParams(editTextParams);
             text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size));
             text.setTextSize(16);
@@ -689,8 +700,9 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             text.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.custom_edit_text_cut));
             // et.setEnabled(false);
-            binding.linearLayoutMain.addView(text, editTextParams);
+            binding.linearLayoutMain.addView(headingTV);
 
+            binding.linearLayoutMain.addView(text, editTextParams);
             SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
 
         }
