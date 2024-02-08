@@ -28,7 +28,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView qty,order_no,dateTxt,amountTxt,product_name,case_id;
+        public TextView qty,order_no,dateTxt,amountTxt,product_name,case_id,status;
 ImageView images;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -39,6 +39,7 @@ ImageView images;
             images = itemView.findViewById(R.id.images);
             order_no = itemView.findViewById(R.id.order_no);
             case_id = itemView.findViewById(R.id.case_id);
+            status = itemView.findViewById(R.id.status);
 
         }
     }
@@ -60,6 +61,10 @@ ImageView images;
         holder.qty.setText("  Items : " +orders.getProducts().size());
         holder.dateTxt.setText(orders.getOrderDate());
         holder.order_no.setText(orders.getOrderNumber());
+
+        if(orders.getState().equalsIgnoreCase("invoiced")) {
+            holder.status.setText("REFUND");
+        }
         holder.product_name.setText(orders.getCustomerName());
         DecimalFormat form = new DecimalFormat("0.00");
         Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getProducts().get(0).getProductImageUrl())
@@ -68,8 +73,8 @@ ImageView images;
                 .into(holder.images);
 
         holder.amountTxt.setText("Rs. "+form.format(Double.valueOf(orders.getAmountPaid())));
-        if(orders.getPayment_type()!=null) {
-            holder.case_id.setText(orders.getPayment_type());
+        if(orders.getPaymentType()!=null) {
+            holder.case_id.setText(orders.getPaymentType().getName());
         }
     }
 

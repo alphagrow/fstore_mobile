@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.ExtraVariantData;
 import com.growit.posapp.fstore.model.TransfersModelList;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +29,7 @@ public class ProductExtraPriceAdapter extends RecyclerView.Adapter<ProductExtraP
         order = order_list;
         mContext = context;
     }
+
     public void updateList(ArrayList<ExtraVariantData> modellist) {
         this.order=modellist;
         notifyDataSetChanged();

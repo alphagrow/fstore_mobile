@@ -157,21 +157,15 @@ public class ProductListFragment extends Fragment {
         ArrayList<Product> filteredList = new ArrayList<>();
         // running a for loop to compare elements.
         for (Product item : productList) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.getProductName().toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
                 filteredList.add(item);
             }
         }
         if (filteredList.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
-//            productListAdapter.filterList(filteredList);
+
             Toast.makeText(getActivity(), R.string.NO_DATA, Toast.LENGTH_SHORT).show();
         } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
+
             productListAdapter.filterList(filteredList);
         }
     }

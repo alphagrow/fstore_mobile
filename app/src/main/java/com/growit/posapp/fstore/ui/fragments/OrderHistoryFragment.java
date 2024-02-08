@@ -121,7 +121,7 @@ public class OrderHistoryFragment extends Fragment {
                             recyclerView.setVisibility(View.VISIBLE);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                            total_order_text.setText("Total : "+productDetail.getOrders().size()+" Transaction ");
+                            total_order_text.setText("Total : "+productDetail.getOrders().size()+" Order ");
                             orderHistoryAdapter = new OrderHistoryAdapter(getActivity(), productDetail.getOrders());
                             recyclerView.setAdapter(orderHistoryAdapter);
                             recyclerView.setLayoutManager(layoutManager);

@@ -58,6 +58,7 @@ import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.Setting.AddDistrictFragment;
 import com.growit.posapp.fstore.ui.fragments.Setting.AddShopAndShopListFragment;
 import com.growit.posapp.fstore.ui.fragments.Setting.AddTalukaFragment;
+import com.growit.posapp.fstore.ui.fragments.Setting.UserCreateFragment;
 import com.growit.posapp.fstore.ui.fragments.TransactionHistoryFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout toolbar_image_lay;
     TextView home_text,customer_text,cart_text,transaction_text,order_text;
     ImageView home_icon,customer_icon,transaction_icon,order_icon;
-    LinearLayout  sale_menu_lay,setting_menu_lay,product_menu_lay,customer_menu_lay;
+    LinearLayout  sale_menu_lay,setting_menu_lay,product_menu_lay,customer_menu_lay,user_text;
     LinearLayout inventory_menu;
     TextView inventory_text,add_product_text,product_list_text,add_extra_price,add_attribute,add_uom,add_pos_cat,vendor,purchase,warehouses,purchase_order_list,transfer,transfer_order_list;
     boolean isClicked;
@@ -487,6 +488,7 @@ public class MainActivity extends AppCompatActivity {
         add_district = view_setting.findViewById(R.id.add_district);
         add_taluka = view_setting.findViewById(R.id.add_taluka);
         sett_menu_image_end = view_setting.findViewById(R.id.sett_menu_image_end);
+        user_text = view_setting.findViewById(R.id.user_text);
 
 
 
@@ -793,6 +795,7 @@ public class MainActivity extends AppCompatActivity {
                 shop_text.setVisibility(View.VISIBLE);
                 location.setVisibility(View.VISIBLE);
                 operation_type.setVisibility(View.VISIBLE);
+                user_text.setVisibility(View.VISIBLE);
                 isClicked = true;
             }else {
                 sett_menu_image_end.setImageResource(0);
@@ -802,6 +805,7 @@ public class MainActivity extends AppCompatActivity {
                 shop_text.setVisibility(View.GONE);
                 location.setVisibility(View.GONE);
                 operation_type.setVisibility(View.GONE);
+                user_text.setVisibility(View.GONE);
                 isClicked = false;
             }
 
@@ -836,6 +840,17 @@ public class MainActivity extends AppCompatActivity {
                 drawer_layout.close();
             }
         });
+        user_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar.setVisibility(View.GONE);
+                Fragment fragment = UserCreateFragment.newInstance();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+                drawer_layout.close();
+            }
+        });
+
     }
 
     private void logoutAlert() {

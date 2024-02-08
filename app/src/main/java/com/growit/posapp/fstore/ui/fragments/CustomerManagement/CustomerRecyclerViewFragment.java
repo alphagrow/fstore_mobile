@@ -180,7 +180,6 @@ public class CustomerRecyclerViewFragment extends Fragment {
         } else {
             // at last we are passing that filtered
             // list to our adapter class.
-
             searchCustomerDataList=filteredList;
             customAdapter.filterList(filteredList);
         }

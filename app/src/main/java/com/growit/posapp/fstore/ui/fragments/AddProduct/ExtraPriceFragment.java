@@ -29,7 +29,9 @@ import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ExtraPriceAdapter;
 import com.growit.posapp.fstore.model.ExtraPriceData;
+import com.growit.posapp.fstore.model.ExtraVariantData;
 import com.growit.posapp.fstore.model.TransfersModel;
+import com.growit.posapp.fstore.tables.Customer;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -43,6 +45,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ExtraPriceFragment extends Fragment {
@@ -52,9 +55,9 @@ public class ExtraPriceFragment extends Fragment {
     TextView searchEditTxt;
     private TextView total_customer_text;
     ImageView backBtn;
-    int position=-1;
+    private int position = 0;
     ExtraPriceData extraPriceData;
-
+    private List<ExtraVariantData> search_variant;
     public static ExtraPriceFragment newInstance() {
         return new ExtraPriceFragment();
     }
@@ -76,16 +79,17 @@ public class ExtraPriceFragment extends Fragment {
 
         if (getArguments() != null) {
             position = getArguments().getInt("position");
-            String orderDetail = getArguments().getString("OrderDetail");
-            Gson gson = new Gson();
-            Type listType = new TypeToken<ExtraPriceData>() {
-            }.getType();
-            extraPriceData = gson.fromJson(orderDetail, listType);
+//            String orderDetail = getArguments().getString("OrderDetail");
+            search_variant = (List<ExtraVariantData>) getArguments().getSerializable("OrderDetail");
+
+//            Gson gson = new Gson();
+//            Type listType = new TypeToken<ExtraPriceData>() {
+//            }.getType();
+//            extraPriceData = gson.fromJson(orderDetail, listType);
 
         }
-        total_customer_text.setText("Total: " + extraPriceData.getData().get(position).getVariants().size() + " " + "Variants List");
-
-        customAdapter = new ExtraPriceAdapter(getActivity(), extraPriceData.getData().get(position).getVariants());
+        total_customer_text.setText("Total: " + search_variant.get(position).getVariants().size() + " " + "Variants List");
+        customAdapter = new ExtraPriceAdapter(getActivity(), search_variant.get(position).getVariants());
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -93,7 +97,7 @@ public class ExtraPriceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 JSONArray jsonArray = new JSONArray();
-                for (int i = 0; i < extraPriceData.getData().get(position).getVariants().size(); i++) {
+                for (int i = 0; i < search_variant.get(position).getVariants().size(); i++) {
                     View view = linearLayoutManager.getChildAt(i);
                     if(view !=null) {
                         EditText mrpEditText = view.findViewById(R.id.mrp_text);
@@ -102,8 +106,8 @@ public class ExtraPriceFragment extends Fragment {
                         String extra_price = priceEditText.getText().toString();
                         JSONObject obj = new JSONObject();
                         try {
-                            obj.putOpt("product_tmpl_id", extraPriceData.getData().get(position).getProductId());
-                            obj.putOpt("variant_id", Integer.parseInt(extraPriceData.getData().get(position).getVariants().get(i).getProductVariant()));
+                            obj.putOpt("product_tmpl_id", search_variant.get(position).getProductId());
+                            obj.putOpt("variant_id", Integer.parseInt(search_variant.get(position).getVariants().get(i).getProductVariant()));
                             obj.putOpt("extra_price", Double.parseDouble(extra_price));
                             obj.putOpt("mrp_price", Double.parseDouble(mrp));
                             jsonArray.put(obj);

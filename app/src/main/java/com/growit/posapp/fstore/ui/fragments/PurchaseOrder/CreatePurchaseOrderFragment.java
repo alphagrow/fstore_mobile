@@ -215,9 +215,9 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         binding.idLLContainer.removeAllViews();
                         variant_value.clear();
                         variantArray.clear();
-                        // binding.numberPicker.setValue(1);
-                        //   binding.setPatternsTxt.setText("");
-                        //    binding.detailLayout.removeAllViews();
+                        //binding.numberPicker.setValue(1);
+                        //binding.setPatternsTxt.setText("");
+                        //binding.detailLayout.removeAllViews();
                         cropID = cropList.get(position).getValueId() + "";
                         cropName = cropList.get(position).getValueName();
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);

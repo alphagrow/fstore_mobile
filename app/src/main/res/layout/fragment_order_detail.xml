@@ -219,40 +219,55 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
                     android:background="#E6E4E4E4" />
-
-                <Button
-                    android:id="@+id/return_pos_order"
-                    android:text="Return order"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </Button>
                 <LinearLayout
-                    android:id="@+id/invoiceDownload"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:orientation="vertical"
+                    android:weightSum="2"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/return_pos_order"
+                        android:text="Return order"
+                        android:textSize="12dp"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
 
-                    >
-                    <ImageView
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="30dp"
-                        android:src="@drawable/download"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp">
-                    </ImageView>
-
-                    <TextView
-                        android:layout_width="match_parent"
+                    </Button>
+                    <LinearLayout
+                        android:id="@+id/invoiceDownload"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/helvetica_neue_medium"
-                        android:gravity="center|end"
-                        android:text="Download Bill"
-                        android:textSize="12sp"
-                        android:textStyle="normal" />
+                       android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="20dp"
+                            android:src="@drawable/download"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp">
+                        </ImageView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/helvetica_neue_medium"
+                            android:gravity="center|end"
+                            android:layout_gravity="center"
+                            android:text="Download Bill"
+                            android:textSize="12sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
                 </LinearLayout>
+
 
             </LinearLayout>
 

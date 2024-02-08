@@ -35,6 +35,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
@@ -873,16 +875,17 @@ private void takePhoto(){
                             String gst = data_json.optString("vat");
                             String seed_lic_no = data_json.optString("seed_lic_no");
                             String zip = data_json.optString("zip");
-                            String logo = data_json.optString("logo");
+                            String logo = data_json.optString("logo_url");
                              state = data_json.optInt("state");
                              district = data_json.optInt("district");
                              taluka = data_json.optInt("taluka");
 
 
-                            byte[] bytes = Base64.decode(logo, Base64.DEFAULT);
-                            binding.imageLogo.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-
-
+                        Glide.with(UserRegistrationActivity.this)
+                                .load(logo)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .into(binding.imageLogo);
 
                             binding.etGstNo.setText(gst);
                             binding.etUsername.setText(name);

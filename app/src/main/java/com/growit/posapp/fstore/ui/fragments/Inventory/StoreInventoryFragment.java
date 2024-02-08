@@ -30,6 +30,7 @@ import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
 import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
+import com.growit.posapp.fstore.model.ExtraVariantData;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.StockInventoryModel;
@@ -44,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,8 @@ public class StoreInventoryFragment extends Fragment {
     TextView noDataFound,total_order_text,add_text;
      EditText seacrEditTxt;
      ImageView backBtn;
+    private boolean isSearch = false;
+    private List<Product> search_product=new ArrayList<>();
     public StoreInventoryFragment() {
         // Required empty public constructor
     }
@@ -95,8 +99,16 @@ public class StoreInventoryFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         Bundle bundle = new Bundle();
+
                         bundle.putString("PID", productList.get(position).getProductID());
                         Fragment fragment = StoreInventoryDetailFragment.newInstance();
+                        if(isSearch) {
+                            bundle.putSerializable("PID", (Serializable) search_product.get(position).getProductID());
+
+                        }else{
+                            bundle.putSerializable("PID", (Serializable) productList.get(position).getProductID());
+
+                        }
                         fragment.setArguments(bundle);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -124,6 +136,11 @@ public class StoreInventoryFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filterList(s.toString());
+                if (s.length() > 0) {
+                    isSearch = true;
+                } else {
+                    isSearch = false;
+                }
             }
 
             @Override
@@ -203,16 +220,44 @@ public class StoreInventoryFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
-    private void filterList(String text){
+//    private void filterList(String text){
+//
+//            ArrayList<Product> model = new ArrayList<>();
+//            for (Product detail : productList){
+//                if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){
+//                    model.add(detail);
+//                }
+//            }
+//
+//        orderHistoryAdapter.updateList(model);
+//
+//    }
 
-            ArrayList<Product> model = new ArrayList<>();
-            for (Product detail : productList){
-                if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){
-                    model.add(detail);
-                }
+
+    private void filterList(String text) {
+        // creating a new array list to filter our data.
+        ArrayList<Product> filteredList = new ArrayList<>();
+
+        // running a for loop to compare elements.
+        for (Product item : productList) {
+            // checking if the entered string matched with any item of our recycler view.
+            if (item.getProductName().toLowerCase().contains(text.toLowerCase())) {
+                // if the item is matched we are
+                // adding it to our filtered list.
+                filteredList.add(item);
             }
+        }
+        if (filteredList.isEmpty()) {
+            // if no item is added in filtered list we are
+            // displaying a toast message as no data found.
+            Toast.makeText(getActivity(), R.string.NO_DATA, Toast.LENGTH_SHORT).show();
+        } else {
+            // at last we are passing that filtered
+            // list to our adapter class.
 
-        orderHistoryAdapter.updateList(model);
-
+            search_product=filteredList;
+            orderHistoryAdapter.updateList(filteredList);
+        }
     }
+
 }

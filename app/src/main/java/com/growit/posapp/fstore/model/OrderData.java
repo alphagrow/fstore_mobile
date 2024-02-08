@@ -24,17 +24,17 @@ public class OrderData {
     @Expose
     private String userName;
 
-    public String getPayment_type() {
-        return payment_type;
-    }
-
-    public void setPayment_type(String payment_type) {
-        this.payment_type = payment_type;
-    }
-
     @SerializedName("payment_type")
     @Expose
-    private String payment_type;
+    private PaymentTypeModel paymentType;
+
+    public PaymentTypeModel getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentTypeModel paymentType) {
+        this.paymentType = paymentType;
+    }
 
     public String getUserName() {
         return userName;
@@ -63,8 +63,19 @@ public class OrderData {
     @SerializedName("amount_paid")
     @Expose
     private String amountPaid;
+    @SerializedName("state")
+    @Expose
+    private String state;
 
-    @SerializedName("customer_name")
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @SerializedName("invoiced")
     @Expose
     private String customerName;
     @SerializedName("pos_reference")

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,7 @@ import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.StoreInventoryDetailAdapter;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.ProductExtraPriceListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -86,11 +88,14 @@ public class StoreInventoryDetailFragment extends Fragment {
 
         noDataFound.setOnClickListener(v -> getStoreInventory(productID));
 
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),MainActivity.class));
-                getActivity().finish();
+                Fragment fragment = StoreInventoryFragment.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
             }
         });
         seacrEditTxt.addTextChangedListener(new TextWatcher() {

@@ -34,6 +34,9 @@ import com.growit.posapp.fstore.adapters.StoreInventoryAdapters;
 import com.growit.posapp.fstore.model.ExtraPriceData;
 import com.growit.posapp.fstore.model.ExtraVariantData;
 import com.growit.posapp.fstore.model.Product;
+import com.growit.posapp.fstore.model.VendorModelList;
+import com.growit.posapp.fstore.model.WarehouseModel;
+import com.growit.posapp.fstore.tables.Customer;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryDetailFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.StoreInventoryFragment;
 import com.growit.posapp.fstore.ui.fragments.Inventory.TransfersDetailsFragment;
@@ -46,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,12 +59,14 @@ public class ProductExtraPriceListFragment extends Fragment {
     protected List<ExtraVariantData> productList = new ArrayList<>();
     private RecyclerView recyclerView;
 
-    TextView noDataFound,total_order_text,add_text;
+    TextView noDataFound, total_order_text, add_text;
     EditText seacrEditTxt;
-    private  String mResponse="";
+    private String mResponse = "";
     ExtraPriceData extraPriceData;
+    private boolean isSearch = false;
     ImageView backBtn;
     ProductExtraPriceAdapter customAdapter;
+    private List<ExtraVariantData> search_variant=new ArrayList<>();
     public ProductExtraPriceListFragment() {
         // Required empty public constructor
     }
@@ -89,18 +95,25 @@ public class ProductExtraPriceListFragment extends Fragment {
         seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
         if (Utility.isNetworkAvailable(getActivity())) {
             getProductExtraPrice();
-        }else {
+        } else {
             Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
         }
 
         noDataFound.setOnClickListener(v -> getProductExtraPrice());
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(),  recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         Bundle bundle = new Bundle();
-                        bundle.putString("OrderDetail", mResponse);
-                        bundle.putInt("position", position);
+                        if(isSearch) {
+                            bundle.putSerializable("OrderDetail", (Serializable) search_variant);
+                            bundle.putInt("position", position);
+                        }else{
+                            bundle.putSerializable("OrderDetail", (Serializable) extraPriceData.getData());
+                            bundle.putInt("position", position);
+                        }
+//                        bundle.putString("OrderDetail", mResponse);
+//                        bundle.putInt("position", position);
                         Fragment fragment = ExtraPriceFragment.newInstance();
                         fragment.setArguments(bundle);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -122,6 +135,11 @@ public class ProductExtraPriceListFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filterList(s.toString());
+                if (s.length() > 0) {
+                    isSearch = true;
+                } else {
+                    isSearch = false;
+                }
             }
 
             @Override
@@ -143,7 +161,7 @@ public class ProductExtraPriceListFragment extends Fragment {
         SessionManagement sm = new SessionManagement(getActivity());
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = ApiConstants.BASE_URL + ApiConstants.GET_EXTRA_PRICE + "user_id=" + sm.getUserID()+ "&" + "token=" + sm.getJWTToken();
+        String url = ApiConstants.BASE_URL + ApiConstants.GET_EXTRA_PRICE + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 
         Utility.showDialoge("Please wait while a moment...", getActivity());
 
@@ -151,7 +169,7 @@ public class ProductExtraPriceListFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 JSONObject obj = null;
-                mResponse=response.toString();
+                mResponse = response.toString();
                 try {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
@@ -164,9 +182,10 @@ public class ProductExtraPriceListFragment extends Fragment {
                         extraPriceData = gson.fromJson(response.toString(), listType);
                         customAdapter = new ProductExtraPriceAdapter(getActivity(), extraPriceData.getData());
                         recyclerView.setAdapter(customAdapter);
-
                         total_order_text.setText("Total: " + extraPriceData.getData().size() + " " + "Products");
+//                        customAdapter.notifyDataSetChanged();
                     }
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -179,16 +198,44 @@ public class ProductExtraPriceListFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
-    private void filterList(String text){
+//    private void filterList(String text) {
+//
+//        ArrayList<ExtraVariantData> model = new ArrayList<>();
+//        for (ExtraVariantData detail : extraPriceData.getData()) {
+//            if (detail.getProductName().toLowerCase().contains(text.toLowerCase())) {
+//                model.add(detail);
+//            }
+//        }
+//
+//        customAdapter.updateList(model);
+//
+//
+//    }
+    private void filterList(String text) {
+        // creating a new array list to filter our data.
+        ArrayList<ExtraVariantData> filteredList = new ArrayList<>();
 
-        ArrayList<ExtraVariantData> model = new ArrayList<>();
-        for (ExtraVariantData detail : extraPriceData.getData()){
-            if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){
-                model.add(detail);
+        // running a for loop to compare elements.
+        for (ExtraVariantData item : extraPriceData.getData()) {
+            // checking if the entered string matched with any item of our recycler view.
+            if (item.getProductName().toLowerCase().contains(text.toLowerCase())) {
+                // if the item is matched we are
+                // adding it to our filtered list.
+                filteredList.add(item);
             }
         }
+        if (filteredList.isEmpty()) {
+            // if no item is added in filtered list we are
+            // displaying a toast message as no data found.
+            Toast.makeText(getActivity(), R.string.NO_DATA, Toast.LENGTH_SHORT).show();
+        } else {
+            // at last we are passing that filtered
+            // list to our adapter class.
 
-        customAdapter.updateList(model);
-
+            search_variant=filteredList;
+            customAdapter.updateList(filteredList);
+        }
     }
+
+
 }

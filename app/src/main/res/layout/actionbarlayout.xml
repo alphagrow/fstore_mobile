@@ -51,7 +51,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_weight=".4"
                 android:background="@drawable/language"
-                android:visibility="visible" />
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/iv_notifications"
@@ -61,7 +61,7 @@
                 android:layout_weight=".4"
                 android:layout_gravity="end|center"
                 android:background="@drawable/notification"
-                android:visibility="visible" />
+                android:visibility="invisible" />
         </LinearLayout>
         <ImageView
             android:layout_width="0dp"

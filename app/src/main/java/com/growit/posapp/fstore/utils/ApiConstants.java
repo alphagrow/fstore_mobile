@@ -97,6 +97,7 @@ public class ApiConstants {
  public final static String PUT_UPDATE_DISTRICT = "/api/update_district?";
  public final static String PUT_UPDATE_TALUKA = "/api/update_taluka?";
     public final static String POST_RETURN_POST_ORDER = "/api/return_pos_order?";
+    public final static String POST_CREATE_User = "/api/user/create?";
 }
 
 

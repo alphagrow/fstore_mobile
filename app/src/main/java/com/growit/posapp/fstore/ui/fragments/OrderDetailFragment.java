@@ -90,12 +90,17 @@ public class OrderDetailFragment extends Fragment {
             getOrderDetail();
         }
         invoiceDownload.setOnClickListener(v -> showPDF(orderID+""));
+        if(productDetail.getOrders().get(position).getState().equalsIgnoreCase("invoiced")) {
+            return_pos_order.setVisibility(View.INVISIBLE);
+        }
         return_pos_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getReturnPosOrder();
             }
         });
+
+
         return view;
     }
 
@@ -129,7 +134,7 @@ public class OrderDetailFragment extends Fragment {
             date.setText(productDetail.getOrders().get(position).getOrderDate());
             double paidAmount=Utility.decimalFormat(Double.parseDouble(productDetail.getOrders().get(position).getAmountPaid()));
             total_value.setText(paidAmount+"");
-            paid_by.setText(productDetail.getOrders().get(position).getPayment_type());
+            paid_by.setText(productDetail.getOrders().get(position).getPaymentType().getName());
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             orderHistoryAdapter = new OrderDetailAdapter(getActivity(), productDetail.getOrders().get(position).getProducts());
@@ -143,8 +148,8 @@ public class OrderDetailFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", sm.getUserID()+ "");
         params.put("token", sm.getJWTToken());
-        params.put("payment_method_id", productDetail.getOrders().get(position).getPayment_type());
-        params.put("pos_order_id", productDetail.getOrders().get(position).getOrderNumber());
+        params.put("payment_method_id", productDetail.getOrders().get(position).getPaymentType().getId()+"");
+        params.put("pos_order_id", productDetail.getOrders().get(position).getId()+"");
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_RETURN_POST_ORDER, new VolleyCallback() {
@@ -160,6 +165,7 @@ public class OrderDetailFragment extends Fragment {
                 if (message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    return_pos_order.setVisibility(View.INVISIBLE);
 
                 }
             }
