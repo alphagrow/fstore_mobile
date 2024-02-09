@@ -3,7 +3,6 @@ package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
@@ -36,7 +35,6 @@ import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.OrderDetailAdapter;
 import com.growit.posapp.fstore.adapters.PurchaseOrderDetailAdapter;
 import com.growit.posapp.fstore.databinding.FragmentPurchaseOrderDetailBinding;
-import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.ui.ResetPasswordActivity;
@@ -66,7 +64,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
     int orderID;
     int purchase_order_id;
     LinearLayoutManager layoutManager;
-  String  qut_str;
+
     public PurchaseOrderDetailFragment() {
         // Required empty public constructor
     }
@@ -131,44 +129,14 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     if(view !=null) {
 
                         EditText qutEditText = view.findViewById(R.id.edi_qut_text);
-                //        double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
+                        double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
 //                        qutEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int)max_quant)});
                         double max_quant =productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
-
-                        qutEditText.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                                if(!s.toString().isEmpty()) {
-                                    if(Double.parseDouble(s.toString())<=max_quant){
-                                        qut_str  =  s.toString();
-                                    }
-
-                                }else {
-                                    Toast.makeText(getContext(), "Enter the valid Qut", Toast.LENGTH_SHORT).show();
-
-
-                                }
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-
-                            }
-                        });
-
-
 
                         JSONObject obj = new JSONObject();
                         try {
                            total_qut +=  productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
-                            total_receive_qut += Double.parseDouble(qut_str);
+                            total_receive_qut += qut_str;
                             // obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
                             obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getProductId());
                             obj.putOpt("quantity", qut_str);
