@@ -28,6 +28,8 @@ public interface PurchaseDao {
         @Query("UPDATE PurchaseOrder SET quantity = :qty WHERE productID = :id AND productVariants=:variants AND unitPrice=:price")
         int updateProductCardQuantity(int qty,int id,String variants,double price);
 
+//        @Query("UPDATE PurchaseOrder SET quantity = quantity+:qty WHERE productID = :id AND productVariants=:variants AND unitPrice=:price")
+//        int updateProductQuantity(int qty,int id,String variants,double price);
         @Query("UPDATE PurchaseOrder SET quantity = quantity+:qty WHERE productID = :id AND productVariants=:variants AND unitPrice=:price")
         int updateProductQuantity(int qty,int id,String variants,double price);
 //

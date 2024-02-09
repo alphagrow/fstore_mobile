@@ -218,6 +218,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         //binding.numberPicker.setValue(1);
                         //binding.setPatternsTxt.setText("");
                         //binding.detailLayout.removeAllViews();
+                        binding.batchNumber.setText("");
+                        binding.cirNo.setText("");
+
+                        binding.mkdBy.setText("");
                         cropID = cropList.get(position).getValueId() + "";
                         cropName = cropList.get(position).getValueName();
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
@@ -245,6 +249,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         binding.numberPicker.setValue(1);
                         binding.uomText.setText("");
                         binding.itemPriceTxt.setText("");
+                        binding.batchNumber.setText("");
+                        binding.cirNo.setText("");
+//                        binding.mfdDate.setText("");
+                        binding.mkdBy.setText("");
                         //  binding.detailLayout.removeAllViews();
                         binding.productImage.setVisibility(View.VISIBLE);
                         product_id = purchaseProductModel.get(position).getProductId();
@@ -324,7 +332,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
 //        });
         binding.numberPicker.setMin(1);
         binding.numberPicker.setUnit(1);
-        binding.numberPicker.setValue(1);
+
+//        binding.numberPicker.setValue(1);
 //        binding.numberPicker.setVisibility(View.GONE);
 //        binding.submitBtn.setVisibility(View.GONE);
 //        binding.proCurrText.setVisibility(View.GONE);
@@ -372,6 +381,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                  str_mfd = binding.mfdDate.getText().toString();
                 str_mfd_by = binding.mkdBy.getText().toString();
 
+
                 if(str_batch_no.length() == 0){
                     Toast.makeText(getActivity(), "Enter the Batch Number", Toast.LENGTH_SHORT).show();
                     return;
@@ -391,7 +401,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 }
 
                 variants = var_pr_name.replaceAll("\\s", "");
-                //  String product_quantity = binding.quantityText.getText().toString().trim();
+                //  String product_quantity = binding.numberPicker.getText().toString().trim();
                 boolean empty = true;
                 if (variantArray != null) {
                     for (int i = 0; i < variantArray.size(); i++) {
@@ -428,7 +438,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
                             int prodCount = 0;
                             prodCount = DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().getProductDetailById(order.getProductID(), order.getProductVariants(),order.getUnitPrice());
                             if (prodCount > 0) {
-                                DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().updateProductQuantity((int) order.getQuantity(), order.getProductID(),order.getProductVariants(),order.getUnitPrice());
+//                                Log.d("prodCount",prodCount+"");
+                                DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().updateProductQuantity((int) (order.getQuantity()), order.getProductID(),order.getProductVariants(),order.getUnitPrice());
                                 GetTasks gt = new GetTasks();
                                 gt.execute();
 
@@ -438,6 +449,13 @@ public class CreatePurchaseOrderFragment extends Fragment {
                                 gt.execute();
 
                             }
+                            quantity=1.0;
+                            binding.numberPicker.setValue(1);
+                            PurchaseOrder order_d = new PurchaseOrder();
+                            Log.d("prod_name",product_name+"");
+                            Log.d("prod_id",product_id+"");
+                            Log.d("prod_quantity",quantity+"");
+                            Log.d("prodCount",prodCount+"");
                         });
                     }
 
@@ -753,10 +771,12 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 setBillPanel(tasks.size());
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
                 purchaseItemListAdapter = new PurchaseItemListAdapter(getActivity(), tasks);
                 purchaseItemListAdapter.setOnClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(int position) {
+
                         setBillPanel(tasks.size());
                     }
                 });

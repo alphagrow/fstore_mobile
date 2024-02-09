@@ -165,6 +165,7 @@ public class StoreInventoryDetailFragment extends Fragment {
                         }
                         if (productList == null || productList.size() == 0) {
                             noDataFound.setVisibility(View.VISIBLE);
+                            noDataFound.setText("Currently Out Of Stock");
                             recyclerView.setVisibility(View.GONE);
                         } else {
                             noDataFound.setVisibility(View.GONE);

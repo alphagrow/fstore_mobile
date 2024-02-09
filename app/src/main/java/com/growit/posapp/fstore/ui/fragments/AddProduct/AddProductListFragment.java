@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,8 @@ import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.model.VendorModelList;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -144,6 +148,24 @@ public class AddProductListFragment extends Fragment {
                 fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
+
+        binding.seacrEditTxt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterList(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @Override
@@ -204,6 +226,28 @@ public class AddProductListFragment extends Fragment {
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
+
+    }
+    private void filterList(String text){
+        if(product_data.equals("crop_product")) {
+            ArrayList<PurchaseProductModel> model = new ArrayList<>();
+            for (PurchaseProductModel detail : purchaseProductModel){
+                if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){
+                    model.add(detail);
+                }
+            }
+
+            adapter.updateList(model);
+        } else {
+            ArrayList<PurchaseProductModel> model = new ArrayList<>();
+            for (PurchaseProductModel detail : purchaseProductModel){
+                if (detail.getProductName().toLowerCase().contains(text.toLowerCase())){
+                    model.add(detail);
+                }
+            }
+
+            all_adapter.updateList(model);
+        }
 
     }
     private void getAllProductList() {

@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
+import com.growit.posapp.fstore.model.WarehouseModel;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.UpdateAddProductFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -36,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAdapter.ViewHolder> {
@@ -50,7 +52,10 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
         this.list = contacts;
         this.mContext = context;
     }
-
+    public void updateList(ArrayList<PurchaseProductModel> modellist) {
+        this.list=modellist;
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView qty, price, dateTxt, amountTxt, case_id;
         ImageView images, deleteBtn;

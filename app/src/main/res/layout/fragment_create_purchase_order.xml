@@ -367,7 +367,7 @@
                                 android:textColor="@color/edt_top_text_color"
                                 android:textStyle="bold"
                                 android:textSize="@dimen/text_size_text"
-                                android:text="Unit Price" />
+                                android:text="Unit Price (Exclusive GST)" />
 
                             <LinearLayout
                                 android:layout_marginTop="@dimen/top_marg_edit"

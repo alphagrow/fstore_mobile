@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
         public TextView nameTxt,mobile,status;
         ImageView deleteBtn,acti_img,acti_img_2,update;
         ShowMoreTextView product_name;
+        LinearLayout linear_cli;
         public ViewHolder(View itemView) {
             super(itemView);
             nameTxt = itemView.findViewById(R.id.nameTxt);
@@ -64,7 +66,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
             acti_img = itemView.findViewById(R.id.acti_img);
             acti_img_2 = itemView.findViewById(R.id.acti_img_2);
             status = itemView.findViewById(R.id.status);
-            update = itemView.findViewById(R.id.update);
+            linear_cli= itemView.findViewById(R.id.linear_cli);
 
 
         }
@@ -86,7 +88,7 @@ public class VendorListAdapter extends RecyclerView.Adapter<VendorListAdapter.Vi
         holder.nameTxt.setText(modelList.getName());
         holder.mobile.setText(modelList.getMobile());
 
-        holder.update.setOnClickListener(new View.OnClickListener() {
+        holder.linear_cli.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();

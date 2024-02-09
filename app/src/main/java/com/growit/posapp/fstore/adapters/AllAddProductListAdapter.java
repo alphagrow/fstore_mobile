@@ -36,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProductListAdapter.ViewHolder> {
@@ -48,7 +49,10 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
         this.list = contacts;
         this.mContext = context;
     }
-
+    public void updateList(ArrayList<PurchaseProductModel> modellist) {
+        this.list=modellist;
+        notifyDataSetChanged();
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView qty, dateTxt, amountTxt, case_id;
         ImageView images, deleteBtn, update;
@@ -60,7 +64,7 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
 
             images = itemView.findViewById(R.id.images);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
-            update = itemView.findViewById(R.id.update);
+//            update = itemView.findViewById(R.id.update);
             detailed_type = itemView.findViewById(R.id.detailed_type);
             price = itemView.findViewById(R.id.price);
             gst = itemView.findViewById(R.id.gst_text);

@@ -3,6 +3,7 @@ package com.growit.posapp.fstore.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,7 @@ public class PurchaseItemListAdapter extends RecyclerView.Adapter<PurchaseItemLi
             number_picker.setMax(100);
             number_picker.setMin(1);
             number_picker.setUnit(1);
-            number_picker.setValue(1);
+//            number_picker.setValue(1);
 
         }
     }
@@ -102,6 +103,7 @@ public class PurchaseItemListAdapter extends RecyclerView.Adapter<PurchaseItemLi
 //        holder.item_total_amount.setText("Rs. " + String.valueOf(total));
 
         holder.number_picker.setValue(quantity);
+
         TextView variants = holder.itemVariants;
         variants.setText(product.getProductVariants());
 

@@ -14,10 +14,10 @@ public class ApiConstants {
  //   public final static String BASE_URL = "http://162.246.254.203:9090";
   //  public final static String BASE_URL = "http://192.168.18.36:9090";
 
-  //   public final static String BASE_URL = "http://162.246.254.203:9090";
+     public final static String BASE_URL = "http://162.246.254.203:9090";
   //dev_fstore
 
-     public final static String BASE_URL = "http://162.246.254.203:8000";
+   // public final static String BASE_URL = "http://162.246.254.203:8000";
     public final static String BASE_URL_SMS = "http://msg.jmdinfotek.in/";
     public final static String SIGN_IN = "/api/login";
     public final static String INVOICE_DOWNLOAD = "/pdf/download?pos_order_id=";
@@ -28,7 +28,6 @@ public class ApiConstants {
     public final static String GET_DISTRICT = "/api/get_district?";
     public final static String GET_TALUKA = "/api/get_taluka?";
     public final static String UPDATE_CUSTOMER = "/api/customer/update/";
-
     public final static String GET_GIFT_CARDS = "/api/gift_cards?";
     public final static String GET_ALL_CUSTOMER = "/api/customer/list?";
     public final static String GST_API = "/api/get_gst_tax_list?";
@@ -93,9 +92,9 @@ public class ApiConstants {
   public final static String GET_UOM_LIST = "/api/list/uoms?";
   public final static String POST_CREATE_DISTRICT= "/api/create_district?";
   public final static String POST_CREATE_TALUKA= "/api/create_taluka?";
-    public final static String GET_COMPANY_DETAILS = "/api/company/details?";
- public final static String PUT_UPDATE_DISTRICT = "/api/update_district?";
- public final static String PUT_UPDATE_TALUKA = "/api/update_taluka?";
+  public final static String GET_COMPANY_DETAILS = "/api/company/details?";
+  public final static String PUT_UPDATE_DISTRICT = "/api/update_district?";
+  public final static String PUT_UPDATE_TALUKA = "/api/update_taluka?";
     public final static String POST_RETURN_POST_ORDER = "/api/return_pos_order?";
     public final static String POST_CREATE_User = "/api/user/create?";
 }

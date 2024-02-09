@@ -3,12 +3,16 @@ package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +36,7 @@ import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.OrderDetailAdapter;
 import com.growit.posapp.fstore.adapters.PurchaseOrderDetailAdapter;
 import com.growit.posapp.fstore.databinding.FragmentPurchaseOrderDetailBinding;
+import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.ui.ResetPasswordActivity;
@@ -61,7 +66,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
     int orderID;
     int purchase_order_id;
     LinearLayoutManager layoutManager;
-
+  String  qut_str;
     public PurchaseOrderDetailFragment() {
         // Required empty public constructor
     }
@@ -126,12 +131,44 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     if(view !=null) {
 
                         EditText qutEditText = view.findViewById(R.id.edi_qut_text);
-                        double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
+                //        double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
+//                        qutEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int)max_quant)});
+                        double max_quant =productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
+
+                        qutEditText.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                if(!s.toString().isEmpty()) {
+                                    if(Double.parseDouble(s.toString())<=max_quant){
+                                        qut_str  =  s.toString();
+                                    }
+
+                                }else {
+                                    Toast.makeText(getContext(), "Enter the valid Qut", Toast.LENGTH_SHORT).show();
+
+
+                                }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+
+
 
                         JSONObject obj = new JSONObject();
                         try {
                            total_qut +=  productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
-                            total_receive_qut += qut_str;
+                            total_receive_qut += Double.parseDouble(qut_str);
                             // obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
                             obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getProductId());
                             obj.putOpt("quantity", qut_str);
@@ -143,6 +180,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
                 }
                 try {
                     if (Utility.isNetworkAvailable(getContext())) {
+//                        if(total_receive_qut>=total_qut)
                         showDialogeReceiveProduct(jsonArray,total_qut,total_receive_qut);
                     } else {
                         Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -299,10 +337,9 @@ public class PurchaseOrderDetailFragment extends Fragment {
     private void getReceiveProducts(JSONArray qut,int purchase_order_id){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-            params.put("user_id", sm.getUserID()+"");
-            params.put("token", sm.getJWTToken());
+        params.put("user_id", sm.getUserID()+"");
+        params.put("token", sm.getJWTToken());
         params.put("product_quantities", qut+"");
-
         params.put("purchase_order_id", purchase_order_id+"");
 
         Utility.showDialoge("Please wait while a moment...", getActivity());
@@ -327,7 +364,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
                     Utility.dismissDialoge();
                 }
             }
