@@ -81,7 +81,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 3;
     String imageFilePath;
-    Bitmap imageBitmap = null;
+    Bitmap imageBitmap;
     String str_image_logo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,7 +295,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     return;
                 }
 
-
+Log.d("imageBitmap",imageBitmap.toString());
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
                     if (imageBitmap !=null) {
@@ -990,8 +990,8 @@ private void takePhoto(){
                              state = data_json.optInt("state");
                              district = data_json.optInt("district");
                              taluka = data_json.optInt("taluka");
-
-
+                        imageBitmap = BitmapFactory.decodeFile(logo);
+//Log.d("imageBitmap",imageBitmap.toString());
                         Glide.with(UserRegistrationActivity.this)
                                 .load(logo)
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)

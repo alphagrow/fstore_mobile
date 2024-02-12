@@ -2,12 +2,15 @@ package com.growit.posapp.fstore.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Purchase.PurchaseOrderLine;
+import com.growit.posapp.fstore.ui.fragments.UpdateUserActivity;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.skyhope.showmoretextview.ShowMoreTextView;
 import com.squareup.picasso.Picasso;
@@ -70,6 +74,8 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
 //        if (!orders.getCrop_name().equalsIgnoreCase("false")) {
 //            holder.crop_text.setText(orders.getCrop_name());
 //        }
+
+        holder.edi_qut_text.setText(String.valueOf(orders.getQuantity()));
         holder.product_name.setText(orders.getProductName());
         holder.product_name.setShowingChar(70);
         holder.product_name.setShowingLine(2);
@@ -79,6 +85,32 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
         holder.product_name.setShowLessTextColor(Color.RED); // or other color
         holder.qty.setText("Qty : " + orders.getQuantity());
         holder.total_amount.setText("Rs. "+orders.getPrice() + "");
+//holder.edi_qut_text.addTextChangedListener(new TextWatcher() {
+//    @Override
+//    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//    }
+//
+//    @Override
+//    public void onTextChanged(CharSequence s, int start, int before, int count) {
+//        if(!s.toString().isEmpty()) {
+//            if(Double.parseDouble(s.toString())<=orders.getQuantity()){
+//
+//            }else {
+//                Toast.makeText(mContext, "invalid Qty", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        }
+//
+//
+//    }
+//
+//    @Override
+//    public void afterTextChanged(Editable s) {
+//
+//    }
+//});
+
 
 
 //        Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getProductImageUrl())

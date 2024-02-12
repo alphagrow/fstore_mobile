@@ -66,6 +66,17 @@ public class OrderData {
     @SerializedName("state")
     @Expose
     private String state;
+    @SerializedName("has_refundable_lines")
+    @Expose
+    private Boolean has_refundable_lines;
+
+    public Boolean getHas_refundable_lines() {
+        return has_refundable_lines;
+    }
+
+    public void setHas_refundable_lines(Boolean has_refundable_lines) {
+        this.has_refundable_lines = has_refundable_lines;
+    }
 
     public String getState() {
         return state;

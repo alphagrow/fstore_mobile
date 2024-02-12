@@ -218,10 +218,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         //binding.numberPicker.setValue(1);
                         //binding.setPatternsTxt.setText("");
                         //binding.detailLayout.removeAllViews();
-                        binding.batchNumber.setText("");
-                        binding.cirNo.setText("");
-
-                        binding.mkdBy.setText("");
+//                        binding.batchNumber.setText("");
+//                        binding.cirNo.setText("");
+//
+//                        binding.mkdBy.setText("");
                         cropID = cropList.get(position).getValueId() + "";
                         cropName = cropList.get(position).getValueName();
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
@@ -249,10 +249,10 @@ public class CreatePurchaseOrderFragment extends Fragment {
                         binding.numberPicker.setValue(1);
                         binding.uomText.setText("");
                         binding.itemPriceTxt.setText("");
-                        binding.batchNumber.setText("");
-                        binding.cirNo.setText("");
+//                        binding.batchNumber.setText("");
+//                        binding.cirNo.setText("");
 //                        binding.mfdDate.setText("");
-                        binding.mkdBy.setText("");
+//                        binding.mkdBy.setText("");
                         //  binding.detailLayout.removeAllViews();
                         binding.productImage.setVisibility(View.VISIBLE);
                         product_id = purchaseProductModel.get(position).getProductId();
@@ -382,23 +382,23 @@ public class CreatePurchaseOrderFragment extends Fragment {
                 str_mfd_by = binding.mkdBy.getText().toString();
 
 
-                if(str_batch_no.length() == 0){
-                    Toast.makeText(getActivity(), "Enter the Batch Number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(str_cir_no.length() == 0){
-                    Toast.makeText(getActivity(), "Enter the CIR Number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(str_mfd.length() == 0){
-                    Toast.makeText(getActivity(), "Enter the Manufacturing date ", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(str_mfd_by.length() == 0){
-                    Toast.makeText(getActivity(), "Enter the MFD By", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if(str_batch_no.length() == 0){
+//                    Toast.makeText(getActivity(), "Enter the Batch Number", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if(str_cir_no.length() == 0){
+//                    Toast.makeText(getActivity(), "Enter the CIR Number", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if(str_mfd.length() == 0){
+//                    Toast.makeText(getActivity(), "Enter the Manufacturing date ", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if(str_mfd_by.length() == 0){
+//                    Toast.makeText(getActivity(), "Enter the MFD By", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
                 variants = var_pr_name.replaceAll("\\s", "");
                 //  String product_quantity = binding.numberPicker.getText().toString().trim();

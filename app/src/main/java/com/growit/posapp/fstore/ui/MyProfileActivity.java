@@ -49,6 +49,7 @@ import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.UomLineModel;
+import com.growit.posapp.fstore.ui.fragments.UpdateUserActivity;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -81,7 +82,8 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     ProgressBar idPBLoading;
     CardView company_profile;
     Bitmap imageBitmap = null;
-    private TextView loginBtn;
+    private TextView loginBtn,update_profile;
+    private  String mResponse="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +104,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         loginBtn = findViewById(R.id.loginBtn);
         backBtn = findViewById(R.id.backBtn);
         company_profile = findViewById(R.id.company_profile);
+        update_profile = findViewById(R.id.update_profile);
         nameET.setFocusable(false);
         emailET.setFocusable(false);
         mobileET = findViewById(R.id.et_usermobile);
@@ -154,6 +157,17 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
                 builder.show();
+            }
+        });
+
+        update_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("profile_detail", mResponse);
+                Intent intent = new Intent(MyProfileActivity.this, UpdateUserActivity.class);
+                intent.putExtra("profile_detail", mResponse);
+                startActivity(intent);
             }
         });
     }
@@ -384,6 +398,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response_product", response.toString());
+                mResponse=response.toString();
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());

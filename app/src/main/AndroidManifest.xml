@@ -35,11 +35,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.fragments.UpdateUserActivity"
+            android:theme="@style/Theme.GStore.NoActionBar"
+            android:exported="false" />
+        <activity
             android:name=".ui.UserRegistrationActivity"
             android:exported="false"
             android:theme="@style/Theme.GStore.NoActionBar" />
-
-
         <activity
             android:name=".PaymentActivity"
             android:exported="false" />

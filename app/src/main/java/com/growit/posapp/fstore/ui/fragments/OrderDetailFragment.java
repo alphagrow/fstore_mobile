@@ -90,7 +90,7 @@ public class OrderDetailFragment extends Fragment {
             getOrderDetail();
         }
         invoiceDownload.setOnClickListener(v -> showPDF(orderID+""));
-        if(productDetail.getOrders().get(position).getState().equalsIgnoreCase("invoiced")) {
+        if(productDetail.getOrders().get(position).getHas_refundable_lines()==false) {
             return_pos_order.setVisibility(View.INVISIBLE);
         }
         return_pos_order.setOnClickListener(new View.OnClickListener() {

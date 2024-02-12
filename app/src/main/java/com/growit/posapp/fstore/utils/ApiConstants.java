@@ -9,15 +9,15 @@ public class ApiConstants {
     // Production server dev- 162.246.254.203:8081
     // Production server qc- 162.246.254.203:8069
 //HFpY4zcsWKqmAg
-    public final static String RazorPayTestKey="rzp_test_rAuo7Wl2Inp0LP";
-    public final static String RazorPayProductionKey="rzp_live_5JiuYm4kh7D4fT";
- //   public final static String BASE_URL = "http://162.246.254.203:9090";
-  //  public final static String BASE_URL = "http://192.168.18.36:9090";
+    public final static String RazorPayTestKey = "rzp_test_rAuo7Wl2Inp0LP";
+    public final static String RazorPayProductionKey = "rzp_live_5JiuYm4kh7D4fT";
+    //   public final static String BASE_URL = "http://162.246.254.203:9090";
+   //   public final static String BASE_URL = "http://192.168.18.36:9090";
 
-     public final static String BASE_URL = "http://162.246.254.203:9090";
-  //dev_fstore
+    //   public final static String BASE_URL = "http://162.246.254.203:9090";
+    //dev_fstore
 
-   // public final static String BASE_URL = "http://162.246.254.203:8000";
+    public final static String BASE_URL = "http://162.246.254.203:8000";
     public final static String BASE_URL_SMS = "http://msg.jmdinfotek.in/";
     public final static String SIGN_IN = "/api/login";
     public final static String INVOICE_DOWNLOAD = "/pdf/download?pos_order_id=";
@@ -77,26 +77,27 @@ public class ApiConstants {
     public final static String GET_LOCATION_LIST = "/api/location/list?";
     public final static String GET_TRANSFER_LIST = "/api/transfer/list?";
     public final static String GET_OPERATION_TYPE_LIST = "/api/operation_types?";
-   public final static String POST_TRANSFER_ORDER = "/api/stock_transfer?";
-  public final static String GET_DELIVERY_DOWNLOAD = "/api/transfer/download_delivery_slip?";
-  public final static String GET_CUSTOMER_DISCOUNT_LIST = "/api/customer/discount/list?";
-  public final static String POST_CREATE_DISCOUNT = "/api/customer/discount?";
-  public final static String PUT_DISCOUNT_UPDATE = "/api/customer/discount/update?";
-  public final static String GET_LIST_SHOPS = "/api/list/shops?";
-  public final static String POST_CREATE_SHOPS = "/api/create/shop?";
-  public final static String PUT_UPDATE_SHOPS = "/api/update/shop?";
-  public final static String GET_USER_PROFILE = "/api/user_profile?";
+    public final static String POST_TRANSFER_ORDER = "/api/stock_transfer?";
+    public final static String GET_DELIVERY_DOWNLOAD = "/api/transfer/download_delivery_slip?";
+    public final static String GET_CUSTOMER_DISCOUNT_LIST = "/api/customer/discount/list?";
+    public final static String POST_CREATE_DISCOUNT = "/api/customer/discount?";
+    public final static String PUT_DISCOUNT_UPDATE = "/api/customer/discount/update?";
+    public final static String GET_LIST_SHOPS = "/api/list/shops?";
+    public final static String POST_CREATE_SHOPS = "/api/create/shop?";
+    public final static String PUT_UPDATE_SHOPS = "/api/update/shop?";
+    public final static String GET_USER_PROFILE = "/api/user_profile?";
 
-  public final static String PUT_UPDATE_UOM = "/api/update/uom?";
-  public final static String POST_CREATE_UOM = "/api/create/uom?";
-  public final static String GET_UOM_LIST = "/api/list/uoms?";
-  public final static String POST_CREATE_DISTRICT= "/api/create_district?";
-  public final static String POST_CREATE_TALUKA= "/api/create_taluka?";
-  public final static String GET_COMPANY_DETAILS = "/api/company/details?";
-  public final static String PUT_UPDATE_DISTRICT = "/api/update_district?";
-  public final static String PUT_UPDATE_TALUKA = "/api/update_taluka?";
+    public final static String PUT_UPDATE_UOM = "/api/update/uom?";
+    public final static String POST_CREATE_UOM = "/api/create/uom?";
+    public final static String GET_UOM_LIST = "/api/list/uoms?";
+    public final static String POST_CREATE_DISTRICT = "/api/create_district?";
+    public final static String POST_CREATE_TALUKA = "/api/create_taluka?";
+    public final static String GET_COMPANY_DETAILS = "/api/company/details?";
+    public final static String PUT_UPDATE_DISTRICT = "/api/update_district?";
+    public final static String PUT_UPDATE_TALUKA = "/api/update_taluka?";
     public final static String POST_RETURN_POST_ORDER = "/api/return_pos_order?";
     public final static String POST_CREATE_User = "/api/user/create?";
+    public final static String POST_USER_UPDATE = "/api/user/update?";
 }
 
 

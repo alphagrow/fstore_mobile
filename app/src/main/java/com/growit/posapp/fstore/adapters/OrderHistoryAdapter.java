@@ -29,7 +29,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView qty,order_no,dateTxt,amountTxt,product_name,case_id,status;
-ImageView images;
+       ImageView images;
         public ViewHolder(View itemView) {
             super(itemView);
             product_name = itemView.findViewById(R.id.product_name);
@@ -62,9 +62,9 @@ ImageView images;
         holder.dateTxt.setText(orders.getOrderDate());
         holder.order_no.setText(orders.getOrderNumber());
 
-        if(orders.getState().equalsIgnoreCase("invoiced")) {
-            holder.status.setText("REFUND");
-        }
+//        if(orders.getHas_refundable_lines()==false) {
+//            holder.status.setText("REFUND");
+//        }
         holder.product_name.setText(orders.getCustomerName());
         DecimalFormat form = new DecimalFormat("0.00");
         Picasso.with(mContext).load(ApiConstants.BASE_URL + orders.getProducts().get(0).getProductImageUrl())

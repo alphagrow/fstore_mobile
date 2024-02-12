@@ -129,9 +129,11 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     if(view !=null) {
 
                         EditText qutEditText = view.findViewById(R.id.edi_qut_text);
+                        qutEditText.setText(String.valueOf(productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity()));
                         double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
+
 //                        qutEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int)max_quant)});
-                        double max_quant =productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
+
 
                         JSONObject obj = new JSONObject();
                         try {
