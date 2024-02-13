@@ -16,10 +16,21 @@ public class ConfigurationModel {
     @SerializedName("parent_id")
     @Expose
     private String parentId;
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     @SerializedName("percentage")
     @Expose
     private String percentage;
-
+    @SerializedName("login")
+    @Expose
+    private String login;
     public String getPercentage() {
         return percentage;
     }

@@ -171,7 +171,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/custom_edit_text_cut_2"
-                android:drawableEnd="@drawable/baseline_phone_enabled_24"
+                android:drawableEnd="@drawable/baseline_co_present_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/helvetica_neue_medium"
                 android:hint="Mobile"

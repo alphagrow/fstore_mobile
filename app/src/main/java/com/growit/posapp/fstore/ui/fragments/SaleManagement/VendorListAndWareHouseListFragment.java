@@ -189,6 +189,8 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                         } else {
                             binding.noDataFound.setVisibility(View.GONE);
                             binding.recyclerVendor.setVisibility(View.VISIBLE);
+                            binding.totalCustomerText.setText("Total : " + vendormodel.getVendors().size() + " Vendor ");
+
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             adapter = new VendorListAdapter(getActivity(), vendormodel.getVendors());
@@ -269,6 +271,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                         } else {
                             binding.noDataFound.setVisibility(View.GONE);
                             binding.recyclerVendor.setVisibility(View.VISIBLE);
+                            binding.totalCustomerText.setText("Total : " + vendormodel.getWarehouses().size() + " Ware House ");
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             wareHouseAdapter = new WareHouseAdapter(getActivity(), vendormodel.getWarehouses());

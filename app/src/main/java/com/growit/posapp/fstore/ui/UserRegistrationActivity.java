@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -61,6 +63,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -81,7 +86,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 3;
     String imageFilePath;
-    Bitmap imageBitmap;
+    Bitmap imageBitmap=null;
     String str_image_logo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,8 +260,8 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
-
-                    if (imageBitmap !=null) {
+                    Log.d("imageBitmap",imageBitmap.toString());
+                   if (imageBitmap !=null) {
                         UserRegistration(imageBitmap);
                     }else {
                         Toast.makeText(UserRegistrationActivity.this, "Select logo", Toast.LENGTH_SHORT).show();
@@ -294,16 +299,14 @@ public class UserRegistrationActivity extends AppCompatActivity {
                     Toast.makeText(UserRegistrationActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-Log.d("imageBitmap",imageBitmap.toString());
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
-                    if (imageBitmap !=null) {
+          //          if (imageBitmap !=null) {
                         UpdateUserRegistration(imageBitmap);
-                    }else {
-                        Toast.makeText(UserRegistrationActivity.this, "Select logo", Toast.LENGTH_SHORT).show();
-
-                    }
+//                    }else {
+//                        Toast.makeText(UserRegistrationActivity.this, "Select logo", Toast.LENGTH_SHORT).show();
+//
+//                    }
                 }
 
 
@@ -721,118 +724,118 @@ private void takePhoto(){
 
         return imgString;
     }
-    private void UserRegistration(Bitmap bitmap) {
-        SessionManagement sm = new SessionManagement(this);
-
-        String apiURL = ApiConstants.BASE_URL + "" + ApiConstants.ADD_COMPANY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken()+ "&" + "name="+nameStr+ "&" + "login="+login_id+ "&" + "password="+str_password+ "&" + "street="+streetStr+ "&" +"country_id="+ApiConstants.COUNTRY_ID+ "&" +"state_id="+stateStr+ "&" +"city="+str_city+ "&" +"zip="+zipStr+ "&" +"phone="+str_phone+ "&" +"mobile="+mobileStr+ "&" +"email="+emailStr+ "&" +"website="+str_website+ "&" +"insect_lic_no="+str_insectLicNo+ "&" +"fert_lic_no="+ str_fertLicNo+ "&" +"seed_lic_no="+ str_seedLicNo+ "&" +"vat="+ str_gst_no+ "&" +"company_name="+ str_comp_name+ "&" +"taluka_id="+ talukaStr+ "&" +"district_id="+ districtStr;
-        Log.d("apiURL",apiURL);
-        Utility.showDialoge("Please wait while a moment...", this);
-        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, apiURL, new Response.Listener<NetworkResponse>() {
-            @Override
-            public void onResponse(NetworkResponse response) {
-                Toast.makeText(UserRegistrationActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                Utility.dismissDialoge();
-                Log.v("Response", response.toString());
-//                    JSONObject obj = new JSONObject(response.toString());
-//                    int statusCode = obj.optInt("statuscode");
-//                    String  message = obj.optString("status");
-//                    String error_message = obj.optString("error_message");
-//                    String str_message = obj.optString("message");
-//                    if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-//                        Utility.dismissDialoge();
-//                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+//    private void UserRegistration(Bitmap bitmap) {
+//        SessionManagement sm = new SessionManagement(this);
 //
-//                    } else {
-//                        Utility.dismissDialoge();
-//                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-//                    }
-
-
-            }
-        }, error -> {
-            Log.v("Error Response", error.toString());
-            Utility.dismissDialoge();
-        }) {
-
-
-            @Override
-            protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                long imagename = System.currentTimeMillis();
-                params.put("company_logo", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
-                return params;
-            }
-        };
-
-        //adding the request to volley
-        volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(
-                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Volley.newRequestQueue(this).add(volleyMultipartRequest);
-    }
-
-//    private void UserRegistration() {
-//        SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
-//        Map<String, String> params = new HashMap<>();
-//        // params.put("user_id", sm.getUserID() + "");
-//        params.put("name", nameStr);
-//        params.put("login", login_id);
-//        params.put("company_logo",str_image_logo);
-//        params.put("password", str_password);
-//        params.put("company_name", str_comp_name);
-//        params.put("street", streetStr);
-//        params.put("country_id", ApiConstants.COUNTRY_ID);
-//        params.put("state_id", stateStr);
-//        params.put("district_id", districtStr);
-//        params.put("taluka_id", talukaStr);
-//        params.put("city", str_city);
-//        params.put("zip", zipStr);
-//        params.put("phone", str_phone);
-//        params.put("mobile", mobileStr);
-//        params.put("email", emailStr);
-//        params.put("website", str_website);
-//        params.put("insect_lic_no", str_insectLicNo);
-//        params.put("fert_lic_no", str_fertLicNo);
-//        params.put("seed_lic_no", str_seedLicNo);
-//        params.put("vat", str_gst_no);
-//
-//        Utility.showDialoge("", UserRegistrationActivity.this);
-//        Log.v("add", String.valueOf(params));
-//        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.ADD_COMPANY, new VolleyCallback() {
-//            private String message = "Registration failed!!";
-//
+//        String apiURL = ApiConstants.BASE_URL + "" + ApiConstants.ADD_COMPANY+"name="+nameStr+ "&" + "login="+login_id+ "&" + "password="+str_password+ "&" + "street="+streetStr+ "&" +"country_id="+ApiConstants.COUNTRY_ID+ "&" +"state_id="+stateStr+ "&" +"city="+str_city+ "&" +"zip="+zipStr+ "&" +"phone="+str_phone+ "&" +"mobile="+mobileStr+ "&" +"email="+emailStr+ "&" +"website="+str_website+ "&" +"insect_lic_no="+str_insectLicNo+ "&" +"fert_lic_no="+ str_fertLicNo+ "&" +"seed_lic_no="+ str_seedLicNo+ "&" +"vat="+ str_gst_no+ "&" +"company_name="+ str_comp_name+ "&" +"taluka_id="+ talukaStr+ "&" +"district_id="+ districtStr;
+//        Log.d("apiURL",apiURL);
+//        Utility.showDialoge("Please wait while a moment...", this);
+//        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, apiURL, new Response.Listener<NetworkResponse>() {
 //            @Override
-//            public void onSuccess(Object result) throws JSONException {
-//                Log.v("Response", result.toString());
-//                JSONObject obj = new JSONObject(result.toString());
-//                int statusCode = obj.optInt("statuscode");
-//                message = obj.optString("status");
-//                String error_message = obj.optString("error_message");
-//                String str_message = obj.optString("message");
-//                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-//                    Utility.dismissDialoge();
-//                    resetFields();
-//                 //   Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
-//                    Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
-//                    startActivity(intentLogin);
-//                    finish();
-//                      Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//                    Utility.dismissDialoge();
-//                    Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(String result) throws Exception {
+//            public void onResponse(NetworkResponse response) {
+//                Toast.makeText(UserRegistrationActivity.this, "Success", Toast.LENGTH_SHORT).show();
 //                Utility.dismissDialoge();
-//                Log.v("Response", result);
-//                Toast.makeText(UserRegistrationActivity.this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+//                Log.v("Response", response.toString());
+////                    JSONObject obj = new JSONObject(response.toString());
+////                    int statusCode = obj.optInt("statuscode");
+////                    String  message = obj.optString("status");
+////                    String error_message = obj.optString("error_message");
+////                    String str_message = obj.optString("message");
+////                    if (statusCode == 200 && message.equalsIgnoreCase("success")) {
+////                        Utility.dismissDialoge();
+////                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+////
+////                    } else {
+////                        Utility.dismissDialoge();
+////                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+////                    }
+//
+//
 //            }
-//        });
+//        }, error -> {
+//            Log.v("Error Response", error.toString());
+//            Utility.dismissDialoge();
+//        }) {
+//
+//
+//            @Override
+//            protected Map<String, DataPart> getByteData() {
+//                Map<String, DataPart> params = new HashMap<>();
+//                long imagename = System.currentTimeMillis();
+//                params.put("company_logo", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+//                return params;
+//            }
+//        };
+//
+//        //adding the request to volley
+//        volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        Volley.newRequestQueue(this).add(volleyMultipartRequest);
 //    }
+
+    private void UserRegistration(Bitmap bitmap) {
+        SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
+        Map<String, String> params = new HashMap<>();
+        // params.put("user_id", sm.getUserID() + "");
+        params.put("name", nameStr);
+        params.put("login", login_id);
+        params.put("company_logo",str_image_logo);
+        params.put("password", str_password);
+        params.put("company_name", str_comp_name);
+        params.put("street", streetStr);
+        params.put("country_id", ApiConstants.COUNTRY_ID);
+        params.put("state_id", stateStr);
+        params.put("district_id", districtStr);
+        params.put("taluka_id", talukaStr);
+        params.put("city", str_city);
+        params.put("zip", zipStr);
+        params.put("phone", str_phone);
+        params.put("mobile", mobileStr);
+        params.put("email", emailStr);
+        params.put("website", str_website);
+        params.put("insect_lic_no", str_insectLicNo);
+        params.put("fert_lic_no", str_fertLicNo);
+        params.put("seed_lic_no", str_seedLicNo);
+        params.put("vat", str_gst_no);
+
+        Utility.showDialoge("", UserRegistrationActivity.this);
+        Log.v("add", String.valueOf(params));
+        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.ADD_COMPANY, new VolleyCallback() {
+            private String message = "Registration failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                message = obj.optString("status");
+                String error_message = obj.optString("error_message");
+                String str_message = obj.optString("message");
+                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    resetFields();
+                 //   Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
+                    Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                    finish();
+                      Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Utility.dismissDialoge();
+                Log.v("Response", result);
+                Toast.makeText(UserRegistrationActivity.this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     private void UpdateUserRegistration(Bitmap bitmap) {
@@ -873,7 +876,10 @@ private void takePhoto(){
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
                 long imagename = System.currentTimeMillis();
-                params.put("company_logo", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+                if(bitmap !=null) {
+                
+                    params.put("company_logo", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+                }
                 return params;
             }
         };
@@ -990,13 +996,14 @@ private void takePhoto(){
                              state = data_json.optInt("state");
                              district = data_json.optInt("district");
                              taluka = data_json.optInt("taluka");
-                        imageBitmap = BitmapFactory.decodeFile(logo);
-//Log.d("imageBitmap",imageBitmap.toString());
+
+//
                         Glide.with(UserRegistrationActivity.this)
                                 .load(logo)
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.imageLogo);
+
 
                             binding.etGstNo.setText(gst);
                             binding.etUsername.setText(name);
@@ -1025,7 +1032,12 @@ private void takePhoto(){
         queue.add(jsonObjectRequest);
     }
 
+    private Bitmap convertImageViewToBitmap(ImageView v){
 
+        Bitmap bm=((BitmapDrawable)v.getDrawable()).getBitmap();
+
+        return bm;
+    }
     private void resetFields() {
         binding.etUsername.setText("");
         binding.etMobile.setText("");
@@ -1044,5 +1056,4 @@ private void takePhoto(){
         binding.stateSpinner.setSelection(0);
 
     }
-
 }

@@ -33,6 +33,7 @@ import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddShopAndShopListBinding;
 import com.growit.posapp.fstore.databinding.FragmentUserCreateBinding;
 import com.growit.posapp.fstore.model.ConfigurationModel;
+import com.growit.posapp.fstore.ui.fragments.AddProduct.UserAdapter;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -56,7 +57,7 @@ public class UserCreateFragment extends Fragment {
     FragmentUserCreateBinding binding;
     List<ConfigurationModel> list;
     Activity contexts;
-    ConfigurationAdapter adapter;
+    UserAdapter adapter;
 
     boolean isAllFieldsChecked = false;
     EditText et_username,ed_login,ed_password;
@@ -87,7 +88,7 @@ public class UserCreateFragment extends Fragment {
             GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
             binding.recyclerVendor.setLayoutManager(layoutManager);
             if (Utility.isNetworkAvailable(getContext())) {
-              //  getShopList();
+                getUserList();
 
             } else {
                 Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -100,7 +101,7 @@ public class UserCreateFragment extends Fragment {
                     binding.refreshLayout.setRefreshing(false);
                     if (Utility.isNetworkAvailable(getContext())) {
 
-                     //   getShopList();
+                        getUserList();
 
 
                     } else {
@@ -146,22 +147,6 @@ public class UserCreateFragment extends Fragment {
                 }
             });
 
-            binding.recyclerVendor.addOnItemTouchListener(
-                    new RecyclerItemClickListener(getActivity(), binding.recyclerVendor, new RecyclerItemClickListener.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            String cust_name = list.get(position).getName();
-                            int _id = list.get(position).getId();
-                            showDialogeUpdateReceiveProduct(cust_name, _id);
-                        }
-
-
-                        @Override
-                        public void onLongItemClick(View view, int position) {
-                            // do whatever
-                        }
-                    })
-            );
 
         }
         @Override
@@ -198,7 +183,7 @@ public class UserCreateFragment extends Fragment {
                     }
 
                     if (isAllFieldsChecked) {
-                        addDiscount(str_shop_name,str_login,str_password);
+                        addUser(str_shop_name,str_login,str_password);
                     }
                     dialog.dismiss();
 
@@ -215,50 +200,6 @@ public class UserCreateFragment extends Fragment {
             dialog.show();
         }
 
-        private void showDialogeUpdateReceiveProduct (String name,int id){
-
-            Dialog dialog = new Dialog(getActivity());
-            dialog.setContentView(R.layout.add_user_dialoge);
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            dialog.setCancelable(false);
-            dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-            et_username = dialog.findViewById(R.id.et_username);
-
-            TextView okay_text = dialog.findViewById(R.id.ok_text);
-            TextView cancel_text = dialog.findViewById(R.id.cancel_text);
-            et_username.setText(name);
-
-
-            okay_text.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String str_shop_name = et_username.getText().toString();
-                    String str_login = ed_login.getText().toString();
-                    String str_password = ed_password.getText().toString();
-
-                    isAllFieldsChecked = CheckAllFields();
-                    if (!Utility.isNetworkAvailable(getActivity())) {
-                        Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (isAllFieldsChecked) {
-                        DiscountUpdate(str_shop_name,str_login,str_password, id);
-                    }
-                    dialog.dismiss();
-
-                }
-            });
-
-            cancel_text.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
-        }
 
         private boolean CheckAllFields () {
             if (et_username.length() == 0) {
@@ -282,7 +223,7 @@ public class UserCreateFragment extends Fragment {
             return true;
         }
 
-        private void addDiscount (String str_name,String login,String password){
+        private void addUser (String str_name,String login,String password){
             SessionManagement sm = new SessionManagement(getActivity());
             Map<String, String> params = new HashMap<>();
             params.put("user_id", sm.getUserID() + "");
@@ -310,7 +251,7 @@ public class UserCreateFragment extends Fragment {
                         et_username.setText("");
                         ed_login.setText("");
                         ed_password.setText("");
-                       // getShopList();
+                        getUserList();
                     } else {
                         Utility.dismissDialoge();
                         Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
@@ -327,49 +268,13 @@ public class UserCreateFragment extends Fragment {
 
         }
 
-        private void DiscountUpdate (String name,String login,String password,int id){
-            SessionManagement sm = new SessionManagement(getActivity());
-            Map<String, String> params = new HashMap<>();
-            params.put("user_id", sm.getUserID() + "");
-            params.put("token", sm.getJWTToken());
-            params.put("name", name);
-            params.put("shop_id", id + "");
-            new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.PUT_UPDATE_SHOPS, new VolleyCallback() {
-                private String message = "Update failed!!";
 
-                @Override
-                public void onSuccess(Object result) throws JSONException {
-                    Log.v("Response", result.toString());
-                    JSONObject obj = new JSONObject(result.toString());
-                    int statusCode = obj.optInt("statuscode");
-                    String status = obj.optString("status");
-                    String message = obj.optString("message");
-                    String error_message = obj.optString("error_message");
-                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
-                        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
-                       // getShopList();
-                    } else {
-                        Utility.dismissDialoge();
-                        Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onError(String result) throws Exception {
-                    Log.v("Response", result.toString());
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        private void getShopList () {
+        private void getUserList () {
             SessionManagement sm = new SessionManagement(contexts);
             RequestQueue queue = Volley.newRequestQueue(contexts);
             //  String url = ApiConstants.BASE_URL + ApiConstants.GET_CUSTOMER_DISCOUNT_LIST;
 
-            String url = ApiConstants.BASE_URL + ApiConstants.GET_LIST_SHOPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
+            String url = ApiConstants.BASE_URL + ApiConstants.GET_LIST_USER + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
             //    Utility.showDialoge("Please wait while a moment...", getActivity());
             Log.d("ALL_CROPS_url", url);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -384,7 +289,7 @@ public class UserCreateFragment extends Fragment {
 
                         if (status.equalsIgnoreCase("success")) {
                             // Utility.dismissDialoge();
-                            JSONArray jsonArray = obj.getJSONArray("shops");
+                            JSONArray jsonArray = obj.getJSONArray("users");
                             list.clear();
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -392,16 +297,18 @@ public class UserCreateFragment extends Fragment {
                                     JSONObject data = jsonArray.getJSONObject(i);
                                     Integer id = data.optInt("id");
                                     String name = data.optString("name");
+                                    String login = data.optString("login");
                                     model.setId(id);
                                     model.setName(name);
+                                    model.setLogin(login);
                                     list.add(model);
                                 }
                                 if (list == null || list.size() == 0) {
                                     binding.noDataFound.setVisibility(View.VISIBLE);
                                 } else {
-                                    binding.totalCustomerText.setText("Total : " + list.size() + " Shops ");
+                                    binding.totalCustomerText.setText("Total : " + list.size() + " User ");
                                     binding.noDataFound.setVisibility(View.GONE);
-                                    adapter = new ConfigurationAdapter(getActivity(), list);
+                                    adapter = new UserAdapter(getActivity(), list);
                                     binding.recyclerVendor.setAdapter(adapter);
 
                                 }

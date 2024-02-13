@@ -219,6 +219,25 @@ public class AddDistrictFragment extends Fragment {
             public void onClick(View v) {
                 String str_dist_name = dist_name_ed.getText().toString();
                 String str_code = dist_code_ed.getText().toString();
+
+//                dist_name_ed.addTextChangedListener(new TextWatcher() {
+//
+//                    @Override
+//                    public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+//                        adapter.getFilter().filter(cs);
+//                    }
+//
+//                    @Override
+//                    public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+//                        Toast.makeText(getContext(),"before text change",Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void afterTextChanged(Editable arg0) {
+//                        Toast.makeText(getContext(),"after text change",Toast.LENGTH_LONG).show();
+//                    }
+//                });
+
                 isAllFieldsChecked= CheckAllFields();
                 if (!Utility.isNetworkAvailable(getActivity())) {
                     Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();

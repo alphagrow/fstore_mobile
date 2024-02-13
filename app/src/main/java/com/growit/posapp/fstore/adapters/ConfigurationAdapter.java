@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdapter.ViewHolder> {
 
@@ -58,6 +59,9 @@ public class ConfigurationAdapter extends RecyclerView.Adapter<ConfigurationAdap
         this.list=modellist;
         notifyDataSetChanged();
     }
+
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
         ImageView productThumb,deleteBtn,update;

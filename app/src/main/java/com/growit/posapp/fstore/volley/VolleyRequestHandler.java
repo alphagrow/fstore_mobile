@@ -94,7 +94,9 @@ public class VolleyRequestHandler {
         };
 
         // Request added to the RequestQueue
-        rq.setRetryPolicy(new DefaultRetryPolicy( 50000, 5, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+      //  rq.setRetryPolicy(new DefaultRetryPolicy( 50000, 5, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        rq.setRetryPolicy(new DefaultRetryPolicy( 10 * 60 * 1000, 5, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         VolleyController.getInstance(mContext).addToRequestQueue(rq);
     }
 

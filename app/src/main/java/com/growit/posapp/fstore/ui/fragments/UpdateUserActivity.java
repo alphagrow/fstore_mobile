@@ -37,6 +37,7 @@ import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.model.VendorModel;
 import com.growit.posapp.fstore.model.WarehouseModel;
+import com.growit.posapp.fstore.ui.MyProfileActivity;
 import com.growit.posapp.fstore.ui.UserRegistrationActivity;
 import com.growit.posapp.fstore.ui.fragments.AddProduct.AddProductListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
@@ -133,10 +134,6 @@ public class UpdateUserActivity extends AppCompatActivity {
                     Log.d("str_comp_id", str_comp_id);
                     binding.textView.setText(stringBuilder_com_name.toString());
 
-
-
-
-
                     StringBuilder stringBuilder_pos_name = new StringBuilder();
                     StringBuilder builder_pos_id = new StringBuilder();
 
@@ -159,8 +156,6 @@ public class UpdateUserActivity extends AppCompatActivity {
                     str_shop_id = builder_pos_id.toString();
                     Log.d("str_comp_id", str_comp_id);
                     binding.textViewShop.setText(stringBuilder_pos_name.toString());
-
-
                     default_company_id = String.valueOf(jsonArray.optInt("default_company"));
                     binding.etUseremail.setText(email);
                     binding.etUsername.setText(name);
@@ -217,19 +212,17 @@ public class UpdateUserActivity extends AppCompatActivity {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(UpdateUserActivity.this, MyProfileActivity.class));
+                finish();
             }
         });
         binding.updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 str_email = binding.etUseremail.getText().toString();
                 str_name = binding.etUsername.getText().toString();
                  str_user_id = binding.edUserId.getText().toString();
-
-
-                if (str_comp_id != null) {
+                 if (str_comp_id != null) {
                     if (str_shop_id != null) {
                         UserUpdate(str_comp_id,str_shop_id);
                     }else {
@@ -254,7 +247,7 @@ public class UpdateUserActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
-
+                int spinnerPosition = 0;
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
@@ -272,18 +265,26 @@ public class UpdateUserActivity extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             stateModel = new StateModel();
                             JSONObject data = jsonArray.getJSONObject(i);
-                            String name = data.optString("name");
-//                            if (name.equalsIgnoreCase("Receipts")) {
+
                                 int id = data.optInt("id");
                                 String warehouse_name = data.optString("name");
+                                if(ware_house_id.equals("false")){
+                                    Toast.makeText(UpdateUserActivity.this, "Ware House false", Toast.LENGTH_SHORT).show();
+
+                                }else {
+                                    if (String.valueOf(id).equalsIgnoreCase(ware_house_id)) {
+                                        spinnerPosition = i + 1;
+                                    }
+                                }
+
                                 stateModel.setId(id);
                                 stateModel.setName(warehouse_name);
                                 ware_houseNames.add(stateModel);
-                          //  }
                         }
                         if (getContext() != null) {
                             CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(UpdateUserActivity.this, ware_houseNames);
                             binding.warehousesSpinner.setAdapter(adapter);
+                            binding.warehousesSpinner.setSelection(spinnerPosition);
                         }
                     }else {
                         Toast.makeText(UpdateUserActivity.this, error_message, Toast.LENGTH_SHORT).show();
@@ -528,15 +529,19 @@ public class UpdateUserActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Object result) throws JSONException {
+                Utility.dismissDialoge();
                 Log.v("Response", result.toString());
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
                 String message_success = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-                     Utility.dismissDialoge();
+
 
                     Toast.makeText(UpdateUserActivity.this, message, Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(UpdateUserActivity.this, message_success, Toast.LENGTH_SHORT).show();
+
                 }
             }
 
