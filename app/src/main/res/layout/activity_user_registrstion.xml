@@ -149,6 +149,37 @@
                     android:inputType="text"
                     android:textSize="14dp"
                      />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:layout_marginTop="@dimen/top_marg_text"
+        android:layout_marginEnd="@dimen/end_marg_text"
+        android:layout_marginStart="@dimen/start_marg_text"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_text"
+        android:text="User Email *"
+        android:textColor="@color/edt_top_text_color"
+        />
+
+    <EditText
+
+        android:id="@+id/ed_user_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_marg_edit"
+        android:layout_marginStart="@dimen/start_marg_edit"
+        android:layout_marginTop="@dimen/top_marg_edit"
+        android:layout_marginEnd="@dimen/end_marg_edit"
+        android:background="@drawable/custom_edit_text_cut"
+        android:drawableEnd="@drawable/baseline_co_present_24"
+        android:drawablePadding="@dimen/ten"
+        android:fontFamily="@font/sf_compact_medium"
+        android:hint=""
+        android:padding="@dimen/padding_edit"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textSize="14dp"
+        />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

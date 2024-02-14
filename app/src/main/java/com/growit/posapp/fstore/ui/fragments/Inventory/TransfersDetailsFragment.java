@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -90,8 +91,9 @@ FragmentTransfersDetailsBinding binding;
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+                Fragment fragment = TransfersOrderListFragment.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
     }

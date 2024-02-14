@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.Editable;
@@ -38,6 +39,7 @@ import com.growit.posapp.fstore.databinding.FragmentPurchaseOrderDetailBinding;
 import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.ui.ResetPasswordActivity;
+import com.growit.posapp.fstore.ui.fragments.Inventory.TransfersOrderListFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderDetailFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
@@ -103,10 +105,12 @@ public class PurchaseOrderDetailFragment extends Fragment {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+                Fragment fragment = PurchaseOrderListFragment.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
+
         binding.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

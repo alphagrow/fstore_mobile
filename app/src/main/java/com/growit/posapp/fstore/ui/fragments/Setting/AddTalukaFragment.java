@@ -12,12 +12,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +76,9 @@ public class AddTalukaFragment extends Fragment {
     Dialog dialog;
     int position_id=0;
     List<StateModel> talukaNames = new ArrayList<>();
+    ArrayAdapter<String>  adapter_search;
+    ListView listView;
+    ArrayList<String> search_taluka_list= new ArrayList<>();
     public AddTalukaFragment() {
         // Required empty public constructor
     }
@@ -174,10 +181,20 @@ public class AddTalukaFragment extends Fragment {
         tal_name_ed = dialog.findViewById(R.id.taluka_name_ed);
         tal_code_ed = dialog.findViewById(R.id.taluka_code_ed);
         TextView text_name= dialog.findViewById(R.id.text_name);
+        listView = dialog.findViewById(R.id.listView);
         Spinner stateSpinner = dialog.findViewById(R.id.stateSpinner);
         Spinner dis_Spinner = dialog.findViewById(R.id.dist_Spinner);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
+        adapter_search = new ArrayAdapter<String>(getActivity(), R.layout.list_item, R.id.product_name, search_taluka_list);
+        listView.setAdapter(adapter_search);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getItemAtPosition(position);
+                tal_name_ed.setText(selectedItem);
+            }
+        });
         if(type.equals("Update")) {
             text_name.setText("Update Taluka");
             tal_name_ed.setText(list.get(position_id).getName());
@@ -225,6 +242,28 @@ public class AddTalukaFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        tal_name_ed.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                if(!cs.toString().isEmpty()) {
+                    listView.setVisibility(View.VISIBLE);
+                }else {
+                    listView.setVisibility(View.GONE);
+                }
+                adapter_search.getFilter().filter(cs);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
 
             }
         });
@@ -345,10 +384,9 @@ public class AddTalukaFragment extends Fragment {
                 String error_message = obj.optString("error_message");
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
-
-                    //                 getDistrictList();
+                    getTalukaData();
                 }else {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
@@ -490,6 +528,7 @@ public class AddTalukaFragment extends Fragment {
                         String name = data.optString("name");
                         stateModel.setId(id);
                         stateModel.setName(name);
+
                         if(type.equals("Update")) {
                             if (String.valueOf(id).equalsIgnoreCase(String.valueOf(list.get(position_id).getUsage()))) {
                                 spinnerPosition = i + 1;
@@ -528,7 +567,6 @@ public class AddTalukaFragment extends Fragment {
                 String status = obj.optString("status");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                     JSONArray jsonArray = obj.getJSONArray("data");
-
                     list.clear();
                     if (jsonArray.length() > 0) {
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -539,13 +577,12 @@ public class AddTalukaFragment extends Fragment {
                             String code = data.optString("code");
                             String states_id = data.optString("states_id");
                             String district_id = data.optString("district_id");
-
                             model.setId(id);
                             model.setName(name);
                             model.setPercentage(code);
                             model.setUsage(states_id);
                             model.setParentId(district_id);
-
+                            search_taluka_list.add(name);
                             list.add(model);
                         }
                         if (list == null || list.size() == 0) {

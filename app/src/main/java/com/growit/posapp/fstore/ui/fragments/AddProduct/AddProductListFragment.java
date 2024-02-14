@@ -39,6 +39,7 @@ import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.model.VendorModelList;
 import com.growit.posapp.fstore.model.WarehouseModel;
+import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -136,10 +137,12 @@ public class AddProductListFragment extends Fragment {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+                Fragment fragment = POSCategoryListFragment.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
+
         binding.addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

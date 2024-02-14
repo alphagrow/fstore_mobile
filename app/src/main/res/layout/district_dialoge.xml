@@ -3,7 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,6 +71,35 @@
             android:layout_marginStart="@dimen/start_marg_text"
             android:textStyle="bold"
             android:textSize="@dimen/text_size_textview"
+            android:text="District Code"
+            />
+
+        <EditText
+            android:id="@+id/dist_code_ed"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_marg_edit"
+            android:layout_marginStart="@dimen/start_marg_edit"
+            android:layout_marginTop="@dimen/top_marg_edit"
+            android:layout_marginEnd="@dimen/end_marg_edit"
+            android:background="@drawable/custom_edit_text_cut"
+            android:drawableEnd="@drawable/gst_no"
+            android:drawablePadding="@dimen/ten"
+            android:fontFamily="@font/sf_compact_medium"
+            android:hint=""
+            android:padding="@dimen/padding_edit"
+            android:importantForAutofill="no"
+            android:textSize="@dimen/text_size_edit"
+            android:inputType="text"
+            android:requiresFadingEdge="vertical" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginTop="@dimen/top_marg_textview"
+            android:layout_marginEnd="@dimen/end_marg_text"
+            android:layout_marginStart="@dimen/start_marg_text"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_textview"
             android:text="District Name"
            />
 
@@ -86,41 +121,15 @@
             android:inputType="text"
             android:requiresFadingEdge="vertical" />
         <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView"
-            android:layout_below="@+id/editText"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:layout_marginTop="@dimen/top_marg_textview"
-            android:layout_marginEnd="@dimen/end_marg_text"
-            android:layout_marginStart="@dimen/start_marg_text"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_textview"
-            android:text="District Code"
-           />
-
-        <EditText
-            android:id="@+id/dist_code_ed"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_marg_edit"
+            android:visibility="gone"
             android:layout_marginStart="@dimen/start_marg_edit"
             android:layout_marginTop="@dimen/top_marg_edit"
             android:layout_marginEnd="@dimen/end_marg_edit"
-            android:background="@drawable/custom_edit_text_cut"
-            android:drawableEnd="@drawable/gst_no"
-            android:drawablePadding="@dimen/ten"
-            android:fontFamily="@font/sf_compact_medium"
-            android:hint=""
-            android:padding="@dimen/padding_edit"
-            android:importantForAutofill="no"
-            android:textSize="@dimen/text_size_edit"
-            android:inputType="text"
-            android:requiresFadingEdge="vertical" />
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:id="@+id/listView"
+            />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -152,4 +161,6 @@
         </LinearLayout>
 
     </LinearLayout>
+    </LinearLayout>
+</ScrollView>
 </RelativeLayout>

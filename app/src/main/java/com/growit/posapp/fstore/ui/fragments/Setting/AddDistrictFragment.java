@@ -19,7 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +66,7 @@ import java.util.Map;
 public class AddDistrictFragment extends Fragment {
     FragmentAddDistrictBinding binding;
     List<ConfigurationModel> list;
+    ArrayList<String> search_dist_list= new ArrayList<>();
     Activity contexts;
     ConfigurationAdapter adapter;
     EditText shop_name_ed;
@@ -71,9 +74,11 @@ public class AddDistrictFragment extends Fragment {
     ProductDetail productDetail;
     List<StateModel> stateNames = new ArrayList<>();
     EditText dist_name_ed,dist_code_ed;
+    ListView listView;
     String  stateStr = "";
     Dialog  dialog;
     int position_id=0;
+    ArrayAdapter<String>  adapter_search;
     public AddDistrictFragment() {
         // Required empty public constructor
     }
@@ -178,10 +183,21 @@ public class AddDistrictFragment extends Fragment {
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
         dist_name_ed = dialog.findViewById(R.id.dist_name_ed);
         dist_code_ed = dialog.findViewById(R.id.dist_code_ed);
-       TextView text_name = dialog.findViewById(R.id.text_name);
+        listView = dialog.findViewById(R.id.listView);
+        TextView text_name = dialog.findViewById(R.id.text_name);
         Spinner stateSpinner = dialog.findViewById(R.id.stateSpinner);
         TextView okay_text = dialog.findViewById(R.id.ok_text);
         TextView cancel_text = dialog.findViewById(R.id.cancel_text);
+
+        adapter_search = new ArrayAdapter<String>(getActivity(), R.layout.list_item, R.id.product_name, search_dist_list);
+        listView.setAdapter(adapter_search);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getItemAtPosition(position);
+                dist_name_ed.setText(selectedItem);
+            }
+        });
         if(type.equals("Update")){
             text_name.setText("Update District");
             dist_name_ed.setText(list.get(position_id).getName());
@@ -213,6 +229,28 @@ public class AddDistrictFragment extends Fragment {
 
             }
         });
+        dist_name_ed.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                if(!cs.toString().isEmpty()) {
+                    listView.setVisibility(View.VISIBLE);
+                }else {
+                    listView.setVisibility(View.GONE);
+                }
+                adapter_search.getFilter().filter(cs);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+
+            }
+        });
 
         okay_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,23 +258,6 @@ public class AddDistrictFragment extends Fragment {
                 String str_dist_name = dist_name_ed.getText().toString();
                 String str_code = dist_code_ed.getText().toString();
 
-//                dist_name_ed.addTextChangedListener(new TextWatcher() {
-//
-//                    @Override
-//                    public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-//                        adapter.getFilter().filter(cs);
-//                    }
-//
-//                    @Override
-//                    public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                        Toast.makeText(getContext(),"before text change",Toast.LENGTH_LONG).show();
-//                    }
-//
-//                    @Override
-//                    public void afterTextChanged(Editable arg0) {
-//                        Toast.makeText(getContext(),"after text change",Toast.LENGTH_LONG).show();
-//                    }
-//                });
 
                 isAllFieldsChecked= CheckAllFields();
                 if (!Utility.isNetworkAvailable(getActivity())) {
@@ -349,7 +370,7 @@ public class AddDistrictFragment extends Fragment {
                 if (statusCode==200 && status.equalsIgnoreCase("success")) {
                     dialog.dismiss();
                     Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
                     getDistrictList();
                 }else {
                     Utility.dismissDialoge();
@@ -441,7 +462,7 @@ public class AddDistrictFragment extends Fragment {
                             model.setName(name);
                             model.setUsage(states_id);
                             model.setPercentage(code);
-
+                            search_dist_list.add(name);
                             list.add(model);
                         }
                         if (list == null || list.size() == 0) {
@@ -485,7 +506,6 @@ public class AddDistrictFragment extends Fragment {
                 String status = obj.optString("status");
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
-
                     JSONArray jsonArray = obj.getJSONArray("data");
                     StateModel stateModel = new StateModel();
                     stateModel.setId(-1);

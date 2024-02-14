@@ -19,6 +19,7 @@ import com.growit.posapp.fstore.databinding.FragmentCreateAttributeBinding;
 import com.growit.posapp.fstore.model.AttributeModel;
 import com.growit.posapp.fstore.model.AttributeValue;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.ui.fragments.Inventory.TransfersOrderListFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -104,8 +105,9 @@ public class CreateAttributeFragment extends Fragment {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
-                getActivity().finish();
+                Fragment fragment = AttributeListFragment.newInstance();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
             }
         });
         binding.update.setOnClickListener(new View.OnClickListener() {

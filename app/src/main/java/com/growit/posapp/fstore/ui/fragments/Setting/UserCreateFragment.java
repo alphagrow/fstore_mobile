@@ -60,7 +60,7 @@ public class UserCreateFragment extends Fragment {
     UserAdapter adapter;
 
     boolean isAllFieldsChecked = false;
-    EditText et_username,ed_login,ed_password;
+    EditText et_username,ed_login,ed_password,email_ed;
     public UserCreateFragment() {
         // Required empty public constructor
     }
@@ -166,6 +166,7 @@ public class UserCreateFragment extends Fragment {
             et_username = dialog.findViewById(R.id.et_username);
             ed_login = dialog.findViewById(R.id.login_ed);
             ed_password = dialog.findViewById(R.id.et_password);
+            email_ed= dialog.findViewById(R.id.email_ed);
             TextView okay_text = dialog.findViewById(R.id.ok_text);
             TextView cancel_text = dialog.findViewById(R.id.cancel_text);
 
@@ -176,6 +177,7 @@ public class UserCreateFragment extends Fragment {
                     String str_shop_name = et_username.getText().toString();
                     String str_login = ed_login.getText().toString();
                     String str_password = ed_password.getText().toString();
+                    String str_email = email_ed.getText().toString();
                     isAllFieldsChecked = CheckAllFields();
                     if (!Utility.isNetworkAvailable(getActivity())) {
                         Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -183,7 +185,7 @@ public class UserCreateFragment extends Fragment {
                     }
 
                     if (isAllFieldsChecked) {
-                        addUser(str_shop_name,str_login,str_password);
+                        addUser(str_shop_name,str_login,str_password,str_email);
                     }
                     dialog.dismiss();
 
@@ -220,10 +222,16 @@ public class UserCreateFragment extends Fragment {
 
                 return false;
             }
+            if (email_ed.length() == 0) {
+                email_ed.setError("This field is required");
+                Toast.makeText(getActivity(), "Enter the Email", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
             return true;
         }
 
-        private void addUser (String str_name,String login,String password){
+        private void addUser (String str_name,String login,String password,String email){
             SessionManagement sm = new SessionManagement(getActivity());
             Map<String, String> params = new HashMap<>();
             params.put("user_id", sm.getUserID() + "");
@@ -231,7 +239,7 @@ public class UserCreateFragment extends Fragment {
             params.put("name", str_name);
             params.put("login", login);
             params.put("password", password);
-
+            params.put("email", email);
             Utility.showDialoge("Please wait while a moment...", getActivity());
             Log.v("add", String.valueOf(params));
             new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_User, new VolleyCallback() {
@@ -251,6 +259,7 @@ public class UserCreateFragment extends Fragment {
                         et_username.setText("");
                         ed_login.setText("");
                         ed_password.setText("");
+                        email_ed.setText("");
                         getUserList();
                     } else {
                         Utility.dismissDialoge();

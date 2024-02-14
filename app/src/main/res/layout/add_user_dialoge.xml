@@ -66,6 +66,36 @@
             android:textStyle="bold"
             android:textSize="@dimen/text_size_textview"
             android:textColor="@color/edt_top_text_color"
+            android:text="Email Id"
+            />
+
+        <EditText
+            android:id="@+id/email_ed"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_marg_edit"
+            android:layout_marginStart="@dimen/start_marg_edit"
+            android:layout_marginTop="@dimen/top_marg_edit"
+            android:layout_marginEnd="@dimen/end_marg_edit"
+            android:background="@drawable/custom_edit_text_cut"
+            android:drawableEnd="@drawable/baseline_mail_24"
+            android:drawablePadding="@dimen/ten"
+            android:fontFamily="@font/sf_compact_medium"
+            android:hint=""
+            android:padding="@dimen/padding_edit"
+            android:importantForAutofill="no"
+            android:textSize="@dimen/text_size_edit"
+            android:inputType="textEmailAddress"
+            android:requiresFadingEdge="vertical" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_marginTop="@dimen/ten"
+            android:layout_marginEnd="@dimen/end_marg_text"
+            android:layout_marginStart="@dimen/start_marg_text"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_textview"
+            android:textColor="@color/edt_top_text_color"
             android:text="User Id"
             />
 

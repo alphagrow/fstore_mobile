@@ -156,14 +156,14 @@ public class AddPOSCategoryFragment extends Fragment {
         binding.backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (getArguments() != null) {
+               // if (getArguments() != null) {
                     Fragment fragment = POSCategoryListFragment.newInstance();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-                }else {
-                    startActivity(new Intent(getActivity(), MainActivity.class));
-                    getActivity().finish();
-                }
+//                }else {
+//                    startActivity(new Intent(getActivity(), MainActivity.class));
+//                    getActivity().finish();
+//                }
             }
         });
     }
