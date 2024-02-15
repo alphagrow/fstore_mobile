@@ -311,7 +311,7 @@ public class AddPOSCategoryFragment extends Fragment {
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_CREATE_POS_CATEGORY, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {

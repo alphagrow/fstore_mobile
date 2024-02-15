@@ -18,6 +18,7 @@ import com.growit.posapp.fstore.adapters.PurchaseItemListAdapter;
 import com.growit.posapp.fstore.db.DatabaseClient;
 import com.growit.posapp.fstore.interfaces.ItemClickListener;
 import com.growit.posapp.fstore.tables.PurchaseOrder;
+import com.growit.posapp.fstore.tables.TransferOrder;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.travijuu.numberpicker.library.NumberPicker;
 
@@ -25,13 +26,13 @@ import java.util.List;
 
 public class TransferItemListAdapter extends RecyclerView.Adapter<TransferItemListAdapter.ViewHolder> {
 
-    private List<PurchaseOrder> customerDataList;
+    private List<TransferOrder> customerDataList;
     private Context mContext;
     ItemClickListener mCallback;
 
     String product_type;
 
-    public TransferItemListAdapter(Context context, List<PurchaseOrder> contacts) {
+    public TransferItemListAdapter(Context context, List<TransferOrder> contacts) {
         customerDataList = contacts;
         mContext = context;
 
@@ -42,7 +43,7 @@ public class TransferItemListAdapter extends RecyclerView.Adapter<TransferItemLi
     }
 
 
-    public void filterList(List<PurchaseOrder> filterer) {
+    public void filterList(List<TransferOrder> filterer) {
         customerDataList = filterer;
         notifyDataSetChanged();
     }
@@ -80,7 +81,7 @@ public class TransferItemListAdapter extends RecyclerView.Adapter<TransferItemLi
 
     @Override
     public void onBindViewHolder(@NonNull TransferItemListAdapter.ViewHolder holder, int position) {
-        PurchaseOrder product = customerDataList.get(position);
+        TransferOrder product = customerDataList.get(position);
         TextView textView = holder.itemName;
         textView.setText(product.getProductName());
         holder.number_picker.setMax(1000000000);
@@ -136,22 +137,22 @@ public class TransferItemListAdapter extends RecyclerView.Adapter<TransferItemLi
         AsyncTask.execute(() -> {
 
             DatabaseClient.getInstance(mContext).getAppDatabase()
-                    .purchaseDao()
+                    .transferDao()
                     .deleteItem(id, variant);
         });
 
     }
 
-    private void setProductDetail(PurchaseOrder product) {
+    private void setProductDetail(TransferOrder product) {
         AsyncTask.execute(() -> {
             int prodCount = 0;
 
-            prodCount = DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().getProductDetailById(product.getProductID(), product.getProductVariants(),product.getUnitPrice());
+            prodCount = DatabaseClient.getInstance(mContext).getAppDatabase().transferDao().getProductDetailById(product.getProductID(), product.getProductVariants(),product.getUnitPrice());
             if (prodCount > 0) {
-                DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().updateProductCardQuantity((int) product.getQuantity(), product.getProductID(),product.getProductVariants(),product.getUnitPrice());
+                DatabaseClient.getInstance(mContext).getAppDatabase().transferDao().updateProductCardQuantity((int) product.getQuantity(), product.getProductID(),product.getProductVariants(),product.getUnitPrice());
 
             } else {
-                DatabaseClient.getInstance(mContext).getAppDatabase().purchaseDao().insert(product);
+                DatabaseClient.getInstance(mContext).getAppDatabase().transferDao().insert(product);
             }
             //  SaveCardListToSomeActivity();
 

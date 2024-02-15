@@ -51,6 +51,7 @@ import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
 import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.Value;
 import com.growit.posapp.fstore.tables.PurchaseOrder;
+import com.growit.posapp.fstore.tables.TransferOrder;
 import com.growit.posapp.fstore.ui.fragments.Setting.ConfirmOrderFragment;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.RecyclerItemClickListener;
@@ -121,7 +122,7 @@ public class AddTransfersFragment extends Fragment {
     List<StateModel> ware_houseNames = new ArrayList<>();
     List<StateModel> location = new ArrayList<>();
 
-    List<PurchaseOrder> purchaseOrderList = new ArrayList<>();
+    List<TransferOrder> purchaseOrderList = new ArrayList<>();
     TransferItemListAdapter purchaseItemListAdapter;
     Spinner cstSpinner;
     String str_internal_transfer;
@@ -321,7 +322,7 @@ public class AddTransfersFragment extends Fragment {
                             Toast.makeText(getActivity(), R.string.Add_Variants, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        PurchaseOrder order = new PurchaseOrder();
+                        TransferOrder order = new TransferOrder();
                         order.setProductID(product_id);
                         order.setProductImage(product_image);
                         order.setVariantID(str_variant_id);
@@ -339,14 +340,14 @@ public class AddTransfersFragment extends Fragment {
                             order.setProductVariants(variants);
                             AsyncTask.execute(() -> {
                                 int prodCount = 0;
-                                prodCount = DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().getProductDetailById(order.getProductID(), order.getProductVariants(),order.getUnitPrice());
+                                prodCount = DatabaseClient.getInstance(getActivity()).getAppDatabase().transferDao().getProductDetailById(order.getProductID(), order.getProductVariants(),order.getUnitPrice());
                                 if (prodCount > 0) {
-                                    DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().updateProductQuantity((int) order.getQuantity(), order.getProductID(),order.getProductVariants(),order.getUnitPrice());
+                                    DatabaseClient.getInstance(getActivity()).getAppDatabase().transferDao().updateProductQuantity((int) order.getQuantity(), order.getProductID(),order.getProductVariants(),order.getUnitPrice());
                                    GetTasks gt = new GetTasks();
                                     gt.execute();
 
                                 } else {
-                                    DatabaseClient.getInstance(getActivity()).getAppDatabase().purchaseDao().insert(order);
+                                    DatabaseClient.getInstance(getActivity()).getAppDatabase().transferDao().insert(order);
                                     GetTasks gt = new GetTasks();
                                     gt.execute();
 
@@ -655,12 +656,12 @@ public class AddTransfersFragment extends Fragment {
         }
 
 
-        class GetTasks extends AsyncTask<Void, Void, List<PurchaseOrder>> {
+        class GetTasks extends AsyncTask<Void, Void, List<TransferOrder>> {
 
             @Override
-            protected List<PurchaseOrder> doInBackground(Void... voids) {
+            protected List<TransferOrder> doInBackground(Void... voids) {
                 AppDatabase dbClient = DatabaseClient.getInstance(getActivity()).getAppDatabase();
-                purchaseOrderList = dbClient.purchaseDao().getPurchaseOrder();
+                purchaseOrderList = dbClient.transferDao().getPurchaseOrder();
                 if (purchaseOrderList == null || purchaseOrderList.size() == 0) {
                     return null;
                 }
@@ -669,7 +670,7 @@ public class AddTransfersFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(List<PurchaseOrder> tasks) {
+            protected void onPostExecute(List<TransferOrder> tasks) {
                 super.onPostExecute(tasks);
                 // tasks_model = tasks;
 
@@ -761,7 +762,7 @@ public class AddTransfersFragment extends Fragment {
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         AsyncTask.execute(() -> {
                             DatabaseClient.getInstance(getActivity()).getAppDatabase()
-                                    .purchaseDao()
+                                    .transferDao()
                                     .delete();
                         });
                         callOrderConfirmFragment(str_internal_transfer);
