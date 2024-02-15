@@ -524,7 +524,7 @@ public class AddCustomerFragment extends Fragment implements
         progressDialog.show();
         Log.v("add", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_CUSTOMER, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
@@ -533,6 +533,7 @@ public class AddCustomerFragment extends Fragment implements
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
                 customerID = obj.optInt("customer_id");
+                String error_message = obj.optString("error_message");
                 String discounts = obj.optString("discounts");
                 customerLineDiscount=discounts.replace("%","");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
@@ -544,6 +545,9 @@ public class AddCustomerFragment extends Fragment implements
                     resetFields();
                     Toast.makeText(getActivity(), R.string.cust_create_success, Toast.LENGTH_SHORT).show();
 
+                }else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -746,23 +746,29 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
                 Utility.dismissDialoge();
                 Log.v("Response", response.toString());
-                   Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
+
+                String res=new String(response.data);
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(res);
+                    int statusCode = obj.optInt("statuscode");
+                    String  status = obj.optString("status");
+                    String error_message = obj.optString("error_message");
+                    String str_message = obj.optString("message");
+                    if (statusCode == 200 && status.equalsIgnoreCase("Success")) {
+
+                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
                     Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
                     startActivity(intentLogin);
                     finish();
-//                    JSONObject obj = new JSONObject(response.toString());
-//                    int statusCode = obj.optInt("statuscode");
-//                    String  message = obj.optString("status");
-//                    String error_message = obj.optString("error_message");
-//                    String str_message = obj.optString("message");
-//                    if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-//                        Utility.dismissDialoge();
-//                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-//
-//                    } else {
-//                        Utility.dismissDialoge();
-//                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-//                    }
+                    } else {
+                        Utility.dismissDialoge();
+                        Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
 
 
             }
@@ -861,23 +867,28 @@ public class UserRegistrationActivity extends AppCompatActivity {
         VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, apiURL, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
-                Toast.makeText(UserRegistrationActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 Utility.dismissDialoge();
-                Log.v("Response", response.toString());
-//                    JSONObject obj = new JSONObject(response.toString());
-//                    int statusCode = obj.optInt("statuscode");
-//                    String  message = obj.optString("status");
-//                    String error_message = obj.optString("error_message");
-//                    String str_message = obj.optString("message");
-//                    if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-//                        Utility.dismissDialoge();
-//                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-//
-//                    } else {
-//                        Utility.dismissDialoge();
-//                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-//                    }
 
+
+                String res=new String(response.data);
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(res);
+                    int statusCode = obj.optInt("statuscode");
+                    String  status = obj.optString("status");
+                    String error_message = obj.optString("error_message");
+                    String str_message = obj.optString("message");
+                    if (statusCode == 200 && status.equalsIgnoreCase("Success")) {
+                        Utility.dismissDialoge();
+                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Utility.dismissDialoge();
+                        Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
 
             }
         }, error -> {

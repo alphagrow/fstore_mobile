@@ -512,7 +512,7 @@ public class UpdateVendorFragment extends Fragment {
         params.put("vat", str_gst_no);
         params.put("vendor_id", vendor_model.get(position).getVendorId()+"");
         params.put("license_number", str_lic_no);
-
+        Utility.showDialoge("", getActivity());
         Log.d("vendoe_update",ApiConstants.UPDATE_Vendor+params.toString());
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.UPDATE_Vendor , new VolleyCallback() {
             private String message = "Update failed!!";
@@ -522,9 +522,11 @@ public class UpdateVendorFragment extends Fragment {
                 JSONObject obj = new JSONObject(result.toString());
                 String status = obj.optString("status");
                 message = obj.optString("message");
+                Utility.dismissDialoge();
                 String error_message = obj.optString("error_message");
                 String  str_message = obj.optString("message");
                 if (status.equalsIgnoreCase("success")) {
+
                     Toast.makeText(getActivity(), "Vendor  Update successfully ", Toast.LENGTH_SHORT).show();
 //                    Bundle bundle = new Bundle();
 //                    bundle.putString("type_of_vendor_warehouse", "vendor");
@@ -534,12 +536,14 @@ public class UpdateVendorFragment extends Fragment {
 //                    fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
                     // resetFields();
                 }else {
+                    Utility.dismissDialoge();
                     Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onError(String result) throws Exception {
+                Utility.dismissDialoge();
                 Log.v("Response", result.toString());
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }

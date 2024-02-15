@@ -253,7 +253,7 @@ public class UserCreateFragment extends Fragment {
                     String status = obj.optString("status");
                     String message = obj.optString("message");
                     String error_message = obj.optString("error_message");
-                    if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                    if (statusCode == 200 && status.equalsIgnoreCase("Success")) {
                         Utility.dismissDialoge();
                         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                         et_username.setText("");
