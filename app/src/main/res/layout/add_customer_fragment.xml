@@ -64,19 +64,18 @@
             <EditText
                 android:id="@+id/et_usermobile"
                 android:layout_width="match_parent"
+                android:drawableEnd="@drawable/baseline_phone_enabled_24"
+                android:inputType="number"
+                android:maxLength="10"
                 android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
                 android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut"
-                android:drawableEnd="@drawable/baseline_phone_enabled_24"
                 android:drawablePadding="@dimen/ten"
                 android:fontFamily="@font/sf_compact_medium"
                 android:hint=""
-
                 android:importantForAutofill="no"
-                android:inputType="number"
-                android:maxLength="10"
                 android:textSize="@dimen/text_size_edit"
                 android:padding="@dimen/padding_edit"
                 android:requiresFadingEdge="vertical" />
@@ -140,19 +139,19 @@
             <EditText
                 android:id="@+id/gst_edit"
                 android:layout_width="match_parent"
+                android:drawableEnd="@drawable/gst_no"
                 android:layout_height="@dimen/height_marg_edit"
                 android:layout_marginStart="@dimen/twenty_five"
                 android:layout_marginTop="@dimen/top_marg_edit"
                 android:layout_marginEnd="@dimen/twenty_five"
                 android:background="@drawable/custom_edit_text_cut"
-                android:drawableEnd="@drawable/gst_no"
                 android:drawablePadding="@dimen/ten"
-                android:maxLength="16"
-                android:fontFamily="@font/sf_compact_regular"
-                android:hint=" "
-                android:inputType="text"
+                android:fontFamily="@font/sf_compact_medium"
+                android:hint=""
+                android:importantForAutofill="no"
                 android:textSize="@dimen/text_size_edit"
-                android:padding="@dimen/padding_edit"/>
+                android:padding="@dimen/padding_edit"
+                android:requiresFadingEdge="vertical"/>
             <TextView
                 android:id="@+id/land_size_text"
                 android:layout_width="match_parent"

@@ -515,13 +515,9 @@ public class AddCustomerFragment extends Fragment implements
 //        if(!cusTomerType.equals("1")) {
 //            params.put("vat", str_gst_no);
 //        }
+        params.put("vat", str_gst_no);
         params.put("land_size", str_land_size);
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMax(100);
-        progressDialog.setMessage("Please wait while a moment...");
-        progressDialog.setTitle("Registering");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("add", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_CUSTOMER, new VolleyCallback() {
             private String message = " failed!!";
@@ -537,9 +533,10 @@ public class AddCustomerFragment extends Fragment implements
                 String discounts = obj.optString("discounts");
                 customerLineDiscount=discounts.replace("%","");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-                    int visibility = (progressBar.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
-                    progressBar.setVisibility(visibility);
-                    progressDialog.cancel();
+                    Utility.dismissDialoge();
+//                    int visibility = (progressBar.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
+//                    progressBar.setVisibility(visibility);
+//                    progressDialog.cancel();
                     SaveTask st = new SaveTask();
                     st.execute();
                     resetFields();

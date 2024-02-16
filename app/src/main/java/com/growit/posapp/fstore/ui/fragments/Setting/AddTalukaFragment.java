@@ -389,7 +389,7 @@ public class AddTalukaFragment extends Fragment {
                     getTalukaData();
                 }else {
                     Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -427,12 +427,12 @@ public class AddTalukaFragment extends Fragment {
                 if (status.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     dialog.dismiss();
-                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), status, Toast.LENGTH_SHORT).show();
 
                     getTalukaData();
                 }else {
                     Utility.dismissDialoge();
-                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -51,7 +51,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
     LinearLayout lay_custom_type;
-    private String str_land_size = "",nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
+    private String str_gst_no="",str_land_size = "",nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "";
     boolean isAllFieldsChecked = false;
     public static UpdateCustomerFragment newInstance() {
         return new UpdateCustomerFragment();
@@ -78,6 +78,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
             getStateData();
             getDistrictData(customer.get(position).getState());
             getTalukaData(customer.get(position).getDistrict());
+            gst_no_edit.setText(customer.get(position).getGst_no());
 //            customer_type.setEnabled(false);
 //            gst_no_edit.setEnabled(false);
 //            if(cstType!=null&&cstType.equalsIgnoreCase("1")) {
@@ -214,6 +215,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
             zipStr = et_pincode.getText().toString();
             streetStr = addressEditText.getText().toString();
             str_land_size = land_size.getText().toString();
+            str_gst_no = gst_no_edit.getText().toString();
             isAllFieldsChecked= CheckAllFields();
             if (!Utility.isNetworkAvailable(getActivity())) {
                 Toast.makeText(getActivity(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -240,7 +242,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
         params.put("country_id", ApiConstants.COUNTRY_ID);
         params.put("zip", zipStr);
         params.put("token", sm.getJWTToken());
-
+        params.put("vat", str_gst_no);
         new VolleyRequestHandler(getActivity(), params).putRequest(ApiConstants.UPDATE_CUSTOMER + customer.get(position).getCustomer_id() + "?", new VolleyCallback() {
             private String message = "Update failed!!";
 
@@ -248,6 +250,7 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
             public void onSuccess(Object result) throws JSONException {
                 JSONObject obj = new JSONObject(result.toString());
                 String status = obj.optString("status");
+                String error_message = obj.optString("error_message");
                 message = obj.optString("message");
                 if (status.equalsIgnoreCase("success")) {
                     int visibility = (progressBar.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
@@ -257,6 +260,10 @@ public class UpdateCustomerFragment extends Fragment implements ApiResponseListe
                     Toast.makeText(getActivity(), R.string.CUSTOMER_UADATE, Toast.LENGTH_SHORT).show();
 
                     // resetFields();
+                }else {
+                    int visibility = (progressBar.getVisibility() == View.GONE) ? View.VISIBLE : View.GONE;
+                    progressBar.setVisibility(visibility);
+                    Toast.makeText(getActivity(), error_message, Toast.LENGTH_SHORT).show();
                 }
             }
 

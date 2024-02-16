@@ -537,7 +537,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
         Log.d("url_addproduct", params.toString());
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_ADD_PRODUCT, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
