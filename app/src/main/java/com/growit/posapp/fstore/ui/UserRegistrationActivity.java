@@ -868,8 +868,6 @@ public class UserRegistrationActivity extends AppCompatActivity {
             @Override
             public void onResponse(NetworkResponse response) {
                 Utility.dismissDialoge();
-
-
                 String res=new String(response.data);
                 JSONObject obj = null;
                 try {
@@ -1057,9 +1055,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     }
 
     private Bitmap convertImageViewToBitmap(ImageView v) {
-
         Bitmap bm = ((BitmapDrawable) v.getDrawable()).getBitmap();
-
         return bm;
     }
 
