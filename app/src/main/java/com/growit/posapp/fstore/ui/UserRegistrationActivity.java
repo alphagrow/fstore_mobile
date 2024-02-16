@@ -109,6 +109,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
             binding.updateBtn.setVisibility(View.VISIBLE);
             binding.submitBtn.setVisibility(GONE);
             binding.layoutUserDetail.setVisibility(GONE);
+            binding.imageLay.setVisibility(View.VISIBLE);
             if (Utility.isNetworkAvailable(UserRegistrationActivity.this)) {
 
                 getCompanyDetails();
@@ -263,12 +264,13 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 isAllFieldsChecked = CheckAllFields();
                 if (isAllFieldsChecked) {
 //                    Log.d("imageBitmap", imageBitmap.toString());
-                    if (imageBitmap != null) {
-                        UserRegistration(imageBitmap);
-                    } else {
-                        Toast.makeText(UserRegistrationActivity.this, "Select logo", Toast.LENGTH_SHORT).show();
-
-                    }
+   //                 if (imageBitmap != null) {
+//                        UserRegistration(imageBitmap);
+                    UserRegistration();
+//                    } else {
+//                        Toast.makeText(UserRegistrationActivity.this, "Select logo", Toast.LENGTH_SHORT).show();
+//
+//                    }
 
                 }
             }
@@ -734,128 +736,128 @@ public class UserRegistrationActivity extends AppCompatActivity {
 
         return imgString;
     }
-    private void UserRegistration(Bitmap bitmap) {
-        SessionManagement sm = new SessionManagement(this);
-
-        String apiURL = ApiConstants.BASE_URL + "" + ApiConstants.ADD_COMPANY+"name="+nameStr+ "&" + "login="+login_id+ "&" + "password="+str_password+ "&" + "street="+streetStr+ "&" +"country_id="+ApiConstants.COUNTRY_ID+ "&" +"state_id="+stateStr+ "&" +"city="+str_city+ "&" +"zip="+zipStr+ "&" +"phone="+str_phone+ "&" +"mobile="+mobileStr+ "&" +"email="+emailStr+ "&" +"website="+str_website+ "&" +"insect_lic_no="+str_insectLicNo+ "&" +"fert_lic_no="+ str_fertLicNo+ "&" +"seed_lic_no="+ str_seedLicNo+ "&" +"vat="+ str_gst_no+ "&" +"company_name="+ str_comp_name+ "&" +"taluka_id="+ talukaStr+ "&" +"district_id="+ districtStr + "&" +"user_email="+ user_email_str;
-        Log.d("apiURL",apiURL);
-        Utility.showDialoge("Please wait while a moment...", this);
-        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, apiURL, new Response.Listener<NetworkResponse>() {
-            @Override
-            public void onResponse(NetworkResponse response) {
-
-                Utility.dismissDialoge();
-                Log.v("Response", response.toString());
-
-                String res=new String(response.data);
-                JSONObject obj = null;
-                try {
-                    obj = new JSONObject(res);
-                    int statusCode = obj.optInt("statuscode");
-                    String  status = obj.optString("status");
-                    String error_message = obj.optString("error_message");
-                    String str_message = obj.optString("message");
-                    if (statusCode == 200 && status.equalsIgnoreCase("Success")) {
-
-                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-                    Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
-                    startActivity(intentLogin);
-                    finish();
-                    } else {
-                        Utility.dismissDialoge();
-                        Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-
-
-            }
-        }, error -> {
-            Log.v("Error Response", error.toString());
-            Utility.dismissDialoge();
-        }) {
-
-
-            @Override
-            protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                long imagename = System.currentTimeMillis();
-                params.put("company_logo", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
-                return params;
-            }
-        };
-
-        //adding the request to volley
-        volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(
-                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Volley.newRequestQueue(this).add(volleyMultipartRequest);
-    }
-
 //    private void UserRegistration(Bitmap bitmap) {
-//        SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
-//        Map<String, String> params = new HashMap<>();
-//        // params.put("user_id", sm.getUserID() + "");
-//        params.put("name", nameStr);
-//        params.put("login", login_id);
-//        params.put("company_logo", str_image_logo);
-//        params.put("password", str_password);
-//        params.put("company_name", str_comp_name);
-//        params.put("street", streetStr);
-//        params.put("country_id", ApiConstants.COUNTRY_ID);
-//        params.put("state_id", stateStr);
-//        params.put("district_id", districtStr);
-//        params.put("taluka_id", talukaStr);
-//        params.put("city", str_city);
-//        params.put("zip", zipStr);
-//        params.put("phone", str_phone);
-//        params.put("mobile", mobileStr);
-//        params.put("email", emailStr);
-//        params.put("website", str_website);
-//        params.put("insect_lic_no", str_insectLicNo);
-//        params.put("fert_lic_no", str_fertLicNo);
-//        params.put("seed_lic_no", str_seedLicNo);
-//        params.put("vat", str_gst_no);
+//        SessionManagement sm = new SessionManagement(this);
 //
-//        Utility.showDialoge("", UserRegistrationActivity.this);
-//        Log.v("add", String.valueOf(params));
-//        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.ADD_COMPANY, new VolleyCallback() {
-//            private String message = "Registration failed!!";
-//
+//        String apiURL = ApiConstants.BASE_URL + "" + ApiConstants.ADD_COMPANY+"name="+nameStr+ "&" + "login="+login_id+ "&" + "password="+str_password+ "&" + "street="+streetStr+ "&" +"country_id="+ApiConstants.COUNTRY_ID+ "&" +"state_id="+stateStr+ "&" +"city="+str_city+ "&" +"zip="+zipStr+ "&" +"phone="+str_phone+ "&" +"mobile="+mobileStr+ "&" +"email="+emailStr+ "&" +"website="+str_website+ "&" +"insect_lic_no="+str_insectLicNo+ "&" +"fert_lic_no="+ str_fertLicNo+ "&" +"seed_lic_no="+ str_seedLicNo+ "&" +"vat="+ str_gst_no+ "&" +"company_name="+ str_comp_name+ "&" +"taluka_id="+ talukaStr+ "&" +"district_id="+ districtStr + "&" +"user_email="+ user_email_str;
+//        Log.d("apiURL",apiURL);
+//        Utility.showDialoge("Please wait while a moment...", this);
+//        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, apiURL, new Response.Listener<NetworkResponse>() {
 //            @Override
-//            public void onSuccess(Object result) throws JSONException {
-//                Log.v("Response", result.toString());
-//                JSONObject obj = new JSONObject(result.toString());
-//                int statusCode = obj.optInt("statuscode");
-//                message = obj.optString("status");
-//                String error_message = obj.optString("error_message");
-//                String str_message = obj.optString("message");
-//                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
-//                    Utility.dismissDialoge();
-//                    resetFields();
-//                    //   Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
+//            public void onResponse(NetworkResponse response) {
+//
+//                Utility.dismissDialoge();
+//                Log.v("Response", response.toString());
+//
+//                String res=new String(response.data);
+//                JSONObject obj = null;
+//                try {
+//                    obj = new JSONObject(res);
+//                    int statusCode = obj.optInt("statuscode");
+//                    String  status = obj.optString("status");
+//                    String error_message = obj.optString("error_message");
+//                    String str_message = obj.optString("message");
+//                    if (statusCode == 200 && status.equalsIgnoreCase("Success")) {
+//
+//                        Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
 //                    Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
 //                    startActivity(intentLogin);
 //                    finish();
-//                    Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
-//
-//                } else {
-//                    Utility.dismissDialoge();
-//                    Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Utility.dismissDialoge();
+//                        Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
 //                }
+//
+//
+//
 //            }
+//        }, error -> {
+//            Log.v("Error Response", error.toString());
+//            Utility.dismissDialoge();
+//        }) {
+//
 //
 //            @Override
-//            public void onError(String result) throws Exception {
-//                Utility.dismissDialoge();
-//                Log.v("Response", result);
-//                Toast.makeText(UserRegistrationActivity.this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+//            protected Map<String, DataPart> getByteData() {
+//                Map<String, DataPart> params = new HashMap<>();
+//                long imagename = System.currentTimeMillis();
+//                params.put("company_logo", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+//                return params;
 //            }
-//        });
+//        };
+//
+//        //adding the request to volley
+//        volleyMultipartRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 2,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        Volley.newRequestQueue(this).add(volleyMultipartRequest);
 //    }
+
+    private void UserRegistration() {
+        SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
+        Map<String, String> params = new HashMap<>();
+        // params.put("user_id", sm.getUserID() + "");
+        params.put("name", nameStr);
+        params.put("login", login_id);
+//        params.put("company_logo", str_image_logo);
+        params.put("password", str_password);
+        params.put("company_name", str_comp_name);
+        params.put("street", streetStr);
+        params.put("country_id", ApiConstants.COUNTRY_ID);
+        params.put("state_id", stateStr);
+        params.put("district_id", districtStr);
+        params.put("taluka_id", talukaStr);
+        params.put("city", str_city);
+        params.put("zip", zipStr);
+        params.put("phone", str_phone);
+        params.put("mobile", mobileStr);
+        params.put("email", emailStr);
+        params.put("website", str_website);
+        params.put("insect_lic_no", str_insectLicNo);
+        params.put("fert_lic_no", str_fertLicNo);
+        params.put("seed_lic_no", str_seedLicNo);
+        params.put("vat", str_gst_no);
+
+        Utility.showDialoge("", UserRegistrationActivity.this);
+        Log.v("add", String.valueOf(params));
+        new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.ADD_COMPANY, new VolleyCallback() {
+            private String message = "Registration failed!!";
+
+            @Override
+            public void onSuccess(Object result) throws JSONException {
+                Log.v("Response", result.toString());
+                JSONObject obj = new JSONObject(result.toString());
+                int statusCode = obj.optInt("statuscode");
+                message = obj.optString("status");
+                String error_message = obj.optString("error_message");
+                String str_message = obj.optString("message");
+                if (statusCode == 200 && message.equalsIgnoreCase("success")) {
+                    Utility.dismissDialoge();
+                    resetFields();
+                    //   Toast.makeText(UserRegistrationActivity.this, "Company Create", Toast.LENGTH_SHORT).show();
+                    Intent intentLogin = new Intent(UserRegistrationActivity.this, LoginActivity.class);
+                    startActivity(intentLogin);
+                    finish();
+                    Toast.makeText(UserRegistrationActivity.this, str_message, Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Utility.dismissDialoge();
+                    Toast.makeText(UserRegistrationActivity.this, error_message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(String result) throws Exception {
+                Utility.dismissDialoge();
+                Log.v("Response", result);
+                Toast.makeText(UserRegistrationActivity.this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     private void UpdateUserRegistration(Bitmap bitmap) {

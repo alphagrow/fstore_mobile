@@ -738,6 +738,8 @@
                     android:textSize="14dp"
                     />
       <LinearLayout
+          android:id="@+id/image_lay"
+          android:visibility="gone"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_marginStart="@dimen/twenty_five"
