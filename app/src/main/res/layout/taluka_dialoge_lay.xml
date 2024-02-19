@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_name"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ten"
+                    android:fontFamily="@font/helvetica_neue_medium"
+                    android:textStyle="normal"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:text="Create Taluka"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_textview"
+                    android:text="State"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:background="@drawable/custom_edit_text_cut">
+
+                    <Spinner
+                        android:id="@+id/stateSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_centerHorizontal="true"
+                        android:padding="5dp" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_text"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="District"
+                    android:textColor="@color/edt_top_text_color"
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:background="@drawable/custom_edit_text_cut">
+
+                    <Spinner
+                        android:id="@+id/dist_Spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_centerHorizontal="true"
+                        android:padding="5dp" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_textview"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_textview"
+                    android:text="Taluka Code"
+                    />
+
+                <EditText
+                    android:id="@+id/taluka_code_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/gst_no"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
+                    android:inputType="text"
+                    android:requiresFadingEdge="vertical" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_textview"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_textview"
+                    android:text="Taluka Name"
+                    />
+
+                <EditText
+                    android:id="@+id/taluka_name_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/height_marg_edit"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:drawableEnd="@drawable/baseline_home_work_24"
+                    android:drawablePadding="@dimen/ten"
+                    android:fontFamily="@font/sf_compact_medium"
+                    android:hint=""
+                    android:padding="@dimen/padding_edit"
+                    android:importantForAutofill="no"
+                    android:textSize="@dimen/text_size_edit"
+                    android:inputType="text"
+                    android:requiresFadingEdge="vertical" />
+
+
+                <ListView
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/start_marg_edit"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_marginEnd="@dimen/end_marg_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:id="@+id/listView"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="@dimen/ten"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/cancel_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:text="Cancel"
+                        android:textColor="@color/white"
+                        android:textStyle="normal" />
+
+                    <Button
+                        android:id="@+id/ok_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Add"
+                        android:textColor="@color/white"
+                        android:textStyle="normal" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -26,21 +26,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
-import com.growit.posapp.fstore.adapters.UOMAdapter;
-import com.growit.posapp.fstore.databinding.FragmentAddDistrictBinding;
 import com.growit.posapp.fstore.databinding.FragmentAddTalukaBinding;
-import com.growit.posapp.fstore.databinding.FragmentAddTranferBinding;
 import com.growit.posapp.fstore.model.ConfigurationModel;
 import com.growit.posapp.fstore.model.ProductDetail;
 import com.growit.posapp.fstore.model.StateModel;
@@ -55,7 +45,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -174,7 +163,7 @@ public class AddTalukaFragment extends Fragment {
 
     private  void showDialogeReceiveProduct(String type) {
          dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.taluka_dialoge);
+        dialog.setContentView(R.layout.taluka_dialoge_lay);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
