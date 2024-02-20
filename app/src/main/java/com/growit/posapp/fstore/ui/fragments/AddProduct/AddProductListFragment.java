@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -33,6 +35,7 @@ import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
 import com.growit.posapp.fstore.adapters.AllAddProductListAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductListBinding;
+import com.growit.posapp.fstore.databinding.FragmentVendorBinding;
 import com.growit.posapp.fstore.model.Product;
 import com.growit.posapp.fstore.model.Purchase.PurchaseModel;
 import com.growit.posapp.fstore.model.Purchase.PurchaseProductModel;
@@ -85,7 +88,9 @@ public class AddProductListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product_list, container, false);
+//        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product_list, container, false);
+        binding= FragmentAddProductListBinding.inflate(inflater, container, false);
+
         if (getArguments() != null) {
 
 
@@ -95,17 +100,23 @@ public class AddProductListFragment extends Fragment {
     }
 
     private void init() {
+        binding.gifLoad.setVisibility(View.VISIBLE);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoad);
+
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recycler.setLayoutManager(layoutManager);
+
         if (getArguments() != null) {
             product_data = getArguments().getString("product_list");
              position = getArguments().getInt("position");
             if (Utility.isNetworkAvailable(getContext())) {
                 if(product_data.equals("crop_product")) {
+
                     crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
                     crop_id = String.valueOf(crop_mode.get(position).getValueId());
                     getProductList(crop_id);
                 }else {
+
                     getAllProductList();
                 }
             } else {
@@ -118,6 +129,7 @@ public class AddProductListFragment extends Fragment {
             @Override
             public void onRefresh() {
                 binding.refreshLayout.setRefreshing(false);
+                binding.gifLoad.setVisibility(View.VISIBLE);
                 if (Utility.isNetworkAvailable(getContext())) {
                     if(product_data.equals("crop_product")) {
                         crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
@@ -185,7 +197,8 @@ public class AddProductListFragment extends Fragment {
         //String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + pos_category_id + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        binding.gifLoad.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -196,7 +209,9 @@ public class AddProductListFragment extends Fragment {
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+                        Toast.makeText(contexts,"Success", Toast.LENGTH_SHORT).show();
+
+//                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<PurchaseModel>() {
                         }.getType();
@@ -207,8 +222,10 @@ public class AddProductListFragment extends Fragment {
                             purchaseProductModel = model.getData().get(i).getProducts();
                         }
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
+                            binding.gifLoad.setVisibility(View.GONE);
                             binding.noDataFound.setVisibility(View.GONE);
                         } else {
+                            binding.gifLoad.setVisibility(View.GONE);
                             binding.noDataFound.setVisibility(View.GONE);
                             binding.totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "Products");
 
@@ -228,6 +245,7 @@ public class AddProductListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        binding.gifLoad.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
 
     }
@@ -259,17 +277,23 @@ public class AddProductListFragment extends Fragment {
         //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//       Utility.showDialoge("Please wait while a moment...", getActivity());
+        binding.gifLoad.setVisibility(View.VISIBLE);
+        long beginTime = System.currentTimeMillis();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
                 JSONObject obj = null;
                 try {
+//                    Toast.makeText(contexts, "Success", Toast.LENGTH_SHORT).show();
+
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        binding.gifLoad.setVisibility(View.GONE);
+
                         Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<PurchaseModel>() {
@@ -285,7 +309,8 @@ public class AddProductListFragment extends Fragment {
                         } else {
                             binding.noDataFound.setVisibility(View.GONE);
                             binding.totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "All Products");
-
+                            long responseTime = System.currentTimeMillis() - beginTime;
+                            Log.v("Response_time", String.valueOf(responseTime));
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             all_adapter = new AllAddProductListAdapter(getActivity(), purchaseProductModel);
@@ -302,6 +327,7 @@ public class AddProductListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        binding.gifLoad.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
 
     }

@@ -181,10 +181,13 @@ public class ProductListFragment extends Fragment {
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
       Log.d("product_list",url);
     //    Utility.showDialoge("Please wait while a moment...", getActivity());
+        long beginTime = System.currentTimeMillis();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
+
+                long responseTime = System.currentTimeMillis() - beginTime;
 
                 JSONObject obj = null;
                 try {
@@ -217,6 +220,7 @@ public class ProductListFragment extends Fragment {
                                 product.setProductImage(image);
                                 productList.add(product);
                             }
+                            Log.v("Response_time", String.valueOf(responseTime));
                             productListAdapter = new ProductListAdapter(getActivity(), productList);
                             recyclerView.setAdapter(productListAdapter);
 

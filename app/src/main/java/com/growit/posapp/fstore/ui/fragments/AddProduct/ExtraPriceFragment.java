@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -58,6 +59,7 @@ public class ExtraPriceFragment extends Fragment {
     private int position = 0;
     ExtraPriceData extraPriceData;
     private List<ExtraVariantData> search_variant;
+    ImageView gif;
     public static ExtraPriceFragment newInstance() {
         return new ExtraPriceFragment();
     }
@@ -76,7 +78,9 @@ public class ExtraPriceFragment extends Fragment {
         lay_add_customer.setVisibility(View.VISIBLE);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL); // set Horizontal Orientation
-
+        gif = view.findViewById(R.id.gif);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif);
+       gif.setVisibility(View.GONE);
         if (getArguments() != null) {
             position = getArguments().getInt("position");
 //            String orderDetail = getArguments().getString("OrderDetail");
@@ -201,8 +205,8 @@ public class ExtraPriceFragment extends Fragment {
         params.put("user_id", sm.getUserID()+"");
         params.put("token", sm.getJWTToken());
         params.put("pricelist_data", jsonArray.toString());
-        Utility.showDialoge("Please wait while a moment...", getActivity());
-
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        gif.setVisibility(View.VISIBLE);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.ADD_EXTRAPRICE, new VolleyCallback() {
             private String message = "Order failed!!";
 
@@ -213,6 +217,7 @@ public class ExtraPriceFragment extends Fragment {
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
                 String  str_message = obj.optString("message");
+                gif.setVisibility(View.GONE);
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), str_message, Toast.LENGTH_SHORT).show();
@@ -224,7 +229,8 @@ public class ExtraPriceFragment extends Fragment {
 
             @Override
             public void onError(String result) throws Exception {
-                Utility.dismissDialoge();
+//                Utility.dismissDialoge();
+                gif.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             }
         });

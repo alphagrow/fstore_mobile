@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -64,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     Customer customerData = null;
     boolean isAllFieldsChecked = false;
     VendorModel vendormodel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,15 +97,17 @@ public class LoginActivity extends AppCompatActivity {
         resetBtn = findViewById(R.id.reset_btn);
         but_change_lang = findViewById(R.id.but_change_lang);
         signupBtn = findViewById(R.id.signupBtn);
+
+
 //        userStoreIDView.setText("admin");
 //        passwordView.setText("admin");
         loadLocale();
         loginBtn = findViewById(R.id.loginBtn);
-        progressDialog = new ProgressDialog(LoginActivity.this);
-        progressDialog.setMax(100);
-        progressDialog.setMessage("Please wait while a moment...");
-        progressDialog.setTitle("Authenticating");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog = new ProgressDialog(LoginActivity.this);
+//        progressDialog.setMax(100);
+//        progressDialog.setMessage("Please wait while a moment...");
+//        progressDialog.setTitle("Authenticating");
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         resetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +129,8 @@ public class LoginActivity extends AppCompatActivity {
             storeID = userStoreIDView.getText().toString().trim();
             password = passwordView.getText().toString().trim();
             if (!storeID.isEmpty() && !password.isEmpty()) {
-                progressDialog.show();
+//                progressDialog.show();
+
                 if (!Utility.isNetworkAvailable(LoginActivity.this)) {
                     Toast.makeText(LoginActivity.this, R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
                     return;
@@ -134,7 +140,8 @@ public class LoginActivity extends AppCompatActivity {
                     loginRequest();
                 }
             } else {
-                progressDialog.cancel();
+
+//                progressDialog.cancel();
                 Toast.makeText(LoginActivity.this, R.string.USER_ID_PASSWORD, Toast.LENGTH_SHORT).show();
             }
         });
@@ -159,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(Object result) throws JSONException {
                 JSONObject obj = new JSONObject(result.toString());
                 Log.i("obj", obj.toString());
-                progressDialog.cancel();
+
                 String status = obj.optString("status");
                 int statusCode = obj.optInt("statuscode");
                 String name = obj.optString("name");
@@ -196,7 +203,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(String result) throws Exception {
                 Log.v("Response", result.toString());
-                progressDialog.cancel();
+
+//                progressDialog.cancel();
                 Toast.makeText(LoginActivity.this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show();
 
             }

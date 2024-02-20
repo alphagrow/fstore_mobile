@@ -27,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -94,6 +95,8 @@ public class UOMFragment extends Fragment {
 
 
     private void init () {
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gif);
+        binding.gif.setVisibility(View.VISIBLE);
         list = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerVendor.setLayoutManager(layoutManager);
@@ -396,6 +399,7 @@ public class UOMFragment extends Fragment {
         String url = ApiConstants.BASE_URL + ApiConstants.GET_UOM_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         //    Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);
+        binding.gif.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -405,7 +409,7 @@ public class UOMFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
+                    binding.gif.setVisibility(View.GONE);
                     if (status.equalsIgnoreCase("success")) {
                         // Utility.dismissDialoge();
                         Gson gson = new Gson();
@@ -427,6 +431,7 @@ public class UOMFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        binding.gif.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
     }
     private void filterList (String text){

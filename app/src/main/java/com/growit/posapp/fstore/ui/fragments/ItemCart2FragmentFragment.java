@@ -263,10 +263,12 @@ public class ItemCart2FragmentFragment extends Fragment {
             totalDiscount += lineDiscountAmount;
             double lineGstAmount = 0.0;
 
+
             posOrderList.get(i).setAmount_tax(amountAfterLineDiscount * posOrderList.get(0).getGst() / 100);
 
             lineGstAmount = amountAfterLineDiscount * posOrderList.get(0).getGst() / 100;
             gstAmount += lineGstAmount;
+
             try {
                 productOBJ = new JSONObject();
 //                productOBJ.putOpt("gift_card", offerDiscount);
@@ -276,8 +278,12 @@ public class ItemCart2FragmentFragment extends Fragment {
                 productOBJ.putOpt("full_product_name", posOrderList.get(i).getProductName() + posOrderList.get(i).getProductVariants());
                 productOBJ.putOpt("price_unit", posOrderList.get(i).getUnitPrice());
                 productOBJ.putOpt("qty", posOrderList.get(i).getQuantity());
+                productOBJ.putOpt("discount", posOrderList.get(i).getDiscount_per());
                 productOBJ.putOpt("amount_tax", posOrderList.get(i).getAmount_tax());//total tax lineWise
                 productOBJ.putOpt("price_subtotal", amountAfterLineDiscount);//amount after discount
+
+                productOBJ.putOpt("discount_amount", lineDiscountAmount);
+
                 Log.i("amountAfterLineDiscount---", amountAfterLineDiscount + "");
                 Log.i("gstAmount---", lineGstAmount + "");
                 productOBJ.putOpt("price_subtotal_incl", amountAfterLineDiscount + lineGstAmount);//price_subtotal - offer discount + GST

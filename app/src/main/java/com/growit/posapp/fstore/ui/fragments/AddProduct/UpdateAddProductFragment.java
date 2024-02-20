@@ -1197,7 +1197,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                                stateModel.setId(id);
                                 String tax_type = data.optString("tax_type");
 
-                                //  if(tax_type.equals("purchase")){
+                                  if(tax_type.equals("purchase")){
                                 StateModel stateM = new StateModel();
                                 stateModel.setId(id);
 
@@ -1206,7 +1206,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                                 }
                                 stateModel.setName(name);
                                 purchase_tax_list.add(stateModel);
-                                //  }else if(tax_type.equals("sale")){
+                                  }
+                                  if(tax_type.equals("sale")){
 
                                 stateModel.setId(id);
 
@@ -1215,7 +1216,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                                 }
                                 stateModel.setName(name);
                                 sale_tax_list.add(stateModel);
-                                //  }
+                                  }
 
 
                             }

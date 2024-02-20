@@ -100,11 +100,11 @@ public class AllAddProductListAdapter extends RecyclerView.Adapter<AllAddProduct
 //        holder.product_name.setShowLessTextColor(Color.RED); // or other color
 
 
-        Glide.with(mContext)
-                .load(ApiConstants.BASE_URL + model.getImageUrl())
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(holder.images);
+//        Glide.with(mContext)
+//                .load(ApiConstants.BASE_URL + model.getImageUrl())
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .skipMemoryCache(true)
+//                .into(holder.images);
 
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {

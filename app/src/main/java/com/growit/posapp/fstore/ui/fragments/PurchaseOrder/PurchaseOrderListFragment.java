@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -75,7 +76,8 @@ public class PurchaseOrderListFragment extends Fragment {
     }
     private  void init(){
         binding.toolbarLay.setVisibility(View.VISIBLE);
-
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gif);
+        binding.gif.setVisibility(View.VISIBLE);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.transactionRecyclerView.setLayoutManager(layoutManager);
         if (Utility.isNetworkAvailable(getContext())) {
@@ -134,7 +136,8 @@ public class PurchaseOrderListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.POST_PURCHASE_ORDER_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        binding.gif.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -145,9 +148,9 @@ public class PurchaseOrderListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
+                    binding.gif.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+//                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<PurchaseModel>() {
                         }.getType();
@@ -176,6 +179,7 @@ public class PurchaseOrderListFragment extends Fragment {
 
             }
         }, error -> {
+            binding.gif.setVisibility(View.GONE);
             binding.noDataFound.setVisibility(View.VISIBLE);
             binding.transactionRecyclerView.setVisibility(View.GONE);
         });

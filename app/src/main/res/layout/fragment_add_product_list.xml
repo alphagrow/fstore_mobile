@@ -6,11 +6,17 @@
     android:layout_width="match_parent"
     android:background="#FFFF"
     android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/gif_load"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+    </ImageView>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -48,6 +54,7 @@
 
 
     </LinearLayout>
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
@@ -57,6 +64,8 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="36dp"

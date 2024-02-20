@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.R;
@@ -42,6 +44,7 @@ public class OrderHistoryFragment extends Fragment {
     OrderHistoryAdapter orderHistoryAdapter;
     TextView noDataFound,total_order_text;
     private  String mResponse="";
+    ImageView gif_loader;
     public static OrderHistoryFragment newInstance() {
         OrderHistoryFragment fragment = new OrderHistoryFragment();
         return fragment;
@@ -58,6 +61,9 @@ public class OrderHistoryFragment extends Fragment {
         recyclerView = view.findViewById(R.id.orderRecyclerView);
         noDataFound = view.findViewById(R.id.noDataFound);
         total_order_text = view.findViewById(R.id.total_order_text);
+        gif_loader =view.findViewById(R.id.gif_loader);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_loader);
+        gif_loader.setVisibility(View.VISIBLE);
         if (Utility.isNetworkAvailable(getActivity())) {
             getOrderHistory();
         }else {
@@ -93,8 +99,8 @@ public class OrderHistoryFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ORDERS_HISTORY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
-
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        gif_loader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -105,9 +111,9 @@ public class OrderHistoryFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
+                    gif_loader.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+//                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<ProductDetail>() {
                         }.getType();
@@ -135,6 +141,7 @@ public class OrderHistoryFragment extends Fragment {
 
             }
         }, error -> {
+            gif_loader.setVisibility(View.GONE);
             noDataFound.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         });

@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -66,6 +67,7 @@ public class ProductExtraPriceListFragment extends Fragment {
     private boolean isSearch = false;
     ImageView backBtn;
     ProductExtraPriceAdapter customAdapter;
+    ImageView gifLoader;
     private List<ExtraVariantData> search_variant=new ArrayList<>();
     public ProductExtraPriceListFragment() {
         // Required empty public constructor
@@ -93,6 +95,9 @@ public class ProductExtraPriceListFragment extends Fragment {
         total_order_text = view.findViewById(R.id.total_order_text);
         add_text = view.findViewById(R.id.add_text);
         seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
+        gifLoader = view.findViewById(R.id.gif_load);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gifLoader);
+        gifLoader.setVisibility(View.VISIBLE);
         if (Utility.isNetworkAvailable(getActivity())) {
             getProductExtraPrice();
         } else {
@@ -163,8 +168,8 @@ public class ProductExtraPriceListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_EXTRA_PRICE + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 
-        Utility.showDialoge("Please wait while a moment...", getActivity());
-
+      //  Utility.showDialoge("Please wait while a moment...", getActivity());
+        gifLoader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -174,6 +179,7 @@ public class ProductExtraPriceListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+                    gifLoader.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         Utility.dismissDialoge();
                         Gson gson = new Gson();
@@ -193,6 +199,7 @@ public class ProductExtraPriceListFragment extends Fragment {
 
             }
         }, error -> {
+            gifLoader.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
         });
         queue.add(jsonObjectRequest);

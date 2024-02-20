@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.R;
@@ -53,6 +55,7 @@ public class TransactionHistoryFragment extends Fragment {
     TransactionHistoryAdapter transactionHistoryAdapter;
     EditText seacrEditTxt;
     Activity activity;
+    ImageView gif_loader;
     public static TransactionHistoryFragment newInstance() {
         TransactionHistoryFragment fragment = new TransactionHistoryFragment();
         return fragment;
@@ -66,6 +69,9 @@ public class TransactionHistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction_history, container, false);
+        gif_loader =view.findViewById(R.id.gif_loader);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_loader);
+        gif_loader.setVisibility(View.VISIBLE);
         recyclerView = view.findViewById(R.id.transactionRecyclerView);
         noDataFound = view.findViewById(R.id.noDataFound);
         seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
@@ -125,11 +131,11 @@ public class TransactionHistoryFragment extends Fragment {
     }
     private void getTransactionHistory() {
         SessionManagement sm = new SessionManagement(getActivity());
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());//162.246.254.203:8069
 //        String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSACTION_HISTORY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken()+"&"+"start_date="+"2023-08-16"+"&"+"end_date="+"2023-08-16";
         String url = ApiConstants.BASE_URL + ApiConstants.GET_TRANSACTION_HISTORY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-
+        gif_loader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -139,7 +145,8 @@ public class TransactionHistoryFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-                    Utility.dismissDialoge();
+                    gif_loader.setVisibility(View.GONE);
+//                    Utility.dismissDialoge();
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
 
                         Gson gson = new Gson();
@@ -167,6 +174,7 @@ public class TransactionHistoryFragment extends Fragment {
 
             }
         }, error -> {
+            gif_loader.setVisibility(View.GONE);
             noDataFound.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         });

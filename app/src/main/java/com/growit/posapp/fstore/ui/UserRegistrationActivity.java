@@ -79,7 +79,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     List<StateModel> stateNames = new ArrayList<>();
     List<StateModel> districtNames = new ArrayList<>();
     List<StateModel> talukaNames = new ArrayList<>();
-    private String login_id = "", str_password = "", str_comp_name = "", str_city = "", str_phone = "", str_website = "", str_insectLicNo = "", str_seedLicNo = "", str_fertLicNo = "", str_gst_no = "", nameStr = "", mobileStr = "", emailStr = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "",user_email_str="";
+    private String login_id = "", str_password = "", str_comp_name = "", str_city = "", str_phone = "", str_website = "", str_insectLicNo = "", str_seedLicNo = "", str_fertLicNo = "", str_gst_no = "", nameStr = "", mobileStr = "", comp_email = "", districtStr = "", streetStr = "", zipStr = "", stateStr = "", talukaStr = "",user_email_str="";
     boolean isAllFieldsChecked = false;
     String update_companyProfile;
     int state, district, taluka;
@@ -225,22 +225,22 @@ public class UserRegistrationActivity extends AppCompatActivity {
         binding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                str_gst_no = binding.etGstNo.getText().toString();
-                nameStr = binding.etUsername.getText().toString();
-                user_email_str = binding.edUserEmail.getText().toString();
-                mobileStr = binding.etMobile.getText().toString();
-                emailStr = binding.etUseremail.getText().toString();
-                zipStr = binding.etPincode.getText().toString();
-                streetStr = binding.etUseraddress.getText().toString();
-                login_id = binding.edUserId.getText().toString();
-                str_password = binding.etPassword.getText().toString();
-                str_comp_name = binding.etCompanyName.getText().toString();
-                str_city = binding.etCity.getText().toString();
-                str_phone = binding.etPhone.getText().toString();
-                str_website = binding.etWebsite.getText().toString();
-                str_insectLicNo = binding.etInsectLicNo.getText().toString();
-                str_fertLicNo = binding.etFertLicNo.getText().toString();
-                str_seedLicNo = binding.etSeedLicNo.getText().toString();
+                str_gst_no = binding.etGstNo.getText().toString().trim();
+                nameStr = binding.etUsername.getText().toString().trim();
+                user_email_str = binding.edUserEmail.getText().toString().trim();
+                mobileStr = binding.etMobile.getText().toString().trim();
+                comp_email = binding.etCompMail.getText().toString().trim();
+                zipStr = binding.etPincode.getText().toString().trim();
+                streetStr = binding.etUseraddress.getText().toString().trim();
+                login_id = binding.edUserId.getText().toString().trim();
+                str_password = binding.etPassword.getText().toString().trim();
+                str_comp_name = binding.etCompanyName.getText().toString().trim();
+                str_city = binding.etCity.getText().toString().trim();
+                str_phone = binding.etPhone.getText().toString().trim();
+                str_website = binding.etWebsite.getText().toString().trim();
+                str_insectLicNo = binding.etInsectLicNo.getText().toString().trim();
+                str_fertLicNo = binding.etFertLicNo.getText().toString().trim();
+                str_seedLicNo = binding.etSeedLicNo.getText().toString().trim();
 
                 if (stateStr.length() == 0) {
                     Toast.makeText(UserRegistrationActivity.this, R.string.Select_state, Toast.LENGTH_SHORT).show();
@@ -281,15 +281,15 @@ public class UserRegistrationActivity extends AppCompatActivity {
                 str_gst_no = binding.etGstNo.getText().toString();
                 nameStr = binding.etUsername.getText().toString();
                 mobileStr = binding.etMobile.getText().toString();
-                emailStr = binding.etUseremail.getText().toString();
+                comp_email = binding.etCompMail.getText().toString();
                 zipStr = binding.etPincode.getText().toString();
                 streetStr = binding.etUseraddress.getText().toString();
-                login_id = binding.edUserId.getText().toString();
+                login_id = binding.edUserId.getText().toString().trim();
                 str_password = binding.etPassword.getText().toString();
                 str_comp_name = binding.etCompanyName.getText().toString();
                 str_city = binding.etCity.getText().toString();
                 str_phone = binding.etPhone.getText().toString();
-                str_website = binding.etWebsite.getText().toString();
+                str_website = binding.etWebsite.getText().toString().trim();
                 str_insectLicNo = binding.etInsectLicNo.getText().toString();
                 str_fertLicNo = binding.etFertLicNo.getText().toString();
                 str_seedLicNo = binding.etSeedLicNo.getText().toString();
@@ -349,7 +349,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("country_id", ApiConstants.COUNTRY_ID);
         new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.GET_STATES, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
@@ -459,7 +459,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("states_id", stateStr);
         new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
@@ -512,7 +512,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("district_id", districtStr);
         new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.GET_TALUKA, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
@@ -800,7 +800,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private void UserRegistration() {
         SessionManagement sm = new SessionManagement(UserRegistrationActivity.this);
         Map<String, String> params = new HashMap<>();
-        // params.put("user_id", sm.getUserID() + "");
+         params.put("user_email", user_email_str);
         params.put("name", nameStr);
         params.put("login", login_id);
 //        params.put("company_logo", str_image_logo);
@@ -815,7 +815,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         params.put("zip", zipStr);
         params.put("phone", str_phone);
         params.put("mobile", mobileStr);
-        params.put("email", emailStr);
+        params.put("email", comp_email);
         params.put("website", str_website);
         params.put("insect_lic_no", str_insectLicNo);
         params.put("fert_lic_no", str_fertLicNo);
@@ -823,9 +823,9 @@ public class UserRegistrationActivity extends AppCompatActivity {
         params.put("vat", str_gst_no);
 
         Utility.showDialoge("", UserRegistrationActivity.this);
-        Log.v("add", String.valueOf(params));
+        Log.v("User_registration", String.valueOf(params));
         new VolleyRequestHandler(UserRegistrationActivity.this, params).createRequest(ApiConstants.ADD_COMPANY, new VolleyCallback() {
-            private String message = "Registration failed!!";
+            private String message = " failed!!";
 
             @Override
             public void onSuccess(Object result) throws JSONException {
@@ -863,7 +863,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
     private void UpdateUserRegistration(Bitmap bitmap) {
         SessionManagement sm = new SessionManagement(this);
 
-        String apiURL = ApiConstants.BASE_URL + "" + ApiConstants.UPDATE_COMPANY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "street=" + streetStr + "&" + "country_id=" + ApiConstants.COUNTRY_ID + "&" + "state_id=" + stateStr + "&" + "city=" + str_city + "&" + "zip=" + zipStr + "&" + "phone=" + str_phone + "&" + "mobile=" + mobileStr + "&" + "email=" + emailStr + "&" + "website=" + str_website + "&" + "insect_lic_no=" + str_insectLicNo + "&" + "fert_lic_no=" + str_fertLicNo + "&" + "seed_lic_no=" + str_seedLicNo + "&" + "vat=" + str_gst_no + "&" + "company_id=" + sm.getCompanyID() + "" + "&" + "company_name=" + str_comp_name + "&" + "taluka_id=" + talukaStr + "&" + "district_id=" + districtStr;
+        String apiURL = ApiConstants.BASE_URL + "" + ApiConstants.UPDATE_COMPANY + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken() + "&" + "street=" + streetStr + "&" + "country_id=" + ApiConstants.COUNTRY_ID + "&" + "state_id=" + stateStr + "&" + "city=" + str_city + "&" + "zip=" + zipStr + "&" + "phone=" + str_phone + "&" + "mobile=" + mobileStr + "&" + "email=" + comp_email + "&" + "website=" + str_website + "&" + "insect_lic_no=" + str_insectLicNo + "&" + "fert_lic_no=" + str_fertLicNo + "&" + "seed_lic_no=" + str_seedLicNo + "&" + "vat=" + str_gst_no + "&" + "company_id=" + sm.getCompanyID() + "" + "&" + "company_name=" + str_comp_name + "&" + "taluka_id=" + talukaStr + "&" + "district_id=" + districtStr;
         Log.d("apiURL", apiURL);
         Utility.showDialoge("Please wait while a moment...", this);
         VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, apiURL, new Response.Listener<NetworkResponse>() {
@@ -1032,7 +1032,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
                         binding.etGstNo.setText(gst);
                         binding.etUsername.setText(name);
                         binding.etMobile.setText(mobile);
-                        binding.etUseremail.setText(email);
+                        binding.etCompMail.setText(email);
                         binding.etPincode.setText(zip);
                         binding.etUseraddress.setText(street);
                         binding.etCompanyName.setText(partner);
@@ -1066,7 +1066,7 @@ public class UserRegistrationActivity extends AppCompatActivity {
         binding.etMobile.setText("");
         binding.etUseraddress.setText("");
         binding.etPincode.setText("");
-        binding.etUseremail.setText("");
+        binding.etCompMail.setText("");
         binding.etCity.setText("");
         binding.etPassword.setText("");
         binding.edUserId.setText("");
