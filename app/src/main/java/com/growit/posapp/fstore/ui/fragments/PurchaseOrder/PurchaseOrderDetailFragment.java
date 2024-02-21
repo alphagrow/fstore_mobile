@@ -133,6 +133,15 @@ public class PurchaseOrderDetailFragment extends Fragment {
                     if(view !=null) {
 
                         EditText qutEditText = view.findViewById(R.id.edi_qut_text);
+
+                        EditText edi_cir_text = view.findViewById(R.id.edi_cir_text);
+                        EditText edi_batch_no_text = view.findViewById(R.id.edi_batch_no_text);
+                        EditText edi_mfd_date = view.findViewById(R.id.edi_mfd_date);
+                        EditText edi_mkd_date = view.findViewById(R.id.edi_mkd_date);
+                        String cir_number=edi_cir_text.getText().toString().trim();
+                        String batch_number=edi_batch_no_text.getText().toString().trim();
+                        String mfd_date=edi_mfd_date.getText().toString().trim();
+                        String mkd_date=edi_mkd_date.getText().toString().trim();
                         qutEditText.setText(String.valueOf(productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity()));
                         double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
 
@@ -146,6 +155,11 @@ public class PurchaseOrderDetailFragment extends Fragment {
                             // obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
                             obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getProductId());
                             obj.putOpt("quantity", qut_str);
+
+                            obj.putOpt("cir_number", cir_number);
+                            obj.putOpt("batch_number", batch_number+"");
+                            obj.putOpt("mfd_date", mfd_date);
+                            obj.putOpt("mkd_by", mkd_date);
                             jsonArray.put(obj);
                         } catch (JSONException e) {
                             throw new RuntimeException(e);

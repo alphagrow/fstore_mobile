@@ -132,7 +132,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     private RecyclerView recy_image;
     Bitmap bitmap = null;
     RadioGroup sel_non_gov;
-    ImageAdapter adapter;
+    AttributeListSpinnerAdapter adapter;
     TextView mfd_date, exp_date, exp_date_alarm;
     String str_image_crop;
     DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
@@ -158,7 +158,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     List<UomCategoryModel> uom_model_type = new ArrayList<>();
     UomLineModel uom_model_list;
     List<UomLineModel> uomLines = new ArrayList<>();
-
+    private List<AttributeModel> selectedItem = new ArrayList<>();
     Bitmap imageBitmap = null;
     List<StateModel> purchase_tax_list = new ArrayList<>();
     List<StateModel> sale_tax_list = new ArrayList<>();
@@ -216,6 +216,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             binding.description.setText(list.get(position).getDescription());
             binding.ediProductType.setText(list.get(position).getDetailedType());
             attributes = list.get(position).getAttributes();
+
+
+//            createTextDynamically(attributes);
             str_uom = list.get(position).getUomId();
             binding.etUomMeasure.setText(list.get(position).getUom_po_name());
             binding.etUomType.setText(list.get(position).getUom_name());
@@ -669,18 +672,48 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                         Type listType = new TypeToken<ListAttributesModel>() {
                         }.getType();
                         model_attribute = gson.fromJson(response.toString(), listType);
-                        AttributeModel model_v = new AttributeModel();
-                        model_v.setId(-1);
-                        model_v.setName("--Select Attribute--");
-                        model.add(model_v);
+//                        AttributeModel model_v = new AttributeModel();
+//                        model_v.setId(-1);
+//                        model_v.setName("--Select Attribute--");
+//                        model.add(model_v);
                         model.addAll(model_attribute.getAttributes());
 
-                        if (getContext() != null) {
-                            AttributeListSpinnerAdapter adapter = new AttributeListSpinnerAdapter(getContext(), model);
-                            binding.typeVariantSpinner.setAdapter(adapter);
+                        if(getContext()!=null) {
+//                            AttributeListSpinnerAdapter adapter = new AttributeListSpinnerAdapter(getContext(), model);
+//                            binding.typeVariantSpinner.setAdapter(adapter);
 //                            binding.typeVariantSpinner.setSelection(spinnerPosition);
+
+                            selectedItem.clear();
+
+                            adapter = new AttributeListSpinnerAdapter(getContext(), model, selectedItem
+                            );
+
+                            binding.typeVariantSpinner.setAdapter(adapter);
+                            adapter.setOnItemSelectedListener(new AttributeListSpinnerAdapter.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(List<AttributeModel> selectedItems, int pos) {
+                                    if (selectedItems == null || selectedItems.isEmpty()) {
+                                        //  name.setText("Codewenation");
+                                        binding.linearLayoutMain.removeAllViews();
+                                    } else {
+                                        StringBuilder selectedNames = new StringBuilder();
+                                        for (AttributeModel item : selectedItems) {
+                                            selectedNames.append(item.getName()).append(",");
+                                        }
+                                        // Remove the trailing comma and space
+                                        //  selectedNames.delete(selectedNames.length() -0, selectedNames.length());
+                                        //  name.setText(selectedNames.toString());
+                                        createTextDynamically(selectedItems);
+                                    }
+
+                                    Log.e("getSelectedItems", selectedItems.toString());
+                                    Log.e("getSelectedItems", String.valueOf(selectedItems.size()));
+                                }
+                            });
+
                         }
-                        createTextDynamically(model_attribute.getAttributes());
+
+                       // createTextDynamically(model_attribute.getAttributes());
 
                     }
                 } catch (JSONException e) {
@@ -776,6 +809,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
     private void createTextDynamically(List<AttributeModel> model) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        binding.linearLayoutMain.removeAllViews();
         int width = display.getWidth();
         LinearLayout l = new LinearLayout(getActivity());
         binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);

@@ -307,7 +307,6 @@
                     android:textColor="@color/edt_top_text_color" />
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/twenty_five"
