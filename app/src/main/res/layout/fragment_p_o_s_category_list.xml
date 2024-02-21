@@ -10,6 +10,12 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/gif_load"
+                android:layout_width="match_parent"
+                android:visibility="visible"
+                android:layout_height="fill_parent"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
@@ -104,11 +110,6 @@
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                    <ImageView
-                        android:id="@+id/gif_loader"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    </ImageView>
 
                     <TextView
                         android:id="@+id/noDataFound"

@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
@@ -94,6 +95,8 @@ public class AddTalukaFragment extends Fragment {
 
 
     private void init () {
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoad);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         list = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerVendor.setLayoutManager(layoutManager);
@@ -544,6 +547,7 @@ public class AddTalukaFragment extends Fragment {
     private void getTalukaData() {
         Map<String, String> params = new HashMap<>();
      //   params.put("district_id", districtStr);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_TALUKA, new VolleyCallback() {
             private String message = " failed!!";
 
@@ -554,6 +558,7 @@ public class AddTalukaFragment extends Fragment {
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
+                binding.gifLoad.setVisibility(View.GONE);
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                     JSONArray jsonArray = obj.getJSONArray("data");
                     list.clear();
@@ -591,7 +596,7 @@ public class AddTalukaFragment extends Fragment {
 
             @Override
             public void onError(String result) {
-
+                binding.gifLoad.setVisibility(View.GONE);
                 Log.v("Response", result.toString());
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }

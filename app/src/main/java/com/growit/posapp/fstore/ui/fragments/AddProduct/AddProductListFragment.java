@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.text.Editable;
@@ -19,7 +20,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -69,6 +72,14 @@ public class AddProductListFragment extends Fragment {
     String product_data;
     List<PurchaseProductModel> purchaseProductModel;
     int position;
+    ImageView gif_load;
+    RecyclerView recycler;
+    TextView noDataFound,totalCustomerText;
+    SwipeRefreshLayout refreshLayout;
+    ImageView backBtn;
+    TextView addText;
+    EditText seacrEditTxt;
+
     public AddProductListFragment() {
         // Required empty public constructor
     }
@@ -89,22 +100,33 @@ public class AddProductListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 //        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_product_list, container, false);
-        binding= FragmentAddProductListBinding.inflate(inflater, container, false);
+//        binding= DataBindingUtil.inflate(inflater, R.layout.fragment_add_product_list,container, false);
+        View view = inflater.inflate(R.layout.fragment_add_product_list, container, false);
+
 
         if (getArguments() != null) {
 
 
         }
-        init();
-        return binding.getRoot();
+        init(view);
+        return  view;
+//        return binding.getRoot();
     }
 
-    private void init() {
-        binding.gifLoad.setVisibility(View.VISIBLE);
-        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoad);
+    private void init(View view) {
+        gif_load =view.findViewById(R.id.gif_load);
+        recycler =view.findViewById(R.id.recycler);
+        noDataFound =view.findViewById(R.id.noDataFound);
+        totalCustomerText =view.findViewById(R.id.total_customer_text);
+        refreshLayout =view.findViewById(R.id.refreshLayout);
+        backBtn =view.findViewById(R.id.backBtn);
+        addText =view.findViewById(R.id.add_text);
+        seacrEditTxt =view.findViewById(R.id.seacrEditTxt);
 
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_load);
+//        gif_load.setVisibility(View.VISIBLE);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
-        binding.recycler.setLayoutManager(layoutManager);
+       recycler.setLayoutManager(layoutManager);
 
         if (getArguments() != null) {
             product_data = getArguments().getString("product_list");
@@ -125,28 +147,28 @@ public class AddProductListFragment extends Fragment {
             }
         }
 
-        binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                binding.refreshLayout.setRefreshing(false);
-                binding.gifLoad.setVisibility(View.VISIBLE);
-                if (Utility.isNetworkAvailable(getContext())) {
-                    if(product_data.equals("crop_product")) {
-                        crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
-                        crop_id = String.valueOf(crop_mode.get(position).getValueId());
-                        getProductList(crop_id);
-                    }else {
-                        getAllProductList();
-                    }
-
-                } else {
-                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-        });
-        binding.backBtn.setOnClickListener(new View.OnClickListener() {
+//        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshLayout.setRefreshing(false);
+//                gif_load.setVisibility(View.VISIBLE);
+//                if (Utility.isNetworkAvailable(getContext())) {
+//                    if(product_data.equals("crop_product")) {
+//                        crop_mode = (List<Value>) getArguments().getSerializable("crop_list");
+//                        crop_id = String.valueOf(crop_mode.get(position).getValueId());
+//                        getProductList(crop_id);
+//                    }else {
+//                        getAllProductList();
+//                    }
+//
+//                } else {
+//                    Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
+//
+//                }
+//
+//            }
+//        });
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment = POSCategoryListFragment.newInstance();
@@ -155,7 +177,7 @@ public class AddProductListFragment extends Fragment {
             }
         });
 
-        binding.addText.setOnClickListener(new View.OnClickListener() {
+       addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment = AddProductFragment.newInstance();
@@ -164,7 +186,7 @@ public class AddProductListFragment extends Fragment {
             }
         });
 
-        binding.seacrEditTxt.addTextChangedListener(new TextWatcher() {
+       seacrEditTxt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -172,7 +194,9 @@ public class AddProductListFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterList(s.toString());
+                if(s!=null) {
+                    filterList(s.toString());
+                }
             }
 
             @Override
@@ -198,7 +222,7 @@ public class AddProductListFragment extends Fragment {
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + pos_category_id + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
 //        Utility.showDialoge("Please wait while a moment...", getActivity());
-        binding.gifLoad.setVisibility(View.VISIBLE);
+      gif_load.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -222,18 +246,18 @@ public class AddProductListFragment extends Fragment {
                             purchaseProductModel = model.getData().get(i).getProducts();
                         }
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
-                            binding.gifLoad.setVisibility(View.GONE);
-                            binding.noDataFound.setVisibility(View.GONE);
+                           gif_load.setVisibility(View.GONE);
+                            noDataFound.setVisibility(View.GONE);
                         } else {
-                            binding.gifLoad.setVisibility(View.GONE);
-                            binding.noDataFound.setVisibility(View.GONE);
-                            binding.totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "Products");
+                           gif_load.setVisibility(View.GONE);
+                           noDataFound.setVisibility(View.GONE);
+                           totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "Products");
 
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             adapter = new AddProductListAdapter(getActivity(), purchaseProductModel,crop_id,crop_name);
-                            binding.recycler.setAdapter(adapter);
-                            binding.recycler.setLayoutManager(layoutManager);
+                          recycler.setAdapter(adapter);
+                           recycler.setLayoutManager(layoutManager);
 
                         }
 
@@ -245,7 +269,7 @@ public class AddProductListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-        binding.gifLoad.setVisibility(View.GONE);
+//       gif_load.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
 
     }
@@ -277,8 +301,8 @@ public class AddProductListFragment extends Fragment {
         //        String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
-//       Utility.showDialoge("Please wait while a moment...", getActivity());
-        binding.gifLoad.setVisibility(View.VISIBLE);
+//      Utility.showDialoge("Please wait while a moment...", getActivity());
+       gif_load.setVisibility(View.VISIBLE);
         long beginTime = System.currentTimeMillis();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -292,9 +316,8 @@ public class AddProductListFragment extends Fragment {
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        binding.gifLoad.setVisibility(View.GONE);
 
-                        Utility.dismissDialoge();
+//                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<PurchaseModel>() {
                         }.getType();
@@ -305,17 +328,18 @@ public class AddProductListFragment extends Fragment {
                             purchaseProductModel = model.getData().get(i).getProducts();
                         }
                         if (purchaseProductModel == null || purchaseProductModel.size() == 0) {
-                            binding.noDataFound.setVisibility(View.GONE);
+                           noDataFound.setVisibility(View.GONE);
                         } else {
-                            binding.noDataFound.setVisibility(View.GONE);
-                            binding.totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "All Products");
+                           noDataFound.setVisibility(View.GONE);
+                           totalCustomerText.setText("Total: " + purchaseProductModel.size() + " " + "All Products");
                             long responseTime = System.currentTimeMillis() - beginTime;
                             Log.v("Response_time", String.valueOf(responseTime));
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             all_adapter = new AllAddProductListAdapter(getActivity(), purchaseProductModel);
-                            binding.recycler.setAdapter(all_adapter);
-                            binding.recycler.setLayoutManager(layoutManager);
+                           recycler.setAdapter(all_adapter);
+                           recycler.setLayoutManager(layoutManager);
+                               gif_load.setVisibility(View.GONE);
 
                         }
 
@@ -327,7 +351,7 @@ public class AddProductListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-        binding.gifLoad.setVisibility(View.GONE);
+//       gif_load.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
 
     }

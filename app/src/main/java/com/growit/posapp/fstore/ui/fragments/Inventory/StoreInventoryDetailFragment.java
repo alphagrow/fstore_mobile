@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.StoreInventoryDetailAdapter;
@@ -47,7 +48,7 @@ public class StoreInventoryDetailFragment extends Fragment {
     StoreInventoryDetailAdapter orderHistoryAdapter;
     TextView noDataFound,total_order_text,add_text;
     String productID="";
-    ImageView backBtn;
+    ImageView backBtn,gif_load;
     EditText seacrEditTxt;
     public StoreInventoryDetailFragment() {
         // Required empty public constructor
@@ -75,6 +76,9 @@ public class StoreInventoryDetailFragment extends Fragment {
         backBtn = view.findViewById(R.id.backBtn);
         add_text = view.findViewById(R.id.add_text);
         seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
+        gif_load = view.findViewById(R.id.gif_loader);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_load);
+        gif_load.setVisibility(View.VISIBLE);
         if (getArguments() != null) {
             productID = getArguments().getString("PID");
             if (Utility.isNetworkAvailable(getActivity())) {
@@ -122,9 +126,9 @@ public class StoreInventoryDetailFragment extends Fragment {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_Detail + "user_id=" + sm.getUserID() + "&"+"product_id=" + productID+"&"+ "token=" + sm.getJWTToken();
-
+        gif_load.setVisibility(View.VISIBLE);
         //  String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_Detail + "user_id=" + sm.getUserID() + "&" +  "shop_id=" + sm.getShopID() + "&"+"product_id=" + productID+"&"+ "token=" + sm.getJWTToken();
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -137,6 +141,7 @@ public class StoreInventoryDetailFragment extends Fragment {
                     String status = obj.optString("status");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
+                        gif_load.setVisibility(View.GONE);
                         Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
                         JSONArray productArray = jsonArray.getJSONObject(0).getJSONArray("product_variant_quantities");
@@ -186,6 +191,7 @@ public class StoreInventoryDetailFragment extends Fragment {
 
             }
         }, error -> {
+            gif_load.setVisibility(View.GONE);
             noDataFound.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         });

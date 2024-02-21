@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -58,7 +59,7 @@ public class StoreInventoryFragment extends Fragment {
     StoreInventoryAdapters orderHistoryAdapter;
     TextView noDataFound,total_order_text,add_text;
      EditText seacrEditTxt;
-     ImageView backBtn;
+     ImageView backBtn,gif_load;
     private boolean isSearch = false;
     private List<Product> search_product=new ArrayList<>();
     public StoreInventoryFragment() {
@@ -87,6 +88,9 @@ public class StoreInventoryFragment extends Fragment {
         add_text = view.findViewById(R.id.add_text);
         seacrEditTxt = view.findViewById(R.id.seacrEditTxt);
         backBtn = view.findViewById(R.id.backBtn);
+        gif_load = view.findViewById(R.id.gif_loader);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_load);
+        gif_load.setVisibility(View.VISIBLE);
         if (Utility.isNetworkAvailable(getActivity())) {
             getStoreInventory();
         }else {
@@ -157,7 +161,8 @@ public class StoreInventoryFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_STOCK_QUANT + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.d("product_list", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        gif_load.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -204,7 +209,7 @@ public class StoreInventoryFragment extends Fragment {
                             orderHistoryAdapter = new StoreInventoryAdapters(getActivity(), productList);
                             recyclerView.setAdapter(orderHistoryAdapter);
                             recyclerView.setLayoutManager(layoutManager);
-
+                            gif_load.setVisibility(View.GONE);
                         }
                     }
                 }catch (JSONException e) {

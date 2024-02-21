@@ -399,7 +399,7 @@ public class AddShopAndShopListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-        binding.gifLoad.setVisibility(View.GONE);
+//        binding.gifLoad.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
     }
     private void filterList (String text){

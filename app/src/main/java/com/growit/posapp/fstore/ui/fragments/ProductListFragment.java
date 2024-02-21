@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CropAdapter;
 import com.growit.posapp.fstore.adapters.ProductListAdapter;
@@ -58,6 +60,7 @@ public class ProductListFragment extends Fragment {
     }
     Activity contexts;
     TextView noDataFound;
+    ImageView gif_loader;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, parent, false);
@@ -66,7 +69,9 @@ public class ProductListFragment extends Fragment {
         searchEditTxt = view.findViewById(R.id.seacrEditTxt);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         noDataFound = view.findViewById(R.id.noDataFound);
-
+        gif_loader =view.findViewById(R.id.gif_loader);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_loader);
+        gif_loader.setVisibility(View.VISIBLE);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -112,6 +117,7 @@ public class ProductListFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(), croplist_view, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+
                         cropID = cropList.get(position).getValueId() + "";
                         cropName=cropList.get(position).getValueName();
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);
@@ -182,6 +188,7 @@ public class ProductListFragment extends Fragment {
       Log.d("product_list",url);
     //    Utility.showDialoge("Please wait while a moment...", getActivity());
         long beginTime = System.currentTimeMillis();
+//       gif_loader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -194,6 +201,7 @@ public class ProductListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+//                    gif_loader.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                  //       Utility.dismissDialoge();
                         productList.clear();
@@ -241,7 +249,8 @@ public class ProductListFragment extends Fragment {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        gif_loader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -251,9 +260,9 @@ public class ProductListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
+                    gif_loader.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+//                        Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
                         cropList = new ArrayList<>();
                         if (jsonArray.length() > 0) {

@@ -85,12 +85,13 @@ public class POSCategoryListFragment extends Fragment {
         return binding.getRoot();
     }
     private void init(){
+
         cropList = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerPos.setLayoutManager(layoutManager);
 
-        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoader);
-        binding.gifLoader.setVisibility(View.VISIBLE);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoad);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         if (Utility.isNetworkAvailable(getContext())) {
             getCropRequest();
         } else {
@@ -133,7 +134,7 @@ public class POSCategoryListFragment extends Fragment {
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 //        Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);
-        binding.gifLoader.setVisibility(View.VISIBLE);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -145,7 +146,7 @@ public class POSCategoryListFragment extends Fragment {
                     String status = obj.optString("status");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        binding.gifLoader.setVisibility(View.GONE);
+                        binding.gifLoad.setVisibility(View.GONE);
 //                        Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
                         cropList.clear();
@@ -180,7 +181,7 @@ public class POSCategoryListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
-        binding.gifLoader.setVisibility(View.GONE);
+//        binding.gifLoader.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
     }
 
