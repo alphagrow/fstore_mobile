@@ -117,7 +117,6 @@ public class ProductListFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(), croplist_view, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-
                         cropID = cropList.get(position).getValueId() + "";
                         cropName=cropList.get(position).getValueName();
                         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1);

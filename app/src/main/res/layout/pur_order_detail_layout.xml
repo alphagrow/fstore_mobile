@@ -301,7 +301,7 @@
                     android:background="@drawable/custom_edit_text_cut"
                     android:layout_marginTop="@dimen/top_marg_edit"
                     android:hint=" "
-                    android:inputType="date"
+                    android:inputType="text"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal"
