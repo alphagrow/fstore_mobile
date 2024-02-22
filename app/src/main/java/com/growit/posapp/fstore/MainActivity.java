@@ -880,7 +880,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        vendor.setVisibility(View.GONE);
+//        vendor.setVisibility(View.GONE);
     }
     private void closeSession(String session) {
         ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);

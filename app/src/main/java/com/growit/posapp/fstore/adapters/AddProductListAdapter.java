@@ -107,7 +107,7 @@ public class AddProductListAdapter extends RecyclerView.Adapter<AddProductListAd
         Glide.with(mContext)
                 .load(ApiConstants.BASE_URL + model.getImageUrl())
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+//                .skipMemoryCache(true)
                 .into(holder.images);
 
         holder.linear_click.setOnClickListener(new View.OnClickListener() {

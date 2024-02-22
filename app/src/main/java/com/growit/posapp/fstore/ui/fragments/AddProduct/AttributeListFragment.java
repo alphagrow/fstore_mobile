@@ -156,7 +156,7 @@ public class AttributeListFragment extends Fragment {
                     String status = obj.optString("status");
                     binding.gifLoad.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+//                        Utility.dismissDialoge();
                         model.clear();
                         JSONArray jsonArray = obj.getJSONArray("attributes");
                         Gson gson = new Gson();

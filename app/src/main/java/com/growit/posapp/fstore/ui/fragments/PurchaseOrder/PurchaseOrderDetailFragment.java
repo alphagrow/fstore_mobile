@@ -155,7 +155,6 @@ public class PurchaseOrderDetailFragment extends Fragment {
                             // obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
                             obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getProductId());
                             obj.putOpt("quantity", qut_str);
-
                             obj.putOpt("cir_number", cir_number);
                             obj.putOpt("batch_number", batch_number+"");
                             obj.putOpt("mfd_date", mfd_date);

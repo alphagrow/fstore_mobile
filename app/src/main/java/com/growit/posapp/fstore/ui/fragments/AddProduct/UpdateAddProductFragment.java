@@ -145,6 +145,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     String crop_id, str_crop_name;
     Activity contexts;
     List<AttributeModel> model = new ArrayList<>();
+
     ArrayList<String> attribute_id_list = new ArrayList<>();
     ListAttributesModel model_attribute;
     String str_non_gov_product = "Non-Gov";
@@ -216,9 +217,28 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             binding.description.setText(list.get(position).getDescription());
             binding.ediProductType.setText(list.get(position).getDetailedType());
             attributes = list.get(position).getAttributes();
+//            selectedItem.clear();
+            for(int i=0;i<attributes.size();i++){
+                AttributeModel attributeModel=new AttributeModel();
+                attributeModel.setName(attributes.get(i).getAttributeName());
+                attributeModel.setId(attributes.get(i).getAttribute_id());
+                List<AttributeValue>value_model =new ArrayList<>();
+                for (int j=0;j<attributes.get(i).getValues().size();j++){
+                    AttributeValue value=new AttributeValue();
+                    value.setId(attributes.get(i).getValues().get(j).getValueId());
+                    value.setName(attributes.get(i).getValues().get(j).getValueName());
+                    value_model.add(value);
+                }
+
+                attributeModel.setValues(value_model);
+
+                model.add(attributeModel);
+                selectedItem.add(attributeModel);
 
 
-//            createTextDynamically(attributes);
+            }
+
+            createTextDynamically(model);
             str_uom = list.get(position).getUomId();
             binding.etUomMeasure.setText(list.get(position).getUom_po_name());
             binding.etUomType.setText(list.get(position).getUom_name());
@@ -399,6 +419,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                return;
 //            }
 
+            if (str_description.length() == 0) {
+                Toast.makeText(getActivity(), "Enter the Description", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (str_product_type.length() == 0) {
                 Toast.makeText(getActivity(), "Enter the Product type", Toast.LENGTH_SHORT).show();
                 return;
@@ -683,10 +707,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                            binding.typeVariantSpinner.setAdapter(adapter);
 //                            binding.typeVariantSpinner.setSelection(spinnerPosition);
 
-                            selectedItem.clear();
+//                            selectedItem.clear();
 
-                            adapter = new AttributeListSpinnerAdapter(getContext(), model, selectedItem
-                            );
+                            adapter = new AttributeListSpinnerAdapter(getContext(), model, selectedItem);
 
                             binding.typeVariantSpinner.setAdapter(adapter);
                             adapter.setOnItemSelectedListener(new AttributeListSpinnerAdapter.OnItemSelectedListener() {
@@ -713,7 +736,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
                         }
 
-                       // createTextDynamically(model_attribute.getAttributes());
+                        // createTextDynamically(model_attribute.getAttributes());
 
                     }
                 } catch (JSONException e) {
@@ -1231,7 +1254,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                                stateModel.setId(id);
                                 String tax_type = data.optString("tax_type");
 
-                                  if(tax_type.equals("purchase")){
+                                //               if(tax_type.equals("purchase")){
                                 StateModel stateM = new StateModel();
                                 stateModel.setId(id);
 
@@ -1240,8 +1263,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                                 }
                                 stateModel.setName(name);
                                 purchase_tax_list.add(stateModel);
-                                  }
-                                  if(tax_type.equals("sale")){
+                                //              }
+                                //    if(tax_type.equals("sale")){
 
                                 stateModel.setId(id);
 
@@ -1250,10 +1273,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                                 }
                                 stateModel.setName(name);
                                 sale_tax_list.add(stateModel);
-                                  }
-
-
                             }
+
+
+                            //  }
                             if (getContext() != null) {
                                 CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), purchase_tax_list);
                                 binding.spinVendorTax.setAdapter(adapter);

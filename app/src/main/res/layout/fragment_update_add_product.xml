@@ -867,7 +867,7 @@
                     android:fontFamily="@font/helvetica_neue_medium"
                     android:gravity="center"
                     android:padding="@dimen/ten"
-                    android:text="Save"
+                    android:text="Update"
                     android:textAllCaps="false"
                     android:textColor="#ffff"
                     android:textSize="16sp" />

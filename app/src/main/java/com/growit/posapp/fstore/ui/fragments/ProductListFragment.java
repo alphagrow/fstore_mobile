@@ -71,7 +71,7 @@ public class ProductListFragment extends Fragment {
         noDataFound = view.findViewById(R.id.noDataFound);
         gif_loader =view.findViewById(R.id.gif_loader);
         Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_loader);
-        gif_loader.setVisibility(View.VISIBLE);
+       gif_loader.setVisibility(View.GONE);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -250,7 +250,7 @@ public class ProductListFragment extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
 //        Utility.showDialoge("Please wait while a moment...", getActivity());
-        gif_loader.setVisibility(View.VISIBLE);
+//        gif_loader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -260,7 +260,7 @@ public class ProductListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-                    gif_loader.setVisibility(View.GONE);
+//                    gif_loader.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
 //                        Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");

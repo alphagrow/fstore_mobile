@@ -10,6 +10,18 @@ public class Attribute {
     @SerializedName("attribute_name")
     @Expose
     private String attributeName;
+
+    public Integer getAttribute_id() {
+        return attribute_id;
+    }
+
+    public void setAttribute_id(Integer attribute_id) {
+        this.attribute_id = attribute_id;
+    }
+
+    @SerializedName("attribute_id")
+    @Expose
+    private Integer attribute_id;
     @SerializedName("values")
     @Expose
     private List<Value> values;
