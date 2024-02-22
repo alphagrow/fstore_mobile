@@ -73,7 +73,8 @@ public class CropAdapter extends RecyclerView.Adapter<CropAdapter.ViewHolder> {
             holder.nameTextView.setTextColor(Color.parseColor("#808080"));
         Picasso.with(mContext).load(customers.getImage_url())
                 .placeholder(R.drawable.loading)
-                .error(R.drawable.no_image)
+                .skipMemoryCache()
+//                .error(R.drawable.no_image)
                 .into(holder.productThumb);
     }
 
