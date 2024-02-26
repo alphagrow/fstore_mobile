@@ -37,10 +37,7 @@ import java.util.Map;
 
 
 public class OrderDetailFragment extends Fragment {
-
-
     private RecyclerView recyclerView;
-
     LinearLayout invoiceDownload;
     ProductDetail productDetail;
     OrderDetailAdapter orderHistoryAdapter;
@@ -169,7 +166,6 @@ public class OrderDetailFragment extends Fragment {
                     Utility.dismissDialoge();
                     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                     return_pos_order.setVisibility(View.INVISIBLE);
-
                 }
             }
 

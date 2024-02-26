@@ -271,8 +271,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/custom_edit_text_cut"
                     android:text=""
-                    android:inputType="date"
-
+                    android:editable="false"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal"

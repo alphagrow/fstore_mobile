@@ -826,8 +826,8 @@ public class CreatePurchaseOrderFragment extends Fragment {
 
         }
         double paid_amount = sumTotalAmount - totalDiscount;
-        binding.txtAmount.setText("₹ " + String.valueOf(paid_amount));
-        binding.amountTxt.setText("₹ " + String.valueOf(sumTotalAmount));
+        binding.txtAmount.setText("₹ " + String.valueOf(Utility.decimalFormat(paid_amount)));
+        binding.amountTxt.setText("₹ " + String.valueOf(Utility.decimalFormat(sumTotalAmount)));
         binding.itemCountTxt.setText(String.valueOf(size));
         binding.payAmount.setText("₹" + String.valueOf(sumTotalAmount+paid_amount));
     }
@@ -845,7 +845,7 @@ public class CreatePurchaseOrderFragment extends Fragment {
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
          params.put("user_id", sm.getUserID()+ "");
-           params.put("token", sm.getJWTToken());
+         params.put("token", sm.getJWTToken());
         params.put("vendor_id", str_vendor_id);
         params.put("company_id", sm.getCompanyID()+"");
         params.put("products", prjsonArray);

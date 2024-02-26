@@ -1,5 +1,6 @@
 package com.growit.posapp.fstore.ui.fragments.PurchaseOrder;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -52,6 +54,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +70,11 @@ public class PurchaseOrderDetailFragment extends Fragment {
     int orderID;
     int purchase_order_id;
     LinearLayoutManager layoutManager;
+    DatePickerDialog.OnDateSetListener  date_exp;
+    public   final Calendar myCalendar = Calendar.getInstance();
 
+
+    String str_mfd;
     public PurchaseOrderDetailFragment() {
         // Required empty public constructor
     }
@@ -84,6 +92,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
 
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,30 +136,32 @@ public class PurchaseOrderDetailFragment extends Fragment {
             public void onClick(View v) {
                 double total_qut=0.0;
                 double total_receive_qut=0.0;
+
                 JSONArray jsonArray = new JSONArray();
                 for (int i = 0; i < productDetail.getOrders().get(position).getOrderLines().size(); i++) {
                     View view = layoutManager.getChildAt(i);
                     if(view !=null) {
 
                         EditText qutEditText = view.findViewById(R.id.edi_qut_text);
-
                         EditText edi_cir_text = view.findViewById(R.id.edi_cir_text);
                         EditText edi_batch_no_text = view.findViewById(R.id.edi_batch_no_text);
-                        EditText edi_mfd_date = view.findViewById(R.id.edi_mfd_date);
+                        EditText ed_mfd_date = view.findViewById(R.id.edi_mfd_date);
                         EditText edi_mkd_date = view.findViewById(R.id.edi_mkd_date);
+
                         String cir_number=edi_cir_text.getText().toString().trim();
                         String batch_number=edi_batch_no_text.getText().toString().trim();
-                        String mfd_date=edi_mfd_date.getText().toString().trim();
+                        String mfd_date=ed_mfd_date.getText().toString().trim();
                         String mkd_date=edi_mkd_date.getText().toString().trim();
                         qutEditText.setText(String.valueOf(productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity()));
                         double qut_str = Double.parseDouble(qutEditText.getText().toString().trim());
-
-//                        qutEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int)max_quant)});
-
-
+                        if (batch_number.isEmpty() || cir_number.isEmpty() || mfd_date.isEmpty() || mkd_date.isEmpty()) {
+                            Toast.makeText(getActivity(), "Fill in all the fields", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        //                        qutEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int)max_quant)});
                         JSONObject obj = new JSONObject();
                         try {
-                           total_qut +=  productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
+                            total_qut +=  productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
                             total_receive_qut += qut_str;
                             // obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getTaxesId());
                             obj.putOpt("product_id", productDetail.getOrders().get(position).getOrderLines().get(i).getProductId());
@@ -185,10 +196,15 @@ public class PurchaseOrderDetailFragment extends Fragment {
         });
     }
 
+    private void ExpireLabel(TextView mfd_date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        str_mfd = sdf.format(myCalendar.getTime());
+        mfd_date.setText(str_mfd);
+    }
 
 
     public void showPDF(int _id) {
-       // String url= ApiConstants.BASE_URL +ApiConstants.GET_PURCHASE_ORDER_DOWNLOAD+_id+"&user_id="+sm.getUserID()+"&token="+sm.getJWTToken();
+        // String url= ApiConstants.BASE_URL +ApiConstants.GET_PURCHASE_ORDER_DOWNLOAD+_id+"&user_id="+sm.getUserID()+"&token="+sm.getJWTToken();
         SessionManagement sm = new SessionManagement(getActivity());
 
         try {
@@ -231,12 +247,12 @@ public class PurchaseOrderDetailFragment extends Fragment {
             }else{
                 binding.totalProduct.setText("0");
             }
-         //     purchase_order_id= productDetail.getOrders().get(position).getId();
+            //     purchase_order_id= productDetail.getOrders().get(position).getId();
             binding.date.setText(productDetail.getOrders().get(position).getOrderDate());
             double paidAmount= Utility.decimalFormat(Double.parseDouble(productDetail.getOrders().get(position).getAmountTotal()));
             binding.totalValue.setText(paidAmount+"");
 //            binding.paidBy.setText(productDetail.getOrders().get(position).getPayment_type());
-             layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             orderHistoryAdapter = new PurchaseOrderDetailAdapter(getActivity(), productDetail.getOrders().get(position).getOrderLines());
             binding.orderRecyclerView.setAdapter(orderHistoryAdapter);
@@ -247,8 +263,8 @@ public class PurchaseOrderDetailFragment extends Fragment {
     private void cancelOrder(int purchase_order_id){
         SessionManagement sm = new SessionManagement(getActivity());
         Map<String, String> params = new HashMap<>();
-            params.put("user_id", sm.getUserID()+"");
-            params.put("token", sm.getJWTToken());
+        params.put("user_id", sm.getUserID()+"");
+        params.put("token", sm.getJWTToken());
         params.put("purchase_order_id", purchase_order_id+"");
 
         Utility.showDialoge("Please wait while a moment...", getActivity());
@@ -304,7 +320,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
             public void onClick(View v) {
 
 
-                    getReceiveProducts(jsonArray,productDetail.getOrders().get(position).getId());
+                getReceiveProducts(jsonArray,productDetail.getOrders().get(position).getId());
 
                 dialog.dismiss();
 
