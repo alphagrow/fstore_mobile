@@ -711,6 +711,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                                 public void onItemSelected(List<AttributeModel> selectedItems, int pos) {
                                     if (selectedItems == null || selectedItems.isEmpty()) {
                                         //  name.setText("Codewenation");
+                                        binding.linearLayoutMain.removeAllViews();
                                     } else {
                                         StringBuilder selectedNames = new StringBuilder();
                                         for (AttributeModel item : selectedItems) {
