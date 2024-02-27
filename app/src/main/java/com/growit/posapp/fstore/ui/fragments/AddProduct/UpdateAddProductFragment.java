@@ -237,7 +237,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
 
             }
-
+            selectedItem.clear();
             createTextDynamically(model);
             str_uom = list.get(position).getUomId();
             binding.etUomMeasure.setText(list.get(position).getUom_po_name());
@@ -707,7 +707,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                            binding.typeVariantSpinner.setAdapter(adapter);
 //                            binding.typeVariantSpinner.setSelection(spinnerPosition);
 
-//                            selectedItem.clear();
+                           selectedItem.clear();
 
                             adapter = new AttributeListSpinnerAdapter(getContext(), model, selectedItem);
 

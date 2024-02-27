@@ -158,7 +158,7 @@ public class PurchaseOrderDetailFragment extends Fragment {
                             Toast.makeText(getActivity(), "Fill in all the fields", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        //                        qutEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int)max_quant)});
+                        //qutEditText.setFilters(new InputFilter[] {new InputFilter.LengthFilter((int)max_quant)});
                         JSONObject obj = new JSONObject();
                         try {
                             total_qut +=  productDetail.getOrders().get(position).getOrderLines().get(i).getQuantity();
@@ -344,7 +344,6 @@ public class PurchaseOrderDetailFragment extends Fragment {
         params.put("token", sm.getJWTToken());
         params.put("product_quantities", qut+"");
         params.put("purchase_order_id", purchase_order_id+"");
-
         Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.v("POST_RECEIVE_PRODUCTS", String.valueOf(params));
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.POST_RECEIVE_PRODUCTS, new VolleyCallback() {

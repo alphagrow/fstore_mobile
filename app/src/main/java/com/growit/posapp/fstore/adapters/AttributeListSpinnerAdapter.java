@@ -65,7 +65,6 @@ public class AttributeListSpinnerAdapter extends ArrayAdapter<AttributeModel> {
         );
 
         TextView textView = view.findViewById(R.id.spin_txt);
-
         if (isDropDown) {
             CheckBox checkBox = view.findViewById(R.id.spinnerCheckbox);
             TextView itemName = view.findViewById(R.id.itemName);
