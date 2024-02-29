@@ -10,9 +10,19 @@ public class Attribute {
     @SerializedName("attribute_name")
     @Expose
     private String attributeName;
-
+    @SerializedName("is_attribute")
+    @Expose
+    private Boolean isAttribute;
     public Integer getAttribute_id() {
         return attribute_id;
+    }
+
+    public Boolean getAttribute() {
+        return isAttribute;
+    }
+
+    public void setAttribute(Boolean attribute) {
+        isAttribute = attribute;
     }
 
     public void setAttribute_id(Integer attribute_id) {

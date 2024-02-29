@@ -10,6 +10,18 @@ public class Value {
     @Expose
     private Integer valueId;
 
+    public Boolean getCustom() {
+        return isCustom;
+    }
+
+    public void setCustom(Boolean custom) {
+        isCustom = custom;
+    }
+
+    @SerializedName("is_custom")
+    @Expose
+    private Boolean isCustom;
+
 
     public int getSelectedPosition() {
         return selectedPosition;

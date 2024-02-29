@@ -50,7 +50,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1.5"
                 android:background="@drawable/custom_edit_text_cut"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:text="0.0">
             </EditText>
 
@@ -71,10 +71,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-
                 android:layout_weight="1.5"
                 android:background="@drawable/custom_edit_text_cut"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:text="0.0">
 
             </EditText>

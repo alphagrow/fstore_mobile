@@ -124,7 +124,7 @@ public class ProductListFragment extends Fragment {
                         cropAdapter = new CropAdapter(getActivity(), cropList,position);
                         croplist_view.setAdapter(cropAdapter);
                         croplist_view.setLayoutManager(layoutManager);
-                        prepareProducts(cropID);
+                        prepareProducts(cropID,"");
                     }
 
                     @Override
@@ -180,14 +180,16 @@ public class ProductListFragment extends Fragment {
         contexts = getActivity();
 
     }
-    private void prepareProducts(String id) {
+    private void prepareProducts(String id,String OnClick) {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
       Log.d("product_list",url);
     //    Utility.showDialoge("Please wait while a moment...", getActivity());
         long beginTime = System.currentTimeMillis();
-//       gif_loader.setVisibility(View.VISIBLE);
+        if(OnClick.equals("OnClick")) {
+            gif_loader.setVisibility(View.VISIBLE);
+        }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -200,7 +202,10 @@ public class ProductListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-//                    gif_loader.setVisibility(View.GONE);
+                    if(OnClick.equals("OnClick")) {
+                        gif_loader.setVisibility(View.GONE);
+                    }
+
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                  //       Utility.dismissDialoge();
                         productList.clear();
@@ -234,11 +239,15 @@ public class ProductListFragment extends Fragment {
                         }
 
                     }
+                    if(OnClick.equals("OnClick")) {
+                        gif_loader.setVisibility(View.GONE);
+                    }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+
         queue.add(jsonObjectRequest);
 
     }
@@ -285,7 +294,7 @@ public class ProductListFragment extends Fragment {
 
                             cropID = cropList.get(0).getValueId() + "";
                             cropName=cropList.get(0).getValueName();
-                            prepareProducts(cropID);
+                            prepareProducts(cropID,"OnClick");
                         }
 
                     }

@@ -231,7 +231,7 @@
                     android:padding="@dimen/padding_edit"
                     android:hint=""
                     android:importantForAutofill="no"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:requiresFadingEdge="vertical"
                    />
                 <TextView

@@ -69,6 +69,7 @@ import com.growit.posapp.fstore.adapters.ImageAdapter;
 
 
 import com.growit.posapp.fstore.adapters.UOMSpinnerAdapter;
+import com.growit.posapp.fstore.adapters.UpdateAttributeListSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.FragmentUpdateAddProductBinding;
 import com.growit.posapp.fstore.model.Attribute;
 import com.growit.posapp.fstore.model.AttributeModel;
@@ -80,6 +81,7 @@ import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.UomCategoryModel;
 import com.growit.posapp.fstore.model.UomLineModel;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.ui.UserRegistrationActivity;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -132,7 +134,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     private RecyclerView recy_image;
     Bitmap bitmap = null;
     RadioGroup sel_non_gov;
-    AttributeListSpinnerAdapter adapter;
+    UpdateAttributeListSpinnerAdapter adapter;
     TextView mfd_date, exp_date, exp_date_alarm;
     String str_image_crop;
     DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
@@ -145,7 +147,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     String crop_id, str_crop_name;
     Activity contexts;
     List<AttributeModel> model = new ArrayList<>();
-
+    List<AttributeModel> select_model = new ArrayList<>();
     ArrayList<String> attribute_id_list = new ArrayList<>();
     ListAttributesModel model_attribute;
     String str_non_gov_product = "Non-Gov";
@@ -232,13 +234,13 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
                 attributeModel.setValues(value_model);
 
-                model.add(attributeModel);
-                selectedItem.add(attributeModel);
+                select_model.add(attributeModel);
+//                selectedItem.add(attributeModel);
 
 
             }
-            selectedItem.clear();
-            createTextDynamically(model);
+
+          //  createTextDynamically(model);
             str_uom = list.get(position).getUomId();
             binding.etUomMeasure.setText(list.get(position).getUom_po_name());
             binding.etUomType.setText(list.get(position).getUom_name());
@@ -372,20 +374,20 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 }
             }
         });
-        binding.typeVariantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    String attributes_id = model.get(position).getId() + "";
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        binding.typeVariantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                if (position != 0) {
+//                    String attributes_id = model.get(position).getId() + "";
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
     }
 
 
@@ -678,6 +680,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         //  String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("product_list", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -691,7 +694,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         JSONArray jsonArray = obj.getJSONArray("attributes");
-
+Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<ListAttributesModel>() {
                         }.getType();
@@ -707,12 +710,16 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                            binding.typeVariantSpinner.setAdapter(adapter);
 //                            binding.typeVariantSpinner.setSelection(spinnerPosition);
 
-                           selectedItem.clear();
+                                StringBuilder selectedNames = new StringBuilder();
+                                for (AttributeModel item : select_model) {
+                                    selectedNames.append(item.getName()).append(",");
+                                }
 
-                            adapter = new AttributeListSpinnerAdapter(getContext(), model, selectedItem);
+          //                  selectedItem.clear();
 
+                            adapter = new UpdateAttributeListSpinnerAdapter(getContext(), model, selectedItem);
                             binding.typeVariantSpinner.setAdapter(adapter);
-                            adapter.setOnItemSelectedListener(new AttributeListSpinnerAdapter.OnItemSelectedListener() {
+                            adapter.setOnItemSelectedListener(new UpdateAttributeListSpinnerAdapter.OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(List<AttributeModel> selectedItems, int pos) {
                                     if (selectedItems == null || selectedItems.isEmpty()) {
@@ -742,7 +749,9 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+                Utility.dismissDialoge();
             }
+
         }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
 
