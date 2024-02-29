@@ -89,7 +89,6 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
             binding.etCity.setVisibility(View.VISIBLE);
             binding.textCode.setVisibility(View.VISIBLE);
             binding.companyLay.setVisibility(View.VISIBLE);
-
             binding.checkBoxGst.setVisibility(View.GONE);
             binding.etGstNo.setVisibility(View.GONE);
             binding.textVendMobNo.setVisibility(View.GONE);
@@ -480,8 +479,8 @@ public class AddVendorAndCreateWareHouseFragment extends Fragment {
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 message = obj.optString("status");
-               String error_message = obj.optString("error_message");
-              String  str_message = obj.optString("message");
+                String error_message = obj.optString("error_message");
+                String  str_message = obj.optString("message");
                 if (statusCode == 200 && message.equalsIgnoreCase("success")) {
                     Utility.dismissDialoge();
                     resetFields();

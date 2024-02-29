@@ -1,5 +1,8 @@
 package com.growit.posapp.fstore.adapters;
 
+import static java.security.AccessController.getContext;
+
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
@@ -7,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +27,7 @@ import com.growit.posapp.fstore.utils.ApiConstants;
 import com.skyhope.showmoretextview.ShowMoreTextView;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrderDetailAdapter.ViewHolder> {
@@ -41,6 +46,7 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
         ShowMoreTextView textView;
         public  ShowMoreTextView product_name;
         EditText edi_qut_text;
+        EditText mfd_date;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -51,6 +57,7 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
             pac_text = itemView.findViewById(R.id.pac_text);
             crop_text = itemView.findViewById(R.id.crop_text);
             edi_qut_text = itemView.findViewById(R.id.edi_qut_text);
+            mfd_date = itemView.findViewById(R.id.edi_mfd_date);
         }
     }
 
@@ -110,6 +117,40 @@ public class PurchaseOrderDetailAdapter extends RecyclerView.Adapter<PurchaseOrd
 //
 //    }
 //});
+        holder.mfd_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // on below line we are getting
+                // the instance of our calendar.
+                final Calendar c = Calendar.getInstance();
+
+                // on below line we are getting
+                // our day, month and year.
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // on below line we are creating a variable for date picker dialog.
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        // on below line we are passing context.
+                        mContext,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our edit text.
+                                holder.mfd_date.setText(year + "-" + (monthOfYear + 1) + "-" +dayOfMonth );
+
+                            }
+                        },
+                        // on below line we are passing year,
+                        // month and day for selected date in our date picker.
+                        year, month, day);
+                // at last we are calling show to
+                // display our date picker dialog.
+                datePickerDialog.show();
+            }
+        });
 
 
 

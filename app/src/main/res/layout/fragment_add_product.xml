@@ -231,7 +231,7 @@
                     android:padding="@dimen/padding_edit"
                     android:hint=""
                     android:importantForAutofill="no"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:requiresFadingEdge="vertical"
                    />
                 <TextView
@@ -294,21 +294,33 @@
                     android:requiresFadingEdge="vertical"
                    />
 
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/twenty_five"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="@dimen/twenty_five"-->
-<!--                    android:background="@drawable/custom_edit_text_cut">-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:layout_marginTop="@dimen/top_marg_textview"
+                    android:layout_marginEnd="@dimen/end_marg_text"
+                    android:layout_marginStart="@dimen/start_marg_text"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Variants"
+                    android:textColor="@color/edt_top_text_color" />
 
-<!--                    <Spinner-->
-<!--                        android:id="@+id/et_uom_spinn_type"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="40dp"-->
-<!--                        android:layout_centerHorizontal="true"-->
-<!--                        android:layout_marginTop="10dp" />-->
-<!--                </LinearLayout>-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/twenty_five"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/twenty_five"
+                    android:background="@drawable/custom_edit_text_cut">
+
+                    <Spinner
+                        android:id="@+id/type_variant_Spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/et_uom_product"

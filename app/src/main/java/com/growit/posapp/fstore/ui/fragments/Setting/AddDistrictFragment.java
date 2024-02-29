@@ -31,6 +31,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -105,6 +106,8 @@ public class AddDistrictFragment extends Fragment {
 
 
     private void init () {
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoad);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         list = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerVendor.setLayoutManager(layoutManager);
@@ -434,6 +437,7 @@ public class AddDistrictFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
 //        params.put("states_id", stateStr);
         Log.d("GET_DISTRICT",ApiConstants.GET_DISTRICT);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         new VolleyRequestHandler(getActivity(), params).createRequest(ApiConstants.GET_DISTRICT, new VolleyCallback() {
             private String message = " failed!!";
 
@@ -444,6 +448,7 @@ public class AddDistrictFragment extends Fragment {
                 JSONObject obj = new JSONObject(result.toString());
                 int statusCode = obj.optInt("statuscode");
                 String status = obj.optString("status");
+                binding.gifLoad.setVisibility(View.GONE);
                 if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                     JSONArray jsonArray = obj.getJSONArray("data");
 
@@ -482,7 +487,7 @@ public class AddDistrictFragment extends Fragment {
             @Override
             public void onError(String result) {
                 Log.v("Response", result.toString());
-
+                binding.gifLoad.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });

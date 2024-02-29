@@ -65,6 +65,7 @@ import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.AddProductListAdapter;
+import com.growit.posapp.fstore.adapters.AttributeListSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.CustomSpinnerAdapter;
 import com.growit.posapp.fstore.adapters.ImageAdapter;
 import com.growit.posapp.fstore.adapters.POSAdapter;
@@ -72,6 +73,7 @@ import com.growit.posapp.fstore.adapters.UOMAdapter;
 import com.growit.posapp.fstore.adapters.UOMSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.FragmentAddProductBinding;
 import com.growit.posapp.fstore.db.DatabaseClient;
+import com.growit.posapp.fstore.interfaces.ItemClickListener;
 import com.growit.posapp.fstore.model.AttributeModel;
 import com.growit.posapp.fstore.model.AttributeValue;
 import com.growit.posapp.fstore.model.ListAttributesModel;
@@ -131,7 +133,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     //    private RecyclerView recy_image;
     Bitmap bitmap = null;
     //    RadioGroup sel_non_gov;
-    ImageAdapter adapter;
+    AttributeListSpinnerAdapter adapter;
     //    TextView mfd_date, exp_date, exp_date_alarm;
     ProductDetail model_uom_type;
     DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
@@ -158,6 +160,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     String str_image_crop;
     StateModel stateModel;
 
+    private List<AttributeModel> selectedItem = new ArrayList<>();
 
     //   List<StateModel> uom_list = new ArrayList<>();
     public AddProductFragment() {
@@ -218,6 +221,25 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
 
         }
+//        adapter.setOnItemSelectedListener(new AttributeListSpinnerAdapter.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(List<AttributeModel> selectedItems, int pos) {
+//                if (selectedItems == null || selectedItems.isEmpty()) {
+//                  //  name.setText("Codewenation");
+//                } else {
+//                    StringBuilder selectedNames = new StringBuilder();
+//                    for (AttributeModel item : selectedItems) {
+//                        selectedNames.append(item.getName()).append(", ");
+//                    }
+//                    // Remove the trailing comma and space
+//                    selectedNames.delete(selectedNames.length() - 2, selectedNames.length());
+//                  //  name.setText(selectedNames.toString());
+//                }
+//
+//                Log.e("getSelectedItems", selectedItems.toString());
+//                Log.e("getSelectedItems", String.valueOf(selectedItems.size()));
+//            }
+//        });
 
         binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -254,11 +276,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
             }
         });
-//        binding.etUomSpinnType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+//        binding.etUomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
 //            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                if (position != 0) {
-//                    str_uom_cate  = uom_model_type.get(position).getId() + "";
+//                    str_uom  = uomLines.get(position).getId() + "";
 //
 //                }
 //            }
@@ -277,6 +300,25 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             }
         });
 
+//        binding.typeVariantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                if (position != 0) {
+//                    String    attributes_id = model.get(position).getId() + "";
+//                    AttributeModel attributeModel= new AttributeModel();
+//
+//
+//                }
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
         binding.spinVendorTax.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -650,7 +692,44 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
                         model_attribute = gson.fromJson(response.toString(), listType);
                         model.addAll(model_attribute.getAttributes());
-                        createTextDynamically(model_attribute.getAttributes().size());
+                        if(getContext()!=null) {
+//                            AttributeListSpinnerAdapter adapter = new AttributeListSpinnerAdapter(getContext(), model);
+//                            binding.typeVariantSpinner.setAdapter(adapter);
+//                            binding.typeVariantSpinner.setSelection(spinnerPosition);
+
+                            selectedItem.clear();
+
+                            adapter = new AttributeListSpinnerAdapter(
+                                    getContext(),
+                                    model,
+                                    selectedItem
+                            );
+
+                            binding.typeVariantSpinner.setAdapter(adapter);
+                            adapter.setOnItemSelectedListener(new AttributeListSpinnerAdapter.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(List<AttributeModel> selectedItems, int pos) {
+                                    if (selectedItems == null || selectedItems.isEmpty()) {
+                                        //  name.setText("Codewenation");
+                                        binding.linearLayoutMain.removeAllViews();
+                                    } else {
+                                        StringBuilder selectedNames = new StringBuilder();
+                                        for (AttributeModel item : selectedItems) {
+                                            selectedNames.append(item.getName()).append(",");
+                                        }
+                                        // Remove the trailing comma and space
+                                      //  selectedNames.delete(selectedNames.length() -0, selectedNames.length());
+                                        //  name.setText(selectedNames.toString());
+                                        createTextDynamically(selectedItems);
+                                    }
+
+                                    Log.e("getSelectedItems", selectedItems.toString());
+                                    Log.e("getSelectedItems", String.valueOf(selectedItems.size()));
+                                }
+                            });
+
+                        }
+
 
                     }
                 } catch (JSONException e) {
@@ -667,10 +746,11 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
 
     }
 
-    private void createTextDynamically(int n) {
+    private void createTextDynamically(List<AttributeModel> selectedItems) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        binding.linearLayoutMain.removeAllViews();
         binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < selectedItems.size(); j++) {
             TextView text = new TextView(getActivity());
             LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
             TextView headingTV = new TextView(getActivity());
@@ -690,10 +770,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             text.setTextSize(16);
             text.setId(j);
             final int id_ = text.getId();
-            int att_id = model.get(j).getId();
+            int att_id = selectedItems.get(j).getId();
             selected_value_map.put(String.valueOf(att_id), null);
 
-            text.setHint("Select the " + model.get(j).getName());
+          //  text.setHint("Select the " + selectedItems.get(j).getName());
 
             // text.setText(name.get(1).getName());
             text.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -703,7 +783,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             binding.linearLayoutMain.addView(headingTV);
 
             binding.linearLayoutMain.addView(text, editTextParams);
-            SetDataTextDataDynamically(text, id_, model.get(j).getValues(), att_id);
+            SetDataTextDataDynamically(text, id_, selectedItems.get(j).getValues(), att_id);
 
         }
 

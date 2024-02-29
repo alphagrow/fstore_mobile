@@ -54,7 +54,12 @@
     android:background="#fff"
     android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/gif"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </ImageView>
     <TextView
         android:id="@+id/noDataFound"
         android:layout_width="match_parent"

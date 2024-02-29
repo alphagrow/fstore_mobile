@@ -154,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
-android:enabled="false"
+                    android:enabled="false"
                     android:layout_weight="1"
                     android:background="@drawable/custom_edit_text_cut"
                     android:inputType="number"
@@ -166,11 +166,159 @@ android:enabled="false"
         </LinearLayout>
 
     </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:weightSum="2"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/edt_top_text_color"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="CIR Number"
+                    />
+                <EditText
+                    android:id="@+id/edi_cir_text"
+                    android:layout_width="150dp"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_height="40dp"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:text=""
+                    android:inputType="number"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="visible"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/edt_top_text_color"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="Batch Number"
+
+                    />
+                <EditText
+                    android:id="@+id/edi_batch_no_text"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:hint=" "
+                    android:inputType="number"
+
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="visible"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:weightSum="2"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/edt_top_text_color"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="MFD Date"
+                    />
+                <EditText
+                    android:id="@+id/edi_mfd_date"
+                    android:layout_width="150dp"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:layout_height="40dp"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:text=""
+                    android:editable="false"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="visible"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/edt_top_text_color"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_text"
+                    android:text="MKD By"
+
+                    />
+                <EditText
+                    android:id="@+id/edi_mkd_date"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/custom_edit_text_cut"
+                    android:layout_marginTop="@dimen/top_marg_edit"
+                    android:hint=" "
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:visibility="visible"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="center"
         android:layout_marginTop="1dp"
-        android:background="#E6E4E4E4" />
+        android:background="#000" />
 
 </LinearLayout>

@@ -38,6 +38,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.R;
@@ -84,6 +85,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
     Bitmap imageBitmap = null;
     private TextView loginBtn,update_profile;
     private  String mResponse="";
+    ImageView gif_loader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +114,9 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         profile_image = findViewById(R.id.profile_image);
         picImageFL = findViewById(R.id.fl_pic_image);
         backBtn.setOnClickListener(this);
-
+        gif_loader =findViewById(R.id.gif_load);
+        Glide.with(this).load(R.drawable.growit_gif_02).into(gif_loader);
+        gif_loader.setVisibility(View.VISIBLE);
         findViewById(R.id.tv_gallery).setOnClickListener(this);
         findViewById(R.id.tv_camera).setOnClickListener(this);
         findViewById(R.id.tv_cross).setOnClickListener(this);
@@ -395,6 +399,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_USER_PROFILE + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
        Log.d("url",url);
+        gif_loader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -405,7 +410,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
+                    gif_loader.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         JSONObject jsonArray = obj.getJSONObject("user_profile");
 
@@ -429,6 +434,7 @@ public class MyProfileActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         }, error -> Toast.makeText(this, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+        gif_loader.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
     }
 

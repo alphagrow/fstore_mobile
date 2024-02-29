@@ -88,7 +88,12 @@
             android:layout_below="@+id/lay_add_customer"
             android:orientation="vertical"
             android:weightSum="1">
+            <ImageView
+                android:id="@+id/gif"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+            </ImageView>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"

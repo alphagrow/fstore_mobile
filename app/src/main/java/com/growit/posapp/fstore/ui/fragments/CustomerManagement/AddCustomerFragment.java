@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -218,6 +220,42 @@ public class AddCustomerFragment extends Fragment implements
 
             }
         });
+        mobileEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String mobileStr = s.toString();
+
+                if (!mobileStr.isEmpty() && mobileStr.length() == 10) {
+                    AsyncTask.execute(() -> {
+                        isMobileExist = DatabaseClient.getInstance(getActivity()).getAppDatabase()
+                                .customerDao()
+                                .isDataExist(mobileStr);
+
+                        getActivity().runOnUiThread(() -> {
+                            if (isMobileExist) {
+                                mobileEditText.setError("Mobile Number Already exists");
+                            } else {
+                                mobileEditText.setError(null);
+                            }
+                        });
+                    });
+                } else {
+
+                    mobileEditText.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // You can add any additional handling if needed
+            }
+        });
+
 
     }
 
@@ -262,21 +300,21 @@ public class AddCustomerFragment extends Fragment implements
             streetStr = addressEditText.getText().toString();
             str_land_size = land_size.getText().toString();
 //
-            AsyncTask.execute(() -> {
-                isMobileExist = DatabaseClient.getInstance(getActivity()).getAppDatabase()
-                        .customerDao()
-                        .isDataExist(mobileStr);
-
-            });
+//            AsyncTask.execute(() -> {
+//                isMobileExist = DatabaseClient.getInstance(getActivity()).getAppDatabase()
+//                        .customerDao()
+//                        .isDataExist(mobileStr);
+//
+//            });
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if (isMobileExist) {
-                Toast.makeText(getActivity(), R.string.MOBILE_NUMBER, Toast.LENGTH_SHORT).show();                return;
-            }
+//            if (isMobileExist) {
+//                Toast.makeText(getActivity(), R.string.MOBILE_NUMBER, Toast.LENGTH_SHORT).show();                return;
+//            }
 //            if (mobileStr.length() == 0 || nameStr.length() == 0 || stateStr.length() == 0 || districtStr.length() == 0 || talukaStr.length() == 0 || zipStr.length() == 0) {
 //                Toast.makeText(getActivity(), "Please add mandatory fields.", Toast.LENGTH_SHORT).show();
 //                return;

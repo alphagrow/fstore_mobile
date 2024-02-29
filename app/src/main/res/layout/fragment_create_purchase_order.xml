@@ -51,6 +51,12 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/gif_loader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </ImageView>
 
                 <TextView
                     android:id="@+id/crop_text"
@@ -393,6 +399,7 @@ android:layout_gravity="center"
                                     android:layout_height="40dp"
                                     android:background="@drawable/custom_edit_text_cut"
                                     android:text=""
+                                    android:inputType="numberDecimal"
                                     android:textColor="@color/black"
                                     android:textSize="14sp"
                                     android:textStyle="normal"

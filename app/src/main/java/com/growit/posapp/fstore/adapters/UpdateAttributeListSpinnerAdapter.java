@@ -1,36 +1,32 @@
 package com.growit.posapp.fstore.adapters;
 
-import static java.security.AccessController.getContext;
-
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.growit.posapp.fstore.R;
+import com.growit.posapp.fstore.model.Attribute;
 import com.growit.posapp.fstore.model.AttributeModel;
-import com.growit.posapp.fstore.model.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttributeListSpinnerAdapter extends ArrayAdapter<AttributeModel> {
+public class UpdateAttributeListSpinnerAdapter extends ArrayAdapter<AttributeModel> {
 
     private final List<AttributeModel> items;
     private final List<AttributeModel> selectedItems;
     private final boolean[] checkedItems;
-    private AttributeListSpinnerAdapter.OnItemSelectedListener onItemSelectedListener;
+    private UpdateAttributeListSpinnerAdapter.OnItemSelectedListener onItemSelectedListener;
 
     public interface OnItemSelectedListener {
         void onItemSelected(List<AttributeModel> selectedItems, int pos);
     }
 
-    public AttributeListSpinnerAdapter(Context context, List<AttributeModel> items, List<AttributeModel> selectedItems) {
+    public UpdateAttributeListSpinnerAdapter(Context context, List<AttributeModel> items, List<AttributeModel> selectedItems) {
         super(context, 0, items);
         this.items = items;
         this.selectedItems = selectedItems;
@@ -41,7 +37,7 @@ public class AttributeListSpinnerAdapter extends ArrayAdapter<AttributeModel> {
         }
     }
 
-    public void setOnItemSelectedListener(AttributeListSpinnerAdapter.OnItemSelectedListener listener) {
+    public void setOnItemSelectedListener(UpdateAttributeListSpinnerAdapter.OnItemSelectedListener listener) {
         this.onItemSelectedListener = listener;
     }
 
@@ -65,6 +61,7 @@ public class AttributeListSpinnerAdapter extends ArrayAdapter<AttributeModel> {
         );
 
         TextView textView = view.findViewById(R.id.spin_txt);
+
         if (isDropDown) {
             CheckBox checkBox = view.findViewById(R.id.spinnerCheckbox);
             TextView itemName = view.findViewById(R.id.itemName);

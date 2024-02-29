@@ -160,10 +160,6 @@ public class UpdateUserActivity extends AppCompatActivity {
                     binding.etUseremail.setText(email);
                     binding.etUsername.setText(name);
                     binding.edUserId.setText(login);
-
-
-
-
                 }
             }
 

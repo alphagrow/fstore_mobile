@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.CropAdapter;
 import com.growit.posapp.fstore.adapters.ProductListAdapter;
@@ -58,6 +60,7 @@ public class ProductListFragment extends Fragment {
     }
     Activity contexts;
     TextView noDataFound;
+    ImageView gif_loader;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, parent, false);
@@ -66,7 +69,9 @@ public class ProductListFragment extends Fragment {
         searchEditTxt = view.findViewById(R.id.seacrEditTxt);
         refreshLayout = view.findViewById(R.id.refreshLayout);
         noDataFound = view.findViewById(R.id.noDataFound);
-
+        gif_loader =view.findViewById(R.id.gif_loader);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(gif_loader);
+       gif_loader.setVisibility(View.GONE);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -119,7 +124,7 @@ public class ProductListFragment extends Fragment {
                         cropAdapter = new CropAdapter(getActivity(), cropList,position);
                         croplist_view.setAdapter(cropAdapter);
                         croplist_view.setLayoutManager(layoutManager);
-                        prepareProducts(cropID);
+                        prepareProducts(cropID,"");
                     }
 
                     @Override
@@ -175,22 +180,32 @@ public class ProductListFragment extends Fragment {
         contexts = getActivity();
 
     }
-    private void prepareProducts(String id) {
+    private void prepareProducts(String id,String OnClick) {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_PRODUCT_LIST + "user_id=" + sm.getUserID() + "&" + "pos_category_id=" + id + "&" + "token=" + sm.getJWTToken();
       Log.d("product_list",url);
     //    Utility.showDialoge("Please wait while a moment...", getActivity());
+        long beginTime = System.currentTimeMillis();
+        if(OnClick.equals("OnClick")) {
+            gif_loader.setVisibility(View.VISIBLE);
+        }
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.v("Response", response.toString());
+
+                long responseTime = System.currentTimeMillis() - beginTime;
 
                 JSONObject obj = null;
                 try {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
+                    if(OnClick.equals("OnClick")) {
+                        gif_loader.setVisibility(View.GONE);
+                    }
+
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                  //       Utility.dismissDialoge();
                         productList.clear();
@@ -217,17 +232,22 @@ public class ProductListFragment extends Fragment {
                                 product.setProductImage(image);
                                 productList.add(product);
                             }
+                            Log.v("Response_time", String.valueOf(responseTime));
                             productListAdapter = new ProductListAdapter(getActivity(), productList);
                             recyclerView.setAdapter(productListAdapter);
 
                         }
 
                     }
+                    if(OnClick.equals("OnClick")) {
+                        gif_loader.setVisibility(View.GONE);
+                    }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+
         queue.add(jsonObjectRequest);
 
     }
@@ -237,7 +257,8 @@ public class ProductListFragment extends Fragment {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        gif_loader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -247,9 +268,9 @@ public class ProductListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
+//                    gif_loader.setVisibility(View.GONE);
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+//                        Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
                         cropList = new ArrayList<>();
                         if (jsonArray.length() > 0) {
@@ -273,7 +294,7 @@ public class ProductListFragment extends Fragment {
 
                             cropID = cropList.get(0).getValueId() + "";
                             cropName=cropList.get(0).getValueName();
-                            prepareProducts(cropID);
+                            prepareProducts(cropID,"OnClick");
                         }
 
                     }

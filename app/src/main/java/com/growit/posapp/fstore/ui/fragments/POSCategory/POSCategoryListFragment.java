@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -84,11 +85,13 @@ public class POSCategoryListFragment extends Fragment {
         return binding.getRoot();
     }
     private void init(){
+
         cropList = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerPos.setLayoutManager(layoutManager);
 
-
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoad);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         if (Utility.isNetworkAvailable(getContext())) {
             getCropRequest();
         } else {
@@ -129,8 +132,9 @@ public class POSCategoryListFragment extends Fragment {
         SessionManagement sm = new SessionManagement(contexts);
         RequestQueue queue = Volley.newRequestQueue(contexts);
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ALL_CROPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -142,7 +146,8 @@ public class POSCategoryListFragment extends Fragment {
                     String status = obj.optString("status");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+                        binding.gifLoad.setVisibility(View.GONE);
+//                        Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("data");
                         cropList.clear();
                         if (jsonArray.length() > 0) {
@@ -176,6 +181,7 @@ public class POSCategoryListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+//        binding.gifLoader.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
     }
 

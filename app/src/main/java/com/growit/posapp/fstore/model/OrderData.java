@@ -70,6 +70,17 @@ public class OrderData {
     @Expose
     private Boolean has_refundable_lines;
 
+    public Boolean getIs_refunded() {
+        return is_refunded;
+    }
+
+    public void setIs_refunded(Boolean is_refunded) {
+        this.is_refunded = is_refunded;
+    }
+
+    @SerializedName("is_refunded")
+    @Expose
+    private Boolean is_refunded;
     public Boolean getHas_refundable_lines() {
         return has_refundable_lines;
     }

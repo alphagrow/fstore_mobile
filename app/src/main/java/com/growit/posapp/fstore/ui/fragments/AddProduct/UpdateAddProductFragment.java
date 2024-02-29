@@ -69,6 +69,7 @@ import com.growit.posapp.fstore.adapters.ImageAdapter;
 
 
 import com.growit.posapp.fstore.adapters.UOMSpinnerAdapter;
+import com.growit.posapp.fstore.adapters.UpdateAttributeListSpinnerAdapter;
 import com.growit.posapp.fstore.databinding.FragmentUpdateAddProductBinding;
 import com.growit.posapp.fstore.model.Attribute;
 import com.growit.posapp.fstore.model.AttributeModel;
@@ -80,6 +81,7 @@ import com.growit.posapp.fstore.model.StateModel;
 import com.growit.posapp.fstore.model.UomCategoryModel;
 import com.growit.posapp.fstore.model.UomLineModel;
 import com.growit.posapp.fstore.model.Value;
+import com.growit.posapp.fstore.ui.UserRegistrationActivity;
 import com.growit.posapp.fstore.utils.ApiConstants;
 import com.growit.posapp.fstore.utils.SessionManagement;
 import com.growit.posapp.fstore.utils.Utility;
@@ -132,7 +134,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     private RecyclerView recy_image;
     Bitmap bitmap = null;
     RadioGroup sel_non_gov;
-    ImageAdapter adapter;
+    UpdateAttributeListSpinnerAdapter adapter;
     TextView mfd_date, exp_date, exp_date_alarm;
     String str_image_crop;
     DatePickerDialog.OnDateSetListener date_mfd, date_exp, date_exp_alarm;
@@ -145,6 +147,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     String crop_id, str_crop_name;
     Activity contexts;
     List<AttributeModel> model = new ArrayList<>();
+    List<AttributeModel> select_model = new ArrayList<>();
     ArrayList<String> attribute_id_list = new ArrayList<>();
     ListAttributesModel model_attribute;
     String str_non_gov_product = "Non-Gov";
@@ -158,7 +161,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
     List<UomCategoryModel> uom_model_type = new ArrayList<>();
     UomLineModel uom_model_list;
     List<UomLineModel> uomLines = new ArrayList<>();
-
+    private List<AttributeModel> selectedItem = new ArrayList<>();
     Bitmap imageBitmap = null;
     List<StateModel> purchase_tax_list = new ArrayList<>();
     List<StateModel> sale_tax_list = new ArrayList<>();
@@ -216,6 +219,28 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
             binding.description.setText(list.get(position).getDescription());
             binding.ediProductType.setText(list.get(position).getDetailedType());
             attributes = list.get(position).getAttributes();
+//            selectedItem.clear();
+            for(int i=0;i<attributes.size();i++){
+                AttributeModel attributeModel=new AttributeModel();
+                attributeModel.setName(attributes.get(i).getAttributeName());
+                attributeModel.setId(attributes.get(i).getAttribute_id());
+                List<AttributeValue>value_model =new ArrayList<>();
+                for (int j=0;j<attributes.get(i).getValues().size();j++){
+                    AttributeValue value=new AttributeValue();
+                    value.setId(attributes.get(i).getValues().get(j).getValueId());
+                    value.setName(attributes.get(i).getValues().get(j).getValueName());
+                    value_model.add(value);
+                }
+
+                attributeModel.setValues(value_model);
+
+                select_model.add(attributeModel);
+//                selectedItem.add(attributeModel);
+
+
+            }
+
+          //  createTextDynamically(model);
             str_uom = list.get(position).getUomId();
             binding.etUomMeasure.setText(list.get(position).getUom_po_name());
             binding.etUomType.setText(list.get(position).getUom_name());
@@ -349,20 +374,20 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                 }
             }
         });
-        binding.typeVariantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    String attributes_id = model.get(position).getId() + "";
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        binding.typeVariantSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                if (position != 0) {
+//                    String attributes_id = model.get(position).getId() + "";
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
     }
 
 
@@ -396,6 +421,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                return;
 //            }
 
+            if (str_description.length() == 0) {
+                Toast.makeText(getActivity(), "Enter the Description", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (str_product_type.length() == 0) {
                 Toast.makeText(getActivity(), "Enter the Product type", Toast.LENGTH_SHORT).show();
                 return;
@@ -651,6 +680,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         //  String url = ApiConstants.BASE_URL + ApiConstants.GET_ATTRIBUTES_LIST;
+        Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("product_list", url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -664,29 +694,64 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                     String status = obj.optString("status");
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
                         JSONArray jsonArray = obj.getJSONArray("attributes");
-
+Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<ListAttributesModel>() {
                         }.getType();
                         model_attribute = gson.fromJson(response.toString(), listType);
-                        AttributeModel model_v = new AttributeModel();
-                        model_v.setId(-1);
-                        model_v.setName("--Select Attribute--");
-                        model.add(model_v);
+//                        AttributeModel model_v = new AttributeModel();
+//                        model_v.setId(-1);
+//                        model_v.setName("--Select Attribute--");
+//                        model.add(model_v);
                         model.addAll(model_attribute.getAttributes());
 
-                        if (getContext() != null) {
-                            AttributeListSpinnerAdapter adapter = new AttributeListSpinnerAdapter(getContext(), model);
-                            binding.typeVariantSpinner.setAdapter(adapter);
+                        if(getContext()!=null) {
+//                            AttributeListSpinnerAdapter adapter = new AttributeListSpinnerAdapter(getContext(), model);
+//                            binding.typeVariantSpinner.setAdapter(adapter);
 //                            binding.typeVariantSpinner.setSelection(spinnerPosition);
+
+                                StringBuilder selectedNames = new StringBuilder();
+                                for (AttributeModel item : select_model) {
+                                    selectedNames.append(item.getName()).append(",");
+                                }
+
+          //                  selectedItem.clear();
+
+                            adapter = new UpdateAttributeListSpinnerAdapter(getContext(), model, selectedItem);
+                            binding.typeVariantSpinner.setAdapter(adapter);
+                            adapter.setOnItemSelectedListener(new UpdateAttributeListSpinnerAdapter.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(List<AttributeModel> selectedItems, int pos) {
+                                    if (selectedItems == null || selectedItems.isEmpty()) {
+                                        //  name.setText("Codewenation");
+                                        binding.linearLayoutMain.removeAllViews();
+                                    } else {
+                                        StringBuilder selectedNames = new StringBuilder();
+                                        for (AttributeModel item : selectedItems) {
+                                            selectedNames.append(item.getName()).append(",");
+                                        }
+                                        // Remove the trailing comma and space
+                                        //  selectedNames.delete(selectedNames.length() -0, selectedNames.length());
+                                        //  name.setText(selectedNames.toString());
+                                        createTextDynamically(selectedItems);
+                                    }
+
+                                    Log.e("getSelectedItems", selectedItems.toString());
+                                    Log.e("getSelectedItems", String.valueOf(selectedItems.size()));
+                                }
+                            });
+
                         }
-                        createTextDynamically(model_attribute.getAttributes());
+
+                        // createTextDynamically(model_attribute.getAttributes());
 
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+                Utility.dismissDialoge();
             }
+
         }, error -> Toast.makeText(getActivity(), R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
         queue.add(jsonObjectRequest);
 
@@ -776,6 +841,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 
     private void createTextDynamically(List<AttributeModel> model) {
         Display display = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        binding.linearLayoutMain.removeAllViews();
         int width = display.getWidth();
         LinearLayout l = new LinearLayout(getActivity());
         binding.linearLayoutMain.setOrientation(LinearLayout.VERTICAL);
@@ -1197,7 +1263,7 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
 //                                stateModel.setId(id);
                                 String tax_type = data.optString("tax_type");
 
-                                //  if(tax_type.equals("purchase")){
+                                //               if(tax_type.equals("purchase")){
                                 StateModel stateM = new StateModel();
                                 stateModel.setId(id);
 
@@ -1206,7 +1272,8 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                                 }
                                 stateModel.setName(name);
                                 purchase_tax_list.add(stateModel);
-                                //  }else if(tax_type.equals("sale")){
+                                //              }
+                                //    if(tax_type.equals("sale")){
 
                                 stateModel.setId(id);
 
@@ -1215,10 +1282,10 @@ public class UpdateAddProductFragment extends Fragment implements View.OnClickLi
                                 }
                                 stateModel.setName(name);
                                 sale_tax_list.add(stateModel);
-                                //  }
-
-
                             }
+
+
+                            //  }
                             if (getContext() != null) {
                                 CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getContext(), purchase_tax_list);
                                 binding.spinVendorTax.setAdapter(adapter);

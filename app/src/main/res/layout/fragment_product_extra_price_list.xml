@@ -92,6 +92,12 @@
                 android:textSize="18sp" />
 
         </LinearLayout>
+        <ImageView
+            android:id="@+id/gif_load"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ImageView>
 
         <TextView
             android:id="@+id/noDataFound"

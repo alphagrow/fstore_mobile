@@ -27,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.growit.posapp.fstore.MainActivity;
 import com.growit.posapp.fstore.R;
 import com.growit.posapp.fstore.adapters.ConfigurationAdapter;
@@ -83,11 +84,13 @@ public class AddShopAndShopListFragment extends Fragment {
 
 
     private void init () {
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoad);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         list = new ArrayList<>();
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 1, LinearLayoutManager.VERTICAL, false);
         binding.recyclerVendor.setLayoutManager(layoutManager);
         if (Utility.isNetworkAvailable(getContext())) {
-            getShopList();
+           getShopList();
 
         } else {
             Toast.makeText(getContext(), R.string.NETWORK_GONE, Toast.LENGTH_SHORT).show();
@@ -97,7 +100,7 @@ public class AddShopAndShopListFragment extends Fragment {
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                binding.refreshLayout.setRefreshing(false);
+//                binding.refreshLayout.setRefreshing(false);
                 if (Utility.isNetworkAvailable(getContext())) {
 
                     getShopList();
@@ -354,6 +357,7 @@ public class AddShopAndShopListFragment extends Fragment {
         String url = ApiConstants.BASE_URL + ApiConstants.GET_LIST_SHOPS + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         //    Utility.showDialoge("Please wait while a moment...", getActivity());
         Log.d("ALL_CROPS_url",url);
+        binding.gifLoad.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -363,7 +367,7 @@ public class AddShopAndShopListFragment extends Fragment {
                     obj = new JSONObject(response.toString());
                     int statusCode = obj.optInt("statuscode");
                     String status = obj.optString("status");
-
+                    binding.gifLoad.setVisibility(View.GONE);
                     if (status.equalsIgnoreCase("success")) {
                         // Utility.dismissDialoge();
                         JSONArray jsonArray = obj.getJSONArray("shops");
@@ -395,6 +399,7 @@ public class AddShopAndShopListFragment extends Fragment {
                 }
             }
         }, error -> Toast.makeText(contexts, R.string.JSONDATA_NULL, Toast.LENGTH_SHORT).show());
+//        binding.gifLoad.setVisibility(View.GONE);
         queue.add(jsonObjectRequest);
     }
     private void filterList (String text){

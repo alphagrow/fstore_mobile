@@ -65,6 +65,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         textView.setText(product.getProductName());
         holder.price.setText("₹"+String.valueOf(product.getPrice()));
         Log.v("images",ApiConstants.BASE_URL + product.getProductImage());
+
         Picasso.with(mContext).load(ApiConstants.BASE_URL + product.getProductImage())
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.no_image)

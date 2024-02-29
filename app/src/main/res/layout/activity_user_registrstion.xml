@@ -286,7 +286,7 @@
 
                 <EditText
                     android:importantForAutofill="no"
-                    android:id="@+id/et_useremail"
+                    android:id="@+id/et_comp_mail"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/height_marg_edit"
                     android:layout_marginStart="@dimen/start_marg_edit"

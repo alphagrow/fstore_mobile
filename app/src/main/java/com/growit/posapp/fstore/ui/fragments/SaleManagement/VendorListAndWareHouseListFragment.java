@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.growit.posapp.fstore.MainActivity;
@@ -71,6 +72,8 @@ public class VendorListAndWareHouseListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding= FragmentVendorBinding.inflate(inflater, container, false);
+        Glide.with(getActivity()).load(R.drawable.growit_gif_02).into(binding.gifLoader);
+        binding.gifLoader.setVisibility(View.VISIBLE);
         if (getArguments() != null) {
             type_of_vendor_warehouse = getArguments().getString("type_of_vendor_warehouse");
             if (type_of_vendor_warehouse.equals("warehouse")){
@@ -163,7 +166,8 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
         // String url = ApiConstants.BASE_URL + ApiConstants.GET_VENDOR_LIST + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
         Log.v("url", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+//        Utility.showDialoge("Please wait while a moment...", getActivity());
+        binding.gifLoader.setVisibility(View.VISIBLE);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -177,7 +181,8 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                     String error_message = obj.optString("error_message");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+
+//                        Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<VendorModel>() {
                         }.getType();
@@ -196,7 +201,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                             adapter = new VendorListAdapter(getActivity(), vendormodel.getVendors());
                             binding.recyclerVendor.setAdapter(adapter);
                             binding.recyclerVendor.setLayoutManager(layoutManager);
-
+                            binding.gifLoader.setVisibility(View.GONE);
                         }
                  //       adapter.notifyDataSetChanged();
                     }else {
@@ -210,7 +215,8 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
             }
         }, error -> {
-            binding.noDataFound.setVisibility(View.VISIBLE);
+         //   binding.gifLoader.setVisibility(View.GONE);
+           binding.noDataFound.setVisibility(View.VISIBLE);
             binding.recyclerVendor.setVisibility(View.GONE);
         });
         queue.add(jsonObjectRequest);
@@ -242,10 +248,10 @@ public class VendorListAndWareHouseListFragment extends Fragment {
         SessionManagement sm = new SessionManagement(getActivity());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = ApiConstants.BASE_URL + ApiConstants.GET_WareHouses + "user_id=" + sm.getUserID() + "&" + "token=" + sm.getJWTToken();
-
+        binding.gifLoader.setVisibility(View.VISIBLE);
       //   String url = ApiConstants.BASE_URL + ApiConstants.GET_WareHouses;
         Log.v("url", url);
-        Utility.showDialoge("Please wait while a moment...", getActivity());
+       // Utility.showDialoge("Please wait while a moment...", getActivity());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -259,7 +265,8 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                     String error_message = obj.optString("error_message");
 
                     if (statusCode == 200 && status.equalsIgnoreCase("success")) {
-                        Utility.dismissDialoge();
+
+                     //   Utility.dismissDialoge();
                         Gson gson = new Gson();
                         Type listType = new TypeToken<VendorModel>() {
                         }.getType();
@@ -277,7 +284,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
                             wareHouseAdapter = new WareHouseAdapter(getActivity(), vendormodel.getWarehouses());
                             binding.recyclerVendor.setAdapter(wareHouseAdapter);
                             binding.recyclerVendor.setLayoutManager(layoutManager);
-
+                            binding.gifLoader.setVisibility(View.GONE);
                         }
                         wareHouseAdapter.notifyDataSetChanged();
                     }else {
@@ -291,6 +298,7 @@ public class VendorListAndWareHouseListFragment extends Fragment {
 
             }
         }, error -> {
+          //  binding.gifLoader.setVisibility(View.GONE);
             binding.noDataFound.setVisibility(View.VISIBLE);
             binding.recyclerVendor.setVisibility(View.GONE);
         });

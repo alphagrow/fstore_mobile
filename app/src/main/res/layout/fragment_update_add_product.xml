@@ -227,7 +227,7 @@
                     android:padding="@dimen/padding_edit"
                     android:importantForAutofill="no"
                     android:textSize="14dp"
-                    android:inputType="text"
+                    android:inputType="numberDecimal"
                     android:requiresFadingEdge="vertical"
                      />
                 <TextView
@@ -303,11 +303,10 @@
                     android:layout_marginStart="@dimen/start_marg_text"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_size_text"
-                    android:text="Variants"
+                    android:text="Attributes"
                     android:textColor="@color/edt_top_text_color" />
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/twenty_five"
@@ -868,7 +867,7 @@
                     android:fontFamily="@font/helvetica_neue_medium"
                     android:gravity="center"
                     android:padding="@dimen/ten"
-                    android:text="Save"
+                    android:text="Update"
                     android:textAllCaps="false"
                     android:textColor="#ffff"
                     android:textSize="16sp" />
