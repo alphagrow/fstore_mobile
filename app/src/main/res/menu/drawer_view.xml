@@ -42,6 +42,7 @@
     <item
         android:id="@+id/about_fragment"
         android:icon="@drawable/warning"
+        android:visible="false"
         android:title="@string/about_us" />
 
 
@@ -54,6 +55,11 @@
         android:id="@+id/logout_id"
         android:icon="@drawable/logout"
         android:title="Logout" />
+
+    <item
+        android:id="@+id/privacy"
+        android:icon="@drawable/warning"
+        android:title="Privacy Policy" />
 
     <group
         android:id="@+id/group5"

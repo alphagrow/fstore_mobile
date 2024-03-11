@@ -10,7 +10,7 @@ android {
         applicationId "com.growit.posapp.fstore"
         minSdk 26
         targetSdk 33
-        versionCode 3
+        versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -32,10 +32,6 @@ android {
     }
     flavorDimensions 'default'
     productFlavors {
-        GStore {
-            dimension 'default'
-            applicationId "com.growit.posapp.gstore"
-        }
         FStore {
             dimension 'default'
             applicationId "com.growit.posapp.fstore"

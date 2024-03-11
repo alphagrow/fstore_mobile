@@ -50,6 +50,7 @@ import com.growit.posapp.fstore.ui.fragments.ItemCart2FragmentFragment;
 import com.growit.posapp.fstore.ui.fragments.ItemCartFragment;
 import com.growit.posapp.fstore.ui.fragments.OrderHistoryFragment;
 import com.growit.posapp.fstore.ui.fragments.POSCategory.POSCategoryListFragment;
+import com.growit.posapp.fstore.ui.fragments.PrivacyFragment;
 import com.growit.posapp.fstore.ui.fragments.ProductListFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.CreatePurchaseOrderFragment;
 import com.growit.posapp.fstore.ui.fragments.PurchaseOrder.PurchaseOrderListFragment;
@@ -431,7 +432,10 @@ public class MainActivity extends AppCompatActivity {
         else if (menuItem.getItemId() == R.id.logout_id) {
             logoutAlert();
 //            fragment = ProductListFragment.newInstance();
-        }
+        }else if(menuItem.getItemId()==R.id.privacy){
+          toolbar.setVisibility(View.GONE);
+          fragment = PrivacyFragment.newInstance();
+      }
 
         // Insert the fragment by replacing any existing fragment
         if(fragment!=null) {

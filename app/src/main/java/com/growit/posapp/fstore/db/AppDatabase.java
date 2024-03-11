@@ -16,7 +16,7 @@ import com.growit.posapp.fstore.tables.PosOrder;
 import com.growit.posapp.fstore.tables.PurchaseOrder;
 import com.growit.posapp.fstore.tables.TransferOrder;
 
-@Database(entities = {Customer.class, PosOrder.class, PurchaseOrder.class, TransferOrder.class, GST.class, VendorModelList.class}, version = 1)
+@Database(entities = {Customer.class, PosOrder.class, PurchaseOrder.class, TransferOrder.class, GST.class, VendorModelList.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract CustomerDao customerDao();
 
